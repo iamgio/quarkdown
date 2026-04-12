@@ -2,9 +2,7 @@ package com.quarkdown.rendering.html.post.resources
 
 import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.pipeline.output.OutputResourceGroup
-import com.quarkdown.rendering.html.post.resources.ScriptPostRendererResource.Companion.SCRIPT_FILES
-import java.io.File
+import com.quarkdown.installlayout.InstallLayoutDirectory
 
 /**
  * Output directory name under which the Quarkdown runtime script is emitted.
@@ -17,45 +15,34 @@ const val HTML_SCRIPT_OUTPUT_PATH = "script"
 const val HTML_SCRIPT_FILE_NAME = "quarkdown.min.js"
 
 /**
- * A [PostRendererResource] that copies the pre-bundled `quarkdown.min.js` runtime and its source
- * map next to the HTML output, enabling fully offline rendering.
+ * A [PostRendererResource] that copies the pre-bundled Quarkdown runtime script directory
+ * (`quarkdown.min.js` + source map) next to the HTML output, enabling fully offline rendering.
  *
  * The script is built once by the `bundleTypeScript` Gradle task and shipped inside a Quarkdown
- * installation under `lib/html/`, alongside the other third-party assets. At render time, this
- * resource reads that same directory and emits [FileReferenceOutputArtifact]s for each required
- * file.
+ * installation under `lib/html/script/`. At render time, this resource emits the entire script
+ * directory as a [FileReferenceOutputArtifact].
  *
- * If [libraryDirectory] is `null` or does not exist, no script resources are emitted; this keeps
- * script-independent tests easy to construct. Otherwise, every file listed in [SCRIPT_FILES] must
- * be present — any missing file indicates a broken Quarkdown installation and raises
- * [IllegalStateException].
+ * If [scriptsLayout] is `null`, no script resources are emitted; this keeps script-independent
+ * tests easy to construct. Otherwise, the directory must exist — a missing directory indicates a
+ * broken Quarkdown installation and raises [IllegalStateException].
  *
- * @param libraryDirectory the filesystem directory containing the bundled `quarkdown.min.js`,
- *        typically `lib/html` within the Quarkdown installation
+ * @param scriptsLayout the install layout node for the `script/` directory,
+ *        typically [com.quarkdown.installlayout.InstallLayout.Html.scripts]
  */
 class ScriptPostRendererResource(
-    private val libraryDirectory: File?,
+    private val scriptsLayout: InstallLayoutDirectory?,
 ) : PostRendererResource {
-    companion object {
-        private val SCRIPT_FILES = listOf(HTML_SCRIPT_FILE_NAME, "$HTML_SCRIPT_FILE_NAME.map")
-    }
-
     override fun includeTo(
         resources: MutableSet<OutputResource>,
         rendered: CharSequence,
     ) {
-        val root = libraryDirectory?.takeIf(File::isDirectory) ?: return
-        val artifacts =
-            SCRIPT_FILES
-                .map { name ->
-                    val file = root.resolve(name)
-                    check(file.isFile) {
-                        "Required Quarkdown runtime script file is missing: ${file.absolutePath}. " +
-                            "This likely indicates a broken Quarkdown installation."
-                    }
-                    FileReferenceOutputArtifact(name = file.name, file = file)
-                }.toSet()
+        if (scriptsLayout == null) return
 
-        resources += OutputResourceGroup(name = HTML_SCRIPT_OUTPUT_PATH, resources = artifacts)
+        check(scriptsLayout.exists()) {
+            "Required Quarkdown runtime script file is missing: ${scriptsLayout.file.absolutePath}. " +
+                "This likely indicates a broken Quarkdown installation."
+        }
+
+        resources += scriptsLayout.asOutputResource()
     }
 }

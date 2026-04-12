@@ -17,23 +17,12 @@ import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.rendering.RenderingComponents
-import com.quarkdown.core.util.resolveInstallDirectory
-import com.quarkdown.rendering.html.HtmlExportOptions
 import com.quarkdown.rendering.html.extension.html
 import com.quarkdown.stdlib.Stdlib
 import java.io.File
 
 // Folder to retrieve test data from.
 const val DATA_FOLDER = "src/test/resources/data"
-
-/**
- * Real HTML library directory inside the dev-time install `lib/` layout (populated by the
- * `:assembleDevLib` Gradle task). Resolved through [resolveInstallDirectory] so the tests go
- * through exactly the same path the CLI uses at runtime, and the HTML post-renderer can emit
- * theme, script, and lib groups that mirror a real Quarkdown installation.
- */
-private val htmlLibraryDirectory: File? =
-    resolveInstallDirectory()?.resolve("html")
 
 // Folder to retrieve 'dummy' libraries from, relative to the data folder.
 private const val LOCAL_LIBRARY_DIRECTORY = "libraries"
@@ -69,10 +58,7 @@ val DEFAULT_OPTIONS =
 fun execute(
     source: String,
     options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
-    renderer: (RendererFactory, Context) -> RenderingComponents =
-        { rendererFactory, ctx ->
-            rendererFactory.html(ctx, HtmlExportOptions(libraryDirectory = htmlLibraryDirectory))
-        },
+    renderer: (RendererFactory, Context) -> RenderingComponents = { rendererFactory, ctx -> rendererFactory.html(ctx) },
     workingDirectory: File = File(DATA_FOLDER),
     subdocumentGraph: (VisitableOnceGraph<Subdocument>) -> VisitableOnceGraph<Subdocument> = { it },
     loadableLibraries: Set<String> = emptySet(),
