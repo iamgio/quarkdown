@@ -2,6 +2,7 @@ package com.quarkdown.core.parser.walker.funcall
 
 import com.github.h0tk3y.betterParse.combinators.and
 import com.github.h0tk3y.betterParse.combinators.map
+import com.github.h0tk3y.betterParse.combinators.oneOrMore
 import com.github.h0tk3y.betterParse.combinators.optional
 import com.github.h0tk3y.betterParse.combinators.or
 import com.github.h0tk3y.betterParse.combinators.unaryMinus
@@ -82,6 +83,11 @@ class FunctionCallGrammar(
          * The character that separates chained function calls.
          */
         const val CHAIN_SEPARATOR = "::"
+
+        /**
+         * The character that, at the end of a line, continues parsing arguments on the next line.
+         */
+        const val LINE_CONTINUATION = '\\'
     }
 
     /**
@@ -120,6 +126,40 @@ class FunctionCallGrammar(
      * Token that matches whitespace, ignored between arguments
      */
     private val whitespace by regexToken("[ \\t]+")
+
+    /**
+     * Token that matches a line continuation: a backslash followed by a newline,
+     * optionally followed by leading whitespace on the next line.
+     * This allows function call arguments to span multiple lines.
+     *
+     * For example:
+     * ```
+     * .container alignment:{center} \
+     *            padding:{1px}
+     * ```
+     */
+    private val lineContinuation by token { string, position ->
+        if (inArg) return@token 0
+
+        val isLineContinuation =
+            string.getOrNull(position) == LINE_CONTINUATION &&
+                string.getOrNull(position + 1) == '\n'
+
+        if (!isLineContinuation) return@token 0
+
+        // Consume `\`, `\n`, and optional leading whitespace on the next line.
+        var length = 2 // LINE_CONTINUATION + newline
+        while (string.getOrNull(position + length)?.let { it == ' ' || it == '\t' } == true) {
+            length++
+        }
+        length
+    }
+
+    /**
+     * Combinator that matches one or more whitespace or line continuation tokens.
+     * Used as a separator between arguments, allowing arguments to span multiple lines.
+     */
+    private val argumentSeparator = oneOrMore(whitespace or lineContinuation)
 
     /**
      * Token that matches the beginning of an inline argument.
@@ -210,7 +250,7 @@ class FunctionCallGrammar(
      */
     private val argumentParser =
         (
-            -optional(whitespace) and
+            -optional(argumentSeparator) and
                 // Optional named argument.
                 optional(identifier and -argumentNameDelimiter) and
                 argumentBegin and
@@ -251,7 +291,7 @@ class FunctionCallGrammar(
                 // Inline arguments.
                 zeroOrMore(argumentParser) and
                 // Body argument.
-                optional(-optional(whitespace) and bodyArgumentParser)
+                optional(-optional(argumentSeparator) and bodyArgumentParser)
         ) map { (id, args, body) ->
             WalkedFunctionCall(
                 id.text,
@@ -265,7 +305,7 @@ class FunctionCallGrammar(
      * The result is an ordered linked list of [WalkedFunctionCall]s, and the first of them is returned.
      */
     private val chainCallParser =
-        callParser and zeroOrMore(-chainSeparator and callParser) map { (first, rest) ->
+        callParser and zeroOrMore(-optional(argumentSeparator) and -chainSeparator and callParser) map { (first, rest) ->
             var current = first
             for (next in rest) {
                 current.next = next
