@@ -1,5 +1,6 @@
 package com.quarkdown.quarkdoc.dokka.signature
 
+import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DParameter
@@ -83,8 +84,8 @@ private class SplitLineBreakingStrategy(
     /**
      * Result:
      * ```
-     * .func abcd:{Int}
-     *         ef:{String}
+     * .func abcd:{Int} \
+     *         ef:{String} \
      *     ghijkl:{Int}
      * ```
      */
@@ -101,11 +102,16 @@ private class SplitLineBreakingStrategy(
             return
         }
 
-        breakLine()
+        lineContinuation()
         pad(supplementPad + firstParameterNameLength - parameterNameLength)
     }
 
     override fun PageContentBuilder.DocumentableContentBuilder.beforeReturn() {
+        lineContinuation()
+    }
+
+    private fun PageContentBuilder.DocumentableContentBuilder.lineContinuation() {
+        punctuation(" " + FunctionCallGrammar.LINE_CONTINUATION)
         breakLine()
     }
 }

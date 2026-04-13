@@ -73,9 +73,9 @@ class QuarkdownSignatureTest :
         testSignature("fun func(a: Int, b: Int, c: Int) = VoidValue") {
             assertEquals(
                 """
-                .func a:{Int}
-                      b:{Int}
-                      c:{Int}
+                .func a:{Int} \
+                      b:{Int} \
+                      c:{Int} \
                 -> Void
                 """.trimIndent(),
                 it,
@@ -88,9 +88,9 @@ class QuarkdownSignatureTest :
         testSignature("fun func(abcd: Int, ef: String, ghijkl: Int) = VoidValue") {
             assertEquals(
                 """
-                .func abcd:{Int}
-                        ef:{String}
-                    ghijkl:{Int}
+                .func abcd:{Int} \
+                        ef:{String} \
+                    ghijkl:{Int} \
                 -> Void
                 """.trimIndent(),
                 it,
@@ -103,9 +103,9 @@ class QuarkdownSignatureTest :
         testSignature("fun func(abcd: Int, ef: String, ghijklmnopqrst: Int) = VoidValue") {
             assertEquals(
                 """
-                .func      abcd:{Int}
-                             ef:{String}
-                 ghijklmnopqrst:{Int}
+                .func      abcd:{Int} \
+                             ef:{String} \
+                 ghijklmnopqrst:{Int} \
                 -> Void
                 """.trimIndent(),
                 it,
