@@ -237,6 +237,27 @@ class FunctionCallTokenizerTest {
     }
 
     @Test
+    fun `function call with line continuation`() {
+        val text = ".function {arg1} \\\n  name:{arg2}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val call = calls.first()
+        val tokens = call.tokens
+
+        // Verify line continuation token is present.
+        val continuationToken = tokens.find { it.type == FunctionCallToken.Type.LINE_CONTINUATION }
+        assertNotNull(continuationToken)
+        assertEquals("\\", continuationToken.lexeme.take(1))
+
+        // Verify the named parameter after the continuation is still tokenized.
+        val paramNameToken = tokens.find { it.type == FunctionCallToken.Type.PARAMETER_NAME }
+        assertNotNull(paramNameToken)
+        assertEquals("name", paramNameToken.lexeme)
+    }
+
+    @Test
     fun `wrapped function call with named parameter`() {
         val text = "{.function param:{value}}"
         val calls = tokenizer.getFunctionCalls(text)

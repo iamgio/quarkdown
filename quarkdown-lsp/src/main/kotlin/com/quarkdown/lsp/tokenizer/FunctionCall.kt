@@ -66,6 +66,9 @@ data class FunctionCallToken(
 
         /** A body argument. */
         BODY_ARGUMENT,
+
+        /** A line continuation (backslash at end of line). */
+        LINE_CONTINUATION,
     }
 }
 

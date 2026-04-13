@@ -365,6 +365,28 @@ class FunctionCallTokensSupplierTest {
         }
     }
 
+    // Line continuation
+
+    @Test
+    fun `function call with line continuation`() {
+        tokenize(
+            ".func {arg1} \\\n  name:{arg2}".normalizeLineSeparators().toString(),
+        ) {
+            assertNext(TYPE_BEGIN, 0..1)
+            assertNext(TYPE_NAME, 1..5)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 6..7)
+            assertNext(TokenType.ENUM, 7..11)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 11..12)
+            // Line continuation is highlighted as punctuation.
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 13..17) // `\` + `\n` + `  `
+            assertNext(TYPE_NAMED_PARAMETER, 17..21) // name
+            assertNext(TYPE_NAMED_PARAMETER_SEPARATOR, 21..22) // :
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 22..23) // {
+            assertNext(TokenType.ENUM, 23..27) // arg2
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 27..28) // }
+        }
+    }
+
     // Wrapped (tight) function calls
 
     @Test
