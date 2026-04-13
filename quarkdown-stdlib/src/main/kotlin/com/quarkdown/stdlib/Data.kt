@@ -75,7 +75,7 @@ internal fun file(
  * @permission [Permission.ProjectRead] to read files located in the project directory
  * @permission [Permission.GlobalRead] to read files located outside the project directory
  * @throws IllegalArgumentException if [lineRange] is out of bounds
- * @wiki File data
+ * @wiki file-data
  */
 fun read(
     @Injected context: Context,
@@ -202,7 +202,7 @@ enum class FileSorting(
  * @permission [Permission.ProjectRead] to list files located in the project directory
  * @permission [Permission.GlobalRead] to list files located outside the project directory
  * @see fileName to exclude the extension from file names
- * @wiki File data
+ * @wiki file-data
  */
 @Name("listfiles")
 fun listFiles(
@@ -246,7 +246,7 @@ fun listFiles(
  * @throws IllegalArgumentException if the file does not exist
  * @permission [Permission.ProjectRead] to access files located in the project directory
  * @permission [Permission.GlobalRead] to access files located outside the project directory
- * @wiki File data
+ * @wiki file-data
  */
 @Name("filename")
 fun fileName(
@@ -282,7 +282,7 @@ enum class CsvParsingMode(
  * @return a table whose content is loaded from the file located in [path]
  * @permission [Permission.ProjectRead] to read CSV files located in the project directory
  * @permission [Permission.GlobalRead] to read CSV files located outside the project directory
- * @wiki File data
+ * @wiki file-data
  */
 fun csv(
     @Injected context: Context,

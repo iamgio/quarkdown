@@ -28,7 +28,7 @@ val Optionality: QuarkdownModule =
 
 /**
  * @return a value which represents nothing
- * @wiki None
+ * @wiki none
  */
 fun none() = NoneValue
 
@@ -49,7 +49,7 @@ internal fun isNone(value: Any?) = value == null || value is None || value is No
  * @param value value to check
  * @return whether [value] represents a [none] value
  * @see [none]
- * @wiki None
+ * @wiki none
  */
 @Name("isnone")
 @LikelyChained
@@ -66,7 +66,7 @@ fun isNone(value: DynamicValue): BooleanValue = isNone(value.unwrappedValue).wra
  * @param fallback value to return if [value] is [none]
  * @return [value] if it is not [none], [fallback] otherwise
  * @see isNone
- * @wiki None
+ * @wiki none
  */
 @LikelyChained
 fun otherwise(
@@ -94,7 +94,7 @@ fun otherwise(
  * It should accept one argument, which is [value], and return a value.
  * @return the result of [mapping] executed on [value] if [value] is not [none], [none] otherwise
  * @see isNone
- * @wiki None
+ * @wiki none
  */
 @LikelyChained
 @Name("ifpresent")
@@ -121,7 +121,7 @@ fun ifPresent(
  * @param value value to check
  * @param condition condition to check, which accepts one argument ([value]) and returns a boolean
  * @return [value] if the result of [condition] is true, [none] otherwise
- * @wiki None
+ * @wiki none
  */
 @LikelyChained
 @Name("takeif")

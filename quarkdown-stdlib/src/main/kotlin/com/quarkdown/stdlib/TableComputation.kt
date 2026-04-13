@@ -151,7 +151,7 @@ private fun reconstructTable(
  * @param order sorting order (`ascending` or `descending`)
  * @param content table to sort
  * @return the sorted [Table] node
- * @wiki Table manipulation
+ * @wiki table-manipulation
  */
 @Name("tablesort")
 fun tableSort(
@@ -199,7 +199,7 @@ fun tableSort(
  * The lambda accepts a single argument, which is the cell value of the column.
  * @param content table to filter
  * @return the filtered [Table] node
- * @wiki Table manipulation
+ * @wiki table-manipulation
  */
 @Name("tablefilter")
 fun tableFilter(
@@ -246,7 +246,7 @@ fun tableFilter(
  * The lambda accepts a single argument, which is the ordered collection of cell values of the column.
  * @param content table to compute on
  * @return the computed [Table] node, of size `columns * (rows + 1)`
- * @wiki Table manipulation
+ * @wiki table-manipulation
  */
 @Name("tablecompute")
 fun tableCompute(
@@ -296,7 +296,7 @@ fun tableCompute(
  * @param column index of the column (starting from 1)
  * @param content table to extract the column from
  * @return the extracted cells
- * @wiki Table manipulation
+ * @wiki table-manipulation
  */
 @Name("tablecolumn")
 fun tableColumn(
@@ -337,7 +337,7 @@ fun tableColumn(
  *
  * @param content table to extract the columns from
  * @return the extracted cells, grouped by column
- * @wiki Table manipulation
+ * @wiki table-manipulation
  */
 @Name("tablecolumns")
 fun tableColumns(
@@ -388,7 +388,7 @@ fun tableColumns(
  * @param rows list of rows, where each row is an iterable of cell values.
  * Rows can have varying lengths; missing cells will be filled with empty content.
  * @return the generated [Table] node
- * @wiki Table generation
+ * @wiki table-generation
  */
 @Name("tablebyrows")
 fun generateTableByRows(

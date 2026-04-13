@@ -67,7 +67,7 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  * @throws IllegalArgumentException if the specified style does not exist or is invalid
  * @permission [Permission.ProjectRead] to read bibliography files located in the project directory
  * @permission [Permission.GlobalRead] to read bibliography files located outside the project directory
- * @wiki Bibliography
+ * @wiki bibliography
  */
 fun bibliography(
     @Injected context: Context,
@@ -142,7 +142,7 @@ fun bibliography(
  * @param key the key (or comma-separated keys) of the bibliography entries to cite
  * @return a wrapped [BibliographyCitation] node
  * @throws IllegalArgumentException if no non-blank citation key is provided
- * @wiki Bibliography#citations
+ * @wiki bibliography#citations
  */
 fun cite(key: String): NodeValue {
     val keys =
