@@ -41,6 +41,12 @@ As before, opt-in libraries, such as Mermaid and KaTeX, are still only included 
 
 Rendering now runs in parallel across sibling elements, improving performance on large documents.
 
+### Fixed
+
+#### Fixed broken wiki links in Quarkdoc
+
+Wiki links at [/docs](https://quarkdown.com/docs) now correctly point to the new wiki.
+
 ## [1.15.1] - 2026-03-31
 
 ### Changed

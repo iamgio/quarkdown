@@ -97,7 +97,7 @@ enum class ContextSandbox {
  *
  * @return the content of the file as a node if a file is included, or nothing if a library is loaded
  * @throws IllegalArgumentException if the loaded Quarkdown source cannot be evaluated
- * @wiki Including other Quarkdown files
+ * @wiki including-other-quarkdown-files
  */
 fun include(
     @Injected context: MutableContext,
@@ -128,7 +128,7 @@ fun include(
  * @return a collection containing the output of the included files
  * @throws IllegalArgumentException if any of the loaded sources cannot be evaluated
  * @see include for information about file inclusion
- * @wiki Including other Quarkdown files
+ * @wiki including-other-quarkdown-files
  */
 @Name("includeall")
 fun includeAll(
@@ -151,7 +151,7 @@ fun includeAll(
  *              If not provided, this function will just add the subdocument to the document graph, without displaying a link.
  * @param anchor optional anchor to a specific section within the subdocument
  * @return a [SubdocumentLink] node, which may be hidden if [label] is not provided
- * @wiki Subdocuments
+ * @wiki subdocuments
  */
 fun subdocument(
     path: String,

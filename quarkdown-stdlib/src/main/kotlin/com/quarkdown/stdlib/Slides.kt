@@ -35,7 +35,7 @@ val Slides: QuarkdownModule =
  * @param transitionStyle global transition style between slides
  * @param transitionSpeed global transition speed between slides
  * @return a new [SlidesConfigurationInitializer] node
- * @wiki Slides configuration
+ * @wiki slides-configuration
  */
 @OnlyForDocumentType(DocumentType.SLIDES)
 @Name("slides")
@@ -62,7 +62,7 @@ fun setSlidesConfiguration(
  * @param behavior visibility type of the fragment and how it reacts to user interactions
  * @param content content to show/hide
  * @return a new [SlidesFragment] node
- * @wiki Slides fragment
+ * @wiki slides-fragment
  */
 @OnlyForDocumentType(DocumentType.SLIDES)
 fun fragment(
@@ -78,7 +78,7 @@ fun fragment(
  *
  * @param content the content of the note
  * @return a new [SlidesSpeakerNote] node
- * @wiki Slides speaker note
+ * @wiki slides-speaker-notes
  */
 @OnlyForDocumentType(DocumentType.SLIDES)
 @Name("speakernote")

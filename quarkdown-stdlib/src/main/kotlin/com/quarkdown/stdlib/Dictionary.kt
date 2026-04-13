@@ -36,7 +36,7 @@ val Dictionary: QuarkdownModule =
  * ```
  * @param dictionary dictionary to initialize
  * @return the dictionary
- * @wiki Dictionary
+ * @wiki dictionary
  */
 fun dictionary(
     @LikelyBody dictionary: Map<String, OutputValue<*>>,
