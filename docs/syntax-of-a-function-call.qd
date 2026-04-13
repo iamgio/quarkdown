@@ -47,6 +47,20 @@ Arguments can span over multiple lines. Indentation is optional and arbitrary.
         .sum {2} {1}
     }
 
+## Line continuation
+
+When a function call has many arguments, a backslash (`\`) at the end of a line continues the argument list on the next line.
+
+```markdown
+.container alignment:{center} \
+           background:{red} \
+           padding:{1px}
+```
+
+The backslash and the newline are consumed by the compiler, and optional leading whitespace on the continuation line is ignored. You can use as many continuation lines as you need.
+
+Line continuation is supported in both block and inline function calls.
+
 ## Nested function calls
 
 Function calls can be nested in arguments, allowing you to compose complex expressions.

@@ -17,6 +17,17 @@ quarkdown c main.qd --allow global-read --deny native-content
 
 Available permissions: `project-read` (default), `global-read`, `network`, `native-content` (default), `all`. See the wiki page for more details.
 
+#### [Line continuation in function calls](https://quarkdown.com/wiki/syntax-of-a-function-call#line-continuation)
+
+A backslash (`\`) at the end of a line lets you split a function call's arguments across multiple lines.
+This improves readability for calls with many parameters:
+
+```markdown
+.container alignment:{center} \
+           background:{red} \
+           padding:{1px}
+```
+
 ### Changed
 
 #### Changed default output directory to `./quarkdown-output` (breaking change)
