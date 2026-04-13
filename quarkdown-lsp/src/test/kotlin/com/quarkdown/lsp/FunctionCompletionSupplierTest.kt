@@ -22,6 +22,8 @@ private const val LAYOUT_MODULE = "Layout"
 private const val DATA_MODULE = "Data"
 
 private const val ALIGNMENT_PARAMETER = "alignment"
+private const val CROSS_PARAMETER = "cross"
+private const val GAP_PARAMETER = "gap"
 private const val BODY_PARAMETER = "body"
 private const val CAPTION_PARAMETER = "caption"
 
@@ -204,6 +206,51 @@ class FunctionCompletionSupplierTest {
         val completions = getCompletions(text, position).map { it.label }
 
         assertContains(completions, ALIGNMENT_PARAMETER)
+    }
+
+    @Test
+    fun `parameter completions on blank line continuation`() {
+        val text = ".$ALIGN_FUNCTION \\\n"
+        val position = Position(1, 0)
+        val completions = getCompletions(text, position).map { it.label }
+
+        assertContains(completions, ALIGNMENT_PARAMETER)
+        assertContains(completions, BODY_PARAMETER)
+    }
+
+    @Test
+    fun `parameter completions on line continuation with some parameters specified`() {
+        val text = ".$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{center} \\\n"
+        val position = Position(1, 0)
+        val completions = getCompletions(text, position).map { it.label }
+
+        assertFalse(ALIGNMENT_PARAMETER in completions)
+        assertEquals(BODY_PARAMETER, completions.single())
+    }
+
+    @Test
+    fun `parameter completions on non-blank continuation line`() {
+        val text = ".$COLUMN_FUNCTION $ALIGNMENT_PARAMETER:{center} \\\n        $GAP_PARAMETER:{1px} "
+        val position = Position(1, text.lines()[1].length)
+        val completions = getCompletions(text, position).map { it.label }
+
+        assertContains(completions, CROSS_PARAMETER)
+        assertContains(completions, BODY_PARAMETER)
+        assertFalse(ALIGNMENT_PARAMETER in completions)
+        assertFalse(GAP_PARAMETER in completions)
+    }
+
+    @Test
+    fun `parameter completions on blank line among non-blank continuations`() {
+        // .column alignment:{center} \
+        //        <cursor here> \
+        //        gap:{1px}
+        val text = ".$COLUMN_FUNCTION $ALIGNMENT_PARAMETER:{center} \\\n \\\n        $GAP_PARAMETER:{1px}"
+        val position = Position(1, 1)
+        val completions = getCompletions(text, position).map { it.label }
+
+        assertContains(completions, CROSS_PARAMETER)
+        assertContains(completions, BODY_PARAMETER)
     }
 
     @Test

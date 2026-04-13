@@ -315,10 +315,18 @@ class FunctionCallGrammar(
         }
 
     /**
+     * Consumes an optional trailing line continuation (`\` + newline) at the end of a function call,
+     * even when no arguments follow on the next line.
+     * This extends the call's parsed range so that tools like the LSP can locate
+     * the call from positions on the blank continuation line.
+     */
+    private val trailingLineContinuation = optional(optional(whitespace) and lineContinuation)
+
+    /**
      * Entry point of the grammar.
      * Parses the whole chain of function calls.
      */
     override val rootParser =
-        (-begin and chainCallParser) or
+        (-begin and chainCallParser and -trailingLineContinuation) or
             (-argumentBegin and -begin and chainCallParser and -argumentEnd)
 }
