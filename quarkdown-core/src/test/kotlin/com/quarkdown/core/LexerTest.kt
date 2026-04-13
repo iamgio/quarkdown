@@ -675,6 +675,102 @@ class LexerTest {
     }
 
     /**
+     * Verifies that backslash line continuation works in block function calls.
+     */
+    @Test
+    fun lineContinuation() {
+        fun walk(source: CharSequence) = FunctionCallWalkerParser(source, allowsBody = true).parse()
+
+        // Basic continuation: two args across two lines.
+        with(walk(".function {x} \\\n{y}")) {
+            assertEquals("function", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+        }
+
+        // Continuation with named arg on next line.
+        with(walk(".function {x} \\\nname:{y}")) {
+            assertEquals("function", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("x", value.arguments[0].value)
+            with(value.arguments[1]) {
+                assertEquals("name", name)
+                assertEquals("y", value)
+            }
+        }
+
+        // Continuation with leading whitespace on next line (consumed).
+        with(walk(".function {x} \\\n    name:{y}")) {
+            assertEquals("function", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("x", value.arguments[0].value)
+            with(value.arguments[1]) {
+                assertEquals("name", name)
+                assertEquals("y", value)
+            }
+        }
+
+        // Multiple continuations across three lines.
+        with(walk(".function {x} \\\n{y} \\\n{z}")) {
+            assertEquals("function", value.name)
+            assertEquals(3, value.arguments.size)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+            assertEquals("z", value.arguments[2].value)
+        }
+
+        // Continuation followed by a body argument.
+        with(
+            walk(
+                """
+                .function {x} \
+                {y}
+                  Body
+                """.trimIndent(),
+            ),
+        ) {
+            assertEquals("function", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+            assertEquals("Body", value.bodyArgument?.value)
+        }
+
+        // Continuation before chaining separator.
+        with(walk(".foo {a} \\\n::bar {b}")) {
+            assertEquals("foo", value.name)
+            assertEquals(1, value.arguments.size)
+            assertEquals("a", value.arguments[0].value)
+            assertEquals("bar", value.next!!.name)
+            assertEquals(1, value.next!!.arguments.size)
+            assertEquals("b", value.next!!.arguments[0].value)
+        }
+
+        // Line continuation also works for inline function calls (allowsBody=false).
+        with(FunctionCallWalkerParser(".function {x} \\\n{y}", allowsBody = false).parse()) {
+            assertEquals("function", value.name)
+            assertEquals(2, value.arguments.size)
+            assertEquals("x", value.arguments[0].value)
+            assertEquals("y", value.arguments[1].value)
+        }
+
+        // Bare backslash at end of source (no newline) is not continuation.
+        with(walk(".function {x} \\")) {
+            assertEquals("function", value.name)
+            assertEquals(1, value.arguments.size)
+            assertEquals("x", value.arguments[0].value)
+        }
+
+        // Backslash inside argument content is literal, not continuation.
+        with(walk(".function {a\\\nb}")) {
+            assertEquals("function", value.name)
+            assertEquals(1, value.arguments.size)
+            assertEquals("a\\\nb", value.arguments[0].value)
+        }
+    }
+
+    /**
      * Verifies that escaped function calls are not tokenized as [FunctionCallToken]s.
      */
     @Test

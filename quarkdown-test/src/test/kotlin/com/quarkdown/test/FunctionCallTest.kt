@@ -95,6 +95,53 @@ class FunctionCallTest {
     }
 
     @Test
+    fun `line continuation`() {
+        // Basic: inline args across lines.
+        execute(".sum {3} \\\n{4}") {
+            assertEquals("<p>7</p>", it)
+        }
+
+        // Named args across lines.
+        execute(".multiply {3} \\\nby:{6}") {
+            assertEquals("<p>18</p>", it)
+        }
+
+        // Multiple continuations.
+        execute(
+            """
+            .sum {.sum {1} {2}} \
+            {4}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>7</p>", it)
+        }
+
+        // Continuation + body argument.
+        execute(
+            """
+            .code \
+            lang:{txt}
+                hello
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<pre><code class=\"language-txt\">hello</code></pre>",
+                it,
+            )
+        }
+
+        // Trailing content after args on a continuation line is inline, not block.
+        execute(
+            """
+            .sum {1} \
+                 {2} hello
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3 hello</p>", it)
+        }
+    }
+
+    @Test
     fun `wrapped inline function call (loose)`() {
         execute("hello {.sum {1} {2}} hello") {
             assertEquals("<p>hello 3 hello</p>", it)

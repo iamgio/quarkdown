@@ -14,6 +14,7 @@ private const val FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME = "argContent"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME = "argumentBegin"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_END_TOKEN_NAME = "argumentEnd"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_CONTENT_TOKEN_NAME = "argContent"
+private const val FUNCTION_CALL_LINE_CONTINUATION_TOKEN_NAME = "lineContinuation"
 
 /**
  * Tokenizes function calls in text content.
@@ -167,6 +168,12 @@ class FunctionCallTokenizer {
             //            ^^^
             FUNCTION_CALL_INLINE_ARGUMENT_CONTENT_TOKEN_NAME -> {
                 FunctionCallToken.Type.INLINE_ARGUMENT_VALUE
+            }
+
+            // .function {x} \
+            //               ^
+            FUNCTION_CALL_LINE_CONTINUATION_TOKEN_NAME -> {
+                FunctionCallToken.Type.LINE_CONTINUATION
             }
 
             else -> {

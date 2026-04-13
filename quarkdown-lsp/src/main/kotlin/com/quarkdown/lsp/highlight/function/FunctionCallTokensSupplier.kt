@@ -13,6 +13,7 @@ import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.FUNCTION_NAME
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.INLINE_ARGUMENT_END
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.INLINE_ARGUMENT_VALUE
+import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.LINE_CONTINUATION
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.NAMED_PARAMETER_DELIMITER
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.PARAMETER_NAME
 import org.eclipse.lsp4j.SemanticTokensParams
@@ -39,23 +40,33 @@ class FunctionCallTokensSupplier : SemanticTokensSupplier {
     private fun FunctionCallToken.toSimpleTokenData(): SimpleTokenData? {
         val type: TokenType? =
             when (type) {
-                BEGIN, FUNCTION_NAME ->
+                BEGIN, FUNCTION_NAME -> {
                     TokenType.FUNCTION_CALL_IDENTIFIER
+                }
 
-                CHAINING_SEPARATOR ->
+                CHAINING_SEPARATOR -> {
                     TokenType.FUNCTION_CALL_CHAINING_SEPARATOR
+                }
 
-                PARAMETER_NAME, NAMED_PARAMETER_DELIMITER ->
+                PARAMETER_NAME, NAMED_PARAMETER_DELIMITER -> {
                     TokenType.FUNCTION_CALL_NAMED_PARAMETER
+                }
 
-                INLINE_ARGUMENT_BEGIN, INLINE_ARGUMENT_END ->
+                INLINE_ARGUMENT_BEGIN, INLINE_ARGUMENT_END -> {
                     TokenType.FUNCTION_CALL_INLINE_ARGUMENT_DELIMITER
+                }
 
-                INLINE_ARGUMENT_VALUE ->
+                INLINE_ARGUMENT_VALUE -> {
                     ValueQualifier.getTokenType(lexeme.trim())
+                }
 
-                BODY_ARGUMENT ->
+                LINE_CONTINUATION -> {
+                    TokenType.FUNCTION_CALL_INLINE_ARGUMENT_DELIMITER
+                }
+
+                BODY_ARGUMENT -> {
                     null
+                }
             }
         return SimpleTokenData(
             type = type ?: return null,
