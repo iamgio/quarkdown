@@ -29,7 +29,7 @@ import java.io.File
  * Name of the default directory to save output files in.
  * It can be overridden by the user.
  */
-const val DEFAULT_OUTPUT_DIRECTORY = "output"
+const val DEFAULT_OUTPUT_DIRECTORY = "quarkdown-output"
 
 /**
  * CLI name to [Permission] set mapping, shared by `--allow` and `--deny`.

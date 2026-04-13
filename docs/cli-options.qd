@@ -38,7 +38,7 @@ Running **`quarkdown c file.qd`** compiles the given file and saves the output t
 
 - **`--pdf`**: produces a PDF file. Learn more in the [PDF export](pdf-export.qd) page.
 
-- `-o <dir>` or `--out <dir>`: sets the directory of the output files. Defaults to `./output`.
+- `-o <dir>` or `--out <dir>`: sets the directory of the output files. Defaults to `./quarkdown-output`.
 
 - `--out-name <name>`: sets the name of the output resource to be saved inside the output directory.
   Defaults to the name of the document, set via [`.docname`](document-metadata.qd).

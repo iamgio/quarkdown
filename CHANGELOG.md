@@ -19,6 +19,10 @@ Available permissions: `project-read` (default), `global-read`, `network`, `nati
 
 ### Changed
 
+#### Changed default output directory to `./quarkdown-output` (breaking change)
+
+The default output directory (`--out`) was changed from `./output` to `./quarkdown-output` to avoid conflicts and ambiguity. If you were relying on the old default, please update your workflow accordingly or compile with `--out ./output` explicitly.
+
 #### Fully offline HTML output
 
 HTML documents now render entirely offline. Assets such as fonts, opt-in libraries and code highlighting themes, are now bundled in the Quarkdown installation and copied to each generated document. Previously, the output relied on CDNs and Google Fonts, which meant that opening a document without an internet connection could lead to broken styling and missing features.
