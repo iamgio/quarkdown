@@ -6,7 +6,6 @@ import com.quarkdown.core.lexer.regex.pattern.WalkedToken
 import com.quarkdown.core.lexer.tokens.FunctionCallToken
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
 import com.quarkdown.core.parser.walker.funcall.FunctionCallWalkerParser
-import com.quarkdown.core.util.isBlankUntilEndOfLine
 
 /**
  * Patterns for block and inline function calls.
@@ -63,7 +62,7 @@ class FunctionCallPatterns {
             walker = { data, remaining ->
                 val result = FunctionCallWalkerParser(remaining, allowsBody = true).parse()
                 // The function call is block-level only if it spans the entire header line.
-                val isBlock = remaining.isBlankUntilEndOfLine(result.endIndex)
+                val isBlock = remaining.isBlankAfterFunctionCall(result.endIndex)
                 if (!isBlock) return@TokenRegexPattern null
 
                 WalkedToken(
@@ -100,3 +99,18 @@ class FunctionCallPatterns {
  * Accepted pattern before a function call.
  */
 const val FUNCTION_CALL_PATTERN_BEFORE = "^|\\s|[^a-zA-Z0-9.\\\\]"
+
+/**
+ * Whether a function call that was parsed from [this] source ends cleanly, with no trailing content
+ * on the same line as the call's last argument. This determines whether the call is block-level.
+ *
+ * @param endIndex the index where the walker stopped parsing
+ * @return `true` if the call is block-level (no trailing content on the last line)
+ */
+private fun CharSequence.isBlankAfterFunctionCall(endIndex: Int): Boolean {
+    // If the walker stopped at a line boundary (e.g. after body arguments), the call's content ended cleanly.
+    if (endIndex >= length || this[endIndex - 1] == '\n') return true
+    // Otherwise, check if the rest of the line after endIndex is blank.
+    val lineEnd = indexOf('\n', endIndex).let { if (it < 0) length else it }
+    return substring(endIndex, lineEnd).isBlank()
+}

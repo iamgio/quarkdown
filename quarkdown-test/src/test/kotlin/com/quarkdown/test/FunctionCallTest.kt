@@ -129,6 +129,16 @@ class FunctionCallTest {
                 it,
             )
         }
+
+        // Trailing content after args on a continuation line is inline, not block.
+        execute(
+            """
+            .sum {1} \
+                 {2} hello
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3 hello</p>", it)
+        }
     }
 
     @Test
