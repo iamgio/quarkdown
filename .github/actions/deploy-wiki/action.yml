@@ -23,5 +23,5 @@ runs:
       with:
         personal_token: ${{ inputs.github-token }}
         external_repository: quarkdown-labs/quarkdown.com
-        publish_dir: docs/output/wiki
+        publish_dir: docs/quarkdown-output/wiki
         destination_dir: wiki

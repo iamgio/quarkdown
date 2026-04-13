@@ -192,7 +192,7 @@ private fun StringBuilder.axis(
  *               or a list of lists of points, which will be plotted as multiple lines.
  * @return the generated diagram node
  * @throws IllegalArgumentException if both [xAxisRange] and [xAxisTags] are set
- * @wiki XY chart
+ * @wiki xy-chart
  */
 @Name("xychart")
 fun xyChart(
@@ -244,7 +244,7 @@ fun xyChart(
  * showing how they are connected through links.
  *
  * @return a new [SubdocumentGraph] node
- * @wiki Subdocuments
+ * @wiki subdocuments
  */
 @Name("subdocumentgraph")
 fun subdocumentGraph() = SubdocumentGraph().wrappedAsValue()

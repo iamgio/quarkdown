@@ -1,6 +1,5 @@
 package com.quarkdown.quarkdoc.dokka.page
 
-import com.quarkdown.core.util.stripAnchor
 import com.quarkdown.quarkdoc.dokka.util.findDeep
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
 import org.jetbrains.dokka.model.DFunction
@@ -8,7 +7,6 @@ import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.model.doc.CustomTagWrapper
 import org.jetbrains.dokka.model.doc.Text
 import org.jetbrains.dokka.plugability.DokkaContext
-import java.net.URLEncoder
 
 private const val TAG_NAME = "wiki"
 
@@ -45,16 +43,6 @@ class WikiLinkPageTransformer(
         documentable: DFunction,
         builder: PageContentBuilder.DocumentableContentBuilder,
     ) = builder.buildGroup {
-        val (page, anchor) = data.stripAnchor() ?: (data to null)
-        val url =
-            buildString {
-                append(WIKI_ROOT)
-                append(URLEncoder.encode(page, Charsets.UTF_8))
-                if (anchor != null) {
-                    append('#')
-                    append(URLEncoder.encode(anchor, Charsets.UTF_8))
-                }
-            }
-        link(data, url)
+        link(data, WIKI_ROOT + data)
     }
 }

@@ -86,7 +86,7 @@ val Flow: QuarkdownModule =
  * @param condition whether the content should be evaluated. If `none`, it is treated as `false`
  * @param body content to evaluate if [condition] is verified. Accepts 0 parameters.
  * @return the evaluation of [body] if [condition] is `true`, nothing otherwise
- * @wiki Conditional statements
+ * @wiki conditional-statements
  */
 @Name("if")
 @Suppress("ktlint:standard:function-naming")
@@ -105,7 +105,7 @@ fun `if`(
  * @param condition whether the content should *not* be evaluated. If `none`, it is treated as `false`, so the content will be evaluated
  * @param body content to evaluate if [condition] is *not* verified. Accepts 0 parameters.
  * @return [body] if [condition] is false, nothing otherwise
- * @wiki Conditional statements
+ * @wiki conditional-statements
  */
 @Name("ifnot")
 fun ifNot(
@@ -179,7 +179,7 @@ fun ifNot(
  * @param iterable collection to iterate
  * @param body the output of each iteration. Accepts 1 parameter (the current element).
  * @return a collection that contains the output of each iteration
- * @wiki Loops
+ * @wiki loops
  */
 @Name("foreach")
 fun forEach(
@@ -214,7 +214,7 @@ fun forEach(
  * @param times number of times to repeat the content
  * @param body the output of each iteration. Accepts 1 parameter (the current repetition index, starting from 1).
  * @return a collection that contains the output of each iteration
- * @wiki Loops
+ * @wiki loops
  */
 fun repeat(
     times: Int,
@@ -288,7 +288,7 @@ private const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
  *
  * @param name name of the function
  * @param body content of the function. Function parameters must be **explicit** lambda parameters
- * @wiki Declaring functions
+ * @wiki declaring-functions
  */
 fun function(
     @Injected context: MutableContext,
@@ -347,7 +347,7 @@ fun function(
  *
  * @param name name of the variable
  * @param value value to assign
- * @wiki Variables
+ * @wiki variables
  */
 @Name("var")
 fun variable(
@@ -431,7 +431,7 @@ fun variable(
  * @param value value to use as a temporary variable
  * @param body content to evaluate with the temporary variable. Accepts 1 parameter ([value] itself)
  * @return the evaluation of [body] with [value] as a parameter
- * @wiki Let
+ * @wiki let
  */
 fun let(
     value: DynamicValue,

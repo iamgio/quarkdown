@@ -135,7 +135,7 @@ private fun <T> MutableContext.modifyOrEchoDocumentInfo(
  *
  * @param type optional type to assign to the document
  * @return the lowercase name of the current document type if [type] is unset, nothing otherwise
- * @wiki Document types
+ * @wiki document-types
  */
 @Name("doctype")
 fun docType(
@@ -169,7 +169,7 @@ fun docType(
  * @param name optional non-blank name to assign to the document
  * @return the current document name if [name] is unset, nothing otherwise
  * @throws IllegalArgumentException if [name] is blank
- * @wiki Document metadata
+ * @wiki document-metadata
  */
 @Name("docname")
 fun docName(
@@ -202,7 +202,7 @@ fun docName(
  *
  * @param description optional description to assign to the document
  * @return the current document description if [description] is unset, nothing otherwise
- * @wiki Document metadata
+ * @wiki document-metadata
  */
 @Name("docdescription")
 fun docDescription(
@@ -234,7 +234,7 @@ fun docDescription(
  *
  * @param author optional author name to assign to the document
  * @return the current document author if [author] is unset, nothing otherwise
- * @wiki Document metadata
+ * @wiki document-metadata
  */
 @Name("docauthor")
 fun docAuthor(
@@ -280,7 +280,7 @@ fun docAuthor(
  * @param authors optional authors to assign to the document.
  *                Each dictionary entry contains the author's name associated with a nested dictionary of additional information.
  * @return the current document authors if [authors] is unset, nothing otherwise
- * @wiki Document metadata
+ * @wiki document-metadata
  */
 @Name("docauthors")
 fun docAuthors(
@@ -335,7 +335,7 @@ fun docAuthors(
  *
  * @param keywords optional collection of keywords to assign to the document
  * @return the current document keywords if [keywords] is unset, nothing otherwise
- * @wiki Document metadata
+ * @wiki document-metadata
  */
 @Name("dockeywords")
 fun docKeywords(
@@ -378,7 +378,7 @@ fun docKeywords(
  *               to assign to the document
  * @return the localized name of the current document language if [locale] is unset, nothing otherwise
  * @throws IllegalArgumentException if the locale tag is invalid or not found
- * @wiki Document metadata
+ * @wiki document-metadata
  */
 @Name("doclang")
 fun docLanguage(
@@ -410,7 +410,7 @@ fun docLanguage(
  *
  * @param color optional color scheme to assign
  * @param layout layout format to assign
- * @wiki Themes
+ * @wiki themes
  */
 fun theme(
     @Injected context: MutableContext,
@@ -467,7 +467,7 @@ fun theme(
  * - `code`, used for code blocks;
  * - `footnotes`, used for footnotes and references to them.
  * Any other key can be addressed by custom elements (see [numbered]).
- * @wiki Numbering
+ * @wiki numbering
  */
 fun numbering(
     @Injected context: MutableContext,
@@ -510,7 +510,7 @@ fun numbering(
 /**
  * Disables numbering across the document, in case a default numbering is set by either [numbering] or the document type default.
  * @see numbering
- * @wiki Numbering
+ * @wiki numbering
  */
 @Name("nonumbering")
 fun disableNumbering(
@@ -547,7 +547,7 @@ fun disableNumbering(
  *                only if the layout [theme] does not enforce a specific heading font
  * @param code font family of code blocks and code spans
  * @param size main font size of the text on each page. Other elements, such as headings, will scale accordingly
- * @wiki Font configuration
+ * @wiki font-configuration
  */
 fun font(
     @Injected context: MutableContext,
@@ -585,7 +585,7 @@ fun font(
  *                This also minorly affects whitespace around lists and between list items
  * @param indent whitespace at the start of each paragraph, multiplied by the font size.
  *               LaTeX's policy is used: indenting the first line of paragraphs, except the first one and aligned ones
- * @wiki Paragraph style
+ * @wiki paragraph-style
  */
 @Name("paragraphstyle")
 fun paragraphStyle(
@@ -617,7 +617,7 @@ fun paragraphStyle(
  * @param figures caption position for figures. If set, overrides [default] for figures
  * @param tables caption position for tables. If set, overrides [default] for tables
  * @param codeBlocks caption position for code blocks. If set, overrides [default] for code blocks
- * @wiki Caption position
+ * @wiki caption-position
  */
 @Name("captionposition")
 fun captionPosition(
@@ -652,7 +652,7 @@ fun captionPosition(
  *
  * @param name name of the macro
  * @param macro TeX code
- * @wiki TeX macros
+ * @wiki tex-macros
  */
 @Name("texmacro")
 fun texMacro(
@@ -718,7 +718,7 @@ fun texMacro(
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
  * @param alignment text alignment of the content on each page
  * @throws IllegalArgumentException if [range] is open-ended (has no finite end)
- * @wiki Page format
+ * @wiki page-format
  */
 @Name("pageformat")
 fun pageFormat(
@@ -786,7 +786,7 @@ fun pageFormat(
  * @param position position of the content within the page
  * @param content content to be displayed on each page
  * @return a [PageMarginContentInitializer] node
- * @wiki Page margin content
+ * @wiki page-margin-content
  */
 @Name("pagemargin")
 fun pageMarginContent(
@@ -807,7 +807,7 @@ fun pageMarginContent(
  * @param content content to be displayed on each page as a footer
  * @return a [PageMarginContentInitializer] node with its position set to bottom center
  * @see pageMarginContent
- * @wiki Page margin content
+ * @wiki page-margin-content
  */
 fun footer(
     @LikelyBody content: MarkdownContent,
@@ -823,7 +823,7 @@ fun footer(
  * In case the current document type does not support page counting (e.g. `plain` documents), `-` is displayed instead.
  *
  * @return a new [PageCounter] node
- * @wiki Page counter
+ * @wiki page-counter
  */
 @Name("currentpage")
 fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
@@ -834,7 +834,7 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
  * In case the current document type does not support page counting (e.g. `plain` documents), `-` is displayed instead.
  *
  * @return a new [PageCounter] node
- * @wiki Page counter
+ * @wiki page-counter
  */
 @Name("totalpages")
 fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
@@ -921,7 +921,7 @@ fun resetPageNumber(
  * @param depth the depth of the last [Heading] to match (1-6)
  * @return a new [LastHeading] node
  * @see pageMarginContent
- * @wiki Persistent headings
+ * @wiki persistent-headings
  */
 @NotForDocumentType(DocumentType.PLAIN)
 @Name("lastheading")
@@ -940,7 +940,7 @@ fun lastHeading(depth: Int) = LastHeading(depth).wrappedAsValue()
  * @param maxDepth heading depth to force page breaks for (positive only).
  * @throws IllegalArgumentException if [maxDepth] is a negative value
  * @see disableAutoPageBreak
- * @wiki Page break
+ * @wiki page-break
  */
 @Name("autopagebreak")
 fun autoPageBreak(
@@ -958,7 +958,7 @@ fun autoPageBreak(
 /**
  * Disables automatic page breaks when a heading is found.
  * @see autoPageBreak
- * @wiki Page break
+ * @wiki page-break
  */
 @Name("noautopagebreak")
 fun disableAutoPageBreak(
@@ -974,7 +974,7 @@ fun disableAutoPageBreak(
  * @param name name of the marker
  * @return a [Heading] marker node
  * @see tableOfContents
- * @wiki Table of contents
+ * @wiki table-of-contents
  */
 fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedAsValue()
 
@@ -1028,7 +1028,7 @@ fun navigationContainer(
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  *                    When at least one item is focused, non-focused items are visually de-emphasized.
  * @return an [AstRoot] containing an optional heading and a [TableOfContentsView]
- * @wiki Table of contents
+ * @wiki table-of-contents
  */
 @Name("tableofcontents")
 fun tableOfContents(

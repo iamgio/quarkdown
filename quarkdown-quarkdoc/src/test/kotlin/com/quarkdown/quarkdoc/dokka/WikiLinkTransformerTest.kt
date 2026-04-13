@@ -41,18 +41,18 @@ class WikiLinkTransformerTest : QuarkdocDokkaTest() {
     }
 
     @Test
-    fun `wiki with escape`() {
+    fun `wiki with hyphenated slug`() {
         test(
             """
             /**
-             * @wiki home: page
+             * @wiki multi-column-layout
              */
             fun func() = Unit
             """.trimIndent(),
             "func",
         ) {
             assertContains(it, "Wiki page")
-            assertContains(it, WIKI_ROOT + "home%3A+page")
+            assertContains(it, WIKI_ROOT + "multi-column-layout")
         }
     }
 
@@ -61,14 +61,14 @@ class WikiLinkTransformerTest : QuarkdocDokkaTest() {
         test(
             """
             /**
-             * @wiki File data#reading-files
+             * @wiki file-data#reading-files
              */
             fun func() = Unit
             """.trimIndent(),
             "func",
         ) {
             assertContains(it, "Wiki page")
-            assertContains(it, WIKI_ROOT + "File+data#reading-files")
+            assertContains(it, WIKI_ROOT + "file-data#reading-files")
         }
     }
 }

@@ -40,7 +40,7 @@ private val emojiCatalog by lazy { EmojiTemplateCatalog(allEmojis) }
  *
  * @param shortcode the shortcode of the emoji to insert (without colons)
  * @return the emoji as a string, or the shortcode as plain text, surrounded by colons, if not found
- * @wiki Emojis
+ * @wiki emojis
  */
 fun emoji(shortcode: String) = emojiCatalog.replaceShortcodes(":$shortcode:").wrappedAsValue()
 
@@ -56,7 +56,7 @@ fun emoji(shortcode: String) = emojiCatalog.replaceShortcodes(":$shortcode:").wr
  * > [quarkdown.com/docs/emoji-list](https://quarkdown.com/docs/emoji-list) is generated from this function!
  *
  * @return a dictionary where keys are emoji characters and values are their shortest shortcodes
- * @wiki Emojis
+ * @wiki emojis
  */
 @Name("allemojis")
 fun allEmojis(): DictionaryValue<StringValue> =

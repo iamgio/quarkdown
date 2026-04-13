@@ -90,7 +90,7 @@ val Layout: QuarkdownModule =
  * @param className CSS class name to apply to the container, if supported by the renderer. None if unset
  * @param body content to group
  * @return the new [Container] node
- * @wiki Container
+ * @wiki container
  */
 fun container(
     @LikelyNamed width: Size? = null,
@@ -144,7 +144,7 @@ fun container(
  * @param body content to center
  * @return the new aligned [Container] node
  * @see container
- * @wiki Align
+ * @wiki align
  */
 fun align(
     alignment: Container.Alignment,
@@ -162,7 +162,7 @@ fun align(
  * @param body content to center
  * @return the new aligned [Container] node
  * @see align
- * @wiki Align
+ * @wiki align
  */
 fun center(
     @LikelyBody body: MarkdownContent,
@@ -174,7 +174,7 @@ fun center(
  * @param alignment floating position
  * @param body content to float
  * @return the new floating [Container] node
- * @wiki Float
+ * @wiki float
  */
 fun float(
     @LikelyNamed alignment: Container.FloatAlignment,
@@ -214,7 +214,7 @@ private fun stack(
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
  * @return the new [Stacked] node
- * @wiki Stacks
+ * @wiki stacks
  */
 fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
@@ -231,7 +231,7 @@ fun row(
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
  * @return the new [Stacked] node
- * @wiki Stacks
+ * @wiki stacks
  */
 fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
@@ -254,7 +254,7 @@ fun column(
  * @param body content to stack
  * @return the new [Stacked] node
  * @throws IllegalArgumentException if [columnCount] is non-positive
- * @wiki Stacks
+ * @wiki stacks
  */
 fun grid(
     @Name("columns") columnCount: Int,
@@ -276,7 +276,7 @@ fun grid(
  * This feature is experimental and may render inconsistently.
  * @param body content to transpose
  * @return the new [Landscape] node
- * @wiki Landscape content
+ * @wiki landscape-content
  */
 fun landscape(
     @LikelyBody body: MarkdownContent,
@@ -290,7 +290,7 @@ fun landscape(
  *
  * @param body content to span across all columns
  * @return the new [Container] node with [Container.fullColumnSpan] enabled
- * @wiki Multi-column layout
+ * @wiki multi-column-layout
  */
 @Name("fullspan")
 fun fullColumnSpan(
@@ -318,7 +318,7 @@ fun whitespace(
  * @param clip clip type to apply
  * @param body content to clip
  * @return the new [Clipped] block
- * @wiki Clip
+ * @wiki clip
  */
 fun clip(
     clip: Clipped.Clip,
@@ -337,7 +337,7 @@ fun clip(
  * @param foregroundColor foreground (text) color. If unset, the box uses the default color
  * @param body box content
  * @return the new [Box] node
- * @wiki Box
+ * @wiki box
  */
 fun box(
     @Injected context: Context,
@@ -395,7 +395,7 @@ fun toDo(
  * @param open whether the block is open at the beginning
  * @param body content of the block when expanded
  * @return the new [Collapse] node
- * @wiki Collapsible
+ * @wiki collapsible
  */
 fun collapse(
     title: InlineMarkdownContent,
@@ -410,7 +410,7 @@ fun collapse(
  * @param short content to show when the node is collapsed
  * @param open whether the block is open at the beginning
  * @return the new [InlineCollapse] node
- * @wiki Collapsible
+ * @wiki collapsible
  */
 @Name("textcollapse")
 fun inlineCollapse(
@@ -441,7 +441,7 @@ fun inlineCollapse(
  * @param referenceId optional ID for cross-referencing via [reference]
  * @param body content, with the formatted location of this element (as a string) as an argument
  * @return the new [Numbered] node
- * @wiki Numbering
+ * @wiki numbering
  */
 fun numbered(
     @LikelyNamed key: String,
@@ -476,7 +476,7 @@ fun numbered(
  *
  * @param subTables independent tables (as Markdown sources) that will be parsed and joined together into a single table
  * @return a new [Table] node
- * @wiki Table generation
+ * @wiki table-generation
  */
 fun table(
     @Injected context: Context,

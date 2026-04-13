@@ -64,7 +64,7 @@ val Reference: QuarkdownModule =
  *
  * @param id the reference ID of the target node being referenced
  * @return a [CrossReference] to the target node
- * @wiki Cross-references
+ * @wiki cross-references
  */
 @Name("ref")
 fun reference(id: String) = CrossReference(id).wrappedAsValue()
