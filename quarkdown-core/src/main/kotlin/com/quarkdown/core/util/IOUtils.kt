@@ -3,6 +3,7 @@ package com.quarkdown.core.util
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
+import java.security.MessageDigest
 import kotlin.io.path.Path
 
 /**
@@ -41,6 +42,29 @@ object IOUtils {
         val parentPath = parent.toPath().resolveReal()
         val childPath = child.toPath().resolveReal()
         return childPath.startsWith(parentPath)
+    }
+
+    /**
+     * Computes a SHA-256 digest that represents the current state of [file].
+     * - For a regular file, the digest covers its content.
+     * - For a directory, the digest covers the sorted list of relative paths and file sizes,
+     *   which is fast (metadata only) and catches additions, deletions, and size changes.
+     */
+    fun computeChecksum(file: File): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        if (file.isFile) {
+            digest.update(file.readBytes())
+        } else {
+            file
+                .walkTopDown()
+                .filter { it.isFile }
+                .sortedBy { it.relativeTo(file).path }
+                .forEach {
+                    digest.update(it.relativeTo(file).path.toByteArray())
+                    digest.update(it.length().toString().toByteArray())
+                }
+        }
+        return digest.digest().joinToString("") { "%02x".format(it) }
     }
 
     /**

@@ -25,7 +25,7 @@ interface InstallLayoutEntry {
     fun resolveDirectory(relativePath: String): InstallLayoutDirectory = InstallLayoutDirectory(file.resolve(relativePath))
 
     /** Wraps this entry as an [OutputResource] for the pipeline to output. */
-    fun asOutputResource(): OutputResource = FileReferenceOutputArtifact(name, file)
+    fun asOutputResource(): OutputResource = FileReferenceOutputArtifact(name, file, useChecksumInvalidation = true)
 }
 
 /**
