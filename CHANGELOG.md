@@ -59,6 +59,11 @@ In order to get the `.docname`-based output name, consider compiling without `--
 
 ### Fixed
 
+#### Fixed live preview flashing with dark themes
+
+Fixed an issue that caused live preview to display white flashes when using dark color themes, during the crossfade transition.
+The transition background now matches the target's background color.
+
 #### Fixed broken wiki links in Quarkdoc
 
 Wiki links at [/docs](https://quarkdown.com/docs) now correctly point to the new wiki.

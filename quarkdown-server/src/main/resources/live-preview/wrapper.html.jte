@@ -43,7 +43,6 @@
             overflow: hidden;
             z-index: 999999;
             background-color: white;
-            transition: opacity 0.3s ease-in-out;
             will-change: opacity, transform;
             transform: translateZ(0);
             backface-visibility: hidden;
@@ -56,12 +55,14 @@
             opacity: 0;
             z-index: 999998;
             pointer-events: none;
+            transition: opacity 0.3s ease-in;
         }
 
         .visible {
             opacity: 1;
             z-index: 999999;
             pointer-events: auto;
+            transition: opacity 0.3s ease-out;
         }
 
         .debug .frame-container {
@@ -290,6 +291,21 @@
     }
 
     /**
+     * Syncs the root background color to match the active frame's content,
+     * so that any opacity gap during the crossfade doesn't flash a mismatched color.
+     * @param {HTMLIFrameElement} frame - The frame to sample from
+     */
+    function syncBackgroundColor(frame) {
+        const body = frame.contentDocument?.body;
+        if (!body) return;
+        const bg = frame.contentWindow?.getComputedStyle(body)?.backgroundColor;
+        if (bg) {
+            document.querySelector('.frame-container').style.backgroundColor = bg;
+            document.documentElement.style.backgroundColor = bg;
+        }
+    }
+
+    /**
      * Performs the frame swap. Only called when the hidden frame is fully ready
      * (loaded and rendered), so scroll can be restored accurately on the
      * still-hidden frame before it becomes visible.
@@ -300,6 +316,10 @@
 
         const outgoing = getActiveFrame();
         const incoming = getInactiveFrame();
+
+        // Match the root background to the incoming frame's content
+        // to prevent flashing during the crossfade.
+        syncBackgroundColor(incoming);
 
         // Snapshot the scroll position from the outgoing frame at the last possible moment,
         // so any user scrolling since the reload started is captured.
@@ -401,8 +421,9 @@
     function onFrameRendered() {
         if (!reloadPending) {
             // Initial page load (no reload in progress).
-            // Just set up scroll tracking on the active frame.
-            setupScrollTracking(getActiveFrame());
+            const active = getActiveFrame();
+            syncBackgroundColor(active);
+            setupScrollTracking(active);
             return;
         }
         frameRendered = true;
