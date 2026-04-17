@@ -52,6 +52,11 @@ As before, opt-in libraries, such as Mermaid and KaTeX, are still only included 
 
 Rendering now runs in parallel across sibling elements, improving performance on large documents.
 
+#### Static preview output file name (breaking change)
+
+When launching with `--preview` (without `--out-name`), the output directory name no longer matches `.docname`, because its dynamic nature may easily break the preview. Instead, it's now `preview-<mainfile>-<hash>`.  
+In order to get the `.docname`-based output name, consider compiling without `--preview`.
+
 ### Fixed
 
 #### Fixed broken wiki links in Quarkdoc

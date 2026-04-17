@@ -203,12 +203,37 @@ abstract class ExecuteCommand(
         ).let(::finalizeCliOptions)
 
     /**
+     * When preview is enabled, the output resource name must be fixed
+     * so that changing the document title doesn't break the live preview.
+     * If the user explicitly set [resourceName], that value is used as-is.
+     * Otherwise, if preview is enabled, the resource name is derived from a hash of the source file path.
+     * @param cliOptions finalized CLI options
+     * @return the resolved resource name, or `null` to let the pipeline decide
+     */
+    private fun resolveResourceName(cliOptions: CliOptions): String? =
+        when {
+            resourceName != null -> {
+                resourceName
+            }
+
+            preview -> {
+                cliOptions.source
+                    ?.let { it.nameWithoutExtension to it.absolutePath.hashCode().toUInt() }
+                    ?.let { (name, hash) -> "preview-$name-$hash" }
+            }
+
+            else -> {
+                null
+            }
+        }
+
+    /**
      * @param cliOptions finalized CLI options
      * @return pipeline options based on the command's properties
      */
     fun createPipelineOptions(cliOptions: CliOptions) =
         PipelineOptions(
-            resourceName = resourceName,
+            resourceName = resolveResourceName(cliOptions),
             prettyOutput = prettyOutput,
             wrapOutput = !noWrap,
             workingDirectory = cliOptions.source?.absoluteFile?.parentFile,

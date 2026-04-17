@@ -404,6 +404,56 @@ class CompileCommandTest : TempDirectory() {
         checkPdf()
     }
 
+    /**
+     * Runs the command with `--preview --pipe` to test preview resource name resolution
+     * without triggering server communication (`--pipe` causes an early return in `postExecute`).
+     * @return the pipeline options after parsing
+     */
+    private fun testPreviewResourceName(vararg additionalArgs: String): PipelineOptions {
+        val pipeStdout = java.io.ByteArrayOutputStream()
+        val originalOut = System.out
+        try {
+            System.setOut(java.io.PrintStream(pipeStdout))
+            command.test(
+                main.absolutePath,
+                "-o",
+                outputDirectory.absolutePath,
+                "--preview",
+                "--pipe",
+                *additionalArgs,
+            )
+        } finally {
+            System.setOut(originalOut)
+        }
+        return command.createPipelineOptions(command.createCliOptions())
+    }
+
+    @Test
+    fun `preview uses deterministic resource name`() {
+        val pipelineOptions = testPreviewResourceName()
+        val expectedHash = main.absolutePath.hashCode().toUInt()
+        assertEquals("preview-main-$expectedHash", pipelineOptions.resourceName)
+    }
+
+    @Test
+    fun `preview resource name is stable across runs`() {
+        val first = testPreviewResourceName()
+        val second = testPreviewResourceName()
+        assertEquals(first.resourceName, second.resourceName)
+    }
+
+    @Test
+    fun `preview with explicit output name uses explicit name`() {
+        val pipelineOptions = testPreviewResourceName("--out-name", "Custom")
+        assertEquals("Custom", pipelineOptions.resourceName)
+    }
+
+    @Test
+    fun `no preview uses null resource name`() {
+        val (_, pipelineOptions) = test()
+        assertEquals(null, pipelineOptions.resourceName)
+    }
+
     @Test
     fun `plaintext, single subdocument`() {
         val (_, _, _) = test("--render", "text")
