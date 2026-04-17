@@ -45,7 +45,7 @@ object IOUtils {
     }
 
     /**
-     * Computes a SHA-256 digest that represents the current state of [file].
+     * Computes an SHA-256 digest that represents the current state of [file].
      * - For a regular file, the digest covers its content.
      * - For a directory, the digest covers the sorted list of relative paths and file sizes,
      *   which is fast (metadata only) and catches additions, deletions, and size changes.
@@ -61,7 +61,9 @@ object IOUtils {
                 .sortedBy { it.relativeTo(file).path }
                 .forEach {
                     digest.update(it.relativeTo(file).path.toByteArray())
+                    digest.update(0)
                     digest.update(it.length().toString().toByteArray())
+                    digest.update(0)
                 }
         }
         return digest.digest().joinToString("") { "%02x".format(it) }
