@@ -16,3 +16,12 @@ test("displays cross-references with localized labels", async (page) => {
     expect(await getFullText(equationRef)).toEqual("(1)");
     expect(await getFullText(tableRef)).toEqual("Table 1");
 });
+
+test("all cross-references are linked", async (page) => {
+    const links = page.locator("a:has(.cross-reference)");
+    await expect(links).toHaveCount(3);
+
+    await expect(links.nth(0)).toHaveAttribute("href", "#title");
+    await expect(links.nth(1)).toHaveAttribute("href", "#line-eq");
+    await expect(links.nth(2)).toHaveAttribute("href", "#tab");
+});

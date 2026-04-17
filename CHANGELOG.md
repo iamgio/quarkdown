@@ -28,7 +28,7 @@ This improves readability for calls with many parameters:
            padding:{1px}
 ```
 
-#### [Keybinding](https://quarkdown.com/wiki/keybinding)
+#### [Keybinding](https://quarkdown.com/wiki/keybindings)
 
 The new `.keybinding {keys}` function displays a keyboard shortcut as styled key labels.
 Modifier keys are platform-aware: on macOS, they automatically display native symbols (e.g. `⌘` instead of `Ctrl`).
@@ -54,6 +54,10 @@ The new `.htmloptions` function configures HTML-specific generation settings. It
 ```markdown
 .htmloptions baseurl:{https://quarkdown.com/wiki}
 ```
+
+#### [Linked cross-references for all referenceable types](https://quarkdown.com/wiki/cross-references)
+
+Cross-references (`.ref`) to figures, tables, code blocks, math equations, and custom numbered blocks are now rendered as clickable links that navigate to the referenced element. Previously, only heading references were linked.
 
 ### Changed
 

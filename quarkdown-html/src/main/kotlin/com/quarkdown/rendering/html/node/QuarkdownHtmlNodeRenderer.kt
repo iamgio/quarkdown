@@ -61,6 +61,7 @@ import com.quarkdown.core.ast.quarkdown.invisible.PageNumberReset
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
+import com.quarkdown.core.ast.quarkdown.reference.linkableReferenceId
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.options.shouldAutoPageBreak
@@ -75,6 +76,7 @@ import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.Escape
 import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
+import com.quarkdown.rendering.html.HtmlIdentifierProvider.Companion.sanitizeId
 import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.CssBuilder
 import com.quarkdown.rendering.html.css.asCSS
@@ -148,9 +150,10 @@ class QuarkdownHtmlNodeRenderer(
                 context.documentInfo.layout.captionPosition
                     .getOrDefault(positionProvider)
 
-            // The label is set as the ID of the element.
+            // The reference ID or label is set as the ID of the element, allowing cross-references to link to it.
             val label = node.getLocationLabel(context)
-            label?.let { optionalAttribute("id", "$idPrefix-$it") }
+            val id = (node as? CrossReferenceableNode)?.linkableReferenceId?.let(::sanitizeId) ?: label?.let { "$idPrefix-$it" }
+            id?.let { optionalAttribute("id", it) }
 
             if (node.caption == null && label == null) {
                 // No caption and no label: nothing to show.
@@ -190,6 +193,7 @@ class QuarkdownHtmlNodeRenderer(
         buildTag("formula") {
             +node.expression
             attribute("data-block", "")
+            optionalAttribute("id", node.linkableReferenceId?.let(::sanitizeId))
             optionalAttribute("data-location", node.getLocationLabel(context))
         }
 
@@ -253,10 +257,19 @@ class QuarkdownHtmlNodeRenderer(
             }
         }
 
-    override fun visit(node: Numbered) =
-        buildMultiTag {
-            +node.children
+    override fun visit(node: Numbered): CharSequence {
+        val id = node.linkableReferenceId?.let(::sanitizeId)
+        return if (id != null) {
+            buildTag("div") {
+                attribute("id", id)
+                +node.children
+            }
+        } else {
+            buildMultiTag {
+                +node.children
+            }
         }
+    }
 
     override fun visit(node: Landscape) = div("landscape", node.children)
 
@@ -430,7 +443,10 @@ class QuarkdownHtmlNodeRenderer(
         val definition: CrossReferenceableNode = node.getDefinition(context) ?: return Text("[???]").accept(this)
 
         // The target node could have an ID. If so, the reference is a link to that node.
-        val anchorId = (definition as? Identifiable)?.accept(HtmlIdentifierProvider.of(this))
+        // Headings use Identifiable for auto-generated IDs; other nodes use their referenceId directly.
+        val anchorId =
+            (definition as? Identifiable)?.accept(HtmlIdentifierProvider.of(this))
+                ?: definition.linkableReferenceId?.let(::sanitizeId)
 
         val reference =
             buildTag("span") {
@@ -451,9 +467,9 @@ class QuarkdownHtmlNodeRenderer(
                         +definition.text
                     }
 
-                    // Fallback: raw reference ID.
+                    // Fallback: raw reference ID, escaped for safe HTML output.
                     else -> {
-                        +node.referenceId
+                        +escapeCriticalContent(node.referenceId)
                     }
                 }
                 if (definition is LocalizedKind) {
@@ -708,8 +724,8 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: Code): String {
         val block = super.visit(node)
 
-        // If the code is numbered or has a caption, it is wrapped in a figure.
-        if (node.caption == null && node.getLocationLabel(context) == null) {
+        // If the code is numbered, has a caption, or has a reference ID, it is wrapped in a figure.
+        if (node.caption == null && node.getLocationLabel(context) == null && node.linkableReferenceId == null) {
             return block
         }
         return buildTag("figure") {

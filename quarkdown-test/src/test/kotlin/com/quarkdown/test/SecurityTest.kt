@@ -73,6 +73,58 @@ class SecurityTest {
     }
 
     @Test
+    fun `cross-reference id injection (heading)`() {
+        execute(
+            """
+            ## Title {#"><script>alert('XSS')</script>}
+
+            See .ref {"><script>alert('XSS')</script>}.
+            """.trimIndent(),
+        ) {
+            // Angle brackets, quotes, and ampersands are stripped from IDs by sanitizeId().
+            val sanitizedId = "scriptalert(XSS)/script"
+            assertContains(it, "id=\"$sanitizedId\"")
+            assertContains(it, "href=\"#$sanitizedId\"")
+            // No raw script tags in the output.
+            assert("<script>" !in it) { "Raw <script> tag found in output: $it" }
+        }
+    }
+
+    @Test
+    fun `cross-reference id injection (figure)`() {
+        execute(
+            """
+            ![Image](img.png) {#"><img src=x onerror=alert(1)>}
+
+            See .ref {"><img src=x onerror=alert(1)>}.
+            """.trimIndent(),
+        ) {
+            val sanitizedId = "imgsrc=xonerror=alert(1)"
+            assertContains(it, "id=\"$sanitizedId\"")
+            assertContains(it, "href=\"#$sanitizedId\"")
+            // The reference ID fallback text is HTML-escaped, not rendered as raw HTML.
+            assertContains(it, "&lt;img src=x onerror=alert(1)&gt;")
+        }
+    }
+
+    @Test
+    fun `cross-reference id injection (math)`() {
+        execute(
+            """
+            .numbering
+                - equations: 1
+
+            ${'$'} E=mc^2 ${'$'} {#" onclick="alert(1)}
+            """.trimIndent(),
+        ) {
+            // Quotes and spaces are stripped from IDs.
+            val sanitizedId = "onclick=alert(1)"
+            assertContains(it, "id=\"$sanitizedId\"")
+            assert("onclick=\"alert" !in it) { "Injected event handler found in output: $it" }
+        }
+    }
+
+    @Test
     fun `docname sanitization at file export time`() {
         execute(
             ".docname {../test.abc}",
