@@ -2,7 +2,7 @@ package com.quarkdown.core.pipeline.output
 
 /**
  * Abstraction of an output entity produced by the pipeline.
- * A resource is saved to file via a [FileResourceExporter].
+ * A resource is saved to file via a [com.quarkdown.core.pipeline.output.visitor.FileResourceExporter].
  */
 interface OutputResource {
     /**

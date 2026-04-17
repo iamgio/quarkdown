@@ -1,5 +1,6 @@
 package com.quarkdown.core.pipeline.output.visitor
 
+import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
@@ -10,12 +11,14 @@ import com.quarkdown.core.pipeline.output.OutputResourceVisitor
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter.NameProvider.fileNameWithoutExtension
 import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter.NameProvider.fullFileName
+import com.quarkdown.core.util.IOUtils
 import com.quarkdown.core.util.sanitizeFileName
 import java.io.File
 
 /**
  * A visitor that saves each type of [OutputResource] to a file and returns it.
  * @param location directory to save the resources to
+ * @param write whether to actually write to the file system (if `false`, the visitor only returns the corresponding file paths without creating them)
  */
 class FileResourceExporter(
     private val location: File,
@@ -83,19 +86,51 @@ class FileResourceExporter(
     /**
      * Copies a [FileReferenceOutputArtifact] to the output location.
      * If the source is a directory, it is copied recursively.
+     *
+     * When [FileReferenceOutputArtifact.useChecksumInvalidation] is enabled, a sibling
+     * `.checksum` file is maintained next to the output. If the checksum of the source
+     * matches the stored value, the copy is skipped entirely. This avoids redundant I/O
+     * for large assets (fonts, third-party libraries) that rarely change between builds.
+     *
      * @return the copied file or directory
      */
     override fun visit(artifact: FileReferenceOutputArtifact) =
-        File(location, artifact.name).also {
-            if (write) {
-                it.parentFile?.mkdirs()
-                if (artifact.file.isDirectory) {
-                    artifact.file.copyRecursively(it, overwrite = true)
-                } else {
-                    artifact.file.copyTo(it, overwrite = true)
+        File(location, artifact.name).also { target ->
+            if (!write) return@also
+
+            target.parentFile?.mkdirs()
+
+            if (artifact.useChecksumInvalidation) {
+                val checksumFile = target.resolveSibling("${target.name}.checksum")
+                val currentChecksum = IOUtils.computeChecksum(artifact.file)
+                val storedChecksum = checksumFile.takeIf { it.isFile }?.readText()
+
+                if (currentChecksum == storedChecksum && target.exists()) {
+                    Log.debug { "Skipping '${artifact.name}': checksum unchanged ($currentChecksum)" }
+                    return@also
                 }
+
+                Log.debug {
+                    "Copying '${artifact.name}': checksum changed " +
+                        "(stored=${storedChecksum ?: "<none>"}, current=$currentChecksum)"
+                }
+                copyFileOrDirectory(artifact.file, target)
+                checksumFile.writeText(currentChecksum)
+            } else {
+                copyFileOrDirectory(artifact.file, target)
             }
         }
+
+    private fun copyFileOrDirectory(
+        source: File,
+        target: File,
+    ) {
+        if (source.isDirectory) {
+            source.copyRecursively(target, overwrite = true)
+        } else {
+            source.copyTo(target, overwrite = true)
+        }
+    }
 
     /**
      * Saves an [OutputResourceGroup] to a directory which contains its nested files.

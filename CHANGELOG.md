@@ -38,7 +38,7 @@ The default output directory (`--out`) was changed from `./output` to `./quarkdo
 
 HTML documents now render entirely offline. Assets such as fonts, opt-in libraries and code highlighting themes, are now bundled in the Quarkdown installation and copied to each generated document. Previously, the output relied on CDNs and Google Fonts, which meant that opening a document without an internet connection could lead to broken styling and missing features.
 
-With this change, compilation is slightly slower and the output directory size is larger, but it comes with more predictable rendering and significantly faster page loads.
+With this change, output directory size is larger, but it comes with more predictable rendering and significantly faster page loads. First-time compilations may take slightly longer due to the additional copying step, but subsequent compilation times should be unaffected thanks to checksum validation.
 
 As before, opt-in libraries, such as Mermaid and KaTeX, are still only included if used in the document, so they don't affect performance or output size if not needed.
 

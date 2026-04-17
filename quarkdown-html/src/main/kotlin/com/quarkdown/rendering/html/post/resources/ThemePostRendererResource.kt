@@ -95,7 +95,13 @@ class ThemePostRendererResource(
      */
     private fun buildArtifacts(components: List<Component>): Set<OutputResource> =
         buildSet {
-            components.mapTo(this) { FileReferenceOutputArtifact(name = it.name, file = it.source) }
+            components.mapTo(this) {
+                FileReferenceOutputArtifact(
+                    name = it.name,
+                    file = it.source,
+                    useChecksumInvalidation = true,
+                )
+            }
             add(
                 TextOutputArtifact(
                     name = MANIFEST_NAME,
