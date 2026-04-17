@@ -1,0 +1,42 @@
+.docname {HTML static assets}
+.include {docs}
+
+Static assets let you ship arbitrary files alongside your compiled HTML output, without any further processing.
+
+Place files in a `public/` directory at the project root, next to your main source file. When compiling, Quarkdown copies its entire contents into the root of the output directory, preserving the original directory structure.
+
+Common examples of static assets include `robots.txt` for search engine crawling rules, `CNAME` for custom domain configuration on GitHub Pages, and misc binary files.
+
+## Example
+
+Given this project structure:
+
+.filetree
+    - main.qd
+    - **public**
+      - robots.txt
+      - CNAME
+      - static
+        - resume.pdf
+
+After compiling, the output looks like:
+
+.filetree
+    - My document
+      - index.html
+      - theme
+        - ...
+      - script
+        - ...
+      - **robots.txt**
+      - **CNAME**
+      - **static**
+        - resume.pdf
+
+## Name collisions
+
+Avoid placing files in `public/` that share names with Quarkdown's generated resources (e.g. `index.html`, `theme/`, `script/`). If a collision occurs, it is undefined which version ends up in the output.
+
+## Subdocuments
+
+Static assets are only copied for the root document. [Subdocument](subdocuments.qd) outputs do not make duplicate copies of the assets.
