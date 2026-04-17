@@ -215,6 +215,29 @@ class FileResourceExporterTest {
         }
 
     @Test
+    fun `checksum re-copies when target deleted but checksum file survives`() =
+        withTempDir { dir ->
+            val source = File(dir, "src").also { it.mkdir() }
+            val sourceFile = File(source, "lib.js").also { it.writeText("content") }
+
+            val output = File(dir, "out").also { it.mkdir() }
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile, useChecksumInvalidation = true)
+
+            // First export.
+            artifact.accept(FileResourceExporter(output))
+            assertTrue(File(output, "lib.js").isFile)
+
+            // Delete the target but leave the checksum file.
+            File(output, "lib.js").delete()
+            assertTrue(File(output, "lib.js.checksum").isFile)
+
+            // Second export: checksum matches but target is missing -> must re-copy.
+            artifact.accept(FileResourceExporter(output))
+            assertTrue(File(output, "lib.js").isFile)
+            assertEquals("content", File(output, "lib.js").readText())
+        }
+
+    @Test
     fun `no checksum file when invalidation is disabled`() =
         withTempDir { dir ->
             val source = File(dir, "src").also { it.mkdir() }

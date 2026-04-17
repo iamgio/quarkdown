@@ -105,7 +105,7 @@ class FileResourceExporter(
                 val currentChecksum = IOUtils.computeChecksum(artifact.file)
                 val storedChecksum = checksumFile.takeIf { it.isFile }?.readText()
 
-                if (currentChecksum == storedChecksum) {
+                if (currentChecksum == storedChecksum && target.exists()) {
                     Log.debug { "Skipping '${artifact.name}': checksum unchanged ($currentChecksum)" }
                     return@also
                 }
