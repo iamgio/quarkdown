@@ -1,7 +1,7 @@
 .docname {CSS}
 .include {docs}
 
-The **`.css`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/css.html} function lets you apply CSS styles to the document.
+The **`.css`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Html/css.html} function lets you apply CSS styles to the document.
 
 > [!WARNING]
 > CSS styles only apply to HTML and HTML-PDF documents. They have no effect on other output formats.
@@ -64,7 +64,7 @@ You can leverage [custom functions](declaring-functions.qd) to create reusable e
 
 ## Overriding properties
 
-If you want to *override* Quarkdown's default styles, we recommend using the **`.cssproperties`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Injection/cssproperties.html} function.
+If you want to *override* Quarkdown's default styles, we recommend using the **`.cssproperties`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Html/cssproperties.html} function.
 
 This function takes a [dictionary](dictionary.qd) of strings, where each item is a `--qd-*` CSS property and its value.
 
