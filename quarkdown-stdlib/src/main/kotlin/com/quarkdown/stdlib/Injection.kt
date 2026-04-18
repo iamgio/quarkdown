@@ -37,7 +37,7 @@ val Injection: QuarkdownModule =
  *
  * @param baseUrl the base URL to use for resolving relative paths in the generated HTML, e.g. `https://example.com`.
  *                Trailing slashes are automatically ignored.
- *                If specified, a canonical link is set in the HTML's `<head>`.
+ *                If specified, a canonical link is set in the HTML's `<head>` and the sitemap is generated.
  * @wiki html-options
  */
 @Name("htmloptions")

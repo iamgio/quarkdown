@@ -13,6 +13,7 @@ import com.quarkdown.rendering.html.post.resources.PostRendererResource
 import com.quarkdown.rendering.html.post.resources.ProxiedPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ScriptPostRendererResource
 import com.quarkdown.rendering.html.post.resources.SearchIndexPostRendererResource
+import com.quarkdown.rendering.html.post.resources.SitemapPostRendererResource
 import com.quarkdown.rendering.html.post.resources.StaticAssetsPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource
@@ -61,6 +62,7 @@ class HtmlPostRenderer(
                 MediaPostRendererResource(context.mediaStorage),
                 context.fileSystem.workingDirectory
                     ?.let(::StaticAssetsPostRendererResource),
+                SitemapPostRendererResource(context),
                 SearchIndexGenerator
                     .takeIf { context.documentInfo.type == DocumentType.DOCS }
                     ?.generate(context.sharedSubdocumentsData)
