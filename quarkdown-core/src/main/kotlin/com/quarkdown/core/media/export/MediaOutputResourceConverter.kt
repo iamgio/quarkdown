@@ -6,6 +6,7 @@ import com.quarkdown.core.media.MediaVisitor
 import com.quarkdown.core.media.RemoteMedia
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
+import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 
 /**
@@ -16,10 +17,10 @@ class MediaOutputResourceConverter(
     private val name: String,
 ) : MediaVisitor<OutputResource> {
     override fun visit(media: LocalMedia) =
-        BinaryOutputArtifact(
+        FileReferenceOutputArtifact(
             name,
-            media.file.readBytes().toList(),
-            ArtifactType.AUTO,
+            media.file,
+            useChecksumInvalidation = true,
         )
 
     override fun visit(media: RemoteMedia) =

@@ -72,6 +72,10 @@ Rendering now runs in parallel across sibling elements, improving performance on
 When launching with `--preview` (without `--out-name`), the output directory name no longer matches `.docname`, because its dynamic nature may easily break the preview. Instead, it's now `preview-<mainfile>-<hash>`.  
 In order to get the `.docname`-based output name, consider compiling without `--preview`.
 
+#### Lightweight media storage IO
+
+IO over the media storage system is now more lightweight and secure, as media files are now copied by reference rather than by content. Each media export now also comes with a checksum that's validated on subsequent exports to avoid unnecessary copying.
+
 #### Renamed `Injection` stdlib module to `Html`
 
 The `Injection` module, which contains functions related to raw HTML injection, was renamed to `Html`.
