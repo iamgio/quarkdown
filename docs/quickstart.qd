@@ -574,6 +574,23 @@ You can also visualize the knowledge graph formed by subdocuments:
 !(650)[Subdocuments](quickstart/subdocuments.png)
 
 
+## Static assets
+
+> Reference: [HTML static assets](html-static-assets.qd)
+
+When exporting to HTML, you might want to ship extra files alongside the generated document, such as a `robots.txt` or a `CNAME` for GitHub Pages.
+
+To do so, create a `public/` directory next to your main source file and place the files inside it:
+
+.filetree
+    - my-document.qd
+    - setup.qd
+    - content.qd
+    - **public**
+      - robots.txt
+      - CNAME
+
+Quarkdown copies everything inside `public/` to the root of the output directory as-is, without any processing.
 
 ## Conclusion
 

@@ -101,6 +101,7 @@
 ###! Native content
 - [HTML](html.qd)
 - [CSS](css.qd)
+- [HTML static assets](html-static-assets.qd)
 
 ###! Value types
 - String

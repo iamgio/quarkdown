@@ -1,19 +1,29 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
+import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
+import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.execute
 import com.quarkdown.test.util.getSubResources
+import com.quarkdown.test.util.getSubdocumentGroup
 import kotlinx.serialization.json.Json
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 /**
  * Tests for generation of HTML output resources.
  */
 class HtmlOutputResourceTest {
+    /** Working directory that contains a `public/` subdirectory with test static assets. */
+    private val staticAssetsDir = File(DATA_FOLDER, "static-assets")
+
     @Test
     fun `regular output with index, theme and script dirs`() {
         execute(
@@ -38,6 +48,81 @@ class HtmlOutputResourceTest {
             },
         ) {}
     }
+
+    // Static assets (public/ directory)
+
+    /**
+     * Finds the static-assets [FileReferenceOutputArtifact] (name `"."`) among the root resources,
+     * or `null` if absent.
+     */
+    private fun findStaticAssetsArtifact(group: OutputResource?): FileReferenceOutputArtifact? =
+        getSubResources(group)
+            .filterIsInstance<FileReferenceOutputArtifact>()
+            .firstOrNull { it.name == "." }
+
+    @Test
+    fun `static assets from public directory are included`() {
+        execute(
+            source = "",
+            workingDirectory = staticAssetsDir,
+            outputResourceHook = { group ->
+                val artifact = findStaticAssetsArtifact(group)
+                assertNotNull(artifact, "Expected a static-assets artifact (name '.') in root resources")
+                assertTrue(artifact.file.isDirectory)
+                assertTrue(artifact.file.resolve("robots.txt").isFile)
+                assertTrue(artifact.file.resolve("CNAME").isFile)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `static assets include subdirectories`() {
+        execute(
+            source = "",
+            workingDirectory = staticAssetsDir,
+            outputResourceHook = { group ->
+                val artifact = findStaticAssetsArtifact(group)
+                assertNotNull(artifact)
+                assertTrue(artifact.file.resolve("assets/icons/favicon.svg").isFile)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `no static assets when public directory is absent`() {
+        execute(
+            source = "",
+            outputResourceHook = { group ->
+                assertNull(findStaticAssetsArtifact(group))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `subdocuments do not include static assets`() {
+        execute(
+            """
+            .doctype {docs}
+
+            [Page](subdoc/page.qd)
+            """.trimIndent(),
+            workingDirectory = staticAssetsDir,
+            outputResourceHook = { group ->
+                // Root should have static assets.
+                assertNotNull(findStaticAssetsArtifact(group))
+
+                // Subdocument should not.
+                val subdocGroup = getSubdocumentGroup(group, "page")
+                val subdocStaticAssets =
+                    subdocGroup.resources
+                        .filterIsInstance<FileReferenceOutputArtifact>()
+                        .firstOrNull { it.name == "." }
+                assertNull(subdocStaticAssets)
+            },
+        ) {}
+    }
+
+    // Search index
 
     private fun getSearchIndexOutputResource(group: OutputResource?): TextOutputArtifact {
         val resources = getSubResources(group)

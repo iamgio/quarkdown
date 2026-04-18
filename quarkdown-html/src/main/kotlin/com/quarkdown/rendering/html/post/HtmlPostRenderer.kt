@@ -13,6 +13,7 @@ import com.quarkdown.rendering.html.post.resources.PostRendererResource
 import com.quarkdown.rendering.html.post.resources.ProxiedPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ScriptPostRendererResource
 import com.quarkdown.rendering.html.post.resources.SearchIndexPostRendererResource
+import com.quarkdown.rendering.html.post.resources.StaticAssetsPostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource
 import com.quarkdown.rendering.html.search.SearchIndexGenerator
@@ -29,6 +30,9 @@ private val DEFAULT_THEME =
  * - Theme components
  * - Runtime scripts
  * - Media resources
+ * - Third-party libraries (e.g. KaTeX, Mermaid)
+ * - User-provided static assets (from a `public/` directory)
+ * - Search index (for docs)
  *
  * @param context the [Context] of the document being rendered
  * @param resourcesLayout the install layout node for the `html/` subtree, used to locate themes, scripts, and third-party libraries
@@ -55,11 +59,12 @@ class HtmlPostRenderer(
                 ),
                 ScriptPostRendererResource(scriptsLayout = resourcesLayout?.scripts),
                 MediaPostRendererResource(context.mediaStorage),
-                if (context.documentInfo.type == DocumentType.DOCS) {
-                    SearchIndexPostRendererResource(SearchIndexGenerator.generate(context.sharedSubdocumentsData))
-                } else {
-                    null
-                },
+                context.fileSystem.workingDirectory
+                    ?.let(::StaticAssetsPostRendererResource),
+                SearchIndexGenerator
+                    .takeIf { context.documentInfo.type == DocumentType.DOCS }
+                    ?.generate(context.sharedSubdocumentsData)
+                    ?.let(::SearchIndexPostRendererResource),
                 ThirdPartyPostRendererResource(context, librariesLayout = resourcesLayout?.libraries),
             )
         },

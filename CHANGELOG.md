@@ -28,6 +28,10 @@ This improves readability for calls with many parameters:
            padding:{1px}
 ```
 
+#### [HTML static assets](https://quarkdown.com/wiki/html-static-assets)
+
+A `public/` directory in your project root lets you ship arbitrary files, such as `robots.txt` or `CNAME`, alongside the compiled output. Quarkdown copies the entire contents into the root of the output directory, preserving the original structure, without any processing.
+
 ### Changed
 
 #### Changed default output directory to `./quarkdown-output` (breaking change)
