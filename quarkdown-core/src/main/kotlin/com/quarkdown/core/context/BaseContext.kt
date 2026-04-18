@@ -6,6 +6,8 @@ import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.context.file.RootGranularity
 import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.context.file.getRootFileSystem
+import com.quarkdown.core.context.options.ContextOptions
+import com.quarkdown.core.context.options.MutableContextOptions
 import com.quarkdown.core.context.subdocument.SubdocumentsData
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument

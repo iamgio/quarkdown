@@ -22,7 +22,7 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.isSubdocumentUrl
+import com.quarkdown.core.context.options.isSubdocumentUrl
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.flavor.InlineLexerVariant
 import com.quarkdown.core.function.value.factory.IllegalRawValueException

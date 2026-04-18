@@ -62,7 +62,7 @@ import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrat
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.MutableContextOptions
+import com.quarkdown.core.context.options.MutableContextOptions
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.size.cm
 import com.quarkdown.core.document.size.inch

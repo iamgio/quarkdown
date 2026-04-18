@@ -3,6 +3,7 @@ package com.quarkdown.core.context
 import com.quarkdown.core.ast.attributes.AstAttributes
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.context.options.ContextOptions
 import com.quarkdown.core.context.subdocument.SubdocumentsData
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument

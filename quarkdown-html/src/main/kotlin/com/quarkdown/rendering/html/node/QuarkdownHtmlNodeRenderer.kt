@@ -62,7 +62,7 @@ import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
-import com.quarkdown.core.context.shouldAutoPageBreak
+import com.quarkdown.core.context.options.shouldAutoPageBreak
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.layout.caption.CaptionPosition
 import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
