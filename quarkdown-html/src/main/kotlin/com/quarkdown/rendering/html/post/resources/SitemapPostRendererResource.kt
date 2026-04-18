@@ -32,6 +32,8 @@ class SitemapPostRendererResource(
     private val subdocuments: Map<Subdocument, Context>
         get() = context.sharedSubdocumentsData.withContexts
 
+    override val runsInPreviewMode: Boolean = false
+
     override fun includeTo(
         resources: MutableSet<OutputResource>,
         rendered: CharSequence,

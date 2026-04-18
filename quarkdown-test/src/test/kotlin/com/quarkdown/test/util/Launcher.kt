@@ -51,6 +51,7 @@ val DEFAULT_OPTIONS =
  * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
  * @param permissions the set of permissions granted to the pipeline
  * @param subdocumentNaming the strategy used to determine subdocument output file names
+ * @param previewMode whether to simulate preview mode, which suppresses certain resources from being generated
  * @param outputResourceHook action run after the pipeline execution, with the output resource as a parameter
  * @param afterPostRenderingHook action run after post-rendering. Parameters are the pipeline context and the post-rendered result
  * @param afterRenderingHook action run after rendering. Parameters are the pipeline context and the rendered result
@@ -67,6 +68,7 @@ fun execute(
     enableMediaStorage: Boolean = false,
     permissions: Set<Permission> = Permission.DEFAULT_SET,
     subdocumentNaming: SubdocumentOutputNaming = SubdocumentOutputNaming.FILE_NAME,
+    previewMode: Boolean = false,
     outputResourceHook: Context.(OutputResource?) -> Unit = {},
     afterPostRenderingHook: Context.(CharSequence) -> Unit = {},
     afterRenderingHook: Context.(CharSequence) -> Unit,
@@ -108,6 +110,7 @@ fun execute(
                 enableMediaStorage = enableMediaStorage,
                 permissions = permissions,
                 subdocumentNaming = subdocumentNaming,
+                isPreview = previewMode,
             ),
             libraries = setOf(Stdlib.library),
             renderer = renderer,

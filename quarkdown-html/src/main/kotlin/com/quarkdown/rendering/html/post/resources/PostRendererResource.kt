@@ -12,6 +12,12 @@ import com.quarkdown.core.pipeline.output.OutputResource
  */
 sealed interface PostRendererResource {
     /**
+     * Whether this resource should be included in the output during live preview.
+     */
+    val runsInPreviewMode: Boolean
+        get() = true
+
+    /**
      * Collects resources and adds them to the output set.
      * @param resources the mutable set to add resources to
      * @param rendered the rendered HTML content, which may be inspected to determine required resources
