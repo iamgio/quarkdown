@@ -185,6 +185,43 @@ class SubdocumentTest {
     }
 
     @Test
+    fun `canonical link for root and subdocuments`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .docname {Parent doc}
+            """.trimIndent(),
+            subdocumentGraph = {
+                it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc)
+            },
+            outputResourceHook = { group ->
+                val rootHtml = getSubdocumentResource(group, Subdocument.Root, this).content
+                assertContains(rootHtml, "href=\"https://example.com\" rel=\"canonical\"")
+
+                val subdocHtml = getSubdocumentResource(group, simpleSubdoc, this).content
+                assertContains(subdocHtml, "href=\"https://example.com/${simpleSubdoc.name}\" rel=\"canonical\"")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `no canonical link without base url`() {
+        execute(
+            "",
+            subdocumentGraph = {
+                it.addVertex(simpleSubdoc).addEdge(Subdocument.Root, simpleSubdoc)
+            },
+            outputResourceHook = { group ->
+                val rootHtml = getSubdocumentResource(group, Subdocument.Root, this).content
+                assertFalse("rel=\"canonical\"" in rootHtml)
+
+                val subdocHtml = getSubdocumentResource(group, simpleSubdoc, this).content
+                assertFalse("rel=\"canonical\"" in subdocHtml)
+            },
+        ) {}
+    }
+
+    @Test
     fun `simple subdocument from file`() {
         arrayOf(
             "The link is: [1](subdoc/simple-1.qd)",

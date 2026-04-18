@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.attributes.presence.hasCode
 import com.quarkdown.core.ast.attributes.presence.hasMath
 import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.context.options.HtmlOptions
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.layout.page.PageOrientation
@@ -42,6 +43,7 @@ class DocumentTest {
             assertNull(documentInfo.locale)
             assertTrue(documentInfo.layout.pageFormats.isEmpty())
             assertNull(documentInfo.layout.paragraphStyle.spacing)
+            assertEquals(HtmlOptions(), options.html)
         }
     }
 
@@ -178,6 +180,25 @@ class DocumentTest {
                     "<ol><li><p>quarkdown</p></li><li><p>markdown</p></li><li><p>documentation</p></li></ol>",
                 it,
             )
+        }
+    }
+
+    // HTML options
+
+    @Test
+    fun `html options base url`() {
+        execute(
+            ".htmloptions baseurl:{https://example.com}",
+        ) {
+            assertEquals(HtmlOptions(baseUrl = "https://example.com"), options.html)
+        }
+    }
+
+    @Test
+    fun `html options default`() {
+        execute("") {
+            assertEquals(HtmlOptions(), options.html)
+            assertNull(options.html.baseUrl)
         }
     }
 

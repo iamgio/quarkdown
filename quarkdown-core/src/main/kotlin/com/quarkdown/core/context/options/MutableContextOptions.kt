@@ -20,6 +20,7 @@ data class MutableContextOptions(
     },
     override var enableRemoteMediaStorage: Boolean = false,
     override var enableLocalMediaStorage: Boolean = false,
+    override var html: HtmlOptions = HtmlOptions(),
 ) : ContextOptions {
     /**
      * Mutates this instance by merging the current media storage rules with the given [options].

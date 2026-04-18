@@ -98,10 +98,11 @@
 - [Interactive fragment](slides-fragment.qd)
 - [Speaker notes](slides-speaker-notes.qd)
 
-###! Native content
+###! HTML
 - [HTML](html.qd)
 - [CSS](css.qd)
-- [HTML static assets](html-static-assets.qd)
+- [HTML options](html-options.qd)
+- [Static assets](html-static-assets.qd)
 
 ###! Value types
 - String
