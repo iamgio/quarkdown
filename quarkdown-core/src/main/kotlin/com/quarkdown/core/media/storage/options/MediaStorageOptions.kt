@@ -2,7 +2,7 @@ package com.quarkdown.core.media.storage.options
 
 /**
  * Read-only options that affect the rules of a context's media storage.
- * @see com.quarkdown.core.context.MutableContextOptions for an implementation
+ * @see com.quarkdown.core.context.options.MutableContextOptions for an implementation
  */
 interface MediaStorageOptions {
     /**

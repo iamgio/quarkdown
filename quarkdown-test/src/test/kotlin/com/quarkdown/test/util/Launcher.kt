@@ -2,7 +2,7 @@ package com.quarkdown.test.util
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.MutableContextOptions
+import com.quarkdown.core.context.options.MutableContextOptions
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming

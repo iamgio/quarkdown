@@ -2,6 +2,7 @@ package com.quarkdown.core.context
 
 import com.quarkdown.core.ast.attributes.MutableAstAttributes
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
+import com.quarkdown.core.context.options.MutableContextOptions
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.MarkdownFlavor

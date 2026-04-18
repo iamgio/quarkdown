@@ -1,9 +1,8 @@
-package com.quarkdown.core.context
+package com.quarkdown.core.context.options
 
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
-
-private val DEFAULT_SUBDOCUMENT_URL_SUFFIXES = setOf(".qd", ".md")
 
 /**
  * Read-only properties that affect several behaviors of the document generation process,
@@ -36,7 +35,6 @@ interface ContextOptions : MediaStorageOptions {
      * @see com.quarkdown.core.ast.base.inline.SubdocumentLink
      */
     val subdocumentUrlSuffixes: Set<String>
-        get() = DEFAULT_SUBDOCUMENT_URL_SUFFIXES
 
     /**
      * Supplier of unique identifiers (UUIDs). For instance, UUIDs are generated for anonymous footnotes.
@@ -59,30 +57,3 @@ fun Context.shouldAutoPageBreak(heading: Heading) =
  * @see com.quarkdown.core.ast.base.inline.SubdocumentLink
  */
 fun Context.isSubdocumentUrl(url: String): Boolean = options.subdocumentUrlSuffixes.any { url.endsWith(it, ignoreCase = true) }
-
-/**
- * Mutable [ContextOptions] implementation.
- */
-data class MutableContextOptions(
-    override var autoPageBreakHeadingMaxDepth: Int = 1,
-    override var enableAutomaticIdentifiers: Boolean = true,
-    override var enableLocationAwareness: Boolean = true,
-    override var subdocumentUrlSuffixes: Set<String> = DEFAULT_SUBDOCUMENT_URL_SUFFIXES,
-    override var uuidSupplier: () -> String = {
-        java.util.UUID
-            .randomUUID()
-            .toString()
-    },
-    override var enableRemoteMediaStorage: Boolean = false,
-    override var enableLocalMediaStorage: Boolean = false,
-) : ContextOptions {
-    /**
-     * Mutates this instance by merging the current media storage rules with the given [options].
-     * An option is overridden and merged only if its value from [options] is set, i.e. not `null`.
-     * @param options options to merge this instance with
-     */
-    fun mergeMediaStorageOptions(options: MediaStorageOptions) {
-        options.enableRemoteMediaStorage?.let { enableRemoteMediaStorage = it }
-        options.enableLocalMediaStorage?.let { enableLocalMediaStorage = it }
-    }
-}
