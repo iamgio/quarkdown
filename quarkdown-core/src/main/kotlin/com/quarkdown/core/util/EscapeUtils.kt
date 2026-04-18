@@ -1,6 +1,7 @@
 package com.quarkdown.core.util
 
 import org.apache.commons.text.StringEscapeUtils
+import java.net.URLEncoder
 
 /**
  * Represents a target (commonly a language or format) that strings can be escaped for.
@@ -58,5 +59,16 @@ object Escape {
         override fun escape(input: String): String = StringEscapeUtils.escapeJson(input)
 
         override fun unescape(input: String): String = StringEscapeUtils.unescapeJson(input)
+    }
+
+    /**
+     * Percent-encodes a URL path. Each `/`-separated segment is encoded individually,
+     * preserving `/` as a path separator. Spaces become `%20` (not `+`).
+     */
+    object Url : EscapeTarget {
+        override fun escape(input: String): String =
+            input.split("/").joinToString("/") {
+                URLEncoder.encode(it, Charsets.UTF_8).replace("+", "%20")
+            }
     }
 }

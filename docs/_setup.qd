@@ -1,5 +1,6 @@
 .doclang {English}
 .theme {galactic} layout:{hyperlegible}
+.htmloptions baseurl:{https://quarkdown.com/wiki}
 
 .numbering
     - example: 1

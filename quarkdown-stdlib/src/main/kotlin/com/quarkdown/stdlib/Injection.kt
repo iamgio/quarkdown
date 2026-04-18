@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.base.block.Html
 import com.quarkdown.core.context.Context
+import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -9,6 +10,7 @@ import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.Value
+import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.requirePermission
@@ -20,10 +22,34 @@ import com.quarkdown.stdlib.internal.applyImportantToCSS
  */
 val Injection: QuarkdownModule =
     moduleOf(
+        ::htmlOptions,
         ::html,
         ::css,
         ::cssProperties,
     )
+
+/**
+ * Configures HTML generation options.
+ *
+ * ```markdown
+ * .htmloptions baseurl:{https://example.com}
+ * ```
+ *
+ * @param baseUrl the base URL to use for resolving relative paths in the generated HTML, e.g. `https://example.com`.
+ *                Trailing slashes are automatically ignored.
+ *                If specified, a canonical link is set in the HTML's `<head>`.
+ * @wiki html-options
+ */
+@Name("htmloptions")
+fun htmlOptions(
+    @Injected context: MutableContext,
+    @Name("baseurl") baseUrl: String? = null,
+) = VoidValue.also {
+    context.options.html =
+        context.options.html.copy(
+            baseUrl = baseUrl?.trimEnd('/'),
+        )
+}
 
 /**
  * Creates an HTML element, which is rendered as-is without any additional processing or escaping,

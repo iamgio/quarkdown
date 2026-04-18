@@ -2,6 +2,8 @@ package com.quarkdown.rendering.html.post.document
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.util.Escape
 import com.quarkdown.rendering.html.post.resources.HTML_LIBRARY_OUTPUT_PATH
 import com.quarkdown.rendering.html.post.resources.HTML_SCRIPT_FILE_NAME
@@ -70,6 +72,7 @@ class HtmlDocumentBuilder(
 
     private fun HEAD.buildHead() {
         documentMetadata()
+        canonicalLink()
         viewport()
         quarkdownMeta()
         title(document.name ?: "Quarkdown")
@@ -99,6 +102,25 @@ class HtmlDocumentBuilder(
             .takeIf { it.isNotEmpty() }
             ?.joinToString { it.name }
             ?.let { meta(name = "author", content = it) }
+    }
+
+    /**
+     * Emits a `<link rel="canonical">` tag if a [base URL][com.quarkdown.core.context.options.HtmlOptions.baseUrl]
+     * is configured. For the root document, the canonical URL is the base URL itself; for subdocuments, the
+     * subdocument's output directory name is appended.
+     */
+    private fun HEAD.canonicalLink() {
+        val baseUrl =
+            context.options.html.baseUrl
+                ?.trimEnd('/') ?: return
+
+        val canonicalUrl =
+            when (context.subdocument) {
+                Subdocument.Root -> baseUrl
+                else -> "$baseUrl/${context.subdocument.getOutputFileName(context).let(Escape.Url::escape)}"
+            }
+
+        link(rel = "canonical", href = canonicalUrl)
     }
 
     /** Emits the viewport meta tag, disabling user scaling for slides. */

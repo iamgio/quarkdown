@@ -3,6 +3,7 @@ package com.quarkdown.rendering.html
 import com.quarkdown.core.ast.attributes.presence.markMathPresence
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.options.HtmlOptions
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentType
@@ -101,6 +102,21 @@ class HtmlPostRendererTest {
         val result = postRenderer().wrap("")
         assertTrue("A test document" in result)
         assertTrue("name=\"description\"" in result)
+    }
+
+    // Canonical link
+
+    @Test
+    fun `no canonical link without base url`() {
+        val result = postRenderer().wrap("")
+        assertFalse("rel=\"canonical\"" in result)
+    }
+
+    @Test
+    fun `canonical link for root document`() {
+        context.options.html = HtmlOptions(baseUrl = "https://example.com")
+        val result = postRenderer().wrap("")
+        assertContains(result, "href=\"https://example.com\" rel=\"canonical\"")
     }
 
     @Test

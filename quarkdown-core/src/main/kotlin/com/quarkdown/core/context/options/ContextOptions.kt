@@ -40,6 +40,11 @@ interface ContextOptions : MediaStorageOptions {
      * Supplier of unique identifiers (UUIDs). For instance, UUIDs are generated for anonymous footnotes.
      */
     val uuidSupplier: () -> String
+
+    /**
+     * Native HTML generation options.
+     */
+    val html: HtmlOptions
 }
 
 /**
