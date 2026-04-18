@@ -32,9 +32,12 @@ This improves readability for calls with many parameters:
 
 A `public/` directory in your project root lets you ship arbitrary files, such as `robots.txt` or `CNAME`, alongside the compiled output. Quarkdown copies the entire contents into the root of the output directory, preserving the original structure, without any processing.
 
-#### [HTML options and canonical links](https://quarkdown.com/wiki/html-options)
+#### [HTML options, sitemap and canonical links](https://quarkdown.com/wiki/html-options)
 
-The new `.htmloptions` function configures HTML-specific generation settings. Currently, it accepts a `baseurl` parameter which, when set, emits a `<link rel="canonical">` tag in each page's `<head>`, pointing to the canonical URL of the root document or subdocument.
+The new `.htmloptions` function configures HTML-specific generation settings. It accepts a `baseurl` parameter which, when set:
+
+- Emits a `<link rel="canonical">` tag in each page's `<head>`, pointing to the canonical URL of the root document or subdocument.
+- Generates a `sitemap.xml` with absolute URLs for the root and all subdocuments, enabling search engine discovery.
 
 ```markdown
 .htmloptions baseurl:{https://quarkdown.com/wiki}

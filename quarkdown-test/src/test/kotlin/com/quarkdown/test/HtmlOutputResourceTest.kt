@@ -1,6 +1,7 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
+import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
@@ -13,6 +14,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -118,6 +120,79 @@ class HtmlOutputResourceTest {
                         .filterIsInstance<FileReferenceOutputArtifact>()
                         .firstOrNull { it.name == "." }
                 assertNull(subdocStaticAssets)
+            },
+        ) {}
+    }
+
+    // Sitemap
+
+    private fun findSitemap(group: OutputResource?): TextOutputArtifact? =
+        getSubResources(group)
+            .filterIsInstance<TextOutputArtifact>()
+            .firstOrNull { it.name == "sitemap.xml" && it.type == ArtifactType.AUTO }
+
+    @Test
+    fun `no sitemap when there are no subdocuments`() {
+        execute(
+            source = ".htmloptions baseurl:{https://example.com}",
+            outputResourceHook = { group ->
+                assertNull(findSitemap(group))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `no sitemap without base url`() {
+        execute(
+            """
+            .doctype {docs}
+
+            [1](subdoc/simple-1.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                assertNull(findSitemap(group))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `sitemap lists root and subdocuments with absolute urls`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+
+            [1](subdoc/simple-1.qd)
+            [2](subdoc/simple-2.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                val sitemap = findSitemap(group)
+                assertNotNull(sitemap)
+                val content = sitemap.content.toString()
+                assertContains(content, "<loc>https://example.com</loc>")
+                assertContains(content, "<loc>https://example.com/simple-1</loc>")
+                assertContains(content, "<loc>https://example.com/simple-2</loc>")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `sitemap does not duplicate root as index subdocument`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+
+            [1](subdoc/simple-1.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                val sitemap = findSitemap(group)
+                assertNotNull(sitemap)
+                val content = sitemap.content.toString()
+                // The base URL should appear exactly once (the root entry).
+                val occurrences = Regex("<loc>https://example\\.com</loc>").findAll(content).count()
+                assertEquals(1, occurrences)
+                assertFalse("<loc>https://example.com/index</loc>" in content)
             },
         ) {}
     }
