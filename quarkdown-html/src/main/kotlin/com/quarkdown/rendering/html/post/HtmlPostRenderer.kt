@@ -75,7 +75,10 @@ class HtmlPostRenderer(
         buildSet {
             // The HTML content is always included, regardless of the other options.
             val resources = resourcesProvider() + ProxiedPostRendererResource(base)
-            resources.forEach { it.includeTo(this, rendered) }
+            for (resource in resources) {
+                if (!resource.runsInPreviewMode && context.attachedPipeline?.options?.isPreview == true) continue
+                resource.includeTo(this, rendered)
+            }
         }
 
     override fun wrapResources(

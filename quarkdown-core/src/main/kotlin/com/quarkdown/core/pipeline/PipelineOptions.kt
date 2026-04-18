@@ -24,6 +24,7 @@ import java.io.File
  * as the media architecture is defined by Quarkdown through a [com.quarkdown.core.context.hooks.MediaStorerHook].
  * If this is disabled, [MediaStorageOptions] are ignored.
  * @param subdocumentNaming the strategy used to determine subdocument output file names
+ * @param isPreview whether the pipeline is running in preview mode, which may suppress certain post-rendering steps, such as HTML sitemap generation
  * @param permissions the set of permissions granted to this pipeline, controlling access to file system, network, and other resources
  * @param mediaStorageOptionsOverrides rules that override the default behavior of the media storage system
  * @param errorHandler the error handler strategy to use when an error occurs in the pipeline, during the processing of a Quarkdown file
@@ -37,6 +38,7 @@ data class PipelineOptions(
     val workingDirectory: File? = null,
     val enableMediaStorage: Boolean = true,
     val subdocumentNaming: SubdocumentOutputNaming = SubdocumentOutputNaming.FILE_NAME,
+    val isPreview: Boolean = false,
     val serverPort: Int? = null,
     val permissions: Set<Permission> = Permission.DEFAULT_SET,
     val mediaStorageOptionsOverrides: MediaStorageOptions = ReadOnlyMediaStorageOptions(),

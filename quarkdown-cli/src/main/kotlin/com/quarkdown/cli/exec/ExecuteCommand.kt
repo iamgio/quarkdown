@@ -239,6 +239,7 @@ abstract class ExecuteCommand(
             workingDirectory = cliOptions.source?.absoluteFile?.parentFile,
             enableMediaStorage = !noMediaStorage,
             subdocumentNaming = subdocumentNaming,
+            isPreview = preview,
             serverPort = serverPort.takeIf { preview },
             mediaStorageOptionsOverrides = ReadOnlyMediaStorageOptions(),
             permissions =

@@ -287,4 +287,36 @@ class HtmlOutputResourceTest {
             },
         ) {}
     }
+
+    // Preview mode
+
+    @Test
+    fun `preview mode excludes sitemap`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+
+            [1](subdoc/simple-1.qd)
+            """.trimIndent(),
+            previewMode = true,
+            outputResourceHook = { group ->
+                assertNull(findSitemap(group))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `preview mode still includes theme and script`() {
+        execute(
+            source = "",
+            previewMode = true,
+            outputResourceHook = { group ->
+                val resources = getSubResources(group).map { it.name }
+                assertContains(resources, "theme")
+                assertContains(resources, "script")
+                assertContains(resources, "index")
+            },
+        ) {}
+    }
 }
