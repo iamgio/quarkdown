@@ -1,11 +1,7 @@
 # Keybindings
 
-.keybinding {Ctrl+C}
+Use .keybinding {Mod+C} to copy.
 
-.keybinding {Cmd+Shift+K}
+Use .keybinding {Alt+F4} to close the window.
 
-.keybinding {Alt+F4}
-
-.keybinding {Ctrl+plus}
-
-.keybinding {Ctrl+dot}
+Use .keybinding {Mod+plus} to zoom in, and .keybinding {Mod+minus} to zoom out.

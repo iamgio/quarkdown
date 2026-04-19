@@ -1,0 +1,14 @@
+# File tree
+
+.filetree
+    - src
+      - components
+        - Button.ts
+        - **Card.ts**
+        - Accordion.ts
+        - ...
+      - **pages**
+        - Home.ts
+        - About.ts
+      - index.ts
+      - README.md
