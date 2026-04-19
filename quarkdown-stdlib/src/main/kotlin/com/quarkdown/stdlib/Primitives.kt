@@ -3,10 +3,15 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.base.inline.Image
+import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
+import com.quarkdown.core.context.Context
+import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -20,6 +25,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
 val Primitives: QuarkdownModule =
     moduleOf(
         ::heading,
+        ::image,
         ::pageBreak,
         ::figure,
     )
@@ -69,6 +75,59 @@ fun heading(
 }
 
 /**
+ * Creates an image with fine-grained control over its properties,
+ * compared to the standard Markdown image syntax (`![alt text](url "title")`).
+ *
+ * Example:
+ * ```markdown
+ * .image {image.png} label:{An image}
+ *
+ * .image {photo.jpg} label:{A photo} title:{A beautiful photo} width:{200px}
+ * ```
+ *
+ * @param url path or URL to the image
+ * @param label inline content used as the image's alt text
+ * @param title optional inline content used as both the tooltip and figure caption
+ * @param width optional width constraint for the image
+ * @param height optional height constraint for the image
+ * @param referenceId optional ID for cross-referencing via [reference]
+ * @param wrapInFigure whether to wrap the image in a [Figure] block
+ * @return a wrapped [Figure] or [Image] node, depending on [wrapInFigure]
+ */
+fun image(
+    @Injected context: Context,
+    url: String,
+    @LikelyNamed label: InlineMarkdownContent,
+    @LikelyNamed title: InlineMarkdownContent? = null,
+    @LikelyNamed width: Size? = null,
+    @LikelyNamed height: Size? = null,
+    @Name("ref") referenceId: String? = null,
+    @Name("figure") wrapInFigure: Boolean = true,
+): NodeValue {
+    val image =
+        Image(
+            Link(
+                label = label.children,
+                url = url,
+                title = title?.children,
+                fileSystem = context.fileSystem,
+            ),
+            width = width,
+            height = height,
+            referenceId = referenceId,
+        )
+    return if (wrapInFigure) {
+        Figure(
+            child = image,
+            caption = title?.children,
+            referenceId = referenceId,
+        )
+    } else {
+        image
+    }.wrappedAsValue()
+}
+
+/**
  * Creates a page break. In standard Quarkdown, this is also achievable with `<<<` on its own line,
  * but this function provides a more explicit way to insert a page break,
  * and can be used within other function calls.
@@ -98,7 +157,7 @@ fun figure(
     @Name("ref") referenceId: String? = null,
     @LikelyBody body: MarkdownContent,
 ): NodeValue =
-    Figure<MarkdownContent>(
+    Figure(
         body,
         caption = caption?.children,
         referenceId = referenceId,
