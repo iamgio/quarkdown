@@ -17,10 +17,10 @@ import com.quarkdown.core.permissions.requirePermission
 import com.quarkdown.stdlib.internal.applyImportantToCSS
 
 /**
- * `Injection` stdlib module exporter.
- * This module handles code injection of different languages.
+ * `Html` stdlib module exporter.
+ * This module handles HTML-specific configuration and native HTML/CSS injection.
  */
-val Injection: QuarkdownModule =
+val Html: QuarkdownModule =
     moduleOf(
         ::htmlOptions,
         ::html,

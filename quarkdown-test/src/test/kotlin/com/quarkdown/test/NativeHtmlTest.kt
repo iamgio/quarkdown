@@ -5,9 +5,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for language injection functions.
+ * Tests for native HTML/CSS injection functions.
  */
-class InjectionTest {
+class NativeHtmlTest {
     @Test
     fun html() {
         execute(".html\n\tHello, <b>world</b>!") {

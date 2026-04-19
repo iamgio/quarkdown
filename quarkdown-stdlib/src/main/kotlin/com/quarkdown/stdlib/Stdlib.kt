@@ -42,7 +42,7 @@ object Stdlib : LibraryExporter {
                     Library,
                     Slides,
                     Ecosystem,
-                    Injection,
+                    Html,
                     Mermaid,
                     Reference,
                     Bibliography,

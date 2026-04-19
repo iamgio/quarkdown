@@ -72,6 +72,11 @@ Rendering now runs in parallel across sibling elements, improving performance on
 When launching with `--preview` (without `--out-name`), the output directory name no longer matches `.docname`, because its dynamic nature may easily break the preview. Instead, it's now `preview-<mainfile>-<hash>`.  
 In order to get the `.docname`-based output name, consider compiling without `--preview`.
 
+#### Renamed `Injection` stdlib module to `Html`
+
+The `Injection` module, which contains functions related to raw HTML injection, was renamed to `Html`.
+This change breaks previous references to the documentation of the module and its functions.
+
 ### Fixed
 
 #### Fixed live preview flashing with dark themes
