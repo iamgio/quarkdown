@@ -1,6 +1,8 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.test.util.execute
+import com.quarkdown.test.util.getSubdocumentResourceCount
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -129,6 +131,66 @@ class LinkTest {
             """.trimIndent(),
         ) {
             assertEquals("<p>This image does not exist: ![Alt text][Alt text]</p>", it)
+        }
+    }
+
+    // Root path symbol (@)
+
+    @Test
+    fun `bare root path symbol in link from root`() {
+        execute("[Root](@)") {
+            assertEquals(
+                "<p><a href=\".\">Root</a></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `root path symbol in link from root`() {
+        execute("[Root link](@/img/icon.png)") {
+            assertEquals(
+                "<p><a href=\"./img/icon.png\">Root link</a></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `root path symbol in image from root`() {
+        execute("![](@/img/icon.png)") {
+            assertEquals(
+                "<figure><img src=\"./img/icon.png\" alt=\"\" /></figure>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `root path symbol in image primitive from root`() {
+        execute(".image {@/img/icon.png} label:{Icon} figure:{no} mediastorage:{no}") {
+            assertEquals(
+                "<img src=\"./img/icon.png\" alt=\"Icon\" />",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `root path symbol in link and image from subdocument`() {
+        execute(
+            "[1](subdoc/root-path.qd)",
+            outputResourceHook = {
+                assertEquals(2, getSubdocumentResourceCount(it))
+            },
+        ) {
+            if (subdocument != Subdocument.Root) {
+                assertEquals(
+                    "<p><a href=\"../img/icon.png\">Root link</a></p>" +
+                        "<figure><img src=\"../img/icon.png\" alt=\"\" /></figure>",
+                    it,
+                )
+            }
         }
     }
 }
