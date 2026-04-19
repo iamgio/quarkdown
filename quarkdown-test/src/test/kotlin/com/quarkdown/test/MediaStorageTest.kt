@@ -3,7 +3,9 @@ package com.quarkdown.test
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
+import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.INDEX
 import com.quarkdown.test.util.execute
@@ -12,6 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -39,11 +42,19 @@ class MediaStorageTest {
     fun `local media, with media storage`() {
         execute(
             """
-            This is the Quarkdown logo: ![Quarkdown](img/icon.png).                                 
+            This is the Quarkdown logo: ![Quarkdown](img/icon.png).
             """.trimIndent(),
             enableMediaStorage = true,
             outputResourceHook = { group ->
-                assertTrue(getMediaResources(group).single().name.startsWith("icon"))
+                val resource = getMediaResources(group).single()
+                assertTrue(resource.name.startsWith("icon"))
+
+                assertIs<FileReferenceOutputArtifact>(resource)
+                assertTrue(resource.file.isFile)
+                assertTrue(resource.useChecksumInvalidation)
+
+                val sourceFile = java.io.File("$DATA_FOLDER/img/icon.png")
+                assertTrue(sourceFile.readBytes().contentEquals(resource.file.readBytes()))
             },
         ) {
             assertEquals("<p>This is the Quarkdown logo: <img src=\"media/icon", it.toString().substringBefore("@"))
