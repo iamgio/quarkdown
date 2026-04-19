@@ -48,7 +48,7 @@
 
 .pagemargin {topleft}
     .row gap:{12px}
-        [![Quarkdown](assets/banner-light.svg)](https://quarkdown.com)
+        [.image {../banner-light.svg} label:{Quarkdown} figure:{no} mediastorage:{no}](https://quarkdown.com)
 
         .read {../version.txt}::text classname:{version} url:{.repourl/releases/tag/latest}
 

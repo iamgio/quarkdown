@@ -1,0 +1,20 @@
+.docname {Decorative headings}
+.include {docs}
+
+To prevent a heading from being numbered and from appearing in the [table of contents](table-of-contents.qd), append a `!` after the last `#` sign. For example: `#!`, `##!`, `###!`, etc.
+
+.exampleoutput {![Decorative heading](numbering/decorative-heading.png)}
+    ```markdown
+    .center
+        #! My document
+
+    ## Introduction
+
+    .loremipsum
+    ```
+
+> Note: A heading with all optional flags disabled via [`.heading`](headings.qd) is equivalent to a decorative heading:
+>
+> ```markdown
+> .heading {My decorative heading} depth:{2} numbered:{no} indexed:{no} breakpage:{no}
+> ```

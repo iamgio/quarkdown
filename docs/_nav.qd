@@ -38,8 +38,7 @@
 - [TeX formulae](tex-formulae.qd)
 - [Table caption](table-caption.qd)
 - [Code caption](code-caption.qd)
-- [Headings](headings.qd)
-  - [Decorative headings](headings.qd#decorative-headings)
+- [Decorative headings](decorative-headings.qd)
 - [Alerts (quote types)](quote-types.qd)
 - [Quotation source](quotation-source.qd)
 - [Cross-references](cross-references.qd)
@@ -49,6 +48,8 @@
 - [Keybindings](keybindings.qd)
 - [Icons](icons.qd)
 - [Emojis](emojis.qd)
+- [Primitive functions](primitives.qd)
+  - [Headings](headings.qd)
 
 ###! Layout
 - [Stacks: rows, columns, grids](stacks.qd)
