@@ -48,6 +48,7 @@ import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
@@ -538,6 +539,20 @@ class QuarkdownHtmlNodeRenderer(
             attribute("data-collapsed-text", buildMultiTag { +node.placeholder })
             attribute("data-collapsed", !node.isOpen)
             +if (node.isOpen) node.text else node.placeholder
+        }
+
+    override fun visit(node: Keybinding) =
+        buildTag("span") {
+            className("keybinding")
+            node.parts.forEach { part ->
+                +buildTag("kbd") {
+                    +part.displayName
+                    optionalAttribute(
+                        "data-mac",
+                        part.macDisplayName.takeIf { it != part.displayName },
+                    )
+                }
+            }
         }
 
     // Invisible nodes

@@ -18,6 +18,7 @@
 @use "components/figure";
 @use "components/mermaid";
 @use "components/filetree";
+@use "components/keybinding";
 @use "components/float";
 @use "components/clip";
 @use "components/box";
@@ -177,6 +178,10 @@
 
   // File tree
   --qd-file-tree-highlight-color: color-mix(in srgb, var(--qd-link-color) 10%, transparent);
+
+  // Keybinding
+  --qd-kbd-background-color: color-mix(in srgb, var(--qd-main-color-muted) 15%, var(--qd-background-color));
+  --qd-kbd-border-color: color-mix(in srgb, var(--qd-main-color-muted) 90%, var(--qd-main-color));
 
   // Docs
   --qd-docs-header-height: 60px;

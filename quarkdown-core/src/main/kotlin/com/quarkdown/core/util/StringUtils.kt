@@ -118,3 +118,11 @@ fun CharSequence.normalizeLineSeparators(): CharSequence =
         "\n" -> this
         else -> this.toString().replace(separator, "\n")
     }
+
+/**
+ * Discards blank entries and trims each remaining entry.
+ * @return a list of non-blank, trimmed strings
+ */
+fun List<String>.trimEntries(): List<String> =
+    filter { it.isNotBlank() }
+        .map { it.trim() }

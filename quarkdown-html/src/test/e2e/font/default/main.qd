@@ -17,3 +17,5 @@ code block
 
 .box {Box}
     Text
+
+.keybinding {Ctrl+K}

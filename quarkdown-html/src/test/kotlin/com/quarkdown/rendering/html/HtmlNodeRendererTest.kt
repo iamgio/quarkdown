@@ -50,6 +50,7 @@ import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
@@ -1015,6 +1016,35 @@ class HtmlNodeRendererTest {
                 text = buildInline { text("Foo bar") },
                 placeholder = buildInline { text("Placeholder") },
                 isOpen = true,
+            ).render(),
+        )
+    }
+
+    @Test
+    fun keybinding() {
+        val out = readParts("quarkdown/keybinding.html")
+
+        // Primary modifier + Shift + Key
+        assertEquals(
+            out.next(),
+            Keybinding(
+                listOf(Keybinding.PrimaryModifier, Keybinding.ShiftModifier, Keybinding.Key("K")),
+            ).render(),
+        )
+
+        // Alt + Key
+        assertEquals(
+            out.next(),
+            Keybinding(
+                listOf(Keybinding.AltModifier, Keybinding.Key("F4")),
+            ).render(),
+        )
+
+        // Ctrl (explicit) + Key
+        assertEquals(
+            out.next(),
+            Keybinding(
+                listOf(Keybinding.CtrlModifier, Keybinding.Key("C")),
             ).render(),
         )
     }

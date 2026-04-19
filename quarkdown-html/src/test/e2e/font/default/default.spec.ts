@@ -48,6 +48,11 @@ testMatrix(
         const codeBlock = page.locator("pre code");
         const codeBlockStyle = await evaluateComputedStyle(codeBlock);
         expect(fontFamilyMatches(codeBlockStyle.fontFamily, codeFont)).toBe(true);
+
+        // Keybinding uses code font
+        const kbd = page.locator(".keybinding kbd").first();
+        const kbdStyle = await evaluateComputedStyle(kbd);
+        expect(fontFamilyMatches(kbdStyle.fontFamily, codeFont)).toBe(true);
     }
 );
 

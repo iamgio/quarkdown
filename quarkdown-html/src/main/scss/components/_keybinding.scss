@@ -1,0 +1,17 @@
+.quarkdown .keybinding kbd {
+  position: relative;
+  top: -1px;
+  font-family: var(--qd-code-font), monospace;
+  font-size: calc(var(--qd-code-span-font-size) * 0.85);
+  background-color: var(--qd-kbd-background-color);
+  border: 1px solid var(--qd-kbd-border-color);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.keybinding {
+  kbd + kbd {
+    margin-left: 4px;
+  }
+}

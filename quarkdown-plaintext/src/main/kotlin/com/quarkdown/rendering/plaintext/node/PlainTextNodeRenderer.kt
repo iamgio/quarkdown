@@ -66,6 +66,7 @@ import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
@@ -298,6 +299,15 @@ class PlainTextNodeRenderer(
     override fun visit(node: IconImage) = ""
 
     override fun visit(node: InlineCollapse) = node.visitChildren()
+
+    override fun visit(node: Keybinding) =
+        node.parts.joinToString(separator = "+") {
+            when {
+                it.displayName == it.macDisplayName -> it.displayName
+                it is Keybinding.ShiftModifier -> it.displayName
+                else -> "${it.displayName}/${it.macDisplayName}"
+            }
+        }
 
     override fun visit(node: PageCounter) = ""
 
