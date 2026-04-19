@@ -91,6 +91,11 @@ import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.asCSS
 
 /**
+ * Symbol used in links to indicate the root of the subdocument hierarchy, i.e. the location of the main HTML file.
+ */
+private const val ROOT_PATH_SYMBOL = "@"
+
+/**
  * A renderer for vanilla Markdown ([com.quarkdown.core.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param context additional information produced by the earlier stages of the pipeline
  */
@@ -107,6 +112,35 @@ open class BaseHtmlNodeRenderer(
     ) = HtmlTagBuilder(name, renderer = this, pretty)
 
     override fun escapeCriticalContent(unescaped: String) = Escape.Html.escape(unescaped)
+
+    /**
+     * @return the relative path to follow to get from the location of the current subdocument to the root
+     *         (the location where the main HTML file is located, alongside `script`, `theme`, etc.).
+     *         Subdocuments are exported flatly, so the path is either `.` for the root subdocument or `..` for non-root subdocuments.
+     */
+    private fun getPathToRoot(): String =
+        when (this.context.subdocument) {
+            Subdocument.Root -> "."
+            else -> ".."
+        }
+
+    /**
+     * Replaces the [ROOT_PATH_SYMBOL] at the start of the given URL with the actual path to root, if present.
+     */
+    private fun replacePathToRoot(url: String): String =
+        when {
+            url == ROOT_PATH_SYMBOL -> {
+                getPathToRoot()
+            }
+
+            url.startsWith("$ROOT_PATH_SYMBOL/") || url.startsWith("$ROOT_PATH_SYMBOL\\") -> {
+                url.replaceFirst(ROOT_PATH_SYMBOL, getPathToRoot())
+            }
+
+            else -> {
+                url
+            }
+        }
 
     // Root
 
@@ -264,7 +298,7 @@ open class BaseHtmlNodeRenderer(
 
     private fun buildLinkTag(node: Link): HtmlTagBuilder =
         tagBuilder("a", node.label)
-            .attribute("href", node.url)
+            .attribute("href", node.url.let(::replacePathToRoot))
             .optionalAttribute("title", node.title?.toPlainText(renderer = this))
 
     override fun visit(node: Link) = buildLinkTag(node).build()
@@ -280,16 +314,9 @@ open class BaseHtmlNodeRenderer(
 
         val isCurrentSubdocument = subdocument == this.context.subdocument
 
-        // Subdocuments are exported flatly. Links from non-root subdocuments must go up one level.
-        val pathToRoot =
-            when (this.context.subdocument) {
-                Subdocument.Root -> "."
-                else -> ".."
-            }
-
         val url =
             buildString {
-                append(pathToRoot)
+                append(getPathToRoot())
                 append("/")
                 append(subdocument.getOutputFileName(context))
                 node.anchor?.let { anchor ->
@@ -319,9 +346,13 @@ open class BaseHtmlNodeRenderer(
         }
     }
 
-    override fun visit(node: Image) =
-        tagBuilder("img")
-            .attribute("src", node.link.getStoredMedia(context)?.path ?: node.link.getResolvedUrl(context))
+    override fun visit(node: Image): CharSequence {
+        val src: String =
+            node.link.getStoredMedia(context)?.path
+                ?: node.link.getResolvedUrl(context).let(::replacePathToRoot)
+
+        return tagBuilder("img")
+            .attribute("src", src)
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title?.toPlainText(renderer = this))
             .style {
@@ -329,6 +360,7 @@ open class BaseHtmlNodeRenderer(
                 "height" value node.height
             }.void(true)
             .build()
+    }
 
     override fun visit(node: ReferenceImage): CharSequence {
         val link = node.link.getDefinition(context) ?: return node.link.fallback().accept(this)
