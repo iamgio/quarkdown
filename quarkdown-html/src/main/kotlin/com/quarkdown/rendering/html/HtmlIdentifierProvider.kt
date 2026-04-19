@@ -25,26 +25,13 @@ class HtmlIdentifierProvider private constructor(
             .replace("\\s+".toRegex(), "-")
             .replace("[^\\p{L}\\p{N}-]".toRegex(), "")
 
-    /**
-     * Ensures that the string is a valid identifier for HTML elements:
-     * - It is not empty.
-     * - It does not start with a digit (#86).
-     * @return a valid identifier string, possibly different from the original
-     */
-    private fun String.asValidId(): String =
-        when {
-            isEmpty() -> "_"
-            first().isDigit() -> "_$this"
-            else -> this
-        }
-
     override fun visit(heading: Heading) =
         (heading.customId ?: heading.text.toPlainText(renderer).toURIString())
-            .asValidId()
+            .let(::sanitizeId)
 
     override fun visit(footnote: FootnoteDefinition): String =
         "__footnote-${footnote.label.toURIString()}"
-            .asValidId()
+            .let(::sanitizeId)
 
     companion object {
         /**
@@ -52,5 +39,22 @@ class HtmlIdentifierProvider private constructor(
          * @param renderer renderer that this provider should use to convert nodes to plain text via [toPlainText]
          */
         fun of(renderer: NodeRenderer?) = HtmlIdentifierProvider(renderer)
+
+        /**
+         * Sanitizes a string for use as an HTML element `id` attribute:
+         * - Strips characters that are problematic in CSS selectors and URL fragments
+         *   (spaces, quotes, angle brackets, etc.).
+         * - Ensures the result is not empty.
+         * - Ensures the result does not start with a digit (#86).
+         * @return a safe identifier string, possibly different from the original
+         */
+        fun sanitizeId(id: String): String {
+            val stripped = id.replace("[\\s\"'<>&]".toRegex(), "")
+            return when {
+                stripped.isEmpty() -> "_"
+                stripped.first().isDigit() -> "_$stripped"
+                else -> stripped
+            }
+        }
     }
 }

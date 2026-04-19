@@ -482,8 +482,9 @@ class NumberingTest {
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
+            // The _ placeholder reference ID enables numbering without generating an HTML id.
             assertEquals(
-                "<formula data-block=\"\" data-location=\"(1)\">E=mc^2</formula>" +
+                "<formula data-block=\"\" id=\"my-id\" data-location=\"(1)\">E=mc^2</formula>" +
                     "<formula data-block=\"\">E=mc^2</formula>" +
                     "<formula data-block=\"\" data-location=\"(2)\">E=mc^2</formula>",
                 it,
@@ -651,7 +652,7 @@ class NumberingTest {
                     "<figure id=\"figure-1.3\"><img src=\"img.png\" alt=\"\" title=\"Caption 3\" />" +
                     "<figcaption class=\"caption-bottom\" data-location=\"1.3\">Caption 3</figcaption>" +
                     "</figure>" +
-                    "<figure id=\"figure-1.4\">" +
+                    "<figure id=\"mermaid-diagram\">" +
                     "<pre class=\"mermaid\">graph TD\n    A--&gt;B\n    A--&gt;C</pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"1.4\"></figcaption>" +
                     "</figure>",

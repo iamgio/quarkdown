@@ -187,8 +187,8 @@ class CrossReferenceTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<figure><img src=\"img.png\" alt=\"My Image\" /></figure>" +
-                    "<p>See <span class=\"cross-reference\">my-fig</span>.</p>",
+                "<figure id=\"my-fig\"><img src=\"img.png\" alt=\"My Image\" /></figure>" +
+                    "<p>See <a href=\"#my-fig\"><span class=\"cross-reference\">my-fig</span></a>.</p>",
                 it,
             )
         }
@@ -204,9 +204,9 @@ class CrossReferenceTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<figure><img src=\"img.png\" alt=\"My Image\" title=\"The caption\" />" +
+                "<figure id=\"my-fig\"><img src=\"img.png\" alt=\"My Image\" title=\"The caption\" />" +
                     "<figcaption class=\"caption-bottom\">The caption</figcaption></figure>" +
-                    "<p>See <span class=\"cross-reference\">The caption</span>.</p>",
+                    "<p>See <a href=\"#my-fig\"><span class=\"cross-reference\">The caption</span></a>.</p>",
                 it,
             )
         }
@@ -222,9 +222,9 @@ class CrossReferenceTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\">my-fig</span> and " +
-                    "<span class=\"cross-reference\">my-fig</span>.</p>" +
-                    "<figure><img src=\"img.png\" alt=\"My Image\" /></figure>",
+                "<p>See <a href=\"#my-fig\"><span class=\"cross-reference\">my-fig</span></a> and " +
+                    "<a href=\"#my-fig\"><span class=\"cross-reference\">my-fig</span></a>.</p>" +
+                    "<figure id=\"my-fig\"><img src=\"img.png\" alt=\"My Image\" /></figure>",
                 it,
             )
         }
@@ -245,8 +245,8 @@ class CrossReferenceTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\" data-location=\"a\"></span>.</p>" +
-                    "<figure id=\"figure-a\">" +
+                "<p>See <a href=\"#my-fig\"><span class=\"cross-reference\" data-location=\"a\"></span></a>.</p>" +
+                    "<figure id=\"my-fig\">" +
                     "<img src=\"img.png\" alt=\"My Image\" title=\"The caption\" />" +
                     "<figcaption class=\"caption-bottom\" data-location=\"a\">The caption</figcaption>" +
                     "</figure>",
@@ -271,8 +271,9 @@ class CrossReferenceTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\" data-location=\"a\" data-localized-kind=\"Figure\"></span>.</p>" +
-                    "<figure id=\"figure-a\">" +
+                "<p>See <a href=\"#my-fig\">" +
+                    "<span class=\"cross-reference\" data-location=\"a\" data-localized-kind=\"Figure\"></span></a>.</p>" +
+                    "<figure id=\"my-fig\">" +
                     "<img src=\"img.png\" alt=\"My Image\" title=\"The caption\" />" +
                     "<figcaption class=\"caption-bottom\" data-location=\"a\" data-localized-kind=\"Figure\">The caption</figcaption>" +
                     "</figure>",
@@ -302,13 +303,13 @@ class CrossReferenceTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\" data-location=\"A\"></span>" +
-                    " and <span class=\"cross-reference\" data-location=\"B\"></span>.</p>" +
-                    "<figure id=\"figure-A\">" +
+                "<p>See <a href=\"#my-diagram\"><span class=\"cross-reference\" data-location=\"A\"></span></a>" +
+                    " and <a href=\"#my-other-diagram\"><span class=\"cross-reference\" data-location=\"B\"></span></a>.</p>" +
+                    "<figure id=\"my-diagram\">" +
                     "<pre class=\"mermaid\">graph TD\n    A --&gt; B</pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"A\"></figcaption>" +
                     "</figure>" +
-                    "<figure id=\"figure-B\">" +
+                    "<figure id=\"my-other-diagram\">" +
                     "<pre class=\"mermaid\">graph TD\n    A --&gt; B</pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"B\">My other diagram</figcaption>" +
                     "</figure>",
@@ -335,13 +336,13 @@ class CrossReferenceTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\" data-location=\"1\"></span> and " +
-                    "<span class=\"cross-reference\" data-location=\"2\"></span>.</p>" +
-                    "<figure id=\"figure-1\">" +
+                "<p>See <a href=\"#my-fig\"><span class=\"cross-reference\" data-location=\"1\"></span></a> and " +
+                    "<a href=\"#my-other-fig\"><span class=\"cross-reference\" data-location=\"2\"></span></a>.</p>" +
+                    "<figure id=\"my-fig\">" +
                     "<p>This is a custom figure.</p>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"1\"></figcaption>" +
                     "</figure>" +
-                    "<figure id=\"figure-2\">" +
+                    "<figure id=\"my-other-fig\">" +
                     "<p>This is another custom figure.</p>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"2\">My caption</figcaption>" +
                     "</figure>",
@@ -363,8 +364,8 @@ class CrossReferenceTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\">my-table</span>.</p>" +
-                    "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                "<p>See <a href=\"#my-table\"><span class=\"cross-reference\">my-table</span></a>.</p>" +
+                    "<table id=\"my-table\"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
                     "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody></table>",
                 it,
             )
@@ -394,12 +395,14 @@ class CrossReferenceTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\" data-location=\"i\" data-localized-kind=\"Table\"></span> " +
-                    "and <span class=\"cross-reference\" data-location=\"ii\" data-localized-kind=\"Table\"></span>.</p>" +
-                    "<table id=\"table-i\"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                "<p>See <a href=\"#my-table\">" +
+                    "<span class=\"cross-reference\" data-location=\"i\" data-localized-kind=\"Table\"></span></a> " +
+                    "and <a href=\"#my-other-table\">" +
+                    "<span class=\"cross-reference\" data-location=\"ii\" data-localized-kind=\"Table\"></span></a>.</p>" +
+                    "<table id=\"my-table\"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
                     "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody>" +
                     "<caption class=\"caption-bottom\" data-location=\"i\" data-localized-kind=\"Table\"></caption></table>" +
-                    "<table id=\"table-ii\"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
+                    "<table id=\"my-other-table\"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
                     "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody>" +
                     "<caption class=\"caption-bottom\" data-location=\"ii\" data-localized-kind=\"Table\">My caption</caption></table>",
                 it,
@@ -427,16 +430,16 @@ class CrossReferenceTest {
         ) {
             assertContains(
                 it,
-                "<p>See <span class=\"cross-reference\" data-location=\"1\"></span> and " +
-                    "<span class=\"cross-reference\" data-location=\"2\"></span>.</p>",
+                "<p>See <a href=\"#my-table\"><span class=\"cross-reference\" data-location=\"1\"></span></a> and " +
+                    "<a href=\"#my-other-table\"><span class=\"cross-reference\" data-location=\"2\"></span></a>.</p>",
             )
             assertContains(
                 it,
-                "<caption class=\"caption-bottom\" data-location=\"1\"></caption></table>",
+                "<table id=\"my-table\">",
             )
             assertContains(
                 it,
-                "<caption class=\"caption-bottom\" data-location=\"2\"></caption></table>",
+                "<table id=\"my-other-table\">",
             )
         }
     }
@@ -459,10 +462,10 @@ class CrossReferenceTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\" data-location=\"1\"></span> and " +
-                    "<span class=\"cross-reference\" data-location=\"2\"></span>.</p>" +
-                    "<formula data-block=\"\" data-location=\"1\">E = mc^2</formula>" +
-                    "<formula data-block=\"\" data-location=\"2\">E = mc^2</formula>",
+                "<p>See <a href=\"#my-math\"><span class=\"cross-reference\" data-location=\"1\"></span></a> and " +
+                    "<a href=\"#my-other-math\"><span class=\"cross-reference\" data-location=\"2\"></span></a>.</p>" +
+                    "<formula data-block=\"\" id=\"my-math\" data-location=\"1\">E = mc^2</formula>" +
+                    "<formula data-block=\"\" id=\"my-other-math\" data-location=\"2\">E = mc^2</formula>",
                 it,
             )
         }
@@ -473,15 +476,17 @@ class CrossReferenceTest {
         execute(
             """
             See .ref {my-code}.
-            
+
             ```kotlin {#my-code}
             println("Hello, World!")
             ```
             """.trimIndent(),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\">my-code</span>.</p>" +
-                    "<pre><code class=\"language-kotlin\">println(&quot;Hello, World!&quot;)</code></pre>",
+                "<p>See <a href=\"#my-code\"><span class=\"cross-reference\">my-code</span></a>.</p>" +
+                    "<figure id=\"my-code\">" +
+                    "<pre><code class=\"language-kotlin\">println(&quot;Hello, World!&quot;)</code></pre>" +
+                    "</figure>",
                 it,
             )
         }
@@ -492,14 +497,16 @@ class CrossReferenceTest {
         execute(
             """
             See .ref {my-code}.
-            
+
             .code lang:{kotlin} ref:{my-code}
                 println("Hello, World!")
             """.trimIndent(),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\">my-code</span>.</p>" +
-                    "<pre><code class=\"language-kotlin\">println(&quot;Hello, World!&quot;)</code></pre>",
+                "<p>See <a href=\"#my-code\"><span class=\"cross-reference\">my-code</span></a>.</p>" +
+                    "<figure id=\"my-code\">" +
+                    "<pre><code class=\"language-kotlin\">println(&quot;Hello, World!&quot;)</code></pre>" +
+                    "</figure>",
                 it,
             )
         }
@@ -528,12 +535,14 @@ class CrossReferenceTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\" data-location=\"I\" data-localized-kind=\"Listing\"></span> and " +
-                    "<span class=\"cross-reference\" data-location=\"II\" data-localized-kind=\"Listing\"></span>.</p>" +
-                    "<figure id=\"listing-I\"><pre><code class=\"language-kotlin\">" +
+                "<p>See <a href=\"#my-code\">" +
+                    "<span class=\"cross-reference\" data-location=\"I\" data-localized-kind=\"Listing\"></span></a> and " +
+                    "<a href=\"#my-other-code\">" +
+                    "<span class=\"cross-reference\" data-location=\"II\" data-localized-kind=\"Listing\"></span></a>.</p>" +
+                    "<figure id=\"my-code\"><pre><code class=\"language-kotlin\">" +
                     "println(&quot;Hello, World!&quot;)</code></pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"I\" data-localized-kind=\"Listing\"></figcaption></figure>" +
-                    "<figure id=\"listing-II\"><pre><code class=\"language-kotlin\">" +
+                    "<figure id=\"my-other-code\"><pre><code class=\"language-kotlin\">" +
                     "println(\n    &quot;Hello, World!&quot;\n)</code></pre>" +
                     "<figcaption class=\"caption-bottom\" data-location=\"II\" data-localized-kind=\"Listing\"></figcaption></figure>",
                 it,
@@ -559,10 +568,10 @@ class CrossReferenceTest {
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
         ) {
             assertEquals(
-                "<p>See <span class=\"cross-reference\" data-location=\"a\"></span> and " +
-                    "<span class=\"cross-reference\" data-location=\"b\"></span>.</p>" +
-                    "<p>Block a</p>" +
-                    "<p>Block b</p>",
+                "<p>See <a href=\"#block1\"><span class=\"cross-reference\" data-location=\"a\"></span></a> and " +
+                    "<a href=\"#block2\"><span class=\"cross-reference\" data-location=\"b\"></span></a>.</p>" +
+                    "<div id=\"block1\"><p>Block a</p></div>" +
+                    "<div id=\"block2\"><p>Block b</p></div>",
                 it,
             )
         }
