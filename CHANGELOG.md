@@ -59,6 +59,16 @@ The new `.htmloptions` function configures HTML-specific generation settings. It
 
 Cross-references (`.ref`) to figures, tables, code blocks, math equations, and custom numbered blocks are now rendered as clickable links that navigate to the referenced element. Previously, only heading references were linked.
 
+#### Root path symbol (`@`) in links and images
+
+When compiling to HTML, the `@` symbol at the start of a URL resolves to the root of the output, where the main HTML file is located. This makes it easy to reference shared assets from any subdocument, particularly useful in combination with the new `public/` directory.
+
+```markdown
+[Home](@)
+
+![Logo](@/assets/logo.png)
+```
+
 #### [`.image` primitive function](https://quarkdown.com/wiki/primitives#images)
 
 The new `.image` function creates images with fine-grained control over their properties, including media storage opt-out. The `mediastorage:{no}` parameter lets an image reference a fixed relative path, useful in combination with the new `public/` directory for shared assets.

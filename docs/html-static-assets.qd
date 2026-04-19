@@ -7,31 +7,44 @@ Place files in a `public/` directory at the project root, next to your main sour
 
 Common examples of static assets include `robots.txt` for search engine crawling rules, `CNAME` for custom domain configuration on GitHub Pages, and misc binary files.
 
-## Example
+.example
+    Given this project structure:
 
-Given this project structure:
+    .filetree
+        - main.qd
+        - **public**
+          - robots.txt
+          - CNAME
+          - static
+            - resume.pdf
 
-.filetree
-    - main.qd
-    - **public**
-      - robots.txt
-      - CNAME
-      - static
-        - resume.pdf
+    After compiling, the output looks like:
 
-After compiling, the output looks like:
+    .filetree
+        - My document
+          - index.html
+          - theme
+            - ...
+          - script
+            - ...
+          - **robots.txt**
+          - **CNAME**
+          - **static**
+            - resume.pdf
 
-.filetree
-    - My document
-      - index.html
-      - theme
-        - ...
-      - script
-        - ...
-      - **robots.txt**
-      - **CNAME**
-      - **static**
-        - resume.pdf
+## Referencing static assets
+
+Assets copied from `public/` can be referenced using relative paths from the output root. For example, an image at `public/logo.png` can be used in the document with:
+
+```markdown
+![Logo](logo.png)
+```
+
+In order to avoid media storage warnings, media storage opt-out via the [`.image`](primitives.qd#images) primitive is recommended:
+
+```markdown
+.image {logo.png} label:{Logo} mediastorage:{no}
+```
 
 ## Name collisions
 
@@ -40,3 +53,16 @@ Avoid placing files in `public/` that share names with Quarkdown's generated res
 ## Subdocuments
 
 Static assets are only copied for the root document. [Subdocument](subdocuments.qd) outputs do not make duplicate copies of the assets.
+
+In order to reference static assets from subdocuments, you can use `@` as a shorthand for the output root:
+
+```markdown
+.image {@/logo.png} label:{Logo} mediastorage:{no}
+```
+
+or:
+
+```markdown
+![Logo](@/logo.png)
+```
+
