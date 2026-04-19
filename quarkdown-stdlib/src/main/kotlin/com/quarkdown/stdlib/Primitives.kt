@@ -92,6 +92,9 @@ fun heading(
  * @param height optional height constraint for the image
  * @param referenceId optional ID for cross-referencing via [reference]
  * @param wrapInFigure whether to wrap the image in a [Figure] block
+ * @param usesMediaStorage whether this image should be registered in the media storage system.
+ *                         When disabled, the image URL is used as-is without being copied to the output's media directory.
+ *                         Useful for images that should reference a fixed relative path rather than a stored copy
  * @return a wrapped [Figure] or [Image] node, depending on [wrapInFigure]
  */
 fun image(
@@ -103,6 +106,7 @@ fun image(
     @LikelyNamed height: Size? = null,
     @Name("ref") referenceId: String? = null,
     @Name("figure") wrapInFigure: Boolean = true,
+    @Name("mediastorage") usesMediaStorage: Boolean = true,
 ): NodeValue {
     val image =
         Image(
@@ -115,6 +119,7 @@ fun image(
             width = width,
             height = height,
             referenceId = referenceId,
+            usesMediaStorage = usesMediaStorage,
         )
     return if (wrapInFigure) {
         Figure(

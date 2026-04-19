@@ -6,6 +6,7 @@ import com.quarkdown.test.util.getMediaResources
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -77,6 +78,23 @@ class ImagePrimitiveTest {
         ) {
             assertContains(it, "<figure><img src=\"media/icon")
             assertEquals(1, mediaStorage.all.size)
+        }
+    }
+
+    @Test
+    fun `local image with media storage disabled`() {
+        execute(
+            ".image {img/icon.png} label:{Quarkdown} mediastorage:{no}",
+            enableMediaStorage = true,
+            outputResourceHook = { group ->
+                assertFails { getMediaResources(group) }
+            },
+        ) {
+            assertEquals(
+                "<figure><img src=\"img/icon.png\" alt=\"Quarkdown\" /></figure>",
+                it,
+            )
+            assertEquals(0, mediaStorage.all.size)
         }
     }
 }

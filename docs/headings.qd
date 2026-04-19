@@ -29,7 +29,7 @@ You can create headings that are not tracked by the [numbering](numbering.qd) sy
 .heading {Appendix} depth:{1} numbered:{no}
 ```
 
-Unlike [decorative headings](#decorative-headings) (`#!`), this approach lets you independently control whether the heading appears in the table of contents.
+Unlike [decorative headings](decorative-headings.qd) (`#!`), this approach lets you independently control whether the heading appears in the table of contents.
 
 ## Controlling table of contents indexing
 
@@ -61,22 +61,4 @@ You can assign a custom identifier for [cross-referencing](cross-references.qd):
 .heading {Introduction} depth:{2} ref:{intro}
 ```
 
-## Decorative headings
-
-To prevent a heading from being numbered and from appearing in the [table of contents](table-of-contents.qd), append a `!` after the last `#` sign. For example: `#!`, `##!`, `###!`, etc.
-
-.exampleoutput {![Decorative heading](numbering/decorative-heading.png)}
-    ```markdown
-    .center
-        #! My document
-
-    ## Introduction
-
-    .loremipsum
-    ```
-
-> Note: A heading with all optional flags disabled via `.heading` is equivalent to a decorative heading:
->
-> ```markdown
-> .heading {My decorative heading} depth:{2} numbered:{no} indexed:{no} breakpage:{no}
-> ```
+See also [Decorative headings](decorative-headings.qd) for headings excluded from numbering and the table of contents.

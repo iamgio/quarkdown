@@ -1,0 +1,61 @@
+.docname {Primitive functions}
+.include {docs}
+
+Quarkdown exposes primitive functions that provide fine-grained control over standard Markdown elements. These functions offer parameters that are not accessible through the regular Markdown syntax.
+
+## Headings
+
+The `.heading` function creates headings with explicit control over numbering, page breaks, table of contents indexing, and custom identifiers. See the [Headings](headings.qd) page for details.
+
+## Images
+
+The **`.image`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/image.html} function creates an image with fine-grained control over its properties, compared to the standard Markdown image syntax (`![alt](url "title")`).
+
+```markdown
+.image {photo.jpg} label:{A photo}
+```
+
+### Size constraints
+
+The `width` and `height` parameters accept any [size](sizes.qd) value.
+
+```markdown
+.image {photo.jpg} label:{A photo} width:{200px} height:{150px}
+
+.image {banner.svg} label:{Banner} width:{100%}
+```
+
+### Caption
+
+When a `title` is provided, it is used both as the image tooltip and as the figure caption.
+
+.examplemirror
+    .image {assets/icon.svg} label:{Icon} title:{The Quarkdown icon} width:{64px}
+
+### Figure wrapping
+
+By default, the image is wrapped in a figure block, which centers it and enables captioning and [numbering](numbering.qd). To disable this behavior, set `figure:{no}`, which produces a raw inline image instead.
+
+```markdown
+Hello .image {icon.svg} label:{Icon} figure:{no} width:{16px} height:{16px} world!
+```
+
+### Cross-referencing
+
+The `ref` parameter assigns an ID that can be used with [cross-references](cross-references.qd).
+
+```markdown
+.image {diagram.png} label:{Architecture diagram} title:{System overview} ref:{arch-diagram} width:{400px}
+
+See .reference {arch-diagram} for more details.
+```
+
+### Media storage opt-out
+
+By default, local images are copied to the output's media directory when [media storage](media-storage.qd) is enabled. To prevent this and reference the image at its original path instead, set `mediastorage:{no}`.
+
+```markdown
+.image {../banner.svg} label:{Banner} mediastorage:{no}
+```
+
+This is useful for images that should reference a fixed relative path, such as assets shared across multiple builds or maintained outside the project directory.
