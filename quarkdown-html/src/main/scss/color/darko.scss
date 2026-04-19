@@ -22,6 +22,8 @@
   --qd-color-on-primary: var(--qd-main-color);
   --qd-mermaid-node-background-color: #ECECFF;
   --qd-mermaid-node-text-color: var(--qd-background-color);
+  --qd-kbd-background-color: color-mix(in srgb, var(--qd-main-color-muted) 25%, var(--qd-background-color));
+  --qd-kbd-border-color: color-mix(in srgb, var(--qd-main-color-muted) 75%, var(--qd-main-color));
 
   --qd-docs-header-background-color: #2E3136;
   --qd-docs-separator-border-color: #393c40;

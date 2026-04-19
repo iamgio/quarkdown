@@ -1,0 +1,49 @@
+.docname {Keybindings}
+.include {docs}
+
+The **`.keybinding {keys}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.MiscElements/keybinding.html} function displays a keyboard shortcut or key combination.
+
+.examplemirror
+    Press .keybinding {Mod+K} to trigger the action.
+
+Keys are separated by `+`, `,`, or `-` delimiters.
+
+On macOS, modifier keys automatically display their native symbols (e.g. Command instead of Ctrl). 
+
+> If you're on macOS right now, you can notice the difference in the above example: the first keybinding displays as `Ctrl K` on other platforms, but as `⌘ K` on macOS.
+
+## Modifiers
+
+The following modifier names are recognized (case-insensitive):
+
+| Input                           | Default display | macOS display |
+|---------------------------------|-----------------|---------------|
+| `cmd`, `command`, `meta`, `mod` | Ctrl            | ⌘             |
+| `ctrl`, `control`               | Ctrl            | ⌃             |
+| `alt`, `option`                 | Alt             | ⌥             |
+| `shift`                         | Shift           | ⇧             |
+
+Any other key name is displayed as-is, capitalized.
+
+.examplemirror
+    .keybinding {Cmd+Alt+Tab}
+
+.examplemirror
+    .keybinding {Alt+F4}
+
+## Literal delimiter keys
+
+Since `+`, `,`, and `-` are reserved as delimiters, use their literal names to represent them as keys:
+
+| Literal          | Key |
+|------------------|-----|
+| `plus`           | `+` |
+| `comma`          | `,` |
+| `dash`, `minus`  | `-` |
+| `dot`, `period`  | `.` |
+
+.examplemirror
+    .keybinding {Ctrl+plus}
+
+.examplemirror
+    .keybinding {Ctrl+dot}

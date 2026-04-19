@@ -53,6 +53,7 @@ import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
@@ -187,6 +188,8 @@ interface NodeVisitor<T> {
     fun visit(node: IconImage): T
 
     fun visit(node: InlineCollapse): T
+
+    fun visit(node: Keybinding): T
 
     fun visit(node: PageCounter): T
 

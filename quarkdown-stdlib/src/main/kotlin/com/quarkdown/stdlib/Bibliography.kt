@@ -16,6 +16,7 @@ import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.util.trimEntries
 
 /**
  * `Bibliography` stdlib module exporter.
@@ -145,11 +146,7 @@ fun bibliography(
  * @wiki bibliography#citations
  */
 fun cite(key: String): NodeValue {
-    val keys =
-        key
-            .split(",")
-            .filter { it.isNotBlank() }
-            .map { it.trim() }
+    val keys = key.split(",").trimEntries()
 
     require(keys.isNotEmpty()) { "At least one citation key must be specified." }
 

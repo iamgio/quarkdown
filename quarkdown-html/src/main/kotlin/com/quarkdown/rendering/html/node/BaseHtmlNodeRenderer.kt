@@ -64,6 +64,7 @@ import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
+import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
@@ -418,6 +419,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: IconImage): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: InlineCollapse): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: Keybinding): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: CrossReference): CharSequence = throw UnsupportedRenderException(node)
 

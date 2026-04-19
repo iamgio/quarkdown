@@ -22,4 +22,11 @@ test("applies theme colors correctly", async (page) => {
     await expect(heading).toHaveCSS("color", headingColor);
     await expect(text).toHaveCSS("color", mainColor);
     await expect(link).toHaveCSS("color", linkColor);
+
+    // Keybinding uses themed background and border colors
+    const kbd = page.locator(".keybinding kbd").first();
+    const kbdBgColor = await getComputedColor(page, "var(--qd-kbd-background-color)");
+    const kbdBorderColor = await getComputedColor(page, "var(--qd-kbd-border-color)");
+    await expect(kbd).toHaveCSS("background-color", kbdBgColor);
+    await expect(kbd).toHaveCSS("border-color", kbdBorderColor);
 });

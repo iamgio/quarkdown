@@ -1,6 +1,7 @@
 import {capabilities} from "../capabilities";
 import {ConditionalDocumentHandler} from "./document-handler";
 import {InlineCollapsibles} from "./handlers/inline-collapsibles";
+import {PlatformAwareKeybindings} from "./handlers/platform-aware-keybindings";
 import {QuarkdownDocument} from "./quarkdown-document";
 import {MathRenderer} from "./handlers/capabilities/math-renderer";
 import {CodeHighlighter} from "./handlers/capabilities/code-highlighter";
@@ -10,6 +11,7 @@ import {MermaidRenderer} from "./handlers/capabilities/mermaid-renderer";
 export function getGlobalHandlers(document: QuarkdownDocument): ConditionalDocumentHandler[] {
     return [
         new InlineCollapsibles(document),
+        new PlatformAwareKeybindings(document),
         capabilities.code && new CodeHighlighter(document),
         capabilities.math && new MathRenderer(document),
         capabilities.mermaid && new MermaidRenderer(document),

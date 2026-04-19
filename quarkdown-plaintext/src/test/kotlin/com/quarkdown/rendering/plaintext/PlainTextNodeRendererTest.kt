@@ -27,6 +27,7 @@ import com.quarkdown.core.ast.quarkdown.block.FileTree
 import com.quarkdown.core.ast.quarkdown.block.FileTreeEntry
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
+import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
@@ -448,6 +449,44 @@ class PlainTextNodeRendererTest {
                     FileTreeEntry.File("index.ts"),
                     FileTreeEntry.Ellipsis(),
                 ),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `keybinding, regular key`() {
+        assertEquals(
+            "A",
+            Keybinding(listOf(Keybinding.Key("A"))).render(),
+        )
+    }
+
+    @Test
+    fun `keybinding, with modifiers`() {
+        assertEquals(
+            "Ctrl/⌘+Shift+K",
+            Keybinding(
+                listOf(Keybinding.PrimaryModifier, Keybinding.ShiftModifier, Keybinding.Key("K")),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `keybinding, ctrl modifier`() {
+        assertEquals(
+            "Ctrl/⌃+C",
+            Keybinding(
+                listOf(Keybinding.CtrlModifier, Keybinding.Key("C")),
+            ).render(),
+        )
+    }
+
+    @Test
+    fun `keybinding, alt modifier`() {
+        assertEquals(
+            "Alt/⌥+F4",
+            Keybinding(
+                listOf(Keybinding.AltModifier, Keybinding.Key("F4")),
             ).render(),
         )
     }
