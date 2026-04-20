@@ -10,6 +10,7 @@ import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.ast.media.StoredMediaProperty
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.log.Log
+import com.quarkdown.core.media.passthrough.MediaPassthrough
 import com.quarkdown.core.media.storage.StoredMedia
 import com.quarkdown.core.permissions.MissingPermissionException
 
@@ -32,10 +33,16 @@ class MediaStorerHook(
      * It is also the node to attach the [StoredMediaProperty] to, into [com.quarkdown.core.ast.attributes.AstAttributes.properties]
      */
     private fun register(link: LinkNode) {
+        val url = link.getResolvedUrl(context)
+        if (MediaPassthrough.isPassthroughPath(url)) {
+            Log.debug("Media is a passthrough: ${link.url}")
+            return
+        }
+
         val media: StoredMedia? =
             try {
                 context.mediaStorage.register(
-                    link.getResolvedUrl(context),
+                    url,
                     context.fileSystem.workingDirectory,
                 )
             } catch (_: IllegalArgumentException) {

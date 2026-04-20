@@ -36,3 +36,15 @@ The storage can handle **both local and remote files**. The rules that determine
 - On the other hand, LaTeX (which is not yet supported but might be in the future) also requires remote media to be downloaded locally.
 
 Overriding these rules is supported, although currently unavailable via CLI.
+
+## Opting out
+
+Some images should not be copied to the media directory, for example [HTML static assets](html-static-assets.qd) that are already present in the output at a known path.
+
+- Paths starting with the [`@` passthrough prefix](html-static-assets.qd#referencing-static-assets) are excluded from media storage automatically, since they are meant to reference files that are already present in the output.
+
+- The [`.image`](primitives.qd#images) primitive function accepts a `mediastorage` parameter that lets you disable media storage for individual images:
+
+  ```markdown
+  .image {logo.png} label:{Logo} mediastorage:{no}
+  ```

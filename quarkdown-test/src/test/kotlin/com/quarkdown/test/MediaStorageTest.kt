@@ -64,6 +64,19 @@ class MediaStorageTest {
     }
 
     @Test
+    fun `passthrough-prefixed path is not registered in media storage`() {
+        execute(
+            "![](@/img/icon.png)",
+            enableMediaStorage = true,
+            outputResourceHook = { group ->
+                assertFails { getMediaResources(group) }
+            },
+        ) {
+            assertEquals(0, mediaStorage.all.size)
+        }
+    }
+
+    @Test
     fun `remote media, with media storage`() {
         execute(
             """

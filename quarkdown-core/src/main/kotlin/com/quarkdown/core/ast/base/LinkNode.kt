@@ -34,4 +34,9 @@ interface LinkNode : ErrorCapableNode {
      * @see com.quarkdown.core.context.hooks.LinkUrlResolverHook
      */
     val fileSystem: FileSystem?
+
+    /**
+     * Creates a copy of this link with the given [url].
+     */
+    fun copy(url: String): LinkNode
 }

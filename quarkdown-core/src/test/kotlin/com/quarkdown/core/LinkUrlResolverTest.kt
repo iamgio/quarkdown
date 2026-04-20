@@ -161,6 +161,20 @@ class LinkUrlResolverTest {
     }
 
     @Test
+    fun `skips passthrough paths`() {
+        val context = createContext()
+
+        val childFs = SimpleFileSystem(ROOT_DIR).branch(File(ROOT_DIR, "subdoc"))
+        val img = image("@/img/icon.png", fileSystem = childFs)
+        val root = buildBlock { root { +img } }
+
+        traverse(root, context)
+
+        // Passthrough paths are not resolved: the URL is kept as-is.
+        assertEquals("@/img/icon.png", img.link.getResolvedUrl(context))
+    }
+
+    @Test
     fun `resolves link definition from branched file system`() {
         val context = createContext()
 

@@ -37,32 +37,15 @@ Common examples of static assets include `robots.txt` for search engine crawling
 Assets copied from `public/` can be referenced using relative paths from the output root. For example, an image at `public/logo.png` can be used in the document with:
 
 ```markdown
-![Logo](logo.png)
+![Logo](@/logo.png)
 ```
 
-In order to avoid media storage warnings, media storage opt-out via the [`.image`](primitives.qd#images) primitive is recommended:
+.box title:{Why `@`?}
+    The `@` prefix is called [media passthrough](media-storage.qd#opting-out) and resolves to the output root.
+    A path starting with this prefix prevents the media storage from processing it, since the asset is not present at that location in the source and would produce a warning.
 
-```markdown
-.image {logo.png} label:{Logo} mediastorage:{no}
-```
+    Additionally, when working with [subdocuments](subdocuments.qd), the `@` prefix ensures that the path is correctly resolved regardless of the subdocument's output location.
 
 ## Name collisions
 
 Avoid placing files in `public/` that share names with Quarkdown's generated resources (e.g. `index.html`, `theme/`, `script/`). If a collision occurs, it is undefined which version ends up in the output.
-
-## Subdocuments
-
-Static assets are only copied for the root document. [Subdocument](subdocuments.qd) outputs do not make duplicate copies of the assets.
-
-In order to reference static assets from subdocuments, you can use `@` as a shorthand for the output root:
-
-```markdown
-.image {@/logo.png} label:{Logo} mediastorage:{no}
-```
-
-or:
-
-```markdown
-![Logo](@/logo.png)
-```
-
