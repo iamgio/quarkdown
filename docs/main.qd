@@ -6,7 +6,7 @@
 
     figure { margin: 72px 0; }
 
-![Quarkdown](assets/banner-light.svg)
+.image {banner-light.svg} label:{Quarkdown} mediastorage:{no}
 
 ## Welcome to the Quarkdown Wiki
 

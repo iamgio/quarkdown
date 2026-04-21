@@ -13,12 +13,15 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param width optional width constraint
  * @param height optional height constraint
  * @param referenceId optional ID that can be cross-referenced via a [com.quarkdown.core.ast.quarkdown.reference.CrossReference]
+ * @param usesMediaStorage whether this image should be registered in the media storage by [com.quarkdown.core.context.hooks.MediaStorerHook],
+ *                         if the media storage is enabled in the context
  */
 class Image(
     val link: LinkNode,
     val width: Size?,
     val height: Size?,
     override val referenceId: String? = null,
+    val usesMediaStorage: Boolean = true,
 ) : CrossReferenceableNode,
     ErrorCapableNode {
     /**

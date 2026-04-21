@@ -15,9 +15,9 @@ import com.quarkdown.core.permissions.MissingPermissionException
 
 /**
  * Hook that, when a node containing information about media is found,
- * registers it in the media [storage].
+ * registers it in the media storage of [MutableContext.mediaStorage].
  * A media storage is a temporary lookup table that maps media to their paths, so that they can be resolved later.
- * @param storage media storage where media are registered
+ * @param context the context containing the media storage to register media into
  */
 class MediaStorerHook(
     private val context: MutableContext,
@@ -57,7 +57,11 @@ class MediaStorerHook(
 
     override fun attach(iterator: ObservableAstIterator) {
         // Images are instantly registered.
-        iterator.on<Image> { register(it.link) }
+        iterator.on<Image> {
+            if (it.usesMediaStorage) {
+                register(it.link)
+            }
+        }
 
         // Reference images are registered upon resolution,
         // i.e. when a definition that matches the reference is found.
