@@ -32,10 +32,7 @@ class Link(
 
     override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 
-    /**
-     * Creates a copy of this link with the given [url].
-     */
-    fun copy(url: String) =
+    override fun copy(url: String) =
         Link(
             label = label,
             url = url,

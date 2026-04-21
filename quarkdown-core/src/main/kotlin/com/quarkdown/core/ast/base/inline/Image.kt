@@ -30,6 +30,18 @@ class Image(
     override var error by link::error
 
     override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
+
+    /**
+     * Creates a copy of this image with the given [link].
+     */
+    fun copy(link: LinkNode) =
+        Image(
+            link = link,
+            width = width,
+            height = height,
+            referenceId = referenceId,
+            usesMediaStorage = usesMediaStorage,
+        )
 }
 
 /**

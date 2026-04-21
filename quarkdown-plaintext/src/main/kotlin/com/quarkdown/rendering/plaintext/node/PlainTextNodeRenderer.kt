@@ -33,7 +33,6 @@ import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
-import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
@@ -89,8 +88,8 @@ import com.quarkdown.core.util.indent
  * It omits non-textual elements and formats structural elements appropriately.
  */
 class PlainTextNodeRenderer(
-    private val context: Context,
-) : NodeRenderer {
+    context: Context,
+) : NodeRenderer(context) {
     private fun NestableNode.visitChildren() = children.visitAll()
 
     private fun InlineContent.visitAll() = parallelAcceptAll(this@PlainTextNodeRenderer).joinToString(separator = "")
@@ -102,6 +101,8 @@ class PlainTextNodeRenderer(
                 endsWith('\n') -> this + "\n"
                 else -> this + "\n\n"
             }
+
+    override fun createMediaPassthroughPrefixReplacement(): String = "."
 
     override fun visit(node: AstRoot) = node.visitChildren()
 
@@ -173,15 +174,13 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: CriticalContent) = node.text
 
-    override fun visit(node: Link) = node.visitChildren()
-
-    override fun visit(node: ReferenceLink) = node.label.visitAll()
+    override fun visitTransformed(node: Link) = node.visitChildren()
 
     override fun visit(node: SubdocumentLink) = visit(node.link)
 
     override fun visit(node: ReferenceFootnote) = "" // Footnotes are currently unsupported
 
-    override fun visit(node: Image) = ""
+    override fun visitTransformed(node: Image) = ""
 
     override fun visit(node: ReferenceImage) = ""
 

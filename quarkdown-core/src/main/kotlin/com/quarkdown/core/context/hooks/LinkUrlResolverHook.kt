@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.media.passthrough.MediaPassthrough
 import com.quarkdown.core.util.isURL
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -35,8 +36,9 @@ class LinkUrlResolverHook(
      */
     private fun resolve(link: LinkNode) {
         val fileSystem = link.fileSystem
-        if (fileSystem == null || fileSystem.isRoot) return // No need to resolve paths.
 
+        if (fileSystem == null || fileSystem.isRoot) return // No need to resolve paths.
+        if (MediaPassthrough.isPassthroughPath(link.url)) return // No need to resolve passthrough paths.
         if (link.url.isURL || Path(link.url).isAbsolute) return // Not a relative path.
 
         val resolved: Path? =

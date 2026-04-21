@@ -30,4 +30,12 @@ class LinkDefinition(
      */
     override val text: InlineContent
         get() = label
+
+    override fun copy(url: String) =
+        LinkDefinition(
+            label = label,
+            url = url,
+            title = title,
+            fileSystem = fileSystem,
+        )
 }

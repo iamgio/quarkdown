@@ -2,7 +2,6 @@ package com.quarkdown.rendering.html.node
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.attributes.id.getId
-import com.quarkdown.core.ast.attributes.link.getResolvedUrl
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
@@ -31,14 +30,12 @@ import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
-import com.quarkdown.core.ast.base.inline.ReferenceLink
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.base.inline.getSubdocument
-import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
@@ -91,11 +88,6 @@ import com.quarkdown.rendering.html.HtmlTagBuilder
 import com.quarkdown.rendering.html.css.asCSS
 
 /**
- * Symbol used in links to indicate the root of the subdocument hierarchy, i.e. the location of the main HTML file.
- */
-private const val ROOT_PATH_SYMBOL = "@"
-
-/**
  * A renderer for vanilla Markdown ([com.quarkdown.core.flavor.base.BaseMarkdownFlavor]) nodes that exports their content into valid HTML code.
  * @param context additional information produced by the earlier stages of the pipeline
  */
@@ -124,23 +116,7 @@ open class BaseHtmlNodeRenderer(
             else -> ".."
         }
 
-    /**
-     * Replaces the [ROOT_PATH_SYMBOL] at the start of the given URL with the actual path to root, if present.
-     */
-    private fun replacePathToRoot(url: String): String =
-        when {
-            url == ROOT_PATH_SYMBOL -> {
-                getPathToRoot()
-            }
-
-            url.startsWith("$ROOT_PATH_SYMBOL/") || url.startsWith("$ROOT_PATH_SYMBOL\\") -> {
-                url.replaceFirst(ROOT_PATH_SYMBOL, getPathToRoot())
-            }
-
-            else -> {
-                url
-            }
-        }
+    override fun createMediaPassthroughPrefixReplacement(): String = getPathToRoot()
 
     // Root
 
@@ -298,14 +274,10 @@ open class BaseHtmlNodeRenderer(
 
     private fun buildLinkTag(node: Link): HtmlTagBuilder =
         tagBuilder("a", node.label)
-            .attribute("href", node.url.let(::replacePathToRoot))
+            .attribute("href", node.url)
             .optionalAttribute("title", node.title?.toPlainText(renderer = this))
 
-    override fun visit(node: Link) = buildLinkTag(node).build()
-
-    // The fallback node is rendered if a corresponding definition can't be found.
-    override fun visit(node: ReferenceLink): CharSequence =
-        (node.getDefinition(context) ?: return node.fallback().accept(this)).accept(this)
+    override fun visitTransformed(node: Link) = buildLinkTag(node).build()
 
     override fun visit(node: SubdocumentLink): CharSequence {
         val subdocument: Subdocument =
@@ -346,13 +318,9 @@ open class BaseHtmlNodeRenderer(
         }
     }
 
-    override fun visit(node: Image): CharSequence {
-        val src: String =
-            node.link.getStoredMedia(context)?.path
-                ?: node.link.getResolvedUrl(context).let(::replacePathToRoot)
-
-        return tagBuilder("img")
-            .attribute("src", src)
+    override fun visitTransformed(node: Image): CharSequence =
+        tagBuilder("img")
+            .attribute("src", node.link.url)
             .attribute("alt", node.link.label.toPlainText(renderer = this)) // Emphasis is discarded (CommonMark 6.4)
             .optionalAttribute("title", node.link.title?.toPlainText(renderer = this))
             .style {
@@ -360,7 +328,6 @@ open class BaseHtmlNodeRenderer(
                 "height" value node.height
             }.void(true)
             .build()
-    }
 
     override fun visit(node: ReferenceImage): CharSequence {
         val link = node.link.getDefinition(context) ?: return node.link.fallback().accept(this)

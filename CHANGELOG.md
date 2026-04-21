@@ -69,6 +69,10 @@ When compiling to HTML, the `@` symbol at the start of a URL resolves to the roo
 ![Logo](@/assets/logo.png)
 ```
 
+In the previous example, `@/assets/logo.png` resolves to `./assets/logo.png`, which is where `public/assets/logo.png` is copied from the source to the output.
+
+This `@` symbol is internally called *media passthrough prefix*, as it prevents the media storage system from registering the path as a media reference, and instead treats it as a passthrough to be copied verbatim.
+
 #### [`.image` primitive function](https://quarkdown.com/wiki/primitives#images)
 
 The new `.image` function creates images with fine-grained control over their properties, including media storage opt-out. The `mediastorage:{no}` parameter lets an image reference a fixed relative path, useful in combination with the new `public/` directory for shared assets.
