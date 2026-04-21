@@ -2,7 +2,11 @@
 
 ## [Unreleased]
 
+&nbsp;
+
 ### Added
+
+&nbsp;
 
 #### [Permission system](https://quarkdown.com/wiki/cli-compiler#permissions)
 
@@ -17,6 +21,8 @@ quarkdown c main.qd --allow global-read --deny native-content
 
 Available permissions: `project-read` (default), `global-read`, `network`, `native-content` (default), `all`. See the wiki page for more details.
 
+&nbsp;
+
 #### [Line continuation in function calls](https://quarkdown.com/wiki/syntax-of-a-function-call#line-continuation)
 
 A backslash (`\`) at the end of a line lets you split a function call's arguments across multiple lines.
@@ -27,6 +33,8 @@ This improves readability for calls with many parameters:
            background:{red} \
            padding:{1px}
 ```
+
+&nbsp;
 
 #### [Keybinding](https://quarkdown.com/wiki/keybindings)
 
@@ -40,9 +48,13 @@ Press .keybinding {Cmd+Shift+K} to delete the line.
 Recognized modifiers: `cmd`/`command`/`meta`/`mod` (primary), `ctrl`/`control`, `alt`/`option`, `shift`.
 Literal delimiter keys (`plus`, `comma`, `dash`/`minus`, `dot`/`period`) let you represent `+`, `,`, `-`, and `.` as key labels.
 
+&nbsp;
+
 #### [HTML static assets](https://quarkdown.com/wiki/html-static-assets)
 
 A `public/` directory in your project root lets you ship arbitrary files, such as `robots.txt` or `CNAME`, alongside the compiled output. Quarkdown copies the entire contents into the root of the output directory, preserving the original structure, without any processing.
+
+&nbsp;
 
 #### [HTML options, sitemap and canonical links](https://quarkdown.com/wiki/html-options)
 
@@ -55,9 +67,13 @@ The new `.htmloptions` function configures HTML-specific generation settings. It
 .htmloptions baseurl:{https://quarkdown.com/wiki}
 ```
 
+&nbsp;
+
 #### [Linked cross-references for all referenceable types](https://quarkdown.com/wiki/cross-references)
 
 Cross-references (`.ref`) to figures, tables, code blocks, math equations, and custom numbered blocks are now rendered as clickable links that navigate to the referenced element. Previously, only heading references were linked.
+
+&nbsp;
 
 #### Root path symbol (`@`) in links and images
 
@@ -73,6 +89,8 @@ In the previous example, `@/assets/logo.png` resolves to `./assets/logo.png`, wh
 
 This `@` symbol is internally called *media passthrough prefix*, as it prevents the media storage system from registering the path as a media reference, and instead treats it as a passthrough to be copied verbatim.
 
+&nbsp;
+
 #### [`.image` primitive function](https://quarkdown.com/wiki/primitives#images)
 
 The new `.image` function creates images with fine-grained control over their properties, including media storage opt-out. The `mediastorage:{no}` parameter lets an image reference a fixed relative path, useful in combination with the new `public/` directory for shared assets.
@@ -81,11 +99,17 @@ The new `.image` function creates images with fine-grained control over their pr
 .image {photo.jpg} label:{A photo} title:{A caption} width:{200px} mediastorage:{no}
 ```
 
+&nbsp;
+
 ### Changed
+
+&nbsp;
 
 #### Changed default output directory to `./quarkdown-output` (breaking change)
 
 The default output directory (`--out`) was changed from `./output` to `./quarkdown-output` to avoid conflicts and ambiguity. If you were relying on the old default, please update your workflow accordingly or compile with `--out ./output` explicitly.
+
+&nbsp;
 
 #### Fully offline HTML output
 
@@ -101,34 +125,58 @@ As before, opt-in libraries, such as Mermaid and KaTeX, are still only included 
 > [!NOTE]
 > User-picked fonts from Google Fonts are still loaded remotely.
 
+&nbsp;
+
 #### Parallel rendering
 
 Rendering now runs in parallel across sibling elements, improving performance on large documents.
+
+&nbsp;
 
 #### Static preview output file name (breaking change)
 
 When launching with `--preview` (without `--out-name`), the output directory name no longer matches `.docname`, because its dynamic nature may easily break the preview. Instead, it's now `preview-<mainfile>-<hash>`.  
 In order to get the `.docname`-based output name, consider compiling without `--preview`.
 
+&nbsp;
+
 #### Lightweight media storage IO
 
 IO over the media storage system is now more lightweight and secure, as media files are now copied by reference rather than by content. Each media export now also comes with a checksum that's validated on subsequent exports to avoid unnecessary copying.
+
+&nbsp;
 
 #### Renamed `Injection` stdlib module to `Html`
 
 The `Injection` module, which contains functions related to raw HTML injection, was renamed to `Html`.
 This change breaks previous references to the documentation of the module and its functions.
 
+&nbsp;
+
 ### Fixed
+
+&nbsp;
 
 #### Fixed live preview flashing with dark themes
 
 Fixed an issue that caused live preview to display white flashes when using dark color themes, during the crossfade transition.
 The transition background now matches the target's background color.
 
+&nbsp;
+
 #### Fixed broken wiki links in Quarkdoc
 
 Wiki links at [/docs](https://quarkdown.com/docs) now correctly point to the new wiki.
+
+* * *
+
+### Sponsors
+
+Thanks to our sponsors! 🎉
+
+@vitto4
+
+<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
 ## [1.15.1] - 2026-03-31
 

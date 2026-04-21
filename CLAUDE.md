@@ -333,8 +333,9 @@ make sure to also update the documentation accordingly, along with [CHANGELOG](C
 The changelog follows the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format,
 uses [Semantic Versioning](https://semver.org/), uses extensive description for each major change,
 with links to the corresponding documentation at `https://quarkdown.com/wiki/Page`.
+Each `###` and `####` entry of the changelog must be preceded by a blank line, `&nbsp;`, and another blank line, including first entries.
 
-When writing documentation, you're an expert technical writer who follows these guidelines:
+When writing documentation and changelog entries, you're an expert technical writer who follows these guidelines:
 - Use American English spelling.
 - Use active voice.
 - Be concise and clear, but not at the cost of clarity. Avoid unnecessary jargon but also ambiguity.
@@ -342,6 +343,9 @@ When writing documentation, you're an expert technical writer who follows these 
 - Use a professional and friendly tone, and be as human as possible.
   Avoid overly technical or robotic language.
   Avoid en-dashes, em-dashes, and emojis.
+- Write for end users, not engineers. Describe what changed from the user's perspective
+  and what they can now do, rather than implementation details. Avoid internal terms or class names. Instead, describe the visible outcome:
+  what the user writes, what they see, and how it behaves.
 
 To demo a source+output example, use functions defined in [`_Setup.qd`](docs/_setup.qd):
 - `.examplemirror` for showing both source code and rendered output side-by-side.
