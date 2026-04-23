@@ -36,20 +36,6 @@ This improves readability for calls with many parameters:
 
 &nbsp;
 
-#### [Keybinding](https://quarkdown.com/wiki/keybindings)
-
-The new `.keybinding {keys}` function displays a keyboard shortcut as styled key labels.
-Modifier keys are platform-aware: on macOS, they automatically display native symbols (e.g. `⌘` instead of `Ctrl`).
-
-```markdown
-Press .keybinding {Cmd+Shift+K} to delete the line.
-```
-
-Recognized modifiers: `cmd`/`command`/`meta`/`mod` (primary), `ctrl`/`control`, `alt`/`option`, `shift`.
-Literal delimiter keys (`plus`, `comma`, `dash`/`minus`, `dot`/`period`) let you represent `+`, `,`, `-`, and `.` as key labels.
-
-&nbsp;
-
 #### [HTML static assets](https://quarkdown.com/wiki/html-static-assets)
 
 A `public/` directory in your project root lets you ship arbitrary files, such as `robots.txt` or `CNAME`, alongside the compiled output. Quarkdown copies the entire contents into the root of the output directory, preserving the original structure, without any processing.
@@ -65,6 +51,17 @@ The new `.htmloptions` function configures HTML-specific generation settings. It
 
 ```markdown
 .htmloptions baseurl:{https://quarkdown.com/wiki}
+```
+
+&nbsp;
+
+#### [Keybindings](https://quarkdown.com/wiki/keybindings)
+
+The new `.keybinding {keys}` function displays a keyboard shortcut as styled key labels.
+Modifier keys are platform-aware: on macOS, they automatically display native symbols (e.g. `⌘` instead of `Ctrl`).
+
+```markdown
+Press .keybinding {Mod+Shift+K} to delete the line.
 ```
 
 &nbsp;
