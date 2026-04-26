@@ -88,26 +88,58 @@
       - todo: タスク
       - warning: 警告
     - Polish
-      - error:   Błąd
-      - note:    Notatka
+      - bibliography: Bibliografia
+      - error: Błąd
+      - figure: Rysunek
+      - important: Ważne
+      - listing: Listing
+      - note: Notatka
+      - section: Sekcja
+      - table: Tabela
+      - tableofcontents: Spis treści
       - tableofcontents/docs: Na tej stronie
-      - tip:     Wskazówka
+      - tip: Wskazówka
+      - todo: Do zrobienia
       - warning: Ostrzeżenie
     - Portuguese
-      - error:   Erro
-      - note:    Nota
+      - bibliography: Bibliografia
+      - error: Erro
+      - figure: Figura
+      - important: Importante
+      - listing: Listagem
+      - note: Nota
+      - section: Seção
+      - table: Tabela
+      - tableofcontents: Índice
       - tableofcontents/docs: Nesta página
-      - tip:     Dica
+      - tip: Dica
+      - todo: A fazer
       - warning: Aviso
     - Russian
-      - error:   Ошибка
-      - note:    Примечание
+      - bibliography: Библиография
+      - error: Ошибка
+      - figure: Рисунок
+      - important: Важно
+      - listing: Listing
+      - note: Примечание
+      - section: Раздел
+      - table: Таблица
+      - tableofcontents: Содержание
       - tableofcontents/docs: На этой странице
-      - tip:     Совет
+      - tip: Совет
+      - todo: К выполнению
       - warning: Предупреждение
     - Ukrainian
-      - error:   Помилка
-      - note:    Примітка
+      - bibliography: Бібліографія
+      - error: Помилка
+      - figure: Рисунок
+      - important: Важливо
+      - listing: Listing
+      - note: Примітка
+      - section: Розділ
+      - table: Таблиця
+      - tableofcontents: Зміст
       - tableofcontents/docs: На цій сторінці
-      - tip:     Порада
+      - tip: Порада
+      - todo: До роботи
       - warning: Попередження
