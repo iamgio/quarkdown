@@ -109,7 +109,7 @@
       - todo: À faire
       - tableofcontents: Table des matières
       - tableofcontents/docs: Sur cette page
-      - biblioraphy: Sources
+      - bibliography: Sources
       - figure: Figure
       - table: Tableau
       - listing: Listing
