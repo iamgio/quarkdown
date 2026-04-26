@@ -1,9 +1,10 @@
-<!-- stdlib localization table -->
+<!-- stdlib localization table
+
+     Please don’t add “callout”.   -->
 
 .localization name:{std}
     - Chinese
       - bibliography: 参考文献
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”.
       - error: 错误
       - figure: 图
       - important: 重要
@@ -18,7 +19,6 @@
       - warning: 警告
     - English
       - bibliography: References
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”.
       - error: Error
       - figure: Figure
       - important: Important
@@ -33,7 +33,6 @@
       - warning: Warning
     - French
       - bibliography: Sources
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”.
       - error: Erreur
       - figure: Figure
       - important: Important
@@ -48,7 +47,6 @@
       - warning: Attention
     - German
       - bibliography: Literaturverzeichnis
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”. (Hinweis)
       - error: Fehler
       - figure: Abbildung
       - important: Wichtig
@@ -63,7 +61,6 @@
       - warning: Warnung
     - Italian
       - bibliography: Riferimenti
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”.
       - error: Errore
       - figure: Figura
       - important: Importante
@@ -78,7 +75,6 @@
       - warning: Attenzione
     - Japanese
       - bibliography: 参考文献
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”.
       - error: エラー
       - figure: 図
       - important: 重要
@@ -92,28 +88,24 @@
       - todo: タスク
       - warning: 警告
     - Polish
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”. (Wyróżnienie)
       - error:   Błąd
       - note:    Notatka
       - tableofcontents/docs: Na tej stronie
       - tip:     Wskazówka
       - warning: Ostrzeżenie
     - Portuguese
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”. (Destaque)
       - error:   Erro
       - note:    Nota
       - tableofcontents/docs: Nesta página
       - tip:     Dica
       - warning: Aviso
     - Russian
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”. (Выделение)
       - error:   Ошибка
       - note:    Примечание
       - tableofcontents/docs: На этой странице
       - tip:     Совет
       - warning: Предупреждение
     - Ukrainian
-      - callout/DO_NOT_TRANSLATE: please don’t add “callout”. (Виділення)
       - error:   Помилка
       - note:    Примітка
       - tableofcontents/docs: На цій сторінці
