@@ -30,7 +30,8 @@
       - listing: Listato
       - section: Sezione
     - German
-      - note: Hinweis
+      - callout: Hinweis
+      - note: Anmerkung
       - tip: Tip
       - warning: Warnung
       - important: Wichtig
@@ -41,8 +42,36 @@
       - bibliography: Literaturverzeichnis
       - figure: Abbildung
       - table: Tabelle
-      - listing: Listing
+      - listing: Liste
       - section: Abschnitt
+    - Polish
+      - callout: Wyróżnienie
+      - error:   Błąd
+      - note:    Notatka
+      - tip:     Wskazówka
+      - warning: Ostrzeżenie
+      - tableofcontents/docs: Na tej stronie
+    - Portuguese
+      - callout: Destaque
+      - error:   Erro
+      - note:    Nota
+      - tip:     Dica
+      - warning: Aviso
+      - tableofcontents/docs: Nesta página
+    - Russian
+      - callout: Выделение
+      - error:   Ошибка
+      - note:    Примечание
+      - tip:     Совет
+      - warning: Предупреждение
+      - tableofcontents/docs: На этой странице
+    - Ukrainian
+      - callout: Виділення
+      - error:   Помилка
+      - note:    Примітка
+      - tip:     Порада
+      - warning: Попередження
+      - tableofcontents/docs: На цій сторінці
     - Japanese
       - note: ノート
       - tip: ヒント
