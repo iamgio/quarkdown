@@ -3,7 +3,7 @@
 
 The **`.if`** function creates a conditional statement:
 
-1. The first parameter is the condition ([`Boolean`](boolean.qd)) to evaluate.
+1. The first parameter is the condition &lpar;[`Boolean`](boolean.qd)&rpar; to evaluate.
 2. The second parameter is a parameter-less [lambda](lambda.qd) that runs only if the condition is true.
 
 .examplemirror
