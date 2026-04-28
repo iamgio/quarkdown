@@ -1,8 +1,15 @@
 # Build stage via Gradle
 FROM gradle:8.14.3-jdk17 AS builder
 
-COPY . /app
+USER root
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends nodejs npm \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
+
+COPY . /app
 
 # Build the distribution zip
 RUN gradle --no-daemon distZip
@@ -17,9 +24,12 @@ RUN unzip quarkdown.zip && rm quarkdown.zip
 # Run stage
 FROM ghcr.io/puppeteer/puppeteer:24.15.0 AS runner
 
-# Install JDK
+ENV QD_NPM_PREFIX="/home/pptruser" \
+    NODE_PATH="/home/pptruser/node_modules"
+
 USER root
-RUN apt-get update && apt-get install -y openjdk-17-jdk \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openjdk-17-jre-headless \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
