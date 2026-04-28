@@ -47,20 +47,20 @@ val Data: QuarkdownModule =
 
 /**
  * @param path path of the file, relative or absolute (with extension)
- * @param requireExistance whether the corresponding file must exist
+ * @param requireExistence whether the corresponding file must exist
  * @return a [File] instance of the file located in [path].
  *         If the path is relative, the location is determined by the working directory of the pipeline.
- * @throws IllegalArgumentException if the file does not exist and [requireExistance] is `true`
+ * @throws IllegalArgumentException if the file does not exist and [requireExistence] is `true`
  */
 internal fun file(
     context: Context,
     path: String,
-    requireExistance: Boolean = true,
+    requireExistence: Boolean = true,
 ): File {
     val file = context.fileSystem.resolve(path)
     context.requireReadPermission(file)
 
-    if (requireExistance && !file.exists()) {
+    if (requireExistence && !file.exists()) {
         throw IllegalArgumentException("File $file does not exist.")
     }
 
