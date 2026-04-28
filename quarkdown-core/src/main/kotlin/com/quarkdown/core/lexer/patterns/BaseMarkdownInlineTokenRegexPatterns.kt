@@ -332,10 +332,10 @@ private const val IMAGE_SIZE_DIVIDER_HELPER = "(?:[* \\t]|(?<![a-zA-Z])x)" // 1*
 /**
  * @param startDelimiter begin of the match (included)
  * @param endDelimiter end of the match (included)
- * @param strict if `true`, restrictions are applied to the delimeter checks.
+ * @param strict if `true`, restrictions are applied to the delimiter checks.
  * According to the CommonMark spec:
- * - non-strict means the start delimeter must be left-flanking and end delimeter must be right-flanking
- * - strict means any of the delimeters must not be left and right-flanking at the same time
+ * - non-strict means the start delimiter must be left-flanking and end delimiter must be right-flanking
+ * - strict means any of the delimiters must not be left and right-flanking at the same time
  *
  * @return a new regex that matches the content between [startDelimiter] and [endDelimiter]
  */
