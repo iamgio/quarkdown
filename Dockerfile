@@ -6,10 +6,13 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends nodejs npm \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /app && chown -R gradle:gradle /app
+
+USER gradle
 
 WORKDIR /app
 
-COPY . /app
+COPY --chown=gradle:gradle . /app
 
 # Build the distribution zip
 RUN gradle --no-daemon distZip
