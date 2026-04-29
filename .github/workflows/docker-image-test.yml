@@ -1,0 +1,51 @@
+name: Docker image test
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: docker build -t quarkdown:test .
+
+    - name: Install PDF inspection tools
+      run: sudo apt-get update && sudo apt-get install -y --no-install-recommends poppler-utils
+
+    - name: Test HTML output
+      run: |
+        workdir="$(mktemp -d)"
+        chmod 777 "$workdir"
+        cat <<'EOF' > "$workdir/main.qd"
+        .docname {test}
+
+        QuarkdownHtmlSmokeCheck
+        EOF
+
+        docker run --rm -v "$workdir:/work" -w /work quarkdown:test c main.qd -o output
+
+        test -f "$workdir/output/test/index.html"
+        test -s "$workdir/output/test/index.html"
+        grep -F "QuarkdownHtmlSmokeCheck" "$workdir/output/test/index.html"
+
+    - name: Test PDF output
+      run: |
+        workdir="$(mktemp -d)"
+        chmod 777 "$workdir"
+        cat <<'EOF' > "$workdir/main.qd"
+        .docname {test}
+
+        QuarkdownPdfSmokeCheck
+        EOF
+
+        docker run --rm -v "$workdir:/work" -w /work quarkdown:test c main.qd -o output --pdf
+
+        test -f "$workdir/output/test.pdf"
+        test -s "$workdir/output/test.pdf"
+        pdftotext "$workdir/output/test.pdf" - | tee "$workdir/test.txt"
+        grep -F "QuarkdownPdfSmokeCheck" "$workdir/test.txt"
