@@ -6,9 +6,9 @@
 
 &nbsp;
 
-#### Polish, Portuguese, Russian and Ukrainian locales
+#### New locales
 
-New locales have been added. Additionally, existing locales now correctly localize the `Important` quote/box type.
+New locales have been added: Polish, Portuguese, Russian and Ukrainian.
 
 Thanks @emsspree!
 
