@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
-## [2.0.0] - 2026-04-23
+### Added
 
- 
+&nbsp;
+
+#### New locales
+
+New locales have been added: Polish, Portuguese, Russian and Ukrainian.
+
+Thanks @emsspree!
+
+## [2.0.0] - 2026-04-23
 
 ### Added
 

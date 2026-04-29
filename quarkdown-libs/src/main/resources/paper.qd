@@ -1,40 +1,64 @@
 .localization {paper}
-    - English
-        - abstract: Abstract
-        - definition: Definition
-        - lemma: Lemma
-        - theorem: Theorem
-        - proof: Proof
-    - Italian
-        - abstract: Sommario
-        - definition: Definizione
-        - lemma: Lemma
-        - theorem: Teorema
-        - proof: Dimostrazione
-    - German
-        - abstract: Abstract
-        - definition: Definition
-        - lemma: Lemma
-        - theorem: Theorem
-        - proof: Beweis
-    - Japanese
-        - abstract: 概要
-        - definition: 定義
-        - lemma: 補題
-        - theorem: 定理
-        - proof: 証明
     - Chinese
         - abstract: 摘要
         - definition: 定义
         - lemma: 引理
-        - theorem: 定理
         - proof: 证明
+        - theorem: 定理
+    - English
+        - abstract: Abstract
+        - definition: Definition
+        - lemma: Lemma
+        - proof: Proof
+        - theorem: Theorem
     - French
         - abstract: Résumé
         - definition: Définition
         - lemma: Lemme
-        - theorem: Théorème
         - proof: Preuve
+        - theorem: Théorème
+    - German
+        - abstract: Abstract
+        - definition: Definition
+        - lemma: Lemma
+        - proof: Beweis
+        - theorem: Theorem
+    - Italian
+        - abstract: Sommario
+        - definition: Definizione
+        - lemma: Lemma
+        - proof: Dimostrazione
+        - theorem: Teorema
+    - Japanese
+        - abstract: 概要
+        - definition: 定義
+        - lemma: 補題
+        - proof: 証明
+        - theorem: 定理
+    - Polish
+        - abstract: Streszczenie
+        - definition: Definicja
+        - lemma: Lemat
+        - proof: Dowód
+        - theorem: Twierdzenie
+    - Portuguese
+        - abstract: Resumo
+        - definition: Definição
+        - lemma: Lema
+        - proof: Demonstração
+        - theorem: Teorema
+    - Russian
+        - abstract: Аннотация
+        - definition: Определение
+        - lemma: Лемма
+        - proof: Доказательство
+        - theorem: Теорема
+    - Ukrainian
+        - abstract: Анотація
+        - definition: Визначення
+        - lemma: Лема
+        - proof: Доведення
+        - theorem: Теорема
 
 <!-- Alignment of the 'Abstract' title, relative to its body content -->
 

@@ -1,87 +1,143 @@
 <!-- stdlib localization table -->
 
 .localization name:{std}
-    - English
-      - note: Note
-      - tip: Tip
-      - warning: Warning
-      - important: Important
-      - error: Error
-      - todo: To do
-      - tableofcontents: Table of Contents
-      - tableofcontents/docs: On this page
-      - bibliography: References
-      - figure: Figure
-      - table: Table
-      - listing: Listing
-      - section: Section
-    - Italian
-      - note: Nota
-      - tip: Consiglio
-      - warning: Attenzione
-      - important: Importante
-      - error: Errore
-      - todo: Da fare
-      - tableofcontents: Indice
-      - tableofcontents/docs: In questa pagina
-      - bibliography: Riferimenti
-      - figure: Figura
-      - table: Tabella
-      - listing: Listato
-      - section: Sezione
-    - German
-      - note: Hinweis
-      - tip: Tip
-      - warning: Warnung
-      - important: Wichtig
-      - error: Fehler
-      - todo: Aufgabe
-      - tableofcontents: Inhaltsverzeichnis
-      - tableofcontents/docs: Auf dieser Seite
-      - bibliography: Literaturverzeichnis
-      - figure: Abbildung
-      - table: Tabelle
-      - listing: Listing
-      - section: Abschnitt
-    - Japanese
-      - note: ノート
-      - tip: ヒント
-      - warning: 警告
-      - important: 重要
-      - error: エラー
-      - todo: タスク
-      - tableofcontents: 目次
-      - tableofcontents/docs: このページの内容
-      - bibliography: 参考文献
-      - figure: 図
-      - table: テーブル
-      - listing: リスト
-      - section: セクション
     - Chinese
-      - note: 注意
-      - tip: 提示
-      - warning: 警告
-      - important: 重要
+      - bibliography: 参考文献
       - error: 错误
-      - todo: 待办
+      - figure: 图
+      - important: 重要
+      - listing: 代码
+      - note: 注意
+      - section: 章节
+      - table: 表
       - tableofcontents: 目录
       - tableofcontents/docs: 本页目录
-      - bibliography: 参考文献
-      - figure: 图
-      - table: 表
-      - listing: 代码
-      - section: 章节
-    - French
-      - note: Note
-      - tip: Astuce
-      - warning: Attention
+      - tip: 提示
+      - todo: 待办
+      - warning: 警告
+    - English
+      - bibliography: References
+      - error: Error
+      - figure: Figure
       - important: Important
+      - listing: Listing
+      - note: Note
+      - section: Section
+      - table: Table
+      - tableofcontents: Table of Contents
+      - tableofcontents/docs: On this page
+      - tip: Tip
+      - todo: To do
+      - warning: Warning
+    - French
+      - bibliography: Sources
       - error: Erreur
-      - todo: À faire
+      - figure: Figure
+      - important: Important
+      - listing: Listing
+      - note: Note
+      - section: Section
+      - table: Tableau
       - tableofcontents: Table des matières
       - tableofcontents/docs: Sur cette page
-      - biblioraphy: Sources
-      - figure: Figure
-      - table: Tableau
+      - tip: Astuce
+      - todo: À faire
+      - warning: Attention
+    - German
+      - bibliography: Literaturverzeichnis
+      - error: Fehler
+      - figure: Abbildung
+      - important: Wichtig
       - listing: Listing
-      - section: Section
+      - note: Hinweis
+      - section: Abschnitt
+      - table: Tabelle
+      - tableofcontents: Inhaltsverzeichnis
+      - tableofcontents/docs: Auf dieser Seite
+      - tip: Tip
+      - todo: Aufgabe
+      - warning: Warnung
+    - Italian
+      - bibliography: Riferimenti
+      - error: Errore
+      - figure: Figura
+      - important: Importante
+      - listing: Listato
+      - note: Nota
+      - section: Sezione
+      - table: Tabella
+      - tableofcontents: Indice
+      - tableofcontents/docs: In questa pagina
+      - tip: Consiglio
+      - todo: Da fare
+      - warning: Attenzione
+    - Japanese
+      - bibliography: 参考文献
+      - error: エラー
+      - figure: 図
+      - important: 重要
+      - listing: リスト
+      - note: ノート
+      - section: セクション
+      - table: テーブル
+      - tableofcontents: 目次
+      - tableofcontents/docs: このページの内容
+      - tip: ヒント
+      - todo: タスク
+      - warning: 警告
+    - Polish
+      - bibliography: Bibliografia
+      - error: Błąd
+      - figure: Rysunek
+      - important: Ważne
+      - listing: Listing
+      - note: Notatka
+      - section: Sekcja
+      - table: Tabela
+      - tableofcontents: Spis treści
+      - tableofcontents/docs: Na tej stronie
+      - tip: Wskazówka
+      - todo: Do zrobienia
+      - warning: Ostrzeżenie
+    - Portuguese
+      - bibliography: Bibliografia
+      - error: Erro
+      - figure: Figura
+      - important: Importante
+      - listing: Listagem
+      - note: Nota
+      - section: Seção
+      - table: Tabela
+      - tableofcontents: Índice
+      - tableofcontents/docs: Nesta página
+      - tip: Dica
+      - todo: A fazer
+      - warning: Aviso
+    - Russian
+      - bibliography: Библиография
+      - error: Ошибка
+      - figure: Рисунок
+      - important: Важно
+      - listing: Listing
+      - note: Примечание
+      - section: Раздел
+      - table: Таблица
+      - tableofcontents: Содержание
+      - tableofcontents/docs: На этой странице
+      - tip: Совет
+      - todo: К выполнению
+      - warning: Предупреждение
+    - Ukrainian
+      - bibliography: Бібліографія
+      - error: Помилка
+      - figure: Рисунок
+      - important: Важливо
+      - listing: Listing
+      - note: Примітка
+      - section: Розділ
+      - table: Таблиця
+      - tableofcontents: Зміст
+      - tableofcontents/docs: На цій сторінці
+      - tip: Порада
+      - todo: До роботи
+      - warning: Попередження
