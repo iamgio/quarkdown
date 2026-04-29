@@ -2,7 +2,18 @@ name: Docker image test
 
 on:
   pull_request:
+    paths:
+      - 'Dockerfile'
+      - 'quarkdown-html/**'
+      - '.github/workflows/docker-image-test.yml'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
   workflow_dispatch:
+
+concurrency:
+  group: docker-image-test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   smoke-test:
