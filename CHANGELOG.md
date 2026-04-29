@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
-## [2.0.0] - 2026-04-23
+### Added
 
- 
+&nbsp;
+
+#### Polish, Portuguese, Russian and Ukrainian locales
+
+New locales have been added. Additionally, existing locales now correctly localize the `Important` quote/box type.
+
+Thanks @emsspree!
+
+## [2.0.0] - 2026-04-23
 
 ### Added
 
