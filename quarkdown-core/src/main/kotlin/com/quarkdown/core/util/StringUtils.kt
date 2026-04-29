@@ -21,7 +21,7 @@ fun String.removeOptionalPrefix(
  *         this string otherwise
  */
 fun String.takeUntilLastOccurrence(string: String): String {
-    // Trim trailing #s preceeded by a space
+    // Trim trailing #s preceded by a space
     val trailingIndex = lastIndexOf(string)
     return if (trailingIndex >= 0) {
         substring(0, trailingIndex)

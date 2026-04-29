@@ -210,7 +210,7 @@ class FunctionNodeExpansionTest {
                 context,
                 "resourceContent",
                 listOf(
-                    FunctionCallArgument(DynamicValue("non-existant-resource")),
+                    FunctionCallArgument(DynamicValue("non-existent-resource")),
                 ),
                 isBlock = false,
             )
@@ -299,7 +299,7 @@ class FunctionNodeExpansionTest {
                 context,
                 "echoEnum",
                 listOf(
-                    FunctionCallArgument(DynamicValue("non-existant-value")),
+                    FunctionCallArgument(DynamicValue("non-existent-value")),
                 ),
                 isBlock = false,
             )

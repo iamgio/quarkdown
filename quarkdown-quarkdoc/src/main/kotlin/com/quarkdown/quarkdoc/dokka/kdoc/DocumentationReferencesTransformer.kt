@@ -37,7 +37,7 @@ interface DocumentationReferencesTransformer {
     /**
      * Transforms references within a KDoc documentation.
      * @param documentation the original documentation
-     * @param parameters the list of arameters to be looked up from `@param` references
+     * @param parameters the list of parameters to be looked up from `@param` references
      * @return the transformed documentation
      */
     fun transformReferences(
