@@ -4,7 +4,7 @@
 @use "util/progressive-heading-sizes" as *;
 @use "util/latex-tables" as *;
 @use "util/latex-toc" as *;
-@use "../components/util/location-selectors" as location-selctors;
+@use "../components/util/location-selectors" as location-selectors;
 //noinspection CssUnknownTarget
 @import url('computermodern/index.css');
 //noinspection CssUnknownTarget
@@ -42,7 +42,7 @@
   @include latex-toc;
 
   // Numbering of headings and list items.
-  #{location-selctors.$location-heading}::before {
+  #{location-selectors.$location-heading}::before {
     padding-right: 0.85rem;
   }
 

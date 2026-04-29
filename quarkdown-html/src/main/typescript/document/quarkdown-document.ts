@@ -24,7 +24,7 @@ export interface QuarkdownDocument {
 
     /**
      * Initializes the document rendering process.
-     * For instance, Reveal.js inizialization in `slides` documents.
+     * For instance, Reveal.js initialization in `slides` documents.
      */
     initializeRendering(): void;
 

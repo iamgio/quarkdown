@@ -584,7 +584,7 @@ object ValueFactory {
                 // The actual type is determined later.
                 is FunctionCallNode -> context.resolveUnchecked(node)
 
-                // Function existance is checked later.
+                // Function existence is checked later.
 
                 else -> throw IllegalArgumentException("Unexpected node $node in expression $raw")
             }

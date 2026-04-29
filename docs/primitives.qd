@@ -47,7 +47,7 @@ The `ref` parameter assigns an ID that can be used with [cross-references](cross
 ```markdown
 .image {diagram.png} label:{Architecture diagram} title:{System overview} ref:{arch-diagram} width:{400px}
 
-See .reference {arch-diagram} for more details.
+See .ref {arch-diagram} for more details.
 ```
 
 ### Media storage opt-out

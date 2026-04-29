@@ -688,7 +688,7 @@ class QuarkdownHtmlNodeRenderer(
             node.type?.asCSS?.let { type ->
                 className(type)
                 // The type is associated to a localized label
-                // only if the documant language is set and the set language is supported.
+                // only if the document language is set and the set language is supported.
                 context.localizeOrNull(key = type)?.let { localizedLabel ->
                     // The localized label is set as a CSS variable.
                     // Themes can customize label appearance and formatting.

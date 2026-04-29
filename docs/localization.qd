@@ -11,11 +11,11 @@ The `locale` value can be either a case-insensitive English full name (e.g., `En
 
 Quarkdown's built-in libraries expose localization tables that localize elements such as [quote types](quote-types.qd), [numbering](numbering.qd) captions, and [table of contents](table-of-contents.qd) title.
 
-> Note: The currently supported locales are **English, Italian, German, French, Chinese, and Japanese**.
+> Note: The currently supported locales are **Chinese, English, French, German, Italian, Japanese, Polish, Portuguese, Russian, Ukrainian**.
 >
 > Contributions to support new locales are welcome:
-> - [stdlib](https://github.com/iamgio/quarkdown/blob/main/quarkdown-stdlib/src/main/resources/lib/localization)
-> - [paperlib](https://github.com/iamgio/quarkdown/blob/main/quarkdown-libs/src/main/resources/paper)
+> - [stdlib](https://github.com/iamgio/quarkdown/blob/main/quarkdown-stdlib/src/main/resources/lib/localization.qd?)
+> - [paperlib](https://github.com/iamgio/quarkdown/blob/main/quarkdown-libs/src/main/resources/paper.qd?)
 
 ## Creating your own localized strings
 

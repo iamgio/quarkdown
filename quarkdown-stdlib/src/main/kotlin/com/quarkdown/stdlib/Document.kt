@@ -127,7 +127,7 @@ private fun <T> MutableContext.modifyOrEchoDocumentInfo(
  * .doctype {paged}
  * ```
  *
- * If it's unset, the lowecase name of the current document type is returned.
+ * If it's unset, the lowercase name of the current document type is returned.
  *
  * ```
  * The current document type is .doctype
