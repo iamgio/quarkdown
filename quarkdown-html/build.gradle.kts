@@ -9,11 +9,6 @@ plugins {
     id("io.miret.etienne.sass") version "1.6.0"
 }
 
-node {
-    download.set(true)
-    version.set("22.22.2")
-}
-
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation(testFixtures(project(":quarkdown-core")))
