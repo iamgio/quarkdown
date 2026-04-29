@@ -404,6 +404,27 @@ class CompileCommandTest : TempDirectory() {
         checkPdf()
     }
 
+    // #469
+    @Test
+    fun `pdf timeout default value`() {
+        val (cliOptions, _) = test()
+        assertEquals(CliOptions.DEFAULT_PDF_TIMEOUT_SECONDS, cliOptions.pdfTimeoutSeconds)
+    }
+
+    // #469
+    @Test
+    fun `pdf timeout custom value`() {
+        val (cliOptions, _) = test("--pdf-timeout", "120")
+        assertEquals(120, cliOptions.pdfTimeoutSeconds)
+    }
+
+    // #469
+    @Test
+    fun `pdf timeout disabled with zero`() {
+        val (cliOptions, _) = test("--pdf-timeout", "0")
+        assertEquals(0, cliOptions.pdfTimeoutSeconds)
+    }
+
     /**
      * Runs the command with `--preview --pipe` to test preview resource name resolution
      * without triggering server communication (`--pipe` causes an early return in `postExecute`).
