@@ -1,9 +1,11 @@
 package com.quarkdown.cli.exec
 
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
 import com.quarkdown.cli.server.WebServerOptions
@@ -47,6 +49,17 @@ class CompileCommand : ExecuteCommand("compile") {
     ).flag()
 
     /**
+     * Per-operation timeout for the headless browser during PDF export, in seconds.
+     * `0` disables the timeout, useful for very large documents whose Paged.js rendering
+     * exceeds the default. Defaults to [CliOptions.DEFAULT_PDF_TIMEOUT_SECONDS].
+     */
+    private val pdfTimeoutSeconds: Int by option(
+        "--pdf-timeout",
+        help = "Per-operation timeout for PDF export, in seconds. 0 disables it.",
+        metavar = "SECONDS",
+    ).int().default(CliOptions.DEFAULT_PDF_TIMEOUT_SECONDS)
+
+    /**
      * When enabled, the rendered content (NOT post-rendered) is printed to stdout and nothing else is logged,
      * suitable for piping the output to other commands.
      */
@@ -83,6 +96,7 @@ class CompileCommand : ExecuteCommand("compile") {
             pipe = pipe,
             exportPdf = exportPdf,
             noPdfSandbox = noPdfSandbox,
+            pdfTimeoutSeconds = pdfTimeoutSeconds,
         )
 
     /**
