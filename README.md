@@ -19,7 +19,9 @@ Quarkdown is on Product Hunt <em>today</em>!
 <p align="center">
 Your upvote shows your support and helps Quarkdown reach more people 💚
 </p>
+<p align="center">
 <a href="https://www.producthunt.com/products/quarkdown?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-quarkdown" target="_blank" rel="noopener noreferrer"><img alt="Quarkdown - Markdown with superpowers: from ideas to stunning documents. | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1130470&amp;theme=light&amp;t=1777150043744"></a>
+</p>
 </blockquote>
   
 <p align="center">
