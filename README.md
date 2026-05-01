@@ -13,7 +13,9 @@
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br><br>
   <a href="https://trendshift.io/repositories/13945" target="_blank"><img src="https://trendshift.io/api/badge/repositories/13945" alt="iamgio%2Fquarkdown | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+  <br>
   <a href="https://www.producthunt.com/products/quarkdown?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-quarkdown" target="_blank" rel="noopener noreferrer"><img alt="Quarkdown - Markdown with superpowers: from ideas to stunning documents. | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1130470&amp;theme=light&amp;t=1777150043744"></a>
+  <br>
 </p>
 
   <p align="center">
