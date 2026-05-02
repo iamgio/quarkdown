@@ -35,7 +35,6 @@ class HtmlPdfExporter(
                 node,
                 npm,
                 options.noSandbox,
-                options.timeoutMillis,
             )
 
         try {

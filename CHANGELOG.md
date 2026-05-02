@@ -6,15 +6,13 @@
 
 &nbsp;
 
-#### [Configurable PDF export timeout](https://quarkdown.com/wiki/pdf-export#additional-options)
+#### [Execution timeout](https://quarkdown.com/wiki/cli-options#other-options)
 
-The new `--pdf-timeout` flag sets the per-operation timeout, in seconds, used by the headless browser during PDF generation. The default remains 30 seconds, matching previous behavior; passing a higher value, or `0` to disable the timeout entirely, lets you export very large documents whose layout takes longer than the default to render.
+The new `--timeout` flag sets the maximum time, in seconds, allowed for the entire program execution to complete. Defaults to 30 seconds; `0` disables the timeout.
 
 ```shell
-quarkdown c main.qd --pdf --pdf-timeout 120
+quarkdown c main.qd --pdf --timeout 120
 ```
-
-Closes #469.
 
 &nbsp;
 

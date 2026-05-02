@@ -24,9 +24,6 @@ Package managers and install scripts already take care of these dependencies.
 - `--pdf-no-sandbox`: Disables Chrome sandbox during PDF generation.
   This is potentially unsafe and should only be used when strictly needed. For instance, some Linux distributions do not support headless sandbox.
 
-- `--pdf-timeout <seconds>`: Sets the per-operation timeout for the headless browser during PDF generation. Defaults to 30 seconds.
-  Use a higher value, or `0` to disable the timeout, for very large documents whose layout takes longer than the default to render.
-
 ### Environment variables
 
 - `QD_NPM_PREFIX`: Directory where `node_modules` should be found. Defaults to `lib` if Quarkdown was installed via a package manager or install script.

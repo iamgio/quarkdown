@@ -21,9 +21,6 @@ private const val STARTING_SERVER_PORT = 8096
  * @param node Node.js executable wrapper
  * @param npm NPM executable wrapper
  * @param noSandbox whether to disable Chrome sandbox for PDF export
- * @param timeoutMillis per-operation timeout for the headless browser, in milliseconds.
- *                     `0` disables the timeout, suitable for very large documents
- *                     whose Paged.js rendering exceeds the default
  */
 class PuppeteerPdfGeneratorScript(
     private val sourcesDirectory: File,
@@ -31,7 +28,6 @@ class PuppeteerPdfGeneratorScript(
     private val node: NodeJsWrapper,
     private val npm: NpmWrapper,
     private val noSandbox: Boolean = false,
-    private val timeoutMillis: Int = HtmlPdfExportOptions.DEFAULT_TIMEOUT_MILLIS,
 ) {
     private var port: Int? = null
 
@@ -53,6 +49,8 @@ class PuppeteerPdfGeneratorScript(
                 try {
                     runScript()
                     Log.info("PDF generated successfully.")
+                } catch (e: InterruptedException) {
+                    throw e
                 } catch (e: Exception) {
                     Log.error("Failed to export PDF: ${e.message}")
                     Log.debug(e)
@@ -68,6 +66,6 @@ class PuppeteerPdfGeneratorScript(
         val script = javaClass.getResourceAsStream("/pdf/pdf.js")!!
         val url = "http://localhost:$port/?print-pdf"
 
-        node.eval(script.reader(), out.absolutePath, url, noSandbox.toString(), timeoutMillis.toString())
+        node.eval(script.reader(), out.absolutePath, url, noSandbox.toString())
     }
 }
