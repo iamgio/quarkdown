@@ -1,8 +1,10 @@
 package com.quarkdown.cli
 
+import com.github.ajalt.clikt.core.parse
 import com.github.ajalt.clikt.testing.CliktCommandTestResult
 import com.github.ajalt.clikt.testing.test
 import com.quarkdown.cli.exec.CompileCommand
+import com.quarkdown.cli.exec.ExecutionTimeoutException
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
@@ -17,6 +19,7 @@ import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
@@ -404,25 +407,83 @@ class CompileCommandTest : TempDirectory() {
         checkPdf()
     }
 
-    // #469
     @Test
-    fun `pdf timeout default value`() {
-        val (cliOptions, _) = test()
-        assertEquals(CliOptions.DEFAULT_PDF_TIMEOUT_SECONDS, cliOptions.pdfTimeoutSeconds)
+    fun `timeout does not fire for faster compilation`() {
+        val cmd = CompileCommand()
+        cmd.parse(
+            arrayOf(
+                main.absolutePath,
+                "-o",
+                outputDirectory.absolutePath,
+                "--timeout",
+                "20",
+            ),
+        )
+        assertHtmlContentPresent()
+    }
+
+    @Test
+    fun `timeout disabled with zero`() {
+        val cmd = CompileCommand()
+        cmd.parse(
+            arrayOf(
+                main.absolutePath,
+                "-o",
+                outputDirectory.absolutePath,
+                "--timeout",
+                "0",
+            ),
+        )
+        assertHtmlContentPresent()
     }
 
     // #469
     @Test
-    fun `pdf timeout custom value`() {
-        val (cliOptions, _) = test("--pdf-timeout", "120")
-        assertEquals(120, cliOptions.pdfTimeoutSeconds)
+    fun `timeout aborts pdf generation`() {
+        assumePdfEnvironmentInstalled()
+
+        val cmd = CompileCommand()
+
+        assertFailsWith<ExecutionTimeoutException> {
+            cmd.parse(
+                arrayOf(
+                    main.absolutePath,
+                    "-o",
+                    outputDirectory.absolutePath,
+                    "--pdf",
+                    "--pdf-no-sandbox",
+                    "--timeout",
+                    "1",
+                ),
+            )
+        }
     }
 
-    // #469
     @Test
-    fun `pdf timeout disabled with zero`() {
-        val (cliOptions, _) = test("--pdf-timeout", "0")
-        assertEquals(0, cliOptions.pdfTimeoutSeconds)
+    fun `timeout aborts long-running execution`() {
+        // A source with a computation that exceeds a 1-second timeout.
+        val heavySource = File(directory, "heavy.qd")
+        heavySource.writeText(
+            """
+            .repeat {500}
+                .repeat {500}
+                    Hello
+            """.trimIndent(),
+        )
+
+        val cmd = CompileCommand()
+
+        assertFailsWith<ExecutionTimeoutException> {
+            cmd.parse(
+                arrayOf(
+                    heavySource.absolutePath,
+                    "-o",
+                    outputDirectory.absolutePath,
+                    "--timeout",
+                    "1",
+                ),
+            )
+        }
     }
 
     /**

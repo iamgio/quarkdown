@@ -48,6 +48,7 @@ abstract class ExecutableWrapper {
      * @param args arguments to pass to the executable
      * @param workingDirectory working directory to run the executable in
      * @return the stdout and stderr of the execution
+     * @throws InterruptedException if the current thread is interrupted while waiting for the process
      */
     protected fun launchAndGetOutput(
         vararg args: String,
@@ -55,22 +56,32 @@ abstract class ExecutableWrapper {
     ): String {
         val process = createProcessBuilder(*args, workingDirectory = workingDirectory).start()
 
-        val output =
-            process.inputStream
-                .bufferedReader()
-                .lines()
-                .asSequence()
-                .onEach(Log::debug)
-                .joinToString(separator = "\n")
+        try {
+            val output =
+                process.inputStream
+                    .bufferedReader()
+                    .lines()
+                    .asSequence()
+                    .onEach(Log::debug)
+                    .onEach { line ->
+                        if (Thread.currentThread().isInterrupted) {
+                            throw InterruptedException()
+                        }
+                    }.joinToString(separator = "\n")
 
-        process.waitFor()
+            process.waitFor()
 
-        Log.debug("Command `$path ${args.joinToString()}` exited with code ${process.exitValue()}. Output:\n$output")
+            Log.debug("Command `$path ${args.joinToString()}` exited with code ${process.exitValue()}. Output:\n$output")
 
-        if (process.exitValue() != 0) {
-            throw IllegalStateException("Command failed with non-zero exit code:\n$output")
+            if (process.exitValue() != 0) {
+                throw IllegalStateException("Command failed with non-zero exit code:\n$output")
+            }
+
+            return output
+        } catch (e: InterruptedException) {
+            process.destroyForcibly()
+            Thread.currentThread().interrupt()
+            throw e
         }
-
-        return output
     }
 }

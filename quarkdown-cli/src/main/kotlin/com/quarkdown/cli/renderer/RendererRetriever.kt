@@ -54,6 +54,5 @@ class RendererRetriever(
             nodeJsPath = options.nodePath,
             npmPath = options.npmPath,
             noSandbox = options.noPdfSandbox,
-            timeoutMillis = options.pdfTimeoutSeconds * 1000,
         )
 }

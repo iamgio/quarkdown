@@ -6,6 +6,7 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
+import com.github.ajalt.clikt.parameters.types.restrictTo
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
 import com.quarkdown.cli.server.WebServerOptions
@@ -19,6 +20,11 @@ import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
 import com.quarkdown.server.message.ServerMessageSession
 import java.io.File
+
+/**
+ * Default execution timeout in seconds.
+ */
+private const val DEFAULT_TIMEOUT_SECONDS = 30
 
 /**
  * Command to compile a Quarkdown file into an output.
@@ -49,15 +55,14 @@ class CompileCommand : ExecuteCommand("compile") {
     ).flag()
 
     /**
-     * Per-operation timeout for the headless browser during PDF export, in seconds.
-     * `0` disables the timeout, useful for very large documents whose Paged.js rendering
-     * exceeds the default. Defaults to [CliOptions.DEFAULT_PDF_TIMEOUT_SECONDS].
+     * Maximum time, in seconds, allowed for the entire execution (pipeline + export) to complete.
+     * `0` disables the timeout. Defaults to [DEFAULT_TIMEOUT_SECONDS].
      */
-    private val pdfTimeoutSeconds: Int by option(
-        "--pdf-timeout",
-        help = "Per-operation timeout for PDF export, in seconds. 0 disables it.",
+    override val timeoutSeconds: Int by option(
+        "--timeout",
+        help = "Maximum execution time in seconds. 0 disables it. Defaults to $DEFAULT_TIMEOUT_SECONDS.",
         metavar = "SECONDS",
-    ).int().default(CliOptions.DEFAULT_PDF_TIMEOUT_SECONDS)
+    ).int().restrictTo(min = 0).default(DEFAULT_TIMEOUT_SECONDS)
 
     /**
      * When enabled, the rendered content (NOT post-rendered) is printed to stdout and nothing else is logged,
@@ -96,7 +101,6 @@ class CompileCommand : ExecuteCommand("compile") {
             pipe = pipe,
             exportPdf = exportPdf,
             noPdfSandbox = noPdfSandbox,
-            pdfTimeoutSeconds = pdfTimeoutSeconds,
         )
 
     /**

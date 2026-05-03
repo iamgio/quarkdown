@@ -16,8 +16,6 @@ import java.io.File
  * @param npmPath path to the npm executable
  * @param exportPdf whether to generate a PDF file
  * @param noPdfSandbox whether to disable the Chrome sandbox for PDF export
- * @param pdfTimeoutSeconds per-operation timeout for the headless browser during PDF export, in seconds.
- *                          `0` disables the timeout.
  */
 data class CliOptions(
     val source: File?,
@@ -30,19 +28,10 @@ data class CliOptions(
     val npmPath: String,
     val exportPdf: Boolean = false,
     val noPdfSandbox: Boolean = false,
-    val pdfTimeoutSeconds: Int = DEFAULT_PDF_TIMEOUT_SECONDS,
 ) {
     /**
      * The rendering target to generate the output for.
      * For instance HTML or PDF.
      */
     val renderer by lazy { RendererRetriever(this).getRenderer() }
-
-    companion object {
-        /**
-         * Default per-operation timeout for the headless browser during PDF export, in seconds.
-         * Mirrors Puppeteer's own 30s default.
-         */
-        const val DEFAULT_PDF_TIMEOUT_SECONDS: Int = 30
-    }
 }

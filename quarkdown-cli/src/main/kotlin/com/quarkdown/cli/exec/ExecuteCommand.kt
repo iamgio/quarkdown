@@ -11,6 +11,7 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.cli.server.DEFAULT_SERVER_PORT
+import com.quarkdown.cli.util.runWithTimeout
 import com.quarkdown.cli.watcher.DirectoryWatcher
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.log.Log
@@ -187,6 +188,12 @@ abstract class ExecuteCommand(
         .default(NpmWrapper.defaultPath)
 
     /**
+     * Maximum time, in seconds, allowed for the entire execution (pipeline + export) to complete.
+     * `null` or non-positive disables the timeout. Subclasses may override to provide a value.
+     */
+    protected open val timeoutSeconds: Int? = null
+
+    /**
      * @return the finalized CLI options based on the command's properties
      */
     fun createCliOptions(): CliOptions =
@@ -280,6 +287,7 @@ abstract class ExecuteCommand(
     /**
      * Executes the Quarkdown pipeline: compiles and generates output files.
      * [preExecute] and [postExecute] are called before and after the execution respectively.
+     * If [timeoutSeconds] is set, the execution is bounded by the specified duration.
      */
     private fun execute(
         cliOptions: CliOptions,
@@ -287,8 +295,10 @@ abstract class ExecuteCommand(
     ) {
         this.preExecute(cliOptions, pipelineOptions)
 
-        // Executes the Quarkdown pipeline.
-        val outcome: ExecutionOutcome = runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
+        val outcome: ExecutionOutcome =
+            runWithTimeout(timeoutSeconds) {
+                runQuarkdown(createExecutionStrategy(cliOptions), cliOptions, pipelineOptions)
+            }
 
         this.postExecute(outcome, cliOptions, pipelineOptions)
     }

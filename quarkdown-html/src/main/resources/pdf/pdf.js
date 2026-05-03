@@ -1,12 +1,9 @@
 const outputFile = process.argv[1];
 const url = process.argv[2];
 const noSandbox = process.argv[3] === 'true';
-// Per-operation timeout in milliseconds. 0 means no timeout. Defaults to Puppeteer's 30s default if omitted.
-const timeoutMillis = process.argv[4] !== undefined ? parseInt(process.argv[4], 10) : 30000;
 
 console.log('outputFile: ' + outputFile);
 console.log('url: ' + url);
-console.log('timeoutMillis: ' + timeoutMillis + (timeoutMillis === 0 ? ' (no timeout)' : ''));
 
 const puppeteer = require('puppeteer');
 
@@ -27,14 +24,12 @@ function createArgs() {
     const browser = await puppeteer.launch({
         args: args,
         headless: 'shell',
-        // Caps the duration of any single CDP call (including page.pdf). 0 disables it.
-        protocolTimeout: timeoutMillis,
+        // Timeout is managed externally by the CLI's --timeout flag.
+        protocolTimeout: 0,
     });
     const page = await browser.newPage();
-    // Caps page.goto and other navigations. 0 disables it.
-    page.setDefaultNavigationTimeout(timeoutMillis);
-    // Caps page.waitForFunction and other waits. 0 disables it.
-    page.setDefaultTimeout(timeoutMillis);
+    page.setDefaultNavigationTimeout(0);
+    page.setDefaultTimeout(0);
 
     console.log('Connecting to ' + url);
     await page.goto(url);
@@ -56,7 +51,7 @@ function createArgs() {
         path: outputFile,
         printBackground: true,
         preferCSSPageSize: true,
-        timeout: timeoutMillis,
+        timeout: 0,
         ...(
             isSinglePage
                 ? {height: (await getClientHeight(body)) * singlePageHeightMultiplier + singlePageHeightPadding + 'px'}
