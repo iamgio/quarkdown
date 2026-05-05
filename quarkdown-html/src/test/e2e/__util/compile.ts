@@ -16,9 +16,13 @@ export const CLI_PATH = process.env.QUARKDOWN_CLI_PATH || DEFAULT_CLI_PATH;
 export function compile(source: string, outName: string): string {
     const sourcePath = path.isAbsolute(source) ? source : path.join(PROJECT_ROOT, source);
 
+    // Unset JAVA_HOME so the CLI must fall back to the bundled runtime, exercising the jlink-produced JRE.
+    const {JAVA_HOME: _, ...env} = process.env;
+
     execSync(`"${CLI_PATH}" compile "${sourcePath}" --out "${OUTPUT_DIR}" --out-name "${outName}" --allow all`, {
         cwd: PROJECT_ROOT,
         stdio: "pipe",
+        env,
     });
 
     return path.join(OUTPUT_DIR, outName);

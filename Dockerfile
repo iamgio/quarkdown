@@ -30,12 +30,6 @@ FROM ghcr.io/puppeteer/puppeteer:24.15.0 AS runner
 ENV QD_NPM_PREFIX="/home/pptruser" \
     NODE_PATH="/home/pptruser/node_modules"
 
-USER root
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends openjdk-17-jre-headless \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
 USER pptruser
 WORKDIR /app
 COPY --from=builder /app/build/distributions/quarkdown quarkdown

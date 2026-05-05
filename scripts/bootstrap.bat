@@ -1,3 +1,10 @@
+REM Always prefer the bundled JRE when present, ignoring any system JAVA_HOME.
+REM This guarantees the JVM version Quarkdown was built and tested against.
+set "SCRIPT_DIR=%~dp0"
+if exist "%SCRIPT_DIR%..\runtime\bin\java.exe" (
+    set "JAVA_HOME=%SCRIPT_DIR%..\runtime"
+)
+
 if defined QD_NPM_PREFIX (
     set "NODE_PATH=%QD_NPM_PREFIX%\node_modules"
 )

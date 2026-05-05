@@ -26,6 +26,16 @@ quarkdown c main.qd --allow process
 
 &nbsp;
 
+### Changed
+
+&nbsp;
+
+#### Bundled Java runtime
+
+The Quarkdown distribution now includes a minimal (~50MB) Java runtime, so the CLI runs out of the box without requiring a separate Java installation on your system. Installers have been updated accordingly.
+
+&nbsp;
+
 ### Fixed
 
 &nbsp;
