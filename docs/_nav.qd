@@ -125,6 +125,9 @@
 - [Docs: documentation projects](docs-library.qd)
 - [Paper: abstract, definitions, theorems](paper-library.qd)
 
+###! Process
+- [Environment variables](environment.qd)
+
 ###! Resources & logging
 - [Media storage](media-storage.qd)
 - [Logging](logging.qd)

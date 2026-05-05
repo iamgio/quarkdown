@@ -20,13 +20,14 @@ The final permission set is computed as: *defaults + allowed - denied*.
 
 ### Available permissions
 
-| Name             | Description                                                                     |
-|------------------|---------------------------------------------------------------------------------|
-| `project-read`   | Read files within the project directory *(default)*                             |
-| `global-read`    | Read files from the entire file system, including outside the project directory |
-| `network`        | Access remote resources over the network (e.g. fetching remote media)           |
-| `native-content` | Embed native content, such as raw HTML and CSS *(default)*                      |
-| `all`            | Shorthand for all of the above                                                  |
+| Name             | Description                                                                                  |
+|------------------|----------------------------------------------------------------------------------------------|
+| `project-read`   | Read files within the project directory *(default)*                                          |
+| `global-read`    | Read files from the entire file system, including outside the project directory              |
+| `network`        | Access remote resources over the network (e.g. fetching remote media)                        |
+| `native-content` | Embed native content, such as raw HTML and CSS *(default)*                                   |
+| `process`        | Access the host process environment (e.g. reading [environment variables](environment.qd))   |
+| `all`            | Shorthand for all of the above                                                               |
 
 > [!NOTE]
 > `project-read`, `global-read` and `network` are only requested when the *compiler* needs access to a resource.

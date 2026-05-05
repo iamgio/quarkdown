@@ -52,7 +52,7 @@ Running **`quarkdown c file.qd`** compiles the given file and saves the output t
 ### Permissions
 
 - `--allow <permission>` / `--deny <permission>`: grants or revokes a [permission](cli-compiler.qd#permissions) (repeatable).
-  Accepted values: `project-read`, `global-read`, `network`, `native-content`, `all`.
+  Accepted values: `project-read`, `global-read`, `network`, `native-content`, `process`, `all`.
   By default, `project-read` and `native-content` are granted.
 
 ### Libraries

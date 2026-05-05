@@ -46,6 +46,7 @@ object Stdlib : LibraryExporter {
                     Mermaid,
                     Reference,
                     Bibliography,
+                    Process,
                 ).withHooks(
                     PipelineHooks(
                         // Localization data is loaded before any function is called.
