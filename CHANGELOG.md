@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Fixed
+
+&nbsp;
+
+#### Fixed inline code inside compact footnote definitions
+
+Compact footnotes like `` [^: text with `code`] `` were incorrectly parsed as plain text instead of footnotes. The definition pattern now allows backtick-enclosed spans inside the footnote body.
+
+Thanks @Shreyansh-Kushwaha!
+
 ## [2.0.1] - 2026-05-04
 
 ### Added
