@@ -41,6 +41,13 @@ sealed interface Permission {
         override val name = "native-content"
     }
 
+    /**
+     * Allows accessing the host process environment (e.g. reading environment variables).
+     */
+    data object ProcessAccess : Permission {
+        override val name = "process"
+    }
+
     companion object {
         /**
          * The default set of permissions granted to a pipeline when no explicit permissions are specified.
@@ -50,7 +57,7 @@ sealed interface Permission {
         /**
          * The complete set of all available permissions.
          */
-        val ALL = setOf(ProjectRead, GlobalRead, NetworkAccess, NativeContent)
+        val ALL = setOf(ProjectRead, GlobalRead, NetworkAccess, NativeContent, ProcessAccess)
     }
 }
 

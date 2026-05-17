@@ -2,6 +2,30 @@
 
 ## [Unreleased]
 
+### Added
+
+&nbsp;
+
+#### [Read environment variables](https://quarkdown.com/wiki/environment)
+
+The new `.env {name}` function reads an environment variable from the host system, returning its value as a string or `none` if unset.
+
+```markdown
+The home directory is .env {HOME}::otherwise {unknown}
+```
+
+&nbsp;
+
+#### [`process` permission](https://quarkdown.com/wiki/cli-compiler#permissions)
+
+A new `process` permission gates access to the host process environment. Reading environment variables requires this permission to be explicitly granted:
+
+```shell
+quarkdown c main.qd --allow process
+```
+
+&nbsp;
+
 ### Fixed
 
 &nbsp;

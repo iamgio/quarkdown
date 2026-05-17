@@ -1,0 +1,23 @@
+.docname {Environment}
+.include {docs}
+
+Quarkdown can read environment variables from the host system at compile time, allowing documents to adapt their content based on the environment they are compiled in.
+
+## Reading an environment variable
+
+**`.env {name}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Process/env.html} returns the value of the environment variable with the given name, or `none` if it is not set.
+
+.examplemirror
+    This page was compiled with .env {SHELL} as the default shell.
+
+.examplemirror prelude:{Since the result may be `none`, you can use [optionality functions](none.qd) to handle missing values:}
+    .container background:{.env {COLOR}::otherwise {teal}}
+        Hello, world!
+
+## Permissions
+
+Reading environment variables requires the `process` [permission](cli-compiler.qd#permissions).
+
+```shell
+quarkdown c main.qd --allow process
+```

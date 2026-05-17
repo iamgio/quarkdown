@@ -193,6 +193,18 @@ class CompileCommandTest : TempDirectory() {
     }
 
     @Test
+    fun `allow process`() {
+        val (_, pipelineOptions) = test("--allow", "process")
+        assertEquals(Permission.DEFAULT_SET + Permission.ProcessAccess, pipelineOptions.permissions)
+    }
+
+    @Test
+    fun `deny process`() {
+        val (_, pipelineOptions) = test("--allow", "all", "--deny", "process")
+        assertEquals(Permission.ALL - Permission.ProcessAccess, pipelineOptions.permissions)
+    }
+
+    @Test
     fun `allow and deny combined`() {
         val (_, pipelineOptions) = test("--allow", "all", "--deny", "network")
         assertEquals(Permission.ALL - Permission.NetworkAccess, pipelineOptions.permissions)
