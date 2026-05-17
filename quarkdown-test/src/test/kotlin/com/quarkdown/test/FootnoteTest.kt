@@ -279,6 +279,45 @@ class FootnoteTest {
     }
 
     @Test
+    fun `all-in-one definition with inline code`() {
+        execute("text[^x: see `foo()` for details]") {
+            assertEquals(
+                "<p>text" +
+                    referenceHtml("x", "1") +
+                    definitionHtml(
+                        label = "x",
+                        index = 0,
+                        content = "see <span class=\"codespan-content\"><code>foo()</code></span> for details",
+                    ) +
+                    "</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `all-in-one anonymous definition with inline code`() {
+        var uuid = 0
+        val firstUuid = "2"
+        execute(
+            "text[^: use `bar` here]",
+            options = DEFAULT_OPTIONS.copy(uuidSupplier = { (++uuid * 2).toString() }),
+        ) {
+            assertEquals(
+                "<p>text" +
+                    referenceHtml(firstUuid, "1") +
+                    definitionHtml(
+                        label = firstUuid,
+                        index = 0,
+                        content = "use <span class=\"codespan-content\"><code>bar</code></span> here",
+                    ) +
+                    "</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun numbered() {
         execute(
             """

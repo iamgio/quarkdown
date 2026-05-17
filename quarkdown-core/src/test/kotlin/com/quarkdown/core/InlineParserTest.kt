@@ -209,6 +209,20 @@ class InlineParserTest {
             )
             assertEquals("this is an anonymous definition!", definition.toPlainText())
         }
+        with(nodes.next()) {
+            assertEquals("code", label)
+            assertEquals("some inline code here", definition.toPlainText())
+        }
+        with(nodes.next()) {
+            assertEquals(
+                label.length,
+                UUID
+                    .randomUUID()
+                    .toString()
+                    .length,
+            )
+            assertEquals("anonymous with code", definition.toPlainText())
+        }
     }
 
     @Test

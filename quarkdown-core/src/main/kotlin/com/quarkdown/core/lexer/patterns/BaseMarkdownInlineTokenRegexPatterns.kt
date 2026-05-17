@@ -173,7 +173,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             regex =
                 RegexBuilder("\\[\\^(label)definition\\]")
                     .withReference("label", LABEL_HELPER)
-                    .withReference("definition", "(?::[ \\t]*([^\\[\\]\\\\`]+?))?")
+                    .withReference("definition", "(?::[ \\t]*((?:`[^`]*`|[^\\[\\]\\\\`])+?))?")
                     .build(),
         )
     }
