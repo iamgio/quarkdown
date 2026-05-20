@@ -15,6 +15,9 @@ class InstallLayout(
     /** The subtree containing all HTML rendering resources. */
     val htmlResources get() = resolveDirectory("html").let(::Html)
 
+    /** The bundled agent skill directory, containing the `SKILL.md` entrypoint and any supporting files. */
+    val agentSkill get() = resolveDirectory("skills").resolveDirectory("quarkdown")
+
     companion object {
         /** Lazily resolved singleton pointing to the current process's install layout. Throws if resolution fails. */
         val get by lazy(InstallDirectoryResolver::resolve)

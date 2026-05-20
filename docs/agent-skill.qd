@@ -1,0 +1,27 @@
+.docname {Quarkdown skill for agents}
+.include {docs}
+
+Quarkdown ships with an agent skill and a full offline copy of its wiki and stdlib API reference, so AI agents can consult the source of truth before generating `.qd` documents.
+
+To use the skill, follow the instructions for your agent below, then just ask it to write or edit a `.qd` file.
+
+If the skill doesn't spin up automatically, you can invoke `/quarkdown` to trigger it.
+
+## Claude Code
+
+Symlink the bundled skill into your Claude skills directory:
+
+```shell
+ln -s "$(quarkdown doctor get agent-skill)" ~/.claude/skills/quarkdown
+```
+
+Restart your Claude session to pick it up. The skill activates when you ask Claude to write or edit a `.qd` file.
+
+## ChatGPT and other agents
+
+Upload the `SKILL.md` file or point the agent to it.
+The file is located at:
+
+```shell
+echo "$(quarkdown doctor get agent-skill)/SKILL.md"
+```
