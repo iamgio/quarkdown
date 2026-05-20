@@ -1,3 +1,5 @@
+@use "util/media-queries" as media-queries;
+
 :root:has(.quarkdown-paged) {
   color-scheme: light;
 }
@@ -12,5 +14,13 @@ body.quarkdown-paged {
 
   .pagedjs_page {
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+  }
+
+  @include media-queries.print {
+    background-color: transparent;
+
+    .pagedjs_page {
+      box-shadow: none;
+    }
   }
 }
