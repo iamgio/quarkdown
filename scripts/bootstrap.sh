@@ -1,3 +1,13 @@
+# Always prefer the bundled JRE when present, ignoring any system JAVA_HOME.
+# This guarantees the JVM version Quarkdown was built and tested against.
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BUNDLED_RUNTIME="$SCRIPT_DIR/../runtime"
+if [ -d "$BUNDLED_RUNTIME" ] && [ -x "$BUNDLED_RUNTIME/bin/java" ]; then
+  # Canonicalize so JAVA_HOME passes the Gradle start script's validation, which rejects relative paths.
+  JAVA_HOME="$(cd "$BUNDLED_RUNTIME" && pwd)"
+  export JAVA_HOME
+fi
+
 if [ -n "$QD_NPM_PREFIX" ]; then
   export NODE_PATH="$QD_NPM_PREFIX/node_modules"
 fi
