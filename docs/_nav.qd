@@ -137,6 +137,7 @@
 - [Exporting to PDF](pdf-export.qd)
 - [Project creator](cli-project-creator.qd)
 - [Webserver](cli-webserver.qd)
+- [Doctor](cli-doctor.qd)
 
 ###! Inside Quarkdown
 - [Quarkdown's pipeline](pipeline.qd)
