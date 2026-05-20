@@ -36,6 +36,12 @@ The Quarkdown distribution now includes a minimal (~50MB) Java runtime, so the C
 
 &nbsp;
 
+#### Improved function call performance
+
+Function call-heavy documents now compile faster, by extracting metadata once at function load time.
+
+&nbsp;
+
 ### Fixed
 
 &nbsp;
