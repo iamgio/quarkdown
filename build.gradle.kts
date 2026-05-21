@@ -27,6 +27,32 @@ allprojects {
 // `quarkdown-test` contains only integration tests and has no `src/main/`.
 val publicationExcludedSubprojects = setOf("quarkdown-test")
 
+/**
+ * Shared POM metadata applied to every Quarkdown Maven publication: project URL, licence,
+ * developers, and SCM. Per-publication `name` and `description` are set at the call site.
+ */
+val publicationPomMetadata: MavenPom.() -> Unit = {
+    url.set("https://github.com/iamgio/quarkdown")
+    licenses {
+        license {
+            name.set("GNU General Public License v3.0")
+            url.set("https://www.gnu.org/licenses/gpl-3.0.html")
+        }
+    }
+    developers {
+        developer {
+            id.set("iamgio")
+            name.set("Giorgio Garofalo")
+            url.set("https://github.com/iamgio")
+        }
+    }
+    scm {
+        connection.set("scm:git:https://github.com/iamgio/quarkdown.git")
+        developerConnection.set("scm:git:ssh://git@github.com:iamgio/quarkdown.git")
+        url.set("https://github.com/iamgio/quarkdown")
+    }
+}
+
 subprojects {
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
@@ -58,25 +84,7 @@ subprojects {
                     pom {
                         name.set(project.name)
                         description.set("Quarkdown module: ${project.name}")
-                        url.set("https://github.com/iamgio/quarkdown")
-                        licenses {
-                            license {
-                                name.set("GNU General Public License v3.0")
-                                url.set("https://www.gnu.org/licenses/gpl-3.0.html")
-                            }
-                        }
-                        developers {
-                            developer {
-                                id.set("iamgio")
-                                name.set("Giorgio Garofalo")
-                                url.set("https://github.com/iamgio")
-                            }
-                        }
-                        scm {
-                            connection.set("scm:git:https://github.com/iamgio/quarkdown.git")
-                            developerConnection.set("scm:git:ssh://git@github.com:iamgio/quarkdown.git")
-                            url.set("https://github.com/iamgio/quarkdown")
-                        }
+                        publicationPomMetadata()
                     }
                 }
             }
@@ -310,6 +318,70 @@ val assembleDevLib by tasks.registering(Sync::class) {
     dependsOn(":quarkdown-html:bundleThirdParty")
     into(layout.buildDirectory.dir("dev-lib"))
     installLibLayout()
+}
+
+/**
+ * Standalone zip artifact containing the Quarkdown install `lib/` layout, with the same
+ * `lib/qd`, `lib/html`, `lib/skills` shape produced by [installLibLayout]. Published as a
+ * Maven artifact alongside the JVM modules so that consumers embedding Quarkdown can fetch
+ * the runtime resources (`.qd` libraries, HTML themes and scripts, third-party bundles,
+ * agent skills) without having to vendor the upstream source or unpack the full
+ * distribution zip.
+ */
+val installLibZip by tasks.registering(Zip::class) {
+    group = "distribution"
+    description = "Packages the Quarkdown install `lib/` layout (qd, html, skills) as a standalone zip artifact."
+
+    archiveBaseName.set("quarkdown-install-lib")
+    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+
+    // The HTML install layout is produced as a side-effect of these bundling tasks.
+    // Provider-based wiring should detect these automatically, but declaring them explicitly
+    // keeps the published artifact reliably reproducible.
+    dependsOn(
+        ":quarkdown-html:assembleThemes",
+        ":quarkdown-html:bundleTypeScript",
+        ":quarkdown-html:bundleHighlightJs",
+        ":quarkdown-html:bundleThirdParty",
+    )
+
+    into("lib", installLibLayout)
+}
+
+// Root-project publication of the standalone install-lib zip.
+//
+// The JVM module publications live on the subprojects (see the `subprojects` block above);
+// this block adds a single artifact on the root so consumers can resolve the runtime
+// install layout under a stable Maven coordinate:
+//
+//     com.quarkdown:quarkdown-install-lib:<version>@zip
+publishing {
+    publications {
+        create<MavenPublication>("installLib") {
+            artifactId = "quarkdown-install-lib"
+            artifact(installLibZip) {
+                extension = "zip"
+            }
+            pom {
+                name.set("quarkdown-install-lib")
+                description.set("Quarkdown install `lib/` layout (qd, html, skills) as a standalone zip artifact.")
+                publicationPomMetadata()
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            val repository = System.getenv("GITHUB_REPOSITORY") ?: "iamgio/quarkdown"
+            url = uri("https://maven.pkg.github.com/$repository")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                    ?: providers.gradleProperty("gpr.user").orNull
+                password = System.getenv("GITHUB_TOKEN")
+                    ?: providers.gradleProperty("gpr.key").orNull
+            }
+        }
+    }
 }
 
 tasks.installDist {

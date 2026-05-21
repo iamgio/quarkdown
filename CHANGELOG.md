@@ -8,23 +8,25 @@
 
 #### Maven artifacts on GitHub Packages
 
-Released versions of Quarkdown are now published to the GitHub Packages Maven registry, so the JVM modules can be consumed as Maven dependencies under the `com.quarkdown` group.
+Released versions of Quarkdown are now published to the GitHub Packages Maven registry under the `com.quarkdown` group, exposing both the JVM modules and a standalone install `lib/` layout zip.
 
-Add the registry to your build:
+GitHub Packages requires authentication even for public reads. For local builds, generate a classic Personal Access Token with the `read:packages` scope and expose it through Gradle properties or environment variables. Inside GitHub Actions, the workflow-provided `GITHUB_ACTOR` and `secrets.GITHUB_TOKEN` already satisfy this with no extra setup.
+
+Add the registry to your build (the example reads credentials from `gpr.user` / `gpr.key` Gradle properties, falling back to env vars for CI):
 
 ```kotlin
 repositories {
     maven {
         url = uri("https://maven.pkg.github.com/iamgio/quarkdown")
         credentials {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GITHUB_TOKEN")
+            username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
+            password = providers.gradleProperty("gpr.key").orNull ?: System.getenv("GITHUB_TOKEN")
         }
     }
 }
 ```
 
-Then depend on any Quarkdown module, for example:
+Depend on any Quarkdown module:
 
 ```kotlin
 dependencies {
@@ -32,7 +34,22 @@ dependencies {
 }
 ```
 
-Programmatic use still relies on a Quarkdown installation layout at runtime to load `.qd` libraries and HTML rendering resources; see the [Lib directory](CONTRIBUTING.md#lib-directory) notes.
+Programmatic use of the JVM modules relies on a Quarkdown installation `lib/` layout at runtime to load `.qd` libraries, HTML rendering resources, and agent skills. The same release publishes a standalone zip containing that layout as `com.quarkdown:quarkdown-install-lib:<version>@zip`:
+
+```kotlin
+val quarkdownInstallLib by configurations.creating
+dependencies {
+    quarkdownInstallLib("com.quarkdown:quarkdown-install-lib:<version>@zip")
+}
+
+distributions.main {
+    contents {
+        from(zipTree(quarkdownInstallLib.singleFile))
+    }
+}
+```
+
+See the [Lib directory](CONTRIBUTING.md#lib-directory) notes for what the layout contains and how it's resolved.
 
 &nbsp;
 
