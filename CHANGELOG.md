@@ -73,6 +73,16 @@ Function call-heavy documents now compile faster, by extracting metadata once at
 
 &nbsp;
 
+#### PDF output size and compile time reduction
+
+PDF output:
+- is up to 90% smaller,
+- compiles up to 2x faster.
+
+Thanks @philipredstone!
+
+&nbsp;
+
 #### Fixed inline code inside compact footnote definitions
 
 Compact footnotes like `` [^: text with `code`] `` were incorrectly parsed as plain text instead of footnotes. The definition pattern now allows backtick-enclosed spans inside the footnote body.
