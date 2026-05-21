@@ -10,6 +10,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 private fun npm() = NpmWrapper(NpmWrapper.defaultPath)
 
@@ -57,6 +58,19 @@ class NodeNpmWrapperTest {
     fun `nonexisting nodejs`() {
         val node = NodeJsWrapper("quarkdown-nodejs-nonexisting-path", directory)
         assertEquals(false, node.isValid)
+    }
+
+    @Test
+    fun `nodejs process path and version`() {
+        val node = node(workingDirectory = directory)
+        assumeTrue(node.isValid)
+
+        val path = node.getProcessPath()
+        assertTrue(path.isNotBlank())
+        assertTrue(File(path).isFile)
+
+        val version = node.getVersion()
+        assertTrue(Regex("^v\\d+\\.\\d+\\.\\d+").containsMatchIn(version))
     }
 
     @Test

@@ -14,7 +14,7 @@ import com.quarkdown.cli.doctor.get.DoctorGetCommand
  */
 class DoctorCommand : CliktCommand("doctor") {
     init {
-        subcommands(DoctorGetCommand())
+        subcommands(DoctorGetCommand(), DoctorEnvCommand())
     }
 
     override fun run() = Unit
