@@ -5,22 +5,16 @@
 }
 
 body.quarkdown-paged {
-  background-color: lightgray;
-
   // Paged rendering is not yet complete
   &:not(:has(.pagedjs_page)) {
     opacity: 0;
   }
 
-  .pagedjs_page {
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
-  }
-
-  @include media-queries.print {
-    background-color: transparent;
+  @media screen, pagedjs-ignore {
+    background-color: lightgray;
 
     .pagedjs_page {
-      box-shadow: none;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
     }
   }
 }
