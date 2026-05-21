@@ -6,6 +6,20 @@
 
 &nbsp;
 
+#### [AI agent skill](https://quarkdown.com/wiki/agent-skill)
+
+Quarkdown now ships with an agent skill, so tools can author `.qd` documents on your behalf.
+
+To install on Claude Code: 
+
+```shell
+ln -s "$(quarkdown doctor get agent-skill)" ~/.claude/skills/quarkdown
+```
+
+See the [agent skill documentation](https://quarkdown.com/wiki/agent-skill) for more details.
+
+&nbsp;
+
 #### [Read environment variables](https://quarkdown.com/wiki/environment)
 
 The new `.env {name}` function reads an environment variable from the host system, returning its value as a string or `none` if unset.
