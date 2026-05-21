@@ -1,0 +1,24 @@
+.docname {CLI - Doctor}
+.include {docs}
+
+**`quarkdown doctor`** groups commands that report information about the current Quarkdown installation.
+
+## `doctor get`
+
+The **`get`** subgroup exposes single-value getters that print one piece of information to standard output, one per line.
+This makes them well suited for shell substitution.
+
+### `install-dir`
+
+**`quarkdown doctor get install-dir`** prints the absolute path of the Quarkdown install directory: the root of the distribution layout that contains `bin/`, `lib/`, and `docs/`.
+
+```shell
+quarkdown doctor get install-dir
+```
+
+A common use is to locate bundled resources from a shell script, without resolving the binary path manually:
+
+```shell
+INSTALL="$(quarkdown doctor get install-dir)"
+ls "$INSTALL/docs"
+```
