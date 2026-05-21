@@ -6,6 +6,36 @@
 
 &nbsp;
 
+#### Maven artifacts on GitHub Packages
+
+Released versions of Quarkdown are now published to the GitHub Packages Maven registry, so the JVM modules can be consumed as Maven dependencies under the `com.quarkdown` group.
+
+Add the registry to your build:
+
+```kotlin
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/iamgio/quarkdown")
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+```
+
+Then depend on any Quarkdown module, for example:
+
+```kotlin
+dependencies {
+    implementation("com.quarkdown:quarkdown-core:<version>")
+}
+```
+
+Programmatic use still relies on a Quarkdown installation layout at runtime to load `.qd` libraries and HTML rendering resources; see the [Lib directory](CONTRIBUTING.md#lib-directory) notes.
+
+&nbsp;
+
 #### [AI agent skill](https://quarkdown.com/wiki/agent-skill)
 
 Quarkdown now ships with an agent skill, so tools can author `.qd` documents on your behalf.

@@ -11,22 +11,90 @@ plugins {
     id("com.github.ben-manes.versions") version "0.53.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
     application
+    `maven-publish`
 }
 
-group = "com.quarkdown"
-version = file("version.txt").readText().trim()
-
 allprojects {
+    group = "com.quarkdown"
+    version = rootProject.file("version.txt").readText().trim()
+
     repositories {
         mavenCentral()
     }
 }
+
+// Subprojects that should not produce a published Maven artifact.
+// `quarkdown-test` contains only integration tests and has no `src/main/`.
+val publicationExcludedSubprojects = setOf("quarkdown-test")
 
 subprojects {
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "com.github.ben-manes.versions")
     apply(plugin = "se.patrikerdes.use-latest-versions")
+    apply(plugin = "maven-publish")
+
+    plugins.withType<JavaPlugin>().configureEach {
+        extensions.configure<JavaPluginExtension> {
+            withSourcesJar()
+        }
+    }
+
+    afterEvaluate {
+        if (project.name in publicationExcludedSubprojects) return@afterEvaluate
+        if (!plugins.hasPlugin("java")) return@afterEvaluate
+
+        // GitHub Packages publication.
+        //
+        // The repository URL is derived from the `GITHUB_REPOSITORY` environment variable set by
+        // GitHub Actions, so the same configuration publishes to the correct registry for the
+        // upstream repo and for any fork. Credentials are read from `GITHUB_ACTOR` and
+        // `GITHUB_TOKEN` in CI, and fall back to the `gpr.user` / `gpr.key` Gradle properties for
+        // local publication.
+        extensions.configure<PublishingExtension> {
+            publications {
+                create<MavenPublication>("maven") {
+                    from(components["java"])
+                    pom {
+                        name.set(project.name)
+                        description.set("Quarkdown module: ${project.name}")
+                        url.set("https://github.com/iamgio/quarkdown")
+                        licenses {
+                            license {
+                                name.set("GNU General Public License v3.0")
+                                url.set("https://www.gnu.org/licenses/gpl-3.0.html")
+                            }
+                        }
+                        developers {
+                            developer {
+                                id.set("iamgio")
+                                name.set("Giorgio Garofalo")
+                                url.set("https://github.com/iamgio")
+                            }
+                        }
+                        scm {
+                            connection.set("scm:git:https://github.com/iamgio/quarkdown.git")
+                            developerConnection.set("scm:git:ssh://git@github.com:iamgio/quarkdown.git")
+                            url.set("https://github.com/iamgio/quarkdown")
+                        }
+                    }
+                }
+            }
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    val repository = System.getenv("GITHUB_REPOSITORY") ?: "iamgio/quarkdown"
+                    url = uri("https://maven.pkg.github.com/$repository")
+                    credentials {
+                        username = System.getenv("GITHUB_ACTOR")
+                            ?: providers.gradleProperty("gpr.user").orNull
+                        password = System.getenv("GITHUB_TOKEN")
+                            ?: providers.gradleProperty("gpr.key").orNull
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Fat JAR / Distribution dependencies
