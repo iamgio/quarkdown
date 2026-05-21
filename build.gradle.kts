@@ -221,6 +221,13 @@ distributions.main {
         from(dokkaOutputDir) {
             into("docs")
         }
+        // .qd wiki sources for the agent skill.
+        into("docs/wiki") {
+            from(rootProject.file("docs")) {
+                include("**/*.qd")
+            }
+            includeEmptyDirs = false
+        }
     }
 }
 
