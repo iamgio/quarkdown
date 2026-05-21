@@ -6,6 +6,20 @@
 
 &nbsp;
 
+#### [AI agent skill](https://quarkdown.com/wiki/agent-skill)
+
+Quarkdown now ships with an agent skill, so tools can author `.qd` documents on your behalf.
+
+To install on Claude Code: 
+
+```shell
+ln -s "$(quarkdown doctor get agent-skill)" ~/.claude/skills/quarkdown
+```
+
+See the [agent skill documentation](https://quarkdown.com/wiki/agent-skill) for more details.
+
+&nbsp;
+
 #### [Read environment variables](https://quarkdown.com/wiki/environment)
 
 The new `.env {name}` function reads an environment variable from the host system, returning its value as a string or `none` if unset.
@@ -22,6 +36,19 @@ A new `process` permission gates access to the host process environment. Reading
 
 ```shell
 quarkdown c main.qd --allow process
+```
+
+&nbsp;
+
+#### [`doctor` command](https://quarkdown.com/wiki/cli-doctor)
+
+The new `quarkdown doctor` command group reports information about the current Quarkdown installation, intended for scripting and tooling that need to introspect Quarkdown's environment.
+
+The first available getter, `quarkdown doctor get install-dir`, prints the absolute path of the install directory to standard output:
+
+```shell
+INSTALL="$(quarkdown doctor get install-dir)"
+ls "$INSTALL/docs"
 ```
 
 &nbsp;

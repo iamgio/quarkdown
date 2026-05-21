@@ -5,6 +5,7 @@ import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.quarkdown.cli.creator.command.CreateProjectCommand
+import com.quarkdown.cli.doctor.DoctorCommand
 import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.cli.exec.ReplCommand
 import com.quarkdown.cli.lsp.LanguageServerCommand
@@ -32,4 +33,5 @@ fun main(args: Array<String>) =
             StartWebServerCommand(),
             CreateProjectCommand(),
             LanguageServerCommand(),
+            DoctorCommand(),
         ).main(args)

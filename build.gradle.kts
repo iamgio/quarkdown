@@ -138,6 +138,10 @@ val installLibLayout: CopySpec.() -> Unit = {
     into("html") {
         from(project(":quarkdown-html").layout.buildDirectory.dir("install"))
     }
+    // Agent skills.
+    into("skills") {
+        from(rootProject.file("skills"))
+    }
 }
 
 // Bundled JVM runtime
@@ -220,6 +224,13 @@ distributions.main {
         val dokkaOutputDir = layout.buildDirectory.file("docs")
         from(dokkaOutputDir) {
             into("docs")
+        }
+        // .qd wiki sources for the agent skill.
+        into("docs/wiki") {
+            from(rootProject.file("docs")) {
+                include("**/*.qd")
+            }
+            includeEmptyDirs = false
         }
     }
 }
