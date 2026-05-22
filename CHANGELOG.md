@@ -73,9 +73,9 @@ Function call-heavy documents now compile faster, by extracting metadata once at
 
 &nbsp;
 
-#### PDF size and generation time reduction
+#### PDF size and generation time reduction in `paged` documents
 
-PDF generation now produces output that is:
+For `paged` documents, PDF generation now produces output that is:
 - up to 90% smaller,
 - generated up to 2x faster.
 
