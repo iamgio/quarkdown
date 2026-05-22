@@ -1,0 +1,122 @@
+# Builds the per-platform distribution zips and verifies each one runs on its
+# native platform with no system Java available. Catches regressions in the
+# jlink cross-compilation pipeline and in the bundled bootstrap launchers.
+# Scoped to build-script changes so it does not run on every PR.
+
+name: Distribution verification
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**/build.gradle.kts'
+      - 'gradle.properties'
+      - '.github/workflows/gradle-distribution-verify.yml'
+  pull_request:
+    paths:
+      - '**/build.gradle.kts'
+      - 'gradle.properties'
+      - '.github/workflows/gradle-distribution-verify.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+        with:
+          full-checkout: true
+
+      - name: Build per-platform distributions
+        uses: burrunan/gradle-cache-action@v3
+        with:
+          job-id: distribution-verify
+          arguments: distZipAll
+
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: quarkdown-distributions
+          path: build/distributions/quarkdown-*.zip
+          retention-days: 1
+
+  verify:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64
+            os: ubuntu-latest
+          - target: macos-aarch64
+            os: macos-latest
+          - target: windows-x64
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: quarkdown-distributions
+
+      - name: Remove pre-installed Java (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          JAVA=$(command -v java || true)
+          if [ -n "$JAVA" ]; then
+            echo "Removing java at $JAVA"
+            sudo rm -f "$JAVA" || true
+          fi
+          if [ "$RUNNER_OS" = "macOS" ] && [ -d /Library/Java/JavaVirtualMachines ]; then
+            sudo rm -rf /Library/Java/JavaVirtualMachines/* || true
+          fi
+          # Drop the toolcache JDK from PATH so its java is also unreachable.
+          NEW_PATH=$(echo "$PATH" | tr ':' '\n' | grep -v 'hostedtoolcache' | tr '\n' ':' | sed 's/:$//')
+          echo "PATH=$NEW_PATH" >> $GITHUB_ENV
+          echo "JAVA_HOME=" >> $GITHUB_ENV
+
+      - name: Remove pre-installed Java (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $java = Get-Command java -ErrorAction SilentlyContinue
+          if ($java) {
+            Write-Host "Removing java at $($java.Source)"
+            Remove-Item -Force $java.Source
+          }
+          $NewPath = ($env:PATH -split ';' | Where-Object { $_ -notmatch 'hostedtoolcache' }) -join ';'
+          "PATH=$NewPath" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "JAVA_HOME=" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Verify Java is absent
+        shell: bash
+        run: |
+          if java -version >/dev/null 2>&1; then
+            echo "ERROR: a working Java runtime is still accessible:"
+            java -version || true
+            exit 1
+          fi
+          if [ -n "$JAVA_HOME" ]; then
+            echo "ERROR: JAVA_HOME is still set to $JAVA_HOME"
+            exit 1
+          fi
+          echo "OK: no working Java runtime available"
+
+      - name: Extract distribution (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          unzip -q quarkdown-${{ matrix.target }}.zip
+          chmod +x quarkdown/bin/quarkdown quarkdown/runtime/bin/java
+
+      - name: Extract distribution (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: Expand-Archive -Path quarkdown-${{ matrix.target }}.zip -DestinationPath .
+
+      - name: Run quarkdown --version (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: quarkdown/bin/quarkdown --version
+
+      - name: Run quarkdown --version (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: quarkdown\bin\quarkdown.bat --version

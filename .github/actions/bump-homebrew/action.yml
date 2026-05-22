@@ -1,0 +1,96 @@
+name: "Bump Homebrew Formula"
+description: "Update the Homebrew formula with a new version and per-arch URLs/SHAs"
+
+inputs:
+  version:
+    description: "Version string to update (e.g. 1.5.0). A leading 'v' is stripped."
+    required: true
+    type: string
+  committer_token:
+    description: "Personal Access Token to push to the tap"
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Set version variable
+      run: |
+        VERSION="${{ inputs.version }}"
+        VERSION="${VERSION#v}"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Checkout Homebrew tap repo
+      uses: actions/checkout@v4
+      with:
+        repository: "quarkdown-labs/homebrew-quarkdown"
+        token: ${{ inputs.committer_token }}
+
+    - name: Download per-arch zips and compute SHAs
+      run: |
+        BASE_URL="https://github.com/iamgio/quarkdown/releases/download/v$VERSION"
+        curl -fL -o macos-x64.zip "$BASE_URL/quarkdown-macos-x64.zip"
+        curl -fL -o macos-aarch64.zip "$BASE_URL/quarkdown-macos-aarch64.zip"
+        echo "SHA_X64=$(shasum -a 256 macos-x64.zip     | cut -d ' ' -f 1)" >> $GITHUB_ENV
+        echo "SHA_AARCH64=$(shasum -a 256 macos-aarch64.zip | cut -d ' ' -f 1)" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Update formula
+      run: |
+        ruby <<'RUBY'
+          path = "Formula/quarkdown.rb"
+          content = File.read(path)
+          version = ENV.fetch("VERSION")
+          sha_x64 = ENV.fetch("SHA_X64")
+          sha_aarch64 = ENV.fetch("SHA_AARCH64")
+          base_url = "https://github.com/iamgio/quarkdown/releases/download/v#{version}"
+
+          content.sub!(/^(\s*)version "[^"]+"/, "\\1version \"#{version}\"")
+
+          # Update each on_<arch> block's url + sha256 in one regex per arch.
+          content.sub!(
+            /(on_arm do\n\s*url ")[^"]+("\n\s*sha256 ")[0-9a-f]{64}/m,
+            "\\1#{base_url}/quarkdown-macos-aarch64.zip\\2#{sha_aarch64}"
+          )
+          content.sub!(
+            /(on_intel do\n\s*url ")[^"]+("\n\s*sha256 ")[0-9a-f]{64}/m,
+            "\\1#{base_url}/quarkdown-macos-x64.zip\\2#{sha_x64}"
+          )
+
+          File.write(path, content)
+        RUBY
+      shell: bash
+
+    - name: Verify formula was fully updated
+      run: |
+        ruby <<'RUBY'
+          content = File.read("Formula/quarkdown.rb")
+          version = ENV.fetch("VERSION")
+          required = [
+            /^\s*version "#{Regexp.escape(version)}"/,
+            /quarkdown-macos-x64\.zip"\s*\n\s*sha256 "#{Regexp.escape(ENV.fetch("SHA_X64"))}"/,
+            /quarkdown-macos-aarch64\.zip"\s*\n\s*sha256 "#{Regexp.escape(ENV.fetch("SHA_AARCH64"))}"/,
+          ]
+          missing = required.reject { |re| content.match?(re) }
+          unless missing.empty?
+            STDERR.puts "Formula update incomplete; missing matches for:"
+            missing.each { |re| STDERR.puts "  #{re.inspect}" }
+            STDERR.puts "--- Current formula ---"
+            STDERR.puts content
+            exit 1
+          end
+          puts "Formula update OK"
+        RUBY
+      shell: bash
+
+    - name: Commit and push updated formula
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add Formula/quarkdown.rb
+        git diff --cached --quiet || git commit -m "quarkdown $VERSION"
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ inputs.committer_token }}
+      shell: bash

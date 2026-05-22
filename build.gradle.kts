@@ -147,59 +147,110 @@ val installLibLayout: CopySpec.() -> Unit = {
 // Bundled JVM runtime
 
 /**
- * Creates a minimal JRE via `jlink`, containing only the JDK modules required by Quarkdown and its dependencies.
- * The output is placed at `build/runtime` and included in the distribution as `runtime/`.
- *
- * The required modules are discovered dynamically via `jdeps` on the runtime classpath JARs,
- * so the module set stays correct as dependencies change. SPI-loaded modules (e.g. `jdk.crypto.ec`
- * for HTTPS/TLS) are added explicitly, since `jdeps` cannot detect them via static analysis.
+ * A target platform for which a bundled minimal JRE is built via `jlink` and a distribution zip is produced.
+ * Cross-compilation works because `jlink` only reads platform-specific bytes from the target JDK's `jmods/`,
+ * so any host `jlink` (e.g., the CI Linux runner's) can emit a Windows or macOS runtime by pointing
+ * `--module-path` at the target JDK's `jmods/` directory.
+ */
+data class JlinkTarget(
+    /** Used in zip file names, e.g. `quarkdown-linux-x64.zip`. */
+    val id: String,
+    /** Used as suffix for per-target task names, e.g. `bundleRuntimeLinuxX64`. */
+    val taskSuffix: String,
+    /** Filename of the Temurin JDK archive on Adoptium's GitHub releases. */
+    val jdkArchive: String,
+    /** Path within the extracted archive to JAVA_HOME (its `jmods/` parent). */
+    val jdkHomeRelative: String,
+)
+
+val jdkVersion = providers.gradleProperty("bundledJdkVersion").get()
+val jdkVersionEncoded = jdkVersion.replace("+", "%2B") // URL-encoded for the GitHub release path
+val jdkBaseUrl = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$jdkVersionEncoded/"
+val jdkFileVersion = jdkVersion.replace("+", "_") // Adoptium uses underscores in archive filenames
+
+val jlinkTargets =
+    listOf(
+        JlinkTarget(
+            id = "linux-x64",
+            taskSuffix = "LinuxX64",
+            jdkArchive = "OpenJDK17U-jdk_x64_linux_hotspot_$jdkFileVersion.tar.gz",
+            jdkHomeRelative = "jdk-$jdkVersion",
+        ),
+        JlinkTarget(
+            id = "macos-x64",
+            taskSuffix = "MacosX64",
+            jdkArchive = "OpenJDK17U-jdk_x64_mac_hotspot_$jdkFileVersion.tar.gz",
+            jdkHomeRelative = "jdk-$jdkVersion/Contents/Home",
+        ),
+        JlinkTarget(
+            id = "macos-aarch64",
+            taskSuffix = "MacosAarch64",
+            jdkArchive = "OpenJDK17U-jdk_aarch64_mac_hotspot_$jdkFileVersion.tar.gz",
+            jdkHomeRelative = "jdk-$jdkVersion/Contents/Home",
+        ),
+        JlinkTarget(
+            id = "windows-x64",
+            taskSuffix = "WindowsX64",
+            jdkArchive = "OpenJDK17U-jdk_x64_windows_hotspot_$jdkFileVersion.zip",
+            jdkHomeRelative = "jdk-$jdkVersion",
+        ),
+    )
+
+// SPI-loaded modules that jdeps cannot detect via static analysis:
+// - `jdk.crypto.ec`: TLS handshakes with EC certificates (most modern HTTPS endpoints).
+// - `jdk.localedata`: display names and resource bundles used by Quarkdown's localization.
+val jlinkSpiModules = listOf("jdk.crypto.ec", "jdk.localedata")
+
+/**
+ * Resolves the full set of JDK modules required by Quarkdown's runtime classpath,
+ * combining `jdeps` static analysis with explicitly listed SPI-loaded modules.
+ * Module names are platform-agnostic, so the host's `jdeps` can be used regardless of target.
+ */
+fun resolveRequiredModules(): String {
+    val jdepsOutput =
+        ByteArrayOutputStream()
+            .also { out ->
+                exec {
+                    val jars = configurations.runtimeClasspath.get().filter { it.name.endsWith(".jar") }
+                    commandLine(
+                        "jdeps",
+                        "--ignore-missing-deps",
+                        "--multi-release",
+                        "17",
+                        "--print-module-deps",
+                        *jars.map { it.absolutePath }.toTypedArray(),
+                    )
+                    standardOutput = out
+                }
+            }.toString()
+            .trim()
+
+    // jdeps may output warnings before the final line; the module list is always the last line.
+    val detectedModules = jdepsOutput.lines().last().trim()
+    return (detectedModules.split(",") + jlinkSpiModules).joinToString(",")
+}
+
+/**
+ * Host-platform bundled JRE, used by `installDist` for development and host-only runs.
+ * Cross-platform release zips use the per-target `bundleRuntime<Target>` tasks instead.
  */
 val bundleRuntime by tasks.registering {
     group = "distribution"
-    description = "Creates a minimal JRE via jlink for bundling with the distribution."
+    description = "Creates a minimal JRE via jlink for the host platform (used by installDist)."
 
     dependsOn(tasks.jar, subprojects.map { it.tasks.named("jar") })
 
-    val runtimeClasspath = configurations.runtimeClasspath
     val runtimeDir = layout.buildDirectory.dir("runtime")
     outputs.dir(runtimeDir)
 
-    // SPI-loaded modules that jdeps cannot detect via static analysis:
-    // - `jdk.crypto.ec`: TLS handshakes with EC certificates (most modern HTTPS endpoints).
-    // - `jdk.localedata`: display names and resource bundles used by Quarkdown's localization.
-    val spiModules = listOf("jdk.crypto.ec", "jdk.localedata")
-
     doLast {
-        val jdepsOutput =
-            ByteArrayOutputStream()
-                .also { out ->
-                    exec {
-                        val jars = runtimeClasspath.get().filter { it.name.endsWith(".jar") }
-                        commandLine(
-                            "jdeps",
-                            "--ignore-missing-deps",
-                            "--multi-release",
-                            "17",
-                            "--print-module-deps",
-                            *jars.map { it.absolutePath }.toTypedArray(),
-                        )
-                        standardOutput = out
-                    }
-                }.toString()
-                .trim()
-
-        // jdeps may output warnings before the final line; the module list is always the last line.
-        val detectedModules = jdepsOutput.lines().last().trim()
-        val allModules = (detectedModules.split(",") + spiModules).joinToString(",")
-
         val outputDir = runtimeDir.get().asFile
         delete(outputDir)
-
         exec {
             commandLine(
                 "jlink",
                 "--add-modules",
-                allModules,
+                resolveRequiredModules(),
                 "--strip-debug",
                 "--no-man-pages",
                 "--no-header-files",
@@ -212,10 +263,118 @@ val bundleRuntime by tasks.registering {
     }
 }
 
+// Per-target tasks: download the JDK, build a target-specific JRE via jlink,
+// and assemble a distribution zip with that runtime bundled in.
+jlinkTargets.forEach { target ->
+    val jdkRoot = layout.buildDirectory.dir("jdks/${target.id}")
+    val runtimeDir = layout.buildDirectory.dir("runtimes/${target.id}")
+
+    val downloadJdkTask =
+        tasks.register("downloadJdk${target.taskSuffix}") {
+            group = "distribution"
+            description = "Downloads and extracts the Temurin JDK for ${target.id} (used for jlink cross-compilation)."
+            outputs.dir(jdkRoot)
+
+            doLast {
+                val rootDir = jdkRoot.get().asFile
+                val jdkHomeDir = File(rootDir, target.jdkHomeRelative)
+                if (jdkHomeDir.resolve("jmods").isDirectory) return@doLast
+
+                delete(rootDir)
+                rootDir.mkdirs()
+                val archive = File(rootDir, target.jdkArchive)
+                ant.invokeMethod("get", mapOf("src" to "$jdkBaseUrl${target.jdkArchive}", "dest" to archive))
+
+                when {
+                    archive.name.endsWith(".tar.gz") -> {
+                        exec {
+                            commandLine("tar", "-xzf", archive.absolutePath, "-C", rootDir.absolutePath)
+                        }
+                    }
+
+                    archive.name.endsWith(".zip") -> {
+                        copy {
+                            from(zipTree(archive))
+                            into(rootDir)
+                        }
+                    }
+                }
+                archive.delete()
+            }
+        }
+
+    val bundleRuntimeTargetTask =
+        tasks.register("bundleRuntime${target.taskSuffix}") {
+            group = "distribution"
+            description = "Creates a minimal JRE via jlink for ${target.id}, using the target platform's jmods."
+            dependsOn(downloadJdkTask, tasks.jar, subprojects.map { it.tasks.named("jar") })
+            inputs.dir(jdkRoot)
+            outputs.dir(runtimeDir)
+
+            doLast {
+                val jmodsDir =
+                    jdkRoot
+                        .get()
+                        .asFile
+                        .resolve(target.jdkHomeRelative)
+                        .resolve("jmods")
+                val outputDir = runtimeDir.get().asFile
+                delete(outputDir)
+
+                exec {
+                    commandLine(
+                        "jlink",
+                        "--module-path",
+                        jmodsDir.absolutePath,
+                        "--add-modules",
+                        resolveRequiredModules(),
+                        "--strip-debug",
+                        "--no-man-pages",
+                        "--no-header-files",
+                        "--compress",
+                        "2",
+                        "--output",
+                        outputDir.absolutePath,
+                    )
+                }
+            }
+        }
+
+    tasks.register("dist${target.taskSuffix}Zip", Zip::class) {
+        group = "distribution"
+        description = "Builds the Quarkdown distribution zip for ${target.id}, with a bundled jlink runtime."
+        archiveBaseName.set("quarkdown-${target.id}")
+        archiveVersion.set("")
+        destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+
+        // Wrap everything in a top-level `quarkdown/` directory, mirroring the legacy zip layout.
+        into("quarkdown") {
+            // bin/, lib/, docs/ from installDist (excluding its host-targeted runtime/).
+            from(tasks.installDist.map { it.destinationDir }) {
+                exclude("runtime/**")
+            }
+            // Per-target runtime.
+            from(runtimeDir) {
+                into("runtime")
+            }
+        }
+
+        dependsOn(tasks.installDist, bundleRuntimeTargetTask)
+    }
+}
+
+// Aggregate task that builds distribution zips for every target platform.
+tasks.register("distZipAll") {
+    group = "distribution"
+    description = "Builds Quarkdown distribution zips for all target platforms."
+    dependsOn(jlinkTargets.map { "dist${it.taskSuffix}Zip" })
+}
+
 distributions.main {
     contents {
         into("lib", installLibLayout)
-        // Bundled minimal JRE, created by bundleRuntime.
+        // Bundled minimal JRE for the host platform, created by bundleRuntime.
+        // Per-platform zips use the per-target bundleRuntime<Target> tasks instead.
         from(layout.buildDirectory.dir("runtime")) {
             into("runtime")
         }
