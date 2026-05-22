@@ -59,7 +59,9 @@ ls "$INSTALL/docs"
 
 #### Bundled Java runtime
 
-The Quarkdown distribution now includes a minimal (~50MB) Java runtime, so the CLI runs out of the box without requiring a separate Java installation on your system. Installers have been updated accordingly.
+The Quarkdown distribution now includes a minimal (~50MB) Java runtime, so the CLI runs out of the box without requiring a separate Java installation on your system.
+
+Each release ships a per-platform executable (`linux-x64`, `macos-x64`, `macos-aarch64`, `windows-x64`).
 
 &nbsp;
 

@@ -53,20 +53,20 @@ jobs:
         file_pattern: version.txt CHANGELOG.md
         branch: main
 
-    - name: Build distribution
+    - name: Build per-platform distributions
       uses: burrunan/gradle-cache-action@v3
       with:
         job-id: main
-        arguments: distZip
+        arguments: distZipAll
 
-    - name: Unzip distribution (keeping the zip file)
+    - name: Unzip Linux distribution (used by downstream steps)
       run: |
         mkdir -p build/unzipped
-        unzip -q build/distributions/quarkdown.zip -d build/unzipped
+        unzip -q build/distributions/quarkdown-linux-x64.zip -d build/unzipped
         echo "$PWD/build/unzipped/quarkdown/bin" >> $GITHUB_PATH
 
     - name: Echo output files
-      run: ls -d "$PWD/build/"*
+      run: ls -d "$PWD/build/"* && ls build/distributions
 
     - name: Deploy wiki
       if: github.ref_type == 'tag'
@@ -75,11 +75,11 @@ jobs:
         quarkdown-path: ${{ github.workspace }}/build/unzipped/quarkdown/bin/quarkdown
         github-token: ${{ secrets.COMMITTER_TOKEN }}
 
-    - name: Distribute artifact
+    - name: Distribute artifacts
       uses: actions/upload-artifact@v4
       with:
         name: quarkdown
-        path: build/distributions/quarkdown.zip
+        path: build/distributions/quarkdown-*.zip
 
     - name: Move devbuild tag to latest commit
       run: |
@@ -95,7 +95,7 @@ jobs:
         prerelease: true
         generate_release_notes: true
         name: Development build
-        files: build/distributions/quarkdown.zip
+        files: build/distributions/quarkdown-*.zip
 
     - name: Create release
       uses: softprops/action-gh-release@v2
@@ -103,7 +103,7 @@ jobs:
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
         body: ${{ steps.release-notes.outputs.release_notes }}
-        files: build/distributions/quarkdown.zip
+        files: build/distributions/quarkdown-*.zip
 
     - name: Generate docs
       uses: burrunan/gradle-cache-action@v3
@@ -128,15 +128,15 @@ jobs:
         publish_dir: ./build/docs
         destination_dir: docs/latest
 
-    # Bump Homebrew
-    - uses: mislav/bump-homebrew-formula-action@v3
+    # Bump Homebrew (both arches in one commit).
+    # A custom action is used instead of mislav/bump-homebrew-formula-action
+    # because that action's regex only replaces the first `url "..."` line in
+    # the formula, so it can't handle separate on_arm and on_intel blocks.
+    - uses: iamgio/quarkdown/.github/actions/bump-homebrew@main
       if: github.ref_type == 'tag'
       with:
-        formula-name: quarkdown
-        homebrew-tap: 'quarkdown-labs/homebrew-quarkdown'
-        download-url: "https://github.com/iamgio/quarkdown/releases/download/${{ github.ref_name }}/quarkdown.zip"
-      env:
-        COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+        version: ${{ github.ref_name }}
+        committer_token: ${{ secrets.COMMITTER_TOKEN }}
 
     # Bump Scoop
     - uses: iamgio/quarkdown/.github/actions/bump-scoop@main
