@@ -108,6 +108,7 @@ nb-configuration.xml
 ##############################
 ## Miscellaneous
 ##############################
-.claude/
+.claude/*
+!.claude/skills/
 *.log
 **/_test/

@@ -89,6 +89,16 @@ Compact footnotes like `` [^: text with `code`] `` were incorrectly parsed as pl
 
 Thanks @Shreyansh-Kushwaha!
 
+* * *
+
+### Sponsors
+
+Thanks to our sponsors! 🎉
+
+@vitto4
+
+<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
+
 ## [2.0.1] - 2026-05-04
 
 ### Added
