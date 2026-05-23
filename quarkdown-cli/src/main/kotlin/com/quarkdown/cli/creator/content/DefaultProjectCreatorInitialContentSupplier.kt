@@ -6,18 +6,17 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 
 private const val RESOURCES_PATH = "/creator/"
-private const val CODE_CONTENT_PATH = RESOURCES_PATH + "initialcontent.qd.jte"
+private const val CODE_TEMPLATE_NAME = "creator/initialcontent.qd.jte"
 private const val LOGO = "logo.png"
 private const val IMAGES_GROUP_NAME = "image"
 
 /**
  * A [ProjectCreatorInitialContentSupplier] that provides some initial content for introduction purposes:
- * - A simple Quarkdown code snippet
+ * - A simple Quarkdown code snippet rendered from the `creator/initialcontent.qd.jte` template
  * - An image of the Quarkdown logo
  */
 class DefaultProjectCreatorInitialContentSupplier : ProjectCreatorInitialContentSupplier {
-    override val templateCodeContent: String
-        get() = javaClass.getResourceAsStream(CODE_CONTENT_PATH)!!.bufferedReader().readText()
+    override val templateName: String = CODE_TEMPLATE_NAME
 
     private val imageGroup: OutputResource
         get() =

@@ -14,6 +14,7 @@ import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
+import com.quarkdown.core.util.normalizeLineSeparators
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -26,7 +27,7 @@ import kotlin.test.assertTrue
  */
 class ProjectCreatorTest {
     private val OutputResource.textContent
-        get() = (this as TextOutputArtifact).content
+        get() = (this as TextOutputArtifact).content.normalizeLineSeparators()
 
     private fun projectCreator(
         info: DocumentInfo,

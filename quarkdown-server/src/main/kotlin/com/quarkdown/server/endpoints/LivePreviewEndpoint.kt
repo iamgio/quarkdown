@@ -1,7 +1,7 @@
 package com.quarkdown.server.endpoints
 
-import com.quarkdown.core.template.TemplateProcessor
 import com.quarkdown.server.SERVER_HOST
+import com.quarkdown.template.TemplateProcessor
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
@@ -74,8 +74,7 @@ class LivePreviewEndpoint(
         // which correctly handles both root-level and subdirectory files.
         val sourceFile = "/${targetFile.relativeTo(origin).invariantSeparatorsPath}"
 
-        return TemplateProcessor
-            .fromResourceName("/live-preview/wrapper.html.jte", referenceClass = javaClass)
+        return TemplateProcessor("live-preview/wrapper.html.jte")
             .value(TEMPLATE_SOURCE_FILE_PLACEHOLDER, sourceFile)
             .value(TEMPLATE_SERVER_HOST_PLACEHOLDER, SERVER_HOST)
             .value(TEMPLATE_SERVER_PORT_PLACEHOLDER, serverPort.toString())

@@ -3,9 +3,9 @@ package com.quarkdown.cli.creator.template
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.function.quarkdownName
-import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.template.TemplateProcessor
 
-private const val TEMPLATE = "/creator/main.qd.jte"
+private const val TEMPLATE = "creator/main.qd.jte"
 
 /**
  * Implementation of [ProjectCreatorTemplateProcessorFactory]
@@ -21,7 +21,7 @@ class DefaultProjectCreatorTemplateProcessorFactory(
 ) : ProjectCreatorTemplateProcessorFactory {
     override fun create(): TemplateProcessor =
         with(ProjectCreatorTemplatePlaceholders) {
-            TemplateProcessor.fromResourceName(template).apply {
+            TemplateProcessor(template).apply {
                 optionalValue(NAME, info.name)
                 optionalValue(DESCRIPTION, info.description)
                 conditional(KEYWORDS, info.keywords.isNotEmpty())
