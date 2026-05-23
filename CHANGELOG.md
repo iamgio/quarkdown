@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+### Fixed
+
+&nbsp;
+
+#### Fixed project creator and live preview crashing on bundled Java runtime
+
+Fixed an issue that caused `quarkdown create` and live preview to crash with a template compilation error on distributions that use the bundled Java runtime. 
+
+* * *
+
+### Sponsors
+
+Thanks to our sponsors! 🎉
+
+@vitto4
+
+<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
+
 ## [2.1.0] - 2026-05-23
 
 ### Added
