@@ -56,29 +56,31 @@ class LocalFileWebServer(
             throw IllegalArgumentException("Cannot start web server for non-existing file: $targetFile")
         }
 
-        embeddedServer(Netty, port) {
-            install(WebSockets) {
-                pingPeriod = 10.seconds
-                timeout = 15.seconds
-                maxFrameSize = Long.MAX_VALUE
-            }
-
-            monitor.subscribe(ServerReady) { onReady(KtorStoppableAdapter(this)) }
-
-            routing {
-                // Serves the target file directly at the root path.
-                staticFiles(ServerEndpoints.ROOT, targetFile)
-
-                // Serves files for live preview.
-                get(ServerEndpoints.LIVE_PREVIEW + "/{file...}") {
-                    livePreview.handleRequest(call, port)
+        val server =
+            embeddedServer(Netty, port) {
+                install(WebSockets) {
+                    pingPeriod = 10.seconds
+                    timeout = 15.seconds
+                    maxFrameSize = Long.MAX_VALUE
                 }
 
-                // WebSocket endpoint for reloading live previews.
-                webSocket(ServerEndpoints.RELOAD_LIVE_PREVIEW) {
-                    reload.handleRequest(this)
+                routing {
+                    // Serves the target file directly at the root path.
+                    staticFiles(ServerEndpoints.ROOT, targetFile)
+
+                    // Serves files for live preview.
+                    get(ServerEndpoints.LIVE_PREVIEW + "/{file...}") {
+                        livePreview.handleRequest(call, port)
+                    }
+
+                    // WebSocket endpoint for reloading live previews.
+                    webSocket(ServerEndpoints.RELOAD_LIVE_PREVIEW) {
+                        reload.handleRequest(this)
+                    }
                 }
             }
-        }.start(wait = wait)
+
+        server.monitor.subscribe(ServerReady) { onReady(KtorStoppableAdapter(server.application)) }
+        server.start(wait = wait)
     }
 }

@@ -7,9 +7,12 @@ dependencies {
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-interaction"))
 
-    val ktorVersion = "3.4.0"
+    val ktorVersion = "3.5.0"
 
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion") {
+        exclude(group = "io.netty", module = "netty-codec-marshalling")
+        exclude(group = "io.netty", module = "netty-codec-protobuf")
+    }
     implementation("io.ktor:ktor-server-websockets:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")

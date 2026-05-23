@@ -10,6 +10,7 @@ import com.github.ajalt.clikt.parameters.types.restrictTo
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
 import com.quarkdown.cli.server.WebServerOptions
+import com.quarkdown.cli.server.WebServerStarter
 import com.quarkdown.cli.server.browserLauncherOption
 import com.quarkdown.cli.util.MillisStopwatch
 import com.quarkdown.core.log.Log
@@ -18,7 +19,9 @@ import com.quarkdown.interaction.Env
 import com.quarkdown.server.ServerEndpoints
 import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
+import com.quarkdown.server.message.ServerMessage
 import com.quarkdown.server.message.ServerMessageSession
+import com.quarkdown.server.stop.Stoppable
 import java.io.File
 
 /**
@@ -89,6 +92,12 @@ class CompileCommand : ExecuteCommand("compile") {
     }
 
     /**
+     * Handle to the running preview server, set once on the first compile.
+     */
+    @Volatile
+    private var server: Stoppable? = null
+
+    /**
      * Finalizes the CLI options before execution.
      * - Sets the source file
      * - Disables file output when in pipe mode
@@ -153,14 +162,37 @@ class CompileCommand : ExecuteCommand("compile") {
         // Communicates with the server to reload the requested resources.
         // If enabled and the server is not running, also starts the server
         // (this is shorthand for `quarkdown start -f <generated directory> -p <server port> -b default`).
-        runServerCommunication(
+        val options =
             WebServerOptions(
                 port = super.serverPort,
                 targetFile = directory,
                 browserLauncher = browser,
                 preferLivePreviewUrl = super.preview && super.watch,
-            ),
-            reloadSession,
-        )
+            )
+
+        if (server == null) {
+            Log.info("Starting server...")
+            WebServerStarter.start(
+                options,
+                reloadSession,
+                onServerStarted = { server = it },
+                onSessionReady = { sendReloadMessage() },
+            )
+            return
+        }
+
+        // The server is already running from a previous compile in this CLI session;
+        // just push a reload message. ServerMessageSession reconnects transparently
+        // if the underlying WebSocket has dropped.
+        sendReloadMessage()
+    }
+
+    private fun sendReloadMessage() {
+        try {
+            ServerMessage().send(reloadSession)
+        } catch (e: Exception) {
+            Log.error("Could not communicate with the server on port ${super.serverPort}: ${e.message}")
+            Log.debug(e)
+        }
     }
 }
