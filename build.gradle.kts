@@ -198,8 +198,10 @@ val jlinkTargets =
 // SPI-loaded modules that jdeps cannot detect via static analysis:
 // - `jdk.crypto.ec`: TLS handshakes with EC certificates (most modern HTTPS endpoints).
 // - `jdk.localedata`: display names and resource bundles used by Quarkdown's localization.
-// - `jdk.compiler`: runtime template compilation by JTE (used by `quarkdown create` and other template-driven flows).
-val jlinkSpiModules = listOf("jdk.crypto.ec", "jdk.localedata", "jdk.compiler")
+// - `jdk.compiler` + `jdk.zipfs`: runtime template compilation by JTE (used by `quarkdown create` and other
+//   template-driven flows). `jdk.zipfs` provides the ZIP file system provider that the in-process compiler
+//   needs to read classpath JARs.
+val jlinkSpiModules = listOf("jdk.crypto.ec", "jdk.localedata", "jdk.compiler", "jdk.zipfs")
 
 /**
  * Resolves the full set of JDK modules required by Quarkdown's runtime classpath,
