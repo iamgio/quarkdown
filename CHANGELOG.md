@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Fixed
+
+&nbsp;
+
+#### Fixed live preview sometimes failing on edit
+
+Fixed an issue that caused live preview to crash with an *"Address already in use"* error on recompile.
+
 ## [2.1.1] - 2026-05-23
 
 ### Fixed

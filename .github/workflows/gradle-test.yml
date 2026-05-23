@@ -98,3 +98,76 @@ jobs:
       with:
         job-id: e2e-test
         arguments: :quarkdown-html:e2eTest -Pshard=${{ matrix.shard }} -PtotalShards=4
+
+  bundled-runtime-test:
+    runs-on: ubuntu-latest
+    needs: e2e-build
+
+    steps:
+    - name: Download CLI artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: quarkdown-e2e-cli
+        path: build/install/quarkdown
+
+    - name: Make CLI and bundled runtime executable
+      run: |
+        chmod +x build/install/quarkdown/bin/quarkdown
+        chmod +x build/install/quarkdown/runtime/bin/java
+
+    - name: Run quarkdown create + live preview
+      run: |
+        QUARKDOWN=build/install/quarkdown/bin/quarkdown
+        $QUARKDOWN create smoke \
+          --name smoke --authors CI --type plain \
+          --description "ci smoke test" --lang en
+        test -f smoke/main.qd
+
+        LOG=preview.log
+        $QUARKDOWN c smoke/main.qd -p -w --browser none > "$LOG" 2>&1 &
+        PID=$!
+
+        PORT_OPEN=false
+        for _ in $(seq 1 60); do
+          if (exec 3<>/dev/tcp/127.0.0.1/8089) 2>/dev/null; then
+            exec 3<&- 3>&-
+            PORT_OPEN=true
+            break
+          fi
+          sleep 0.5
+        done
+        if [ "$PORT_OPEN" != "true" ]; then
+          echo "ERROR: preview server did not start listening on port 8089 within 30s"
+          cat "$LOG"
+          kill "$PID" 2>/dev/null
+          wait "$PID" 2>/dev/null || true
+          exit 1
+        fi
+
+        printf '\nRe-compiled paragraph.\n' >> smoke/main.qd
+
+        sleep 8
+        if ! kill -0 "$PID" 2>/dev/null; then
+          echo "ERROR: live preview process exited before timeout"
+          cat "$LOG"
+          wait "$PID"
+          exit 1
+        fi
+        kill "$PID"
+        wait "$PID" 2>/dev/null || true
+
+        echo "----- live preview output -----"
+        cat "$LOG"
+        echo "-------------------------------"
+
+        if grep -q "Exception in thread" "$LOG"; then
+          echo "ERROR: uncaught exception detected in live preview output"
+          exit 1
+        fi
+
+        COUNT=$(grep -c "Success" "$LOG" || true)
+        if [ "$COUNT" -lt 2 ]; then
+          echo "ERROR: expected at least 2 'Success' entries (initial compile + watch re-compile), got $COUNT"
+          exit 1
+        fi
+        echo "OK: live preview ran for 10s, observed $COUNT 'Success' entries"
