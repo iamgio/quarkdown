@@ -260,7 +260,7 @@ curl -fsSL https://raw.githubusercontent.com/quarkdown-labs/get-quarkdown/refs/h
 ```
 
 Root privileges let the script install Quarkdown into `/opt/quarkdown` and its wrapper script into `/usr/local/bin/quarkdown`.  
-If missing, Java 17, Node.js and npm will be installed automatically using the system's package manager.
+If missing, Node.js will be installed automatically using the system's package manager.
 
 For more installation options, check out [get-quarkdown](https://github.com/quarkdown-labs/get-quarkdown).
 
@@ -297,7 +297,6 @@ or build it with `gradlew installDist`.
 Optionally, adding `<install_dir>/bin` to your `PATH` allows you easier access Quarkdown.
 
 Requirements:
-- Java 17 or higher
 - (Only for PDF export) Node.js, npm, Puppeteer. See [*PDF export*](https://quarkdown.com/wiki/pdf-export) for details.
 
 </details>
