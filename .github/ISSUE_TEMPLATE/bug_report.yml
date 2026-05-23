@@ -16,8 +16,8 @@ body:
       options:
         - label: I am using the latest version of Quarkdown.
           required: true
-        - label: I am using Java 17 or later (`java -version`).
-          required: true
+        - label: (Optional) If the issue is environment-related, I have run `quarkdown doctor env` and will include its output.
+          required: false
 
   - type: textarea
     id: description

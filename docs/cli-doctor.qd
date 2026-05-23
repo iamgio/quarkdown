@@ -3,6 +3,14 @@
 
 **`quarkdown doctor`** groups commands that report information about the current Quarkdown installation.
 
+## `doctor env`
+
+**`quarkdown doctor env`** reports the status of the external runtimes Quarkdown depends on: the JVM, Node.js, and Puppeteer (required for PDF export).
+
+```shell
+quarkdown doctor env
+```
+
 ## `doctor get`
 
 The **`get`** subgroup exposes single-value getters that print one piece of information to standard output, one per line.
@@ -22,3 +30,13 @@ A common use is to locate bundled resources from a shell script, without resolvi
 INSTALL="$(quarkdown doctor get install-dir)"
 ls "$INSTALL/docs"
 ```
+
+### `agent-skill`
+
+**`quarkdown doctor get agent-skill`** prints the absolute path of the bundled agent skill directory, which contains the `SKILL.md` entrypoint that AI agent tools can read or symlink.
+
+```shell
+quarkdown doctor get agent-skill
+```
+
+See [Use with AI agents](agent-skill.qd) for installation instructions.

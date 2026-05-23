@@ -42,14 +42,16 @@ quarkdown c main.qd --allow process
 
 #### [`doctor` command](https://quarkdown.com/wiki/cli-doctor)
 
-The new `quarkdown doctor` command group reports information about the current Quarkdown installation, intended for scripting and tooling that need to introspect Quarkdown's environment.
+The new `quarkdown doctor` command group reports information about the current Quarkdown installation:
 
-The first available getter, `quarkdown doctor get install-dir`, prints the absolute path of the install directory to standard output:
+- `doctor env` checks the runtime environment for possible issues.
 
-```shell
-INSTALL="$(quarkdown doctor get install-dir)"
-ls "$INSTALL/docs"
-```
+- `doctor get *` commands are intended for scripting and tooling that need to introspect Quarkdown's environment:
+
+  ```shell
+  INSTALL="$(quarkdown doctor get install-dir)"
+  ls "$INSTALL/docs"
+  ```
 
 &nbsp;
 
