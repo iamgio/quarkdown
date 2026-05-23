@@ -2,9 +2,11 @@
 
 ## [Unreleased]
 
+## [2.1.1] - 2026-05-23
+
 ### Fixed
 
-&nbsp;
+ 
 
 #### Fixed project creator and live preview crashing on bundled Java runtime
 
@@ -24,8 +26,6 @@ Thanks to our sponsors! 🎉
 
 ### Added
 
- 
-
 #### [AI agent skill](https://quarkdown.com/wiki/agent-skill)
 
 Quarkdown now ships with an agent skill, so tools can author `.qd` documents on your behalf.
@@ -38,8 +38,6 @@ ln -s "$(quarkdown doctor get agent-skill)" ~/.claude/skills/quarkdown
 
 See the [agent skill documentation](https://quarkdown.com/wiki/agent-skill) for more details.
 
- 
-
 #### [Read environment variables](https://quarkdown.com/wiki/environment)
 
 The new `.env {name}` function reads an environment variable from the host system, returning its value as a string or `none` if unset.
@@ -48,8 +46,6 @@ The new `.env {name}` function reads an environment variable from the host syste
 The home directory is .env {HOME}::otherwise {unknown}
 ```
 
- 
-
 #### [`process` permission](https://quarkdown.com/wiki/cli-compiler#permissions)
 
 A new `process` permission gates access to the host process environment. Reading environment variables requires this permission to be explicitly granted:
@@ -57,8 +53,6 @@ A new `process` permission gates access to the host process environment. Reading
 ```shell
 quarkdown c main.qd --allow process
 ```
-
- 
 
 #### [`doctor` command](https://quarkdown.com/wiki/cli-doctor)
 
@@ -73,11 +67,7 @@ The new `quarkdown doctor` command group reports information about the current Q
     ls "$INSTALL/docs"
     ```
 
- 
-
 ### Changed
-
- 
 
 #### Bundled Java runtime
 
@@ -85,17 +75,11 @@ The Quarkdown distribution now includes a minimal (~50MB) Java runtime, so the C
 
 Each release ships a per-platform executable (`linux-x64`, `macos-x64`, `macos-aarch64`, `windows-x64`).
 
- 
-
 #### Improved function call performance
 
 Function call-heavy documents now compile faster, by extracting metadata once at function load time.
 
- 
-
 ### Fixed
-
- 
 
 #### PDF size and generation time reduction in `paged` documents
 
@@ -105,8 +89,6 @@ For `paged` documents, PDF generation now produces output that is:
 -   generated up to 2x faster.
 
 Thanks @philipredstone!
-
- 
 
 #### Fixed inline code inside compact footnote definitions
 
@@ -756,7 +738,9 @@ Shout out to our sponsors! 🎉
 
 <a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.1.1...HEAD
+
+[2.1.1]: https://github.com/iamgio/quarkdown/compare/v2.1.0...v2.1.1
 
 [2.1.0]: https://github.com/iamgio/quarkdown/compare/v2.0.1...v2.1.0
 
