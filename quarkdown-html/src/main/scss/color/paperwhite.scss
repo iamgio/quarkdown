@@ -22,16 +22,22 @@
         border-color: rgba(0, 0, 0, 0.2);
     }
 
-    pre code {
-        background-color: transparent;
+    pre {
         border: 1px solid var(--qd-main-color-muted);
+
+        code {
+            background-color: transparent;
+        }
     }
 
     &.quarkdown-paged {
-        pre code {
-            padding-left: 0;
-            padding-right: 0;
+        pre {
             border: none;
+
+            code {
+                padding-left: 0;
+                padding-right: 0;
+            }
         }
     }
 

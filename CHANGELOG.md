@@ -37,6 +37,12 @@ The following snippet now correctly preserves formatting when iterating over a M
 
 Fixed an issue that caused live preview to crash with an *"Address already in use"* error on recompile.
 
+&nbsp;
+
+#### [theme/paperwhite] Cleaned up border around code snippets in error boxes
+
+Fixed unexpected borders around code snippets in error boxes when using the `paperwhite` color theme.
+
 * * *
 
 ### Sponsors
