@@ -2,19 +2,21 @@
 
 ## [Unreleased]
 
+## [2.1.2] - 2026-05-24
+
 ### Changed
 
-&nbsp;
+ 
 
 #### Precompiled templates
 
 Templates, used in `quarkdown create` and live preview, are now precompiled at build time. This results in a smaller distribution size and faster startup times for these features.
 
-&nbsp;
+ 
 
 ### Fixed
 
-&nbsp;
+ 
 
 #### Preserve rich formatting in iterated lists
 
@@ -31,13 +33,13 @@ The following snippet now correctly preserves formatting when iterating over a M
         .1
 ```
 
-&nbsp;
+ 
 
 #### Fixed live preview sometimes failing on edit
 
-Fixed an issue that caused live preview to crash with an *"Address already in use"* error on recompile.
+Fixed an issue that caused live preview to crash with an _"Address already in use"_ error on recompile.
 
-&nbsp;
+ 
 
 #### [theme/paperwhite] Cleaned up border around code snippets in error boxes
 
@@ -56,8 +58,6 @@ Thanks to our sponsors! 🎉
 ## [2.1.1] - 2026-05-23
 
 ### Fixed
-
- 
 
 #### Fixed project creator and live preview crashing on bundled Java runtime
 
@@ -789,7 +789,9 @@ Shout out to our sponsors! 🎉
 
 <a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.1.1...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.1.2...HEAD
+
+[2.1.2]: https://github.com/iamgio/quarkdown/compare/v2.1.1...v2.1.2
 
 [2.1.1]: https://github.com/iamgio/quarkdown/compare/v2.1.0...v2.1.1
 
