@@ -27,13 +27,15 @@ runs:
         repository: "quarkdown-labs/homebrew-quarkdown"
         token: ${{ inputs.committer_token }}
 
-    - name: Download per-arch zips and compute SHAs
+    - name: Download per-platform zips and compute SHAs
       run: |
         BASE_URL="https://github.com/iamgio/quarkdown/releases/download/v$VERSION"
-        curl -fL -o macos-x64.zip "$BASE_URL/quarkdown-macos-x64.zip"
+        curl -fL -o macos-x64.zip     "$BASE_URL/quarkdown-macos-x64.zip"
         curl -fL -o macos-aarch64.zip "$BASE_URL/quarkdown-macos-aarch64.zip"
-        echo "SHA_X64=$(shasum -a 256 macos-x64.zip     | cut -d ' ' -f 1)" >> $GITHUB_ENV
-        echo "SHA_AARCH64=$(shasum -a 256 macos-aarch64.zip | cut -d ' ' -f 1)" >> $GITHUB_ENV
+        curl -fL -o linux-x64.zip     "$BASE_URL/quarkdown-linux-x64.zip"
+        echo "SHA_MACOS_X64=$(shasum -a 256 macos-x64.zip         | cut -d ' ' -f 1)" >> $GITHUB_ENV
+        echo "SHA_MACOS_AARCH64=$(shasum -a 256 macos-aarch64.zip | cut -d ' ' -f 1)" >> $GITHUB_ENV
+        echo "SHA_LINUX_X64=$(shasum -a 256 linux-x64.zip         | cut -d ' ' -f 1)" >> $GITHUB_ENV
       shell: bash
 
     - name: Update formula
@@ -42,20 +44,25 @@ runs:
           path = "Formula/quarkdown.rb"
           content = File.read(path)
           version = ENV.fetch("VERSION")
-          sha_x64 = ENV.fetch("SHA_X64")
-          sha_aarch64 = ENV.fetch("SHA_AARCH64")
+          sha_macos_x64 = ENV.fetch("SHA_MACOS_X64")
+          sha_macos_aarch64 = ENV.fetch("SHA_MACOS_AARCH64")
+          sha_linux_x64 = ENV.fetch("SHA_LINUX_X64")
           base_url = "https://github.com/iamgio/quarkdown/releases/download/v#{version}"
 
           content.sub!(/^(\s*)version "[^"]+"/, "\\1version \"#{version}\"")
 
-          # Update each on_<arch> block's url + sha256 in one regex per arch.
+          # Update each per-platform block's url + sha256 in one regex per block.
           content.sub!(
             /(on_arm do\n\s*url ")[^"]+("\n\s*sha256 ")[0-9a-f]{64}/m,
-            "\\1#{base_url}/quarkdown-macos-aarch64.zip\\2#{sha_aarch64}"
+            "\\1#{base_url}/quarkdown-macos-aarch64.zip\\2#{sha_macos_aarch64}"
           )
           content.sub!(
             /(on_intel do\n\s*url ")[^"]+("\n\s*sha256 ")[0-9a-f]{64}/m,
-            "\\1#{base_url}/quarkdown-macos-x64.zip\\2#{sha_x64}"
+            "\\1#{base_url}/quarkdown-macos-x64.zip\\2#{sha_macos_x64}"
+          )
+          content.sub!(
+            /(on_linux do\n\s*url ")[^"]+("\n\s*sha256 ")[0-9a-f]{64}/m,
+            "\\1#{base_url}/quarkdown-linux-x64.zip\\2#{sha_linux_x64}"
           )
 
           File.write(path, content)
@@ -69,8 +76,9 @@ runs:
           version = ENV.fetch("VERSION")
           required = [
             /^\s*version "#{Regexp.escape(version)}"/,
-            /quarkdown-macos-x64\.zip"\s*\n\s*sha256 "#{Regexp.escape(ENV.fetch("SHA_X64"))}"/,
-            /quarkdown-macos-aarch64\.zip"\s*\n\s*sha256 "#{Regexp.escape(ENV.fetch("SHA_AARCH64"))}"/,
+            /quarkdown-macos-x64\.zip"\s*\n\s*sha256 "#{Regexp.escape(ENV.fetch("SHA_MACOS_X64"))}"/,
+            /quarkdown-macos-aarch64\.zip"\s*\n\s*sha256 "#{Regexp.escape(ENV.fetch("SHA_MACOS_AARCH64"))}"/,
+            /quarkdown-linux-x64\.zip"\s*\n\s*sha256 "#{Regexp.escape(ENV.fetch("SHA_LINUX_X64"))}"/,
           ]
           missing = required.reject { |re| content.match?(re) }
           unless missing.empty?
