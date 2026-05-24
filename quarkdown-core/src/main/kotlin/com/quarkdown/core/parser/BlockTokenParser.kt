@@ -54,6 +54,7 @@ import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.removeOptionalPrefix
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.BlockTokenVisitor
+import java.nio.file.Files.lines
 
 /**
  * The position of this character in the delimiter of a table header defines its column alignment.
@@ -293,14 +294,15 @@ class BlockTokenParser(
             token.data.text
                 .removePrefix(marker)
                 .removePrefix(task)
-        val lines = content.lineSequence()
 
-        if (lines.none()) {
-            return ListItem(children = emptyList())
+        if (content.isBlank()) {
+            return ListItem(children = emptyList(), rawContent = content)
         }
 
+        val lines = content.lineSequence()
+
         // Trims the content, removing common indentation.
-        val trimmedContent = trimMinIndent(lines, minIndent = marker.trim().length)
+        val trimmedContent = trimMinIndent(lines, minIndent = marker.trim().length).trimEnd()
 
         // Additional features of this list item.
         val variants =
@@ -318,7 +320,7 @@ class BlockTokenParser(
                 .newBlockLexer(source = trimmedContent)
                 .tokenizeAndParse()
 
-        return ListItem(variants, children)
+        return ListItem(variants, children, rawContent = trimmedContent)
     }
 
     override fun visit(token: TableToken): Node {

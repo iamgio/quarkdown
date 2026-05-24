@@ -1,5 +1,6 @@
 package com.quarkdown.core
 
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
@@ -260,8 +261,9 @@ class ValueFactoryTest {
 
     @Test
     fun `simple iterable`() {
+        val context = newContext()
         assertEquals(
-            listOf(DynamicValue("1"), DynamicValue("2"), DynamicValue("3")),
+            listOf(DynamicValue("1", context), DynamicValue("2", context), DynamicValue("3", context)),
             ValueFactory
                 .iterable(
                     """
@@ -269,20 +271,21 @@ class ValueFactoryTest {
                     - 2
                     - 3
                     """.trimIndent(),
-                    newContext(),
+                    context,
                 ).unwrappedValue,
         )
     }
 
     @Test
     fun `nested iterable, compact`() {
+        val context = newContext()
         assertEquals(
             listOf(
                 OrderedCollectionValue(
-                    listOf(DynamicValue("11"), DynamicValue("12")),
+                    listOf(DynamicValue("11", context), DynamicValue("12", context)),
                 ),
                 OrderedCollectionValue(
-                    listOf(DynamicValue("22")),
+                    listOf(DynamicValue("22", context)),
                 ),
             ),
             ValueFactory
@@ -292,21 +295,21 @@ class ValueFactoryTest {
                       - 12
                     - - 22
                     """.trimIndent(),
-                    newContext(),
+                    context,
                 ).unwrappedValue,
         )
     }
 
-    private val complexIterableResult =
+    private fun complexIterableResult(context: Context) =
         listOf(
             OrderedCollectionValue(
                 listOf(
-                    DynamicValue("11"),
-                    DynamicValue("12"),
+                    DynamicValue("11", context),
+                    DynamicValue("12", context),
                     OrderedCollectionValue(
                         listOf(
-                            DynamicValue("121"),
-                            DynamicValue("122"),
+                            DynamicValue("121", context),
+                            DynamicValue("122", context),
                         ),
                     ),
                 ),
@@ -314,17 +317,18 @@ class ValueFactoryTest {
             OrderedCollectionValue(
                 listOf(
                     OrderedCollectionValue(
-                        listOf(DynamicValue("211")),
+                        listOf(DynamicValue("211", context)),
                     ),
-                    DynamicValue("22"),
+                    DynamicValue("22", context),
                 ),
             ),
         )
 
     @Test
     fun `complex nested iterable, compact`() {
+        val context = newContext()
         assertEquals(
-            complexIterableResult,
+            complexIterableResult(context),
             ValueFactory
                 .iterable(
                     """
@@ -335,15 +339,16 @@ class ValueFactoryTest {
                     - - - 211
                       - 22
                     """.trimIndent(),
-                    newContext(),
+                    context,
                 ).unwrappedValue,
         )
     }
 
     @Test
     fun `complex nested iterable, extended syntax`() {
+        val context = newContext()
         assertEquals(
-            complexIterableResult,
+            complexIterableResult(context),
             ValueFactory
                 .iterable(
                     """
@@ -358,7 +363,7 @@ class ValueFactoryTest {
                         - 211
                       - 22
                     """.trimIndent(),
-                    newContext(),
+                    context,
                 ).unwrappedValue,
         )
     }

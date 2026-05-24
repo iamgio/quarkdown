@@ -40,7 +40,10 @@ abstract class MarkdownListConverter<T, E, N : Node>(
      * @param child the first child of a list item. In the previous example, it would be a paragraph which contains "Inline 1", "Inline 2" or "Inline 3".
      * @return the element to push
      */
-    protected abstract fun inlineValue(child: N): E
+    protected abstract fun inlineValue(
+        child: N,
+        rawContent: String?,
+    ): E
 
     /**
      * Converts the nested child of a list item to a pushable element.
@@ -72,11 +75,11 @@ abstract class MarkdownListConverter<T, E, N : Node>(
     fun convert(): T {
         list.items
             .asSequence()
-            .map { it.children.filterNot { child -> child is Newline } }
-            .forEach { children ->
+            .map { it.rawContent to it.children.filterNot { child -> child is Newline } }
+            .forEach { (rawContent, children) ->
                 val firstChild: N = validateChild(children.first())
                 when (val secondChild = children.getOrNull(1)) {
-                    null -> push(inlineValue(firstChild))
+                    null -> push(inlineValue(firstChild, rawContent))
                     is ListBlock -> push(nestedValue(firstChild, secondChild))
                     else -> throw IllegalRawValueException("Unexpected element", secondChild)
                 }
