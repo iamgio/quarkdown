@@ -1,14 +1,14 @@
-package com.quarkdown.core.template
+package com.quarkdown.template
 
-import com.quarkdown.core.util.normalizeLineSeparators
-import gg.jte.CodeResolver
 import gg.jte.ContentType
 import gg.jte.TemplateEngine
 import gg.jte.output.StringOutput
-import kotlin.io.path.createTempDirectory
 
 /**
- * A builder-like processor for a template engine backed by JTE (Java Template Engine) with `.jte` templates.
+ * A builder-like processor for a JTE (Java Template Engine) `.jte` template, identified by its
+ * precompiled template [name] (e.g. `creator/main.qd.jte`). Templates must be precompiled at
+ * build time via the JTE Gradle plugin and shipped on the runtime classpath; see the
+ * `quarkdown-templates` module for production templates.
  *
  * Three main features:
  *
@@ -23,10 +23,10 @@ import kotlin.io.path.createTempDirectory
  *   while replacing the placeholder with the current item during each iteration.
  *   In JTE templates, iterables are expressed via `@for(item in NAME)${item}@endfor`.
  *
- * @param text text or code of the `.jte` template
+ * @param name template name as known by the precompiled JTE engine, relative to its source root
  */
 class TemplateProcessor(
-    private val text: String,
+    private val name: String,
     private val values: MutableMap<String, Any?> = mutableMapOf(),
     private val conditionals: MutableMap<String, Boolean> = mutableMapOf(),
     private val iterables: MutableMap<String, Iterable<Any>> = mutableMapOf(),
@@ -81,12 +81,12 @@ class TemplateProcessor(
 
     /**
      * Creates a copy of this template processor with the same injected properties.
-     * @param text new text the template
-     * @return a new [TemplateProcessor] with the same injections, and the new text
+     * @param name template name for the new processor; defaults to this processor's [name]
+     * @return a new [TemplateProcessor] with the same injections, and the new template name
      */
-    fun copy(text: String = this.text) =
+    fun copy(name: String = this.name) =
         TemplateProcessor(
-            text,
+            name,
             values.toMutableMap(),
             conditionals.toMutableMap(),
             iterables.toMutableMap(),
@@ -108,50 +108,23 @@ class TemplateProcessor(
         }
 
     /**
-     * @return the original template [text], with all placeholders and conditionals processed into the final output
+     * @return the rendered template, with all placeholders and conditionals processed into the final output
      */
     fun process(): CharSequence {
-        val normalizedText = text.normalizeLineSeparators().toString()
-        val params = buildParams()
-
-        val templateName = "template.jte"
-        val codeResolver =
-            object : CodeResolver {
-                override fun resolve(name: String): String = normalizedText
-
-                override fun getLastModified(name: String): Long = 0L
-
-                override fun exists(name: String): Boolean = name == templateName
-            }
-
-        val engine =
-            TemplateEngine.create(
-                codeResolver,
-                createTempDirectory("jte"),
-                ContentType.Plain,
-            )
-        engine.setTrimControlStructures(true)
         val output = StringOutput()
-        engine.render(templateName, params, output)
+        engine.render(name, buildParams(), output)
         return output.toString().trimEnd()
     }
 
     companion object {
         /**
-         * @param name name of the internal resource
-         * @param referenceClass reference classpath to use to retrieve the internal resource
-         * @return a new [TemplateProcessor] with its template loaded from the resource content
-         * @throws IllegalStateException if the resource cannot be found
+         * Shared, precompiled JTE engine. Templates are resolved from the runtime classpath
+         * (the `quarkdown-templates` module's jar in production, test-source `.jte` fixtures
+         * during tests).
          */
-        fun fromResourceName(
-            name: String,
-            referenceClass: Class<*> = TemplateProcessor::class.java,
-        ) = TemplateProcessor(
-            referenceClass
-                .getResourceAsStream(name)
-                ?.reader()
-                ?.readText()
-                ?: throw IllegalStateException("Cannot find wrapper resource $name."),
-        )
+        private val engine: TemplateEngine =
+            TemplateEngine
+                .createPrecompiled(ContentType.Plain)
+                .apply { setTrimControlStructures(true) }
     }
 }

@@ -6,7 +6,7 @@ import com.quarkdown.cli.creator.template.ProjectCreatorTemplateProcessorFactory
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
-import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.template.TemplateProcessor
 
 /**
  * Generator of resources for a new Quarkdown project via [createResources].
@@ -26,7 +26,8 @@ class ProjectCreator(
     /**
      * Finalizes the template processor by injecting into it:
      * - The main file name
-     * - The initial example content, processed via the same template processor
+     * - The initial example content, processed via a sibling template processor
+     *   that inherits the same placeholder values
      * @param template the template processor to finalize
      * @return the finalized template processor
      */
@@ -35,10 +36,12 @@ class ProjectCreator(
         // so that the initial content template can reference it.
         template.optionalValue(ProjectCreatorTemplatePlaceholders.MAIN_FILE, mainFileName)
 
-        // Initial content is processed via the same template processor.
+        // Initial content is rendered through a copy of the same template processor,
+        // pointed at the supplier-provided template name. The copy inherits all values
+        // already set on `template`, including MAIN_FILE.
         val initialContentCode =
-            initialContentSupplier.templateCodeContent
-                ?.let { template.copy(text = it).process().trim() }
+            initialContentSupplier.templateName
+                ?.let { template.copy(name = it).process().trim() }
 
         // Processed initial content is injected into the main template.
         template.optionalValue(ProjectCreatorTemplatePlaceholders.INITIAL_CONTENT, initialContentCode)

@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Changed
+
+&nbsp;
+
+#### Precompiled templates
+
+Templates, used in `quarkdown create` and live preview, are now precompiled at build time. This results in a smaller distribution size and faster startup times for these features.
+
+&nbsp;
+
 ### Fixed
 
 &nbsp;
@@ -9,6 +19,16 @@
 #### Fixed live preview sometimes failing on edit
 
 Fixed an issue that caused live preview to crash with an *"Address already in use"* error on recompile.
+
+* * *
+
+### Sponsors
+
+Thanks to our sponsors! 🎉
+
+@vitto4
+
+<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
 ## [2.1.1] - 2026-05-23
 

@@ -1,6 +1,6 @@
 package com.quarkdown.cli.creator.template
 
-import com.quarkdown.core.template.TemplateProcessor
+import com.quarkdown.template.TemplateProcessor
 
 /**
  * Factory that creates one or multiple [TemplateProcessor]s that generate files of a new Quarkdown project.

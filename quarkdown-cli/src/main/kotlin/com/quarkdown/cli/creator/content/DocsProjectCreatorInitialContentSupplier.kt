@@ -12,8 +12,8 @@ private val RESOURCES = arrayOf("_nav.qd", "page-1.qd", "page-2.qd", "page-3.qd"
  * The template includes a navigation file and three page files, with some example content.
  */
 class DocsProjectCreatorInitialContentSupplier : ProjectCreatorInitialContentSupplier {
-    override val templateCodeContent: String
-        get() = DefaultProjectCreatorInitialContentSupplier().templateCodeContent
+    override val templateName: String
+        get() = DefaultProjectCreatorInitialContentSupplier().templateName
 
     override fun createResources(): Set<OutputResource> =
         RESOURCES

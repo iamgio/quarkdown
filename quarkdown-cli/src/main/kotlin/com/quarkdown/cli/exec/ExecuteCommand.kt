@@ -113,7 +113,7 @@ abstract class ExecuteCommand(
     /**
      * When enabled, the rendered code isn't wrapped in a template code.
      * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`, with the content injected in `body`.
-     * @see com.quarkdown.core.template.TemplateProcessor
+     * @see com.quarkdown.template.TemplateProcessor
      */
     private val noWrap: Boolean by option("--nowrap", help = "Don't wrap output").flag()
 

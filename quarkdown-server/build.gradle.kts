@@ -5,6 +5,7 @@ plugins {
 dependencies {
     testImplementation(kotlin("test"))
     implementation(project(":quarkdown-core"))
+    implementation(project(":quarkdown-template"))
     implementation(project(":quarkdown-interaction"))
 
     val ktorVersion = "3.5.0"

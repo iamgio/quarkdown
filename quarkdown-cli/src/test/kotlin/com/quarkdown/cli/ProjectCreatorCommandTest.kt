@@ -2,6 +2,7 @@ package com.quarkdown.cli
 
 import com.github.ajalt.clikt.testing.test
 import com.quarkdown.cli.creator.command.CreateProjectCommand
+import com.quarkdown.core.util.normalizeLineSeparators
 import org.junit.Test
 import java.io.File
 import kotlin.test.BeforeTest
@@ -63,7 +64,13 @@ class ProjectCreatorCommandTest : TempDirectory() {
 
         assertTrue(mainFileName in directory.listFiles()!!.map { it.name })
 
-        val main = directory.listFiles()!!.first { it.name == mainFileName }.readText()
+        val main =
+            directory
+                .listFiles()!!
+                .first { it.name == mainFileName }
+                .readText()
+                .normalizeLineSeparators()
+                .toString()
         assertTrue(main.startsWith(".docname {test}"))
         if (includeDescription) {
             assertTrue(".docdescription {A test document for slides}" in main)
