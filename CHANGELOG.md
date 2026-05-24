@@ -16,6 +16,23 @@ Templates, used in `quarkdown create` and live preview, are now precompiled at b
 
 &nbsp;
 
+#### Preserve rich formatting in iterated lists
+
+The following snippet now correctly preserves formatting when iterating over a Markdown list, rather than treating entries as plain text:
+
+```markdown
+.var {mylist}
+  - text
+  - *italic*
+  - **bold**
+
+.row alignment:{spacearound}
+    .foreach {.mylist}
+        .1
+```
+
+&nbsp;
+
 #### Fixed live preview sometimes failing on edit
 
 Fixed an issue that caused live preview to crash with an *"Address already in use"* error on recompile.

@@ -34,7 +34,7 @@ private fun Node.isHighlighted(): Boolean =
 internal fun fileTreeFromList(list: ListBlock): List<FileTreeEntry> =
     MarkdownListToList(
         list,
-        inlineValueMapper = { node ->
+        inlineValueMapper = { node, _ ->
             val text = listOf(node).toPlainText()
             val highlighted = node.isHighlighted()
             if (text in ELLIPSIS_TEXTS) {

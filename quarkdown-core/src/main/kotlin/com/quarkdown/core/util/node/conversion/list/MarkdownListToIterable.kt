@@ -33,7 +33,7 @@ import com.quarkdown.core.ast.base.block.list.ListBlock
  */
 abstract class MarkdownListToIterable<O, T>(
     list: ListBlock,
-    private val inlineValueMapper: (Node) -> T,
+    private val inlineValueMapper: (Node, rawContent: String?) -> T,
     private val nestedValueMapper: (Node, ListBlock) -> T,
 ) : MarkdownListConverter<O, T, Node>(list) {
     protected val elements = mutableListOf<T>()
@@ -44,13 +44,15 @@ abstract class MarkdownListToIterable<O, T>(
 
     override fun validateChild(firstChild: Node) = firstChild
 
-    override fun inlineValue(child: Node) =
-        when (child) {
-            // Compact syntax: the parent node is the list itself.
-            is ListBlock -> nestedValueMapper(child, child)
+    override fun inlineValue(
+        child: Node,
+        rawContent: String?,
+    ) = when (child) {
+        // Compact syntax: the parent node is the list itself.
+        is ListBlock -> nestedValueMapper(child, child)
 
-            else -> inlineValueMapper(child)
-        }
+        else -> inlineValueMapper(child, rawContent)
+    }
 
     // Extended syntax.
     override fun nestedValue(

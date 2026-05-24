@@ -310,6 +310,33 @@ class ScriptingTest {
     }
 
     @Test
+    fun `iterated list keeps formatting`() {
+        execute(
+            """
+            .var {abc}
+                - text
+                - *italic*
+                - **bold**
+                - [Link](https://example.com)
+                - .sum {1} {2}
+            
+            .row
+                .foreach {.abc}
+                    .1
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div style=\"justify-content: flex-start; align-items: center;\" class=\"stack stack-row\">" +
+                    "<p>text</p><p><em>italic</em></p><p><strong>bold</strong></p>" +
+                    "<p><a href=\"https://example.com\">Link</a></p>" +
+                    "<p>3</p>" +
+                    "</div>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun dictionaries() {
         val authors =
             """

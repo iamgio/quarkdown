@@ -13,7 +13,7 @@ import com.quarkdown.core.ast.base.block.list.ListBlock
  */
 class MarkdownListToList<T>(
     list: ListBlock,
-    inlineValueMapper: (Node) -> T,
+    inlineValueMapper: (Node, rawContent: String?) -> T,
     nestedValueMapper: (Node, ListBlock) -> T,
 ) : MarkdownListToIterable<List<T>, T>(list, inlineValueMapper, nestedValueMapper) {
     override fun wrap(): List<T> = elements.toList()

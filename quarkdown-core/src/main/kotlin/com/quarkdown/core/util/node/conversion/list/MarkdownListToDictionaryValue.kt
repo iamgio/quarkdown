@@ -55,7 +55,10 @@ class MarkdownListToDictionaryValue<T : OutputValue<*>>(
                 firstChild,
             )
 
-    override fun inlineValue(child: TextNode): Pair<String, T> {
+    override fun inlineValue(
+        child: TextNode,
+        rawContent: String?,
+    ): Pair<String, T> {
         val text = child.text.toPlainText()
         // A key-value pair.
         // - This: that
