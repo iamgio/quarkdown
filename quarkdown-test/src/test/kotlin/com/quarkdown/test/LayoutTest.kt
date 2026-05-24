@@ -120,7 +120,7 @@ class LayoutTest {
     }
 
     @Test
-    fun gridGap() {
+    fun `grid gap`() {
         execute(
             """
             .grid columns:{2} vgap:{1cm} hgap:{2cm}
@@ -163,6 +163,99 @@ class LayoutTest {
                     "<p>Hello 2</p>" +
                     "<p>Hello 3</p>" +
                     "</div>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `layout function called directly`() {
+        execute(
+            """
+            .noautopagebreak
+
+            .function {mylayout}
+                name number:
+                # Hello, .name!
+
+                .number $ \times $ .number is .multiply {.number} by:{.number}
+
+                ### End
+
+            .mylayout {world} {3}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1>Hello, world!</h1><p>3 <formula>\\times</formula> 3 is 9</p><h3>End</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `layout function called from repeat`() {
+        execute(
+            """
+            .noautopagebreak
+
+            .function {mylayout}
+                name number:
+                # Hello, .name!
+
+                .number $ \times $ .number is .multiply {.number} by:{.number}
+
+                ### End
+
+            .repeat {4}
+                n:
+                .mylayout {world} {.n}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1>Hello, world!</h1><p>1 <formula>\\times</formula> 1 is 1</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>2 <formula>\\times</formula> 2 is 4</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>3 <formula>\\times</formula> 3 is 9</p><h3>End</h3>" +
+                    "<h1>Hello, world!</h1><p>4 <formula>\\times</formula> 4 is 16</p><h3>End</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `inline layout function inside a paragraph`() {
+        execute(
+            """
+            .function {poweredby}
+                credits:
+                .text {powered by .credits} size:{small} variant:{smallcaps}
+
+            This **exciting feature**, .poweredby {[Quarkdown](https://github.com/iamgio/quarkdown)}, looks great!
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>This <strong>exciting feature</strong>, " +
+                    "<span class=\"size-small\" style=\"font-variant: small-caps;\">" +
+                    "powered by <a href=\"https://github.com/iamgio/quarkdown\">Quarkdown</a>" +
+                    "</span>, looks great!</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `repeated container with index in body`() {
+        execute(
+            """
+            .repeat {3}
+                .container width:{1cm}
+                    Item .1
+            """.trimIndent(),
+        ) {
+            val item =
+                "<div class=\"container\" style=\"width: 1.0cm;\">" +
+                    "<p>Item %d</p></div>"
+            assertEquals(
+                item.format(1) + item.format(2) + item.format(3),
                 it,
             )
         }

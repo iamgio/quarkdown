@@ -296,4 +296,74 @@ class MermaidTest {
             )
         }
     }
+
+    @Test
+    fun `bar chart counting element repetitions`() {
+        // Build a frequency chart from a list of strings:
+        // sort, then count repetitions per distinct group.
+        execute(
+            """
+            .var {x}
+                - b
+                - a
+                - b
+                - c
+                - b
+                - a
+                - d
+                - e
+                - f
+                - e
+                - d
+                - b
+
+            .x {.x::sorted}
+
+            .xychart bars:{yes} lines:{no} xtags:{.x::distinct}
+                .foreach {.x::groupvalues}
+                    .1::size
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                """
+                <figure><pre class="mermaid">xychart-beta
+                	x-axis [a, b, c, d, e, f]
+                	bar [2.0, 4.0, 1.0, 2.0, 2.0, 1.0]
+                </pre></figure>
+                """.trimIndent(),
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `combined bar and line chart from a csv via destructuring`() {
+        execute(
+            """
+            .let {.csv {csv/sales.csv}}
+                data:
+                .var {columns}
+                    .tablecolumns
+                        .data
+
+                .xychart xtags:{.columns::first} y:{Sales} bars:{yes}
+                    .columns::second
+                    .columns::third
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                """
+                <figure><pre class="mermaid">xychart-beta
+                    x-axis [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+                    y-axis &quot;Sales&quot;
+                    bar [230.0, 190.0, 180.0, 175.0, 200.0, 250.0, 290.0, 350.0, 470.0]
+                    line [230.0, 190.0, 180.0, 175.0, 200.0, 250.0, 290.0, 350.0, 470.0]
+                    bar [85.0, 100.0, 135.0, 180.0, 240.0, 320.0, 430.0, 580.0, 800.0, 0.0]
+                    line [85.0, 100.0, 135.0, 180.0, 240.0, 320.0, 430.0, 580.0, 800.0, 0.0]
+                </pre></figure>
+                """.trimIndent(),
+                it.toString().replace("\t", "    "),
+            )
+        }
+    }
 }
