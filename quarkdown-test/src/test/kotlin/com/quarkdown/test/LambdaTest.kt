@@ -1,0 +1,101 @@
+package com.quarkdown.test
+
+import com.quarkdown.test.util.execute
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+
+/**
+ * Tests for `@lambda` expressions: implicit `.1` parameters, explicit named parameters,
+ * and how lambdas combine with higher-order functions such as `.takeif` and `.otherwise`.
+ */
+class LambdaTest {
+    @Test
+    fun `bare body without @lambda fails to bind a parameter`() {
+        // `.1` is only defined within an actual lambda block; the bare body cannot resolve it.
+        assertFails {
+            execute(
+                """
+                .takeif {3} { .islower {.1} than:{5} }
+                """.trimIndent(),
+            ) {}
+        }
+    }
+
+    @Test
+    fun `takeif keeps the value when the @lambda predicate is true`() {
+        execute(
+            """
+            .takeif {3} { @lambda .islower {.1} than:{5} }
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3</p>", it)
+        }
+    }
+
+    @Test
+    fun `takeif drops the value when the @lambda predicate is false`() {
+        execute(
+            """
+            .takeif {3} { @lambda .islower {.1} than:{2} }
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><span class=\"codespan-content\"><code>None</code></span></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `lambda with explicit named parameter`() {
+        execute(
+            """
+            .takeif {3} { @lambda x: .islower {.x} than:{5} }
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3</p>", it)
+        }
+    }
+
+    @Test
+    fun `takeif combined with otherwise as fallback`() {
+        execute(
+            """
+            .otherwise {.takeif {3} {@lambda x: .iseven {.x}}} {0}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>0</p>", it)
+        }
+    }
+
+    @Test
+    fun `lambda with multiple explicit parameters used in foreach`() {
+        // The lambda accepts two named parameters (key + value) and references both.
+        execute(
+            """
+            .var {d}
+                .dictionary
+                    - x: 10
+                    - y: 20
+
+            .foreach {.d}
+                k v:
+                .k = .v
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>x = 10</p><p>y = 20</p>", it)
+        }
+    }
+
+    @Test
+    fun `takeif combined with otherwise via chaining`() {
+        execute(
+            """
+            .takeif {3} {@lambda x: .iseven {.x}}::otherwise {0}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>0</p>", it)
+        }
+    }
+}
