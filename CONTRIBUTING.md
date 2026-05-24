@@ -119,6 +119,10 @@ The following list shows contributions that are highly welcome, in order of impo
    Please ensure your theme looks correctly on all document types (`plain`, `paged`, `slides`, `docs`)
    on the [Mock document](https://github.com/iamgio/quarkdown/tree/main/mock) and [Quarkdown's wiki](https://github.com/iamgio/quarkdown/tree/main/docs).
 
+6. Improve the [agent skill](https://github.com/iamgio/quarkdown/tree/main/skills/quarkdown/SKILL.md).
+   The skill teaches Claude Code and other agents how to author Quarkdown documents.
+   Refinements to its workflow, guidance, or examples are welcome, especially when they help the agent improve the output and avoid common pitfalls.
+
 ### Understanding the architecture
 
 The architecture behind Quarkdown's core is explained in the wiki's [*Pipeline*](https://quarkdown.com/wiki/pipeline).
@@ -130,9 +134,12 @@ A Quarkdown installation ships a `lib/` directory next to the JARs, containing e
 ```
 <install>/
   bin/quarkdown
+  docs/        # API reference
+    wiki/      # .qd wiki sources of quarkdown.com/wiki
   lib/
-    qd/        # bundled .qd library files (from quarkdown-libs)
-    html/      # HTML rendering resources (navigable at runtime via InstallLayout.Html)
+    qd/        # .qd library files (from quarkdown-libs)
+    skills/    # agent skill files (from skills/)
+    html/      # HTML rendering resources
       lib/     # third-party JS/CSS libraries
         bootstrap-icons/
         highlight.js/
