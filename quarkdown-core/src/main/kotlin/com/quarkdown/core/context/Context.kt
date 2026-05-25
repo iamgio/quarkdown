@@ -57,7 +57,7 @@ interface Context : PermissionHolder {
     /**
      * Loaded libraries to look up functions from.
      */
-    val libraries: Set<Library>
+    val libraries: List<Library>
 
     /**
      * External libraries that can be loaded by the user into [libraries].

@@ -23,13 +23,13 @@ import com.quarkdown.core.media.storage.MutableMediaStorage
  */
 open class MutableContext(
     flavor: MarkdownFlavor = QuarkdownFlavor,
-    libraries: Set<Library> = emptySet(),
+    libraries: List<Library> = emptyList(),
     loadableLibraries: Set<Library> = emptySet(),
     subdocument: Subdocument = Subdocument.Root,
     override val attributes: MutableAstAttributes = MutableAstAttributes(),
     override val options: MutableContextOptions = MutableContextOptions(),
 ) : BaseContext(attributes, flavor, libraries, subdocument) {
-    override val libraries: MutableSet<Library> = super.libraries.toMutableSet()
+    override val libraries: MutableList<Library> = super.libraries.toMutableList()
 
     override var documentInfo: DocumentInfo = super.documentInfo
 
@@ -67,6 +67,14 @@ open class MutableContext(
     override fun fork(): ScopeContext = ScopeContext(parent = this)
 
     /**
+     * Registers a library in the context, regardless of whether it appears in [loadableLibraries].
+     * The library is added to [libraries] and its [Library.onLoad] action, if any, is executed.
+     * @param library library to register
+     * @return the value returned by the library's [Library.onLoad] action if it exists
+     */
+    fun loadLibrary(library: Library): OutputValue<*>? = LibraryRegistrant(this).register(library)
+
+    /**
      * Loads a loadable library by name and registers it in the context.
      * After a successful load, the library is added to [libraries], with its [Library.onLoad] action executed.
      * @param name name of the library to load, case-sensitive
@@ -74,7 +82,7 @@ open class MutableContext(
      */
     fun loadLibrary(name: String): Pair<Library, OutputValue<*>?>? =
         loadableLibraries.find { it.name == name }?.let { library ->
-            library to LibraryRegistrant(this).register(library)
+            library to loadLibrary(library)
         }
 
     /**

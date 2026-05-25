@@ -15,10 +15,14 @@ class LibraryRegistrant(
     /**
      * Registers a new single library, allowing it to be looked up by functions
      * and its [Library.onLoad] action is executed.
+     *
+     * The library is appended to the list. Function lookup walks the list in reverse,
+     * so the most recently registered library wins on name conflicts (see [Context.getFunctionByName]).
+     *
      * @param library library to register
      */
     fun register(library: Library): OutputValue<*>? {
-        context.libraries += library
+        context.libraries.add(library)
         return library.onLoad?.invoke(context)
     }
 

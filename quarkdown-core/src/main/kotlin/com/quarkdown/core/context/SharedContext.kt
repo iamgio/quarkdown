@@ -14,7 +14,7 @@ open class SharedContext(
     override val fileSystem: FileSystem = parent.fileSystem,
 ) : MutableContext(
         flavor = parent.flavor,
-        libraries = emptySet(),
+        libraries = emptyList(),
         subdocument = parent.subdocument,
     ),
     ChildContext<MutableContext> {

@@ -2,6 +2,32 @@
 
 ## [Unreleased]
 
+### Added
+
+&nbsp;
+
+#### [Function overwriting](https://quarkdown.com/wiki/declaring-functions#overwriting-functions)
+
+It is now possible to overwrite any previously-declared function:
+
+```markdown
+.uppercase {Quarkdown}
+            
+.function {uppercase}
+    text:
+    .text::lowercase
+            
+.uppercase {Quarkdown}
+```
+
+Output:
+
+```markdown
+QUARKDOWN
+
+quarkdown
+```
+
 ## [2.1.2] - 2026-05-24
 
 ### Changed

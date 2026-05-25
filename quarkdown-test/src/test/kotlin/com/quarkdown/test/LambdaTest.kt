@@ -11,6 +11,21 @@ import kotlin.test.assertFails
  */
 class LambdaTest {
     @Test
+    fun `newer implicit parameters take precedence`() {
+        execute(
+            """
+            .let {hello}
+                .1
+                
+                .let {world}
+                    .1
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>hello</p><p>world</p>", it)
+        }
+    }
+
+    @Test
     fun `bare body without @lambda fails to bind a parameter`() {
         // `.1` is only defined within an actual lambda block; the bare body cannot resolve it.
         assertFails {
