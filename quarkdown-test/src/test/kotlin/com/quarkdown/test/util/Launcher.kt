@@ -50,6 +50,7 @@ val DEFAULT_OPTIONS =
  * @param enableMediaStorage whether the media storage system should be enabled.
  * If enabled, nodes that reference media (e.g. images) will instead reference the path to the media on the local storage
  * @param permissions the set of permissions granted to the pipeline
+ * @param forbidFunctionOverwriting whether defining a function with an existing name should raise an error
  * @param subdocumentNaming the strategy used to determine subdocument output file names
  * @param previewMode whether to simulate preview mode, which suppresses certain resources from being generated
  * @param outputResourceHook action run after the pipeline execution, with the output resource as a parameter
@@ -67,6 +68,7 @@ fun execute(
     errorHandler: PipelineErrorHandler = StrictPipelineErrorHandler(),
     enableMediaStorage: Boolean = false,
     permissions: Set<Permission> = Permission.DEFAULT_SET,
+    forbidFunctionOverwriting: Boolean = false,
     subdocumentNaming: SubdocumentOutputNaming = SubdocumentOutputNaming.FILE_NAME,
     previewMode: Boolean = false,
     outputResourceHook: Context.(OutputResource?) -> Unit = {},
@@ -110,6 +112,7 @@ fun execute(
                 enableMediaStorage = enableMediaStorage,
                 permissions = permissions,
                 subdocumentNaming = subdocumentNaming,
+                forbidFunctionOverwriting = forbidFunctionOverwriting,
                 isPreview = previewMode,
             ),
             libraries = setOf(Stdlib.library),

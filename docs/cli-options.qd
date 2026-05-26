@@ -80,6 +80,8 @@ Running **`quarkdown c file.qd`** compiles the given file and saves the output t
 
 - `--no-media-storage`: turns the [media storage](media-storage.qd) system off.
 
+- `--forbid-function-overwriting`: raises a compilation error when a [function is declared](declaring-functions.qd#overwriting-functions) with a name that is already in use, instead of silently overwriting the previous definition.
+
 - `--subdoc-naming <strategy>`: sets the [subdocument](subdocuments.qd) output naming strategy. Defaults to `file-name`. Accepted values:
   - `file-name`: uses the subdocument's file name (human-readable, but prone to collisions)
   - `collision-proof`: appends a hash to `file-name` to minimize name collisions
