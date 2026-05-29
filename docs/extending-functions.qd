@@ -1,0 +1,53 @@
+.docname {Extending functions}
+.include {docs}
+
+You can extend any previously-declared function using the **`.extend`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Flow/extend.html} function within a scope. The extension wraps the original function, letting you transform, decorate, or replace its output without losing the original definition.
+
+.examplemirror
+    .function {greet}
+        name:
+        Hello, .name!
+
+    .extend {greet}
+        super:
+        .super::uppercase
+
+    .greet {world}
+
+## Parameters
+
+The wrapper body is a [lambda](lambda.qd). Its first explicit parameter, conventionally called `super`, is bound to the result of the original function. Any further parameters must match the names of the original function's parameters and let you read the arguments the caller passed.
+
+.examplemirror prelude:{The output may depend on an argument's value:}
+    .function {greet}
+        name:
+        Hello, .name!
+
+    .extend {greet}
+        super name:
+        .if {.name::equals {world}}
+            .super::uppercase
+        .ifnot {.name::equals {world}}
+            .super
+
+    .greet {world}
+
+    .greet {John}
+
+All wrapper parameters are always optional. You only need to declare the parameters you actually use in the body.
+
+.examplemirror prelude:{Built-in functions can be extended:}
+    .extend {heading}
+        super depth:
+        .let {.depth::islower than:{4}}
+            .if {.1}
+                .container background:{teal} fullwidth:{yes}
+                    .super
+            .ifnot {.1}
+                .super
+
+    .heading {H2} depth:{2} indexed:{no}
+
+    .heading {H3} depth:{3} indexed:{no}
+
+    .heading {H4} depth:{4} indexed:{no}

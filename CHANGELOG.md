@@ -6,6 +6,39 @@
 
 &nbsp;
 
+#### [Extending functions](https://quarkdown.com/wiki/extending-functions)
+
+The new `.extend` function lets you wrap any previously-declared function, transforming or replacing its output without losing the original definition:
+
+```markdown
+.function {greet}
+    greeting name:
+    .greeting, .name!
+
+.extend {greet}
+    super name:
+    .if {.name::equals {world}}
+        .super::uppercase
+    .ifnot {.name::equals {world}}
+        .super
+
+.greet {Hello} {world}
+
+.greet {Hey} {everyone}
+```
+
+Output:
+
+```markdown
+HELLO, WORLD!
+
+Hey, everyone!
+```
+
+The wrapper body receives the result of the original function (conventionally called `super`) as its first parameter, followed by the original function's parameters.
+
+&nbsp;
+
 #### [Function overwriting](https://quarkdown.com/wiki/declaring-functions#overwriting-functions)
 
 It is now possible to overwrite any previously-declared function:
@@ -29,6 +62,8 @@ quarkdown
 ```
 
 This behavior can be turned off with the new [`--forbid-function-overwriting`](https://quarkdown.com/wiki/cli-compiler#function-overwriting) CLI flag, which raises a compilation error instead.
+
+Unlike `.extend`, which wraps the previous function and keeps its output reachable via `super`, this fully replaces the previous definition, so its return value and parameters are no longer accessible.
 
 &nbsp;
 

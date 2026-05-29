@@ -51,3 +51,19 @@ data class FunctionCall<T : OutputValue<*>>(
 
     override fun <T> accept(visitor: ExpressionVisitor<T>): T = visitor.visit(this)
 }
+
+/**
+ * Re-dispatches this call against a different [function], reusing the original arguments,
+ * and executes it.
+ *
+ * Useful when a wrapper function needs to delegate to another function while preserving
+ * the caller's arguments, as in the `extend` stdlib function.
+ *
+ * @param function function to re-dispatch the call to
+ * @return the output of executing [function] against this call's arguments
+ */
+@Suppress("UNCHECKED_CAST")
+fun FunctionCall<*>.executeAs(function: Function<*>): OutputValue<*> =
+    (this as FunctionCall<OutputValue<*>>)
+        .copy(function = function as Function<OutputValue<*>>)
+        .execute()
