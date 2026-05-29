@@ -109,6 +109,7 @@ class CompileCommandTest : TempDirectory() {
             assertFalse(it.prettyOutput)
             assertTrue(it.wrapOutput)
             assertTrue(it.enableMediaStorage)
+            assertFalse(it.forbidFunctionOverwriting)
             assertIs<BasePipelineErrorHandler>(it.errorHandler)
         }
     }
@@ -151,6 +152,12 @@ class CompileCommandTest : TempDirectory() {
         test("--clean")
         assertHtmlContentPresent()
         assertFalse(dummyFile.exists())
+    }
+
+    @Test
+    fun `forbid function overwriting`() {
+        val (_, pipelineOptions) = test("--forbid-function-overwriting")
+        assertTrue(pipelineOptions.forbidFunctionOverwriting)
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.quarkdown.core.function.error.InvalidArgumentCountException
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 
 /**
@@ -198,6 +199,24 @@ class FunctionDefinitionTest {
     }
 
     @Test
+    fun `function overwrite from same source fails if overwriting is forbidden`() {
+        assertFails {
+            execute(
+                """
+                .function {greet}
+                    name:
+                    Hello, .name!
+
+                .function {greet}
+                    name:
+                    Hi, .name!
+                """.trimIndent(),
+                forbidFunctionOverwriting = true,
+            ) {}
+        }
+    }
+
+    @Test
     fun `function overwrite from stdlib`() {
         execute(
             """
@@ -211,6 +230,20 @@ class FunctionDefinitionTest {
             """.trimIndent(),
         ) {
             assertEquals("<p>HELLO</p><p>hello</p>", it)
+        }
+    }
+
+    @Test
+    fun `function overwrite from stdlib fails if overwriting is forbidden`() {
+        assertFails {
+            execute(
+                """
+                .function {uppercase}
+                    text:
+                    .text::lowercase
+                """.trimIndent(),
+                forbidFunctionOverwriting = true,
+            ) {}
         }
     }
 

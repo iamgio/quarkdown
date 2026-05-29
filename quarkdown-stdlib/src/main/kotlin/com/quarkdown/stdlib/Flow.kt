@@ -11,6 +11,7 @@ import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
+import com.quarkdown.core.function.signatureAsString
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
 import com.quarkdown.core.function.value.IterableValue
@@ -288,6 +289,7 @@ private const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
  *
  * @param name name of the function
  * @param body content of the function. Function parameters must be **explicit** lambda parameters
+ * @throws IllegalStateException if a function with the same name already exists and function overwriting is forbidden by the current options
  * @wiki declaring-functions
  */
 fun function(
@@ -295,6 +297,15 @@ fun function(
     name: String,
     @LikelyBody body: Lambda,
 ): VoidValue {
+    if (context.attachedPipeline?.options?.forbidFunctionOverwriting == true) {
+        val existingFunction = context.getFunctionByName(name)
+        if (existingFunction != null) {
+            throw IllegalStateException(
+                "Function ${existingFunction.signatureAsString()} already exists and function overwriting is turned off.",
+            )
+        }
+    }
+
     // Function parameters.
     val parameters =
         body.explicitParameters.mapIndexed { index, parameter ->

@@ -151,6 +151,14 @@ abstract class ExecuteCommand(
     private val noMediaStorage: Boolean by option("--no-media-storage", help = "Disables media storage").flag()
 
     /**
+     * When enabled, defining a function with an existing name raises an error, rather than overwriting the previous function definition.
+     */
+    private val forbidFunctionOverwriting: Boolean by option(
+        "--forbid-function-overwriting",
+        help = "Raise error on clashing function names",
+    ).flag()
+
+    /**
      * The strategy used to determine subdocument output file names.
      */
     private val subdocumentNaming: SubdocumentOutputNaming by option(
@@ -247,6 +255,7 @@ abstract class ExecuteCommand(
             wrapOutput = !noWrap,
             workingDirectory = cliOptions.source?.absoluteFile?.parentFile,
             enableMediaStorage = !noMediaStorage,
+            forbidFunctionOverwriting = forbidFunctionOverwriting,
             subdocumentNaming = subdocumentNaming,
             isPreview = preview,
             serverPort = serverPort.takeIf { preview },

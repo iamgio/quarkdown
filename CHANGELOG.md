@@ -28,6 +28,8 @@ QUARKDOWN
 quarkdown
 ```
 
+This behavior can be turned off with the new [`--forbid-function-overwriting`](https://quarkdown.com/wiki/cli-compiler#function-overwriting) CLI flag, which raises a compilation error instead.
+
 ## [2.1.2] - 2026-05-24
 
 ### Changed
