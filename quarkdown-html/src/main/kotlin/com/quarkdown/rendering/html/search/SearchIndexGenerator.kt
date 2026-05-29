@@ -58,7 +58,7 @@ object SearchIndexGenerator {
             .flatMap(::flatten)
             .map { item ->
                 SearchHeading(
-                    anchor = item.target.accept(HtmlIdentifierProvider.of(renderer = null)),
+                    anchor = item.target.accept(HtmlIdentifierProvider.of(renderer = null, context = context)),
                     text = item.text.toPlainText(),
                     level = item.depth,
                 )

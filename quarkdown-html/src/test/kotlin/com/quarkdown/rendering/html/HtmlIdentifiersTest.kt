@@ -1,5 +1,6 @@
 package com.quarkdown.rendering.html
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.inline.Text
@@ -69,5 +70,18 @@ class HtmlIdentifiersTest {
     fun `with chinese characters`() {
         assertIdEquals("abc-你好", "Abc 你好")
         assertIdEquals("你好-abc", "你好 abc")
+    }
+
+    @Test
+    fun `duplicate headings get suffixed ids when context root is available`() {
+        val first = Heading(1, listOf(Text("Task Requirements")))
+        val second = Heading(2, listOf(Text("Task Requirements")))
+        val context = MutableContext(QuarkdownFlavor)
+        context.attributes.root = AstRoot(listOf(first, second))
+
+        val contextAwareProvider = HtmlIdentifierProvider.of(QuarkdownHtmlNodeRenderer(context), context)
+
+        assertEquals("task-requirements", contextAwareProvider.getId(first))
+        assertEquals("task-requirements-1", contextAwareProvider.getId(second))
     }
 }

@@ -113,6 +113,48 @@ class TableOfContentsTest {
     }
 
     @Test
+    fun `table of contents handles duplicate heading titles with unique ids`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents
+
+            # Chapter One
+
+            ## Task Requirements
+
+            ## I/O Allocation
+
+            # Chapter Two
+
+            ## I/O Allocation
+
+            ## Task Requirements
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h1 id=\"table-of-contents\"></h1>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"chapter-one\" data-depth=\"1\"><a href=\"#chapter-one\">Chapter One</a>" +
+                    "<ol><li data-target-id=\"task-requirements\" data-depth=\"2\"><a href=\"#task-requirements\">Task Requirements</a></li>" +
+                    "<li data-target-id=\"io-allocation\" data-depth=\"2\"><a href=\"#io-allocation\">I/O Allocation</a></li></ol></li>" +
+                    "<li data-target-id=\"chapter-two\" data-depth=\"1\"><a href=\"#chapter-two\">Chapter Two</a>" +
+                    "<ol><li data-target-id=\"io-allocation-1\" data-depth=\"2\"><a href=\"#io-allocation-1\">I/O Allocation</a></li>" +
+                    "<li data-target-id=\"task-requirements-1\" data-depth=\"2\"><a href=\"#task-requirements-1\">Task Requirements</a></li></ol></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"chapter-one\">Chapter One</h1>" +
+                    "<h2 id=\"task-requirements\">Task Requirements</h2>" +
+                    "<h2 id=\"io-allocation\">I/O Allocation</h2>" +
+                    "<h1 id=\"chapter-two\">Chapter Two</h1>" +
+                    "<h2 id=\"io-allocation-1\">I/O Allocation</h2>" +
+                    "<h2 id=\"task-requirements-1\">Task Requirements</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `localized table of contents title (docs)`() {
         execute(
             """

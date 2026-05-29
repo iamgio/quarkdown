@@ -10,6 +10,28 @@ import {formatNumber} from "../../util/numbering";
  */
 export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>> {
     /**
+     * Resolves a table-of-contents anchor target by preferring the entry location label (`data-location`),
+     * then falling back to the link's hash id.
+     */
+    private getTableOfContentsTarget(anchor: HTMLAnchorElement): HTMLElement | undefined {
+        const location = anchor.closest('li')?.dataset.location;
+
+        if (location) {
+            const targetByLocation = Array.from(document.querySelectorAll<HTMLElement>('[data-location]')).find(candidate => {
+                return candidate.dataset.location === location
+                    && candidate.closest('nav[data-role="table-of-contents"]') === null;
+            });
+
+            if (targetByLocation) {
+                return targetByLocation;
+            }
+        }
+
+        const targetId = getAnchorTargetId(anchor);
+        return targetId ? document.getElementById(targetId) ?? undefined : undefined;
+    }
+
+    /**
      * Gets all elements that display the total page count.
      * @returns NodeList of total page number elements (`.total-page-number`)
      */
@@ -94,11 +116,37 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
         const tocs = document.querySelectorAll<HTMLElement>('nav[data-role="table-of-contents"]');
         tocs.forEach(nav => {
             nav.querySelectorAll<HTMLAnchorElement>(':scope a[href^="#"]').forEach(anchor => {
-                const targetId = getAnchorTargetId(anchor);
-                const target = targetId ? document.getElementById(targetId) : undefined;
+                const target = this.getTableOfContentsTarget(anchor);
                 const displayNumber = target ? this.quarkdownDocument.getDisplayPageNumber(this.quarkdownDocument.getPage(target)) : undefined;
                 this.setTableOfContentsPageNumber(anchor, displayNumber?.toString());
             });
+        });
+    }
+
+    /**
+     * Makes TOC interactions location-aware for numbered entries,
+     * so duplicate heading IDs across chapters still jump to the intended section.
+     */
+    private updateTableOfContentsNavigationTargets() {
+        const tocs = document.querySelectorAll<HTMLElement>('nav[data-role="table-of-contents"]');
+        tocs.forEach(nav => {
+            if (nav.dataset.locationAwareNavigationBound === 'true') {
+                return;
+            }
+
+            nav.querySelectorAll<HTMLAnchorElement>(':scope a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', event => {
+                    const target = this.getTableOfContentsTarget(anchor);
+                    if (!target) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    target.scrollIntoView();
+                });
+            });
+
+            nav.dataset.locationAwareNavigationBound = 'true';
         });
     }
 
@@ -127,5 +175,6 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
         this.updateTotalPageNumbers(pages);
         this.updateCurrentPageNumbers(pages);
         this.updateTableOfContentsPageNumbers();
+        this.updateTableOfContentsNavigationTargets();
     }
 }
