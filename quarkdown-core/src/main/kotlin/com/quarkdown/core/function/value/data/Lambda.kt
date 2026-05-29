@@ -119,17 +119,15 @@ open class Lambda(
         // whose values can be retrieved as function calls.
         val context = parentContext.fork()
 
-        // Register the arguments in the context, which can be accessed as function calls.
-        // Lambda parameters are added first so they take priority over the calling context's declarations.
-        context.libraries += createLambdaParametersLibrary(actualArguments)
-
         // Propagate the calling scope's own libraries (e.g. its lambda parameters, locally defined variables)
         // so that dynamic value references passed as body arguments can resolve variables from the calling scope.
-        // These are added after the lambda parameters so that the lambda's own parameters shadow any
-        // same-named declarations from the calling context.
         if (callingContext is MutableContext) {
             context.libraries += callingContext.libraries
         }
+
+        // Register the arguments in the context, which can be accessed as function calls.
+        // Lambda parameters are registered last so they shadow any same-named declarations from the calling context.
+        context.loadLibrary(createLambdaParametersLibrary(actualArguments))
 
         // The result of the lambda action is processed.
         return action(actualArguments, context)

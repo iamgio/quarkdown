@@ -25,7 +25,7 @@ open class SubdocumentContext(
     private val _fileSystem: FileSystem? = null,
 ) : MutableContext(
         flavor = parent.flavor,
-        libraries = emptySet(),
+        libraries = emptyList(),
         subdocument = subdocument,
     ),
     ChildContext<MutableContext> {

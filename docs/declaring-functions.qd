@@ -102,3 +102,20 @@ Quarkdown is [weakly typed](typing.qd), so functions can return any type of valu
 
     .if {.isadult age:{20}}
         You're an adult!
+
+## Overwriting functions
+
+A function can be redeclared at any point, and the new definition takes precedence over the previous one from that point onward within that scope.
+
+.exampleoutput output:{
+    QUARKDOWN
+
+    quarkdown
+}
+    .uppercase {Quarkdown}
+
+    .function {uppercase}
+        text:
+        .text::lowercase
+
+    .uppercase {Quarkdown}

@@ -315,7 +315,8 @@ fun function(
         }
 
     // The function is registered and ready to be called.
-    context.libraries += Library(CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name, setOf(function))
+    val library = Library(CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name, setOf(function))
+    context.loadLibrary(library)
 
     return VoidValue
 }
@@ -357,9 +358,9 @@ fun variable(
 ): VoidValue {
     val libraryName = CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name
 
-    fun containsVariable(libraries: Set<Library>) = libraries.any { it.name == libraryName }
+    fun containsVariable(libraries: Iterable<Library>) = libraries.any { it.name == libraryName }
 
-    fun removeVariable(libraries: MutableSet<Library>) {
+    fun removeVariable(libraries: MutableList<Library>) {
         libraries.removeIf { it.name == libraryName }
     }
 

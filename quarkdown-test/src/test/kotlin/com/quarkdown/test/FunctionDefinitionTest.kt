@@ -177,6 +177,44 @@ class FunctionDefinitionTest {
     }
 
     @Test
+    fun `function overwrite from same source`() {
+        execute(
+            """
+            .function {greet}
+                name:
+                Hello, .name!
+
+            .greet {Alice}
+
+            .function {greet}
+                name:
+                Hi, .name!
+
+            .greet {Bob}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Hello, Alice!</p><p>Hi, Bob!</p>", it)
+        }
+    }
+
+    @Test
+    fun `function overwrite from stdlib`() {
+        execute(
+            """
+            .uppercase {Hello}
+            
+            .function {uppercase}
+                text:
+                .text::lowercase
+            
+            .uppercase {Hello}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>HELLO</p><p>hello</p>", it)
+        }
+    }
+
+    @Test
     fun `recursive function with conditional base case`() {
         execute(
             """
