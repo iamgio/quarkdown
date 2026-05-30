@@ -39,6 +39,16 @@ class FileResourceExporterNameSanitizationTest {
     }
 
     @Test
+    fun `unicode letters are preserved`() {
+        assertEquals("abc123我爱你-_", sanitize("abc123我爱你-_"))
+    }
+
+    @Test
+    fun `unicode letters mixed with spaces`() {
+        assertEquals("封面-版本-2", sanitize("封面 版本 2"))
+    }
+
+    @Test
     fun spaces() {
         assertEquals("file-name", sanitize("file name"))
     }
