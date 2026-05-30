@@ -86,6 +86,22 @@ class HtmlPostRendererTest {
     }
 
     @Test
+    fun `wrap title is overridden by html options title`() {
+        context.documentInfo = DocumentInfo(name = "Doc title")
+        context.options.html = HtmlOptions(title = "Custom title")
+        val result = postRenderer().wrap("")
+        assertTrue("<title>Custom title</title>" in result)
+        assertFalse("<title>Doc title</title>" in result)
+    }
+
+    @Test
+    fun `wrap title override applies without document name`() {
+        context.options.html = HtmlOptions(title = "Only override")
+        val result = postRenderer().wrap("")
+        assertTrue("<title>Only override</title>" in result)
+    }
+
+    @Test
     fun `wrap includes authors`() {
         context.documentInfo =
             DocumentInfo(

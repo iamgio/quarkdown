@@ -6,6 +6,19 @@
 
 &nbsp;
 
+#### [Custom HTML title](https://quarkdown.com/wiki/html-options#custom-title)
+
+The new `title` parameter of [`.htmloptions`](https://quarkdown.com/wiki/html-options) lets you override the text that appears in the browser tab and in search engine results, independently of the document name:
+
+```markdown
+.docname {Quarkdown}
+.htmloptions title:{Quarkdown | Markdown with superpowers}
+```
+
+The `docs` project creator was also updated to automatically include this attribute on each page as `.docname | My project`.
+
+&nbsp;
+
 #### [Function overwriting](https://quarkdown.com/wiki/declaring-functions#overwriting-functions)
 
 It is now possible to overwrite any previously-declared function:
