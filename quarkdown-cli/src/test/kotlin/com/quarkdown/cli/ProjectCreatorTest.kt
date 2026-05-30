@@ -293,11 +293,12 @@ class ProjectCreatorTest {
         val main = resources.first { it.name == "main" }
 
         // _setup: name and doctype are excluded for docs.
-        assertTrue(".docname" !in setup.textContent)
+        assertTrue(".docname {" !in setup.textContent)
         assertTrue(".doctype" !in setup.textContent)
         // _setup: has page margin with name.
         assertContains(setup.textContent, ".pagemargin {topleft}")
         assertContains(setup.textContent, "Test")
+        assertContains(setup.textContent, ".htmloptions title:{.docname | Test}")
 
         // main: has .docname and .include {docs}.
         assertContains(main.textContent, ".docname {Test}")
@@ -319,7 +320,8 @@ class ProjectCreatorTest {
         // _setup: has description and page margin, but not .docname or .doctype.
         assertContains(setup.textContent, ".docdescription {A test document}")
         assertContains(setup.textContent, ".pagemargin {topleft}")
-        assertTrue(".docname" !in setup.textContent)
+        assertTrue(".docname {" !in setup.textContent)
+        assertTrue(".docname" in setup.textContent)
         assertTrue(".doctype" !in setup.textContent)
 
         // main: has .docname and .include {docs}.
@@ -352,7 +354,8 @@ class ProjectCreatorTest {
         assertContains(setup.textContent, ".pagemargin {topleft}")
 
         // _setup: no .docname or .doctype for docs.
-        assertTrue(".docname" !in setup.textContent)
+        assertTrue(".docname {" !in setup.textContent)
+        assertTrue(".docname" in setup.textContent)
         assertTrue(".doctype" !in setup.textContent)
     }
 

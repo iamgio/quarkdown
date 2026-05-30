@@ -75,7 +75,7 @@ class HtmlDocumentBuilder(
         canonicalLink()
         viewport()
         quarkdownMeta()
-        title(document.name ?: "Quarkdown")
+        title(context.options.html.title ?: document.name ?: "Quarkdown")
         quarkdownScript()
         texMacrosScript()
         thirdPartyLibraries()
