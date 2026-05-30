@@ -135,6 +135,21 @@ The generated PDF file is now `abc123我爱你.pdf`.
 
 Thanks @CarmJos!
 
+&nbsp;
+
+#### [Table of contents navigation for duplicate headings](https://quarkdown.com/wiki/table-of-contents)
+
+In HTML previews and exports, table of contents links now correctly navigate when multiple headings share the same title.
+
+This fix applies to both:
+
+- `.tableofcontents` content in the document body,
+- the docs sidebar navigation.
+
+Navigation and page labels are now resolved from each heading's location metadata, so entries point to the correct section even when heading text is duplicated across chapters.
+
+Thanks @CarmJos!
+
 ## [2.1.2] - 2026-05-24
 
 ### Changed

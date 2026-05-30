@@ -110,4 +110,40 @@ describe('PageNumbersDocumentHandler', () => {
         const numbers = Array.from(document.querySelectorAll<HTMLSpanElement>('.toc-page-number')).map(span => span.textContent);
         expect(numbers).toEqual(['1', '5']);
     });
+
+    it('uses table-of-contents data-location to resolve duplicated heading ids', async () => {
+        document.body.className = 'quarkdown quarkdown-paged';
+        document.body.innerHTML = `
+      <div class="pagedjs_page" data-page-number="1">
+        <div class="pagedjs_area">
+          <nav data-role="table-of-contents">
+            <ol>
+              <li data-location="1.1"><a href="#task-requirements">Task Requirements</a></li>
+              <li data-location="2.1"><a href="#task-requirements">Task Requirements</a></li>
+            </ol>
+          </nav>
+          <h2 id="task-requirements" data-location="1.1">Task Requirements</h2>
+          <span class="current-page-number">X</span>
+        </div>
+      </div>
+      <div class="pagedjs_page" data-page-number="2">
+        <div class="pagedjs_area">
+          <span class="page-number-reset" data-start="10"></span>
+          <h2 id="task-requirements" data-location="2.1">Task Requirements</h2>
+          <span class="current-page-number">Y</span>
+        </div>
+      </div>`;
+
+        const pages = Array.from(document.querySelectorAll<HTMLElement>('.pagedjs_page'));
+        const handler = new Concrete(new DummyDocument(pages));
+
+        await handler.onPostRendering();
+
+        const numbers = Array.from(document.querySelectorAll<HTMLSpanElement>('.toc-page-number')).map(span => span.textContent);
+        expect(numbers).toEqual(['1', '10']);
+
+        const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('nav[data-role="table-of-contents"] a'));
+        expect(links[0].getAttribute('href')).toBe('#task-requirements');
+        expect(links[1].getAttribute('href')).toBe('#qd-location-2-1');
+    });
 });

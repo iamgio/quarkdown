@@ -5,13 +5,67 @@
  * @param navigation - The navigation element containing items with `data-target-id` attributes
  */
 export function initNavigationActiveTracking(navigation: HTMLElement): void {
-    const items = navigation.querySelectorAll<HTMLLIElement>('li[data-target-id]');
+    const items = navigation.querySelectorAll<HTMLLIElement>('li[data-target-id], li[data-location]');
     if (items.length === 0) return;
+
+    const NAVIGATION_CONTAINER_SELECTOR = 'nav[role="doc-toc"], nav[data-role="table-of-contents"]';
+    const GENERATED_ID_PREFIX = 'qd-location-';
+
+    const escapeForAttributeSelector = (value: string): string =>
+        value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+
+    const toLocationToken = (location: string): string =>
+        location.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
+
+    const getAvailableId = (preferred: string): string => {
+        if (!document.getElementById(preferred)) {
+            return preferred;
+        }
+
+        let suffix = 2;
+        while (document.getElementById(`${preferred}-${suffix}`)) {
+            suffix += 1;
+        }
+        return `${preferred}-${suffix}`;
+    };
+
+    const ensureUniqueTargetId = (target: HTMLElement, location: string): string => {
+        const hasUsableId = target.id.length > 0 && document.getElementById(target.id) === target;
+        if (hasUsableId) {
+            return target.id;
+        }
+
+        const locationToken = toLocationToken(location) || 'item';
+        const generatedId = getAvailableId(`${GENERATED_ID_PREFIX}${locationToken}`);
+        target.id = generatedId;
+        return generatedId;
+    };
+
+    const resolveTargetByLocation = (location: string): HTMLElement | undefined => {
+        const escapedLocation = escapeForAttributeSelector(location);
+        const candidates = document.querySelectorAll<HTMLElement>(`[data-location="${escapedLocation}"]`);
+        return Array.from(candidates).find(element => !element.closest(NAVIGATION_CONTAINER_SELECTOR));
+    };
+
+    const resolveNavigationTargetId = (item: HTMLLIElement): string | undefined => {
+        const location = item.dataset.location;
+        if (location) {
+            const target = resolveTargetByLocation(location);
+            if (target) {
+                const targetId = ensureUniqueTargetId(target, location);
+                item.dataset.targetId = targetId;
+                item.querySelector<HTMLAnchorElement>('a[href^="#"]')?.setAttribute('href', `#${targetId}`);
+                return targetId;
+            }
+        }
+
+        return item.dataset.targetId;
+    };
 
     // Map target IDs to their corresponding navigation items
     const targetToItem = new Map<string, HTMLLIElement>();
     items.forEach(item => {
-        const targetId = item.dataset.targetId;
+        const targetId = resolveNavigationTargetId(item);
         if (targetId) {
             targetToItem.set(targetId, item);
         }
