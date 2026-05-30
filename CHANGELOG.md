@@ -30,6 +30,24 @@ quarkdown
 
 This behavior can be turned off with the new [`--forbid-function-overwriting`](https://quarkdown.com/wiki/cli-compiler#function-overwriting) CLI flag, which raises a compilation error instead.
 
+&nbsp;
+
+### Fixed
+
+&nbsp;
+
+#### Preserve Unicode characters in output names
+
+When compiling with `--out-name`, output file names now preserve Unicode letters and numbers instead of replacing them with dashes.
+
+For example, this command now keeps the Chinese characters in the file name:
+
+```shell
+quarkdown c src/_main.qd --pdf --allow all --out-name abc123我爱你-_ -o .asset/
+```
+
+The generated PDF file is now `abc123我爱你-_.pdf`.
+
 ## [2.1.2] - 2026-05-24
 
 ### Changed
