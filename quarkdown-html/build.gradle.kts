@@ -4,7 +4,7 @@ import groovy.json.JsonSlurper
 
 plugins {
     kotlin("jvm")
-    kotlin("plugin.serialization") version "2.3.10"
+    kotlin("plugin.serialization") version "2.3.21"
     id("com.github.node-gradle.node") version "7.1.0"
     id("io.miret.etienne.sass") version "1.6.0"
 }
@@ -19,7 +19,7 @@ dependencies {
     implementation(project(":quarkdown-plaintext")) // For search index generation
     implementation(project(":quarkdown-install-layout-navigator"))
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 }
 
 tasks.compileSass {
