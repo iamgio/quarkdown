@@ -38,15 +38,17 @@ This behavior can be turned off with the new [`--forbid-function-overwriting`](h
 
 #### Preserve Unicode characters in output names
 
-When compiling with `--out-name`, output file names now preserve Unicode letters and numbers instead of replacing them with dashes.
+Output file names now preserve Unicode letters and numbers instead of replacing them with dashes.
 
 For example, this command now keeps the Chinese characters in the file name:
 
 ```shell
-quarkdown c src/_main.qd --pdf --allow all --out-name abc123我爱你-_ -o .asset/
+quarkdown c main.qd --pdf --out-name abc123我爱你
 ```
 
-The generated PDF file is now `abc123我爱你-_.pdf`.
+The generated PDF file is now `abc123我爱你.pdf`.
+
+Thanks @CarmJos!
 
 ## [2.1.2] - 2026-05-24
 
