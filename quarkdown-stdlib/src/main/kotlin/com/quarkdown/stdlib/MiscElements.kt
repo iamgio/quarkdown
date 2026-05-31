@@ -34,7 +34,7 @@ val MiscElements: QuarkdownModule =
  * Example:
  * ```
  * .filetree
- *     - src/
+ *     - src
  *       - main.ts
  *       - utils.ts
  *     - target/

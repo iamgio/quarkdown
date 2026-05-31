@@ -14,19 +14,7 @@ The slash is only a marker and is not rendered.
             - Button.ts
             - Card.ts
           - index.ts
-        - README.md
-
-## Explicit directory marker
-
-A trailing slash is useful for empty directories and for disambiguating names.
-
-.examplemirror
-    .filetree
-        - src/
-          - main.c
         - target/
-        - docs
-          - guide.md
         - README.md
 
 ## Ellipsis
