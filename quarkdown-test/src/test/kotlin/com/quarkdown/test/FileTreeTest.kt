@@ -139,4 +139,49 @@ class FileTreeTest {
             )
         }
     }
+
+    @Test
+    fun `explicit empty directory marker`() {
+        execute(
+            """
+            .filetree
+                - src/
+                - target/
+                - README.md
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"file-tree\"><ul>" +
+                    "<li class=\"directory\" data-name=\"src\">src<ul></ul></li>" +
+                    "<li class=\"directory\" data-name=\"target\">target<ul></ul></li>" +
+                    "<li class=\"file\" data-name=\"README.md\">README.md</li>" +
+                    "</ul></div>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `explicit directory marker with children`() {
+        execute(
+            """
+            .filetree
+                - docs/
+                  - guide.md
+                - docs
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"file-tree\"><ul>" +
+                    "<li class=\"directory\" data-name=\"docs\">docs" +
+                    "<ul>" +
+                    "<li class=\"file\" data-name=\"guide.md\">guide.md</li>" +
+                    "</ul>" +
+                    "</li>" +
+                    "<li class=\"file\" data-name=\"docs\">docs</li>" +
+                    "</ul></div>",
+                it,
+            )
+        }
+    }
 }

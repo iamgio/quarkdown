@@ -27,12 +27,17 @@ val MiscElements: QuarkdownModule =
  * Creates a visual file tree from a Markdown list.
  * Each inline item is rendered as a file, and each nested list as a directory.
  *
+ * To explicitly mark an item as a directory, add a trailing slash (`/`).
+ * This is useful for empty directories that have no nested children.
+ * The slash marker is not shown in the rendered output.
+ *
  * Example:
  * ```
  * .filetree
- *     - src
+ *     - src/
  *       - main.ts
  *       - utils.ts
+ *     - target/
  *     - README.md
  * ```
  * @param content body content containing a Markdown list that defines the file tree structure

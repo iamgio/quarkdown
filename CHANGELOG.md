@@ -63,6 +63,28 @@ The generated PDF file is now `abc123我爱你.pdf`.
 
 Thanks @CarmJos!
 
+&nbsp;
+
+#### [File tree explicit directories](https://quarkdown.com/wiki/file-tree)
+
+The `.filetree` block now accepts a trailing slash (`/`) marker so you can explicitly render directories, including empty ones.
+
+For example:
+
+```markdown
+.filetree
+    - src/
+      - main.c
+    - target/
+    - docs
+      - guide.md
+    - README.md
+```
+
+In this example, `target/` is now rendered as an empty folder, while entries with children still work as directories without needing the slash.
+
+Thanks @CarmJos!
+
 ## [2.1.2] - 2026-05-24
 
 ### Changed

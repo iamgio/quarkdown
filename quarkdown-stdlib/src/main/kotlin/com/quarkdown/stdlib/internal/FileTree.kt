@@ -26,9 +26,19 @@ private fun Node.isHighlighted(): Boolean =
         (this is NestableNode && children.any { it.isHighlighted() })
 
 /**
+ * Checks whether the entry name explicitly marks a directory (`name/`).
+ */
+private fun String.isExplicitDirectory(): Boolean = endsWith("/")
+
+/**
+ * Removes a trailing directory marker slash from an entry name.
+ */
+private fun String.stripDirectoryMarker(): String = if (isExplicitDirectory()) dropLast(1) else this
+
+/**
  * Recursively converts a Markdown [ListBlock] into a flat list of [FileTreeEntry] elements.
- * Inline items become [FileTreeEntry.File]s, nested items become [FileTreeEntry.Directory]s,
- * and items with `...` as text become [FileTreeEntry.Ellipsis].
+ * Inline items become [FileTreeEntry.File]s unless they explicitly end with `/`,
+ * nested items become [FileTreeEntry.Directory]s, and items with `...` as text become [FileTreeEntry.Ellipsis].
  * Entries wrapped in strong emphasis are marked as highlighted.
  */
 internal fun fileTreeFromList(list: ListBlock): List<FileTreeEntry> =
@@ -37,15 +47,16 @@ internal fun fileTreeFromList(list: ListBlock): List<FileTreeEntry> =
         inlineValueMapper = { node, _ ->
             val text = listOf(node).toPlainText()
             val highlighted = node.isHighlighted()
-            if (text in ELLIPSIS_TEXTS) {
-                FileTreeEntry.Ellipsis(highlighted)
-            } else {
-                FileTreeEntry.File(text, highlighted)
+            when {
+                text in ELLIPSIS_TEXTS -> FileTreeEntry.Ellipsis(highlighted)
+                text.isExplicitDirectory() -> FileTreeEntry.Directory(text.stripDirectoryMarker(), emptyList(), highlighted)
+                else -> FileTreeEntry.File(text, highlighted)
             }
         },
         nestedValueMapper = { parent, nestedList ->
+            val text = listOf(parent).toPlainText().stripDirectoryMarker()
             FileTreeEntry.Directory(
-                listOf(parent).toPlainText(),
+                text,
                 fileTreeFromList(nestedList),
                 highlighted = parent.isHighlighted(),
             )
