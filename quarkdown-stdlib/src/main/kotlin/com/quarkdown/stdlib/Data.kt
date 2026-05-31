@@ -226,11 +226,13 @@ fun listFiles(
         throw IllegalArgumentException("Path $rootDirectory is not a directory.")
     }
 
+    val pattern = if (regex) path.toRegex() else null
+
     val files =
         listFiles(rootDirectory, recursive)
             .filter { listDirectories || it.isFile }
             .filter { currentFile ->
-                !regex || path.toRegex().matches(fileMatchingName(rootDirectory, currentFile, fullPath))
+                pattern == null || pattern.matches(fileMatchingName(rootDirectory, currentFile, fullPath))
             }.let { sortBy.sort(it, order) }
             .map { if (fullPath) it.absolutePath else it.name }
             .map(::StringValue)
