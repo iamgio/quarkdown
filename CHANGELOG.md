@@ -45,26 +45,6 @@ This behavior can be turned off with the new [`--forbid-function-overwriting`](h
 
 &nbsp;
 
-### Fixed
-
-&nbsp;
-
-#### Preserve Unicode characters in output names
-
-Output file names now preserve Unicode letters and numbers instead of replacing them with dashes.
-
-For example, this command now keeps the Chinese characters in the file name:
-
-```shell
-quarkdown c main.qd --pdf --out-name abc123我爱你
-```
-
-The generated PDF file is now `abc123我爱你.pdf`.
-
-Thanks @CarmJos!
-
-&nbsp;
-
 #### [File tree explicit directories](https://quarkdown.com/wiki/file-tree)
 
 The `.filetree` block now accepts a trailing slash (`/`) marker so you can explicitly render directories, including empty ones.
@@ -82,6 +62,26 @@ For example:
 ```
 
 In this example, `target/` is now rendered as an empty folder, while entries with children still work as directories without needing the slash.
+
+Thanks @CarmJos!
+
+&nbsp;
+
+### Fixed
+
+&nbsp;
+
+#### Preserve Unicode characters in output names
+
+Output file names now preserve Unicode letters and numbers instead of replacing them with dashes.
+
+For example, this command now keeps the Chinese characters in the file name:
+
+```shell
+quarkdown c main.qd --pdf --out-name abc123我爱你
+```
+
+The generated PDF file is now `abc123我爱你.pdf`.
 
 Thanks @CarmJos!
 
