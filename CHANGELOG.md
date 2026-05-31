@@ -45,6 +45,28 @@ This behavior can be turned off with the new [`--forbid-function-overwriting`](h
 
 &nbsp;
 
+#### [File tree explicit directories](https://quarkdown.com/wiki/file-tree)
+
+The `.filetree` block now accepts a trailing slash (`/`) marker so you can explicitly render directories, including empty ones.
+
+For example:
+
+```markdown
+.filetree
+    - src/
+      - main.c
+    - target/
+    - docs
+      - guide.md
+    - README.md
+```
+
+In this example, `target/` is now rendered as an empty folder, while entries with children still work as directories without needing the slash.
+
+Thanks @CarmJos!
+
+&nbsp;
+
 ### Fixed
 
 &nbsp;
