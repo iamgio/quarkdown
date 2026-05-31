@@ -30,10 +30,21 @@ Open ranges work as follows:
 
 The **`.listfiles {path} {sortby?} {order?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/listfiles.html} function returns an [iterable](iterable.qd) of the files in a directory. The result is unordered by default, but you can sort it by name or date.
 
+By default, `path` is treated as a literal directory path. You can optionally:
+
+- Set `recursive:{yes}` to traverse nested subdirectories.
+- Set `regex:{yes}` to treat `path` as a regular expression pattern.
+
+When `regex:{yes}`, Quarkdown traverses from the current working directory. The pattern is applied to each entry name when `fullpath:{no}`, or to each relative path when `fullpath:{yes}`.
+
 Like any other collection, you can iterate over the result or supply it to other functions. For example, you can perform automatic bulk inclusions via [`.includeall`](including-other-quarkdown-files.qd):
 
 ```markdown
 .includeall {.listfiles {somedirectory} sortby:{name}}
+```
+
+```markdown
+.listfiles {^chapters/.+\\.qd$} regex:{yes} recursive:{yes} fullpath:{yes} sortby:{name}
 ```
 
 ## Getting a file name
