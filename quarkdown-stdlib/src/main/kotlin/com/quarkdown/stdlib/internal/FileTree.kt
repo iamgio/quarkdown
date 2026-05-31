@@ -26,14 +26,26 @@ private fun Node.isHighlighted(): Boolean =
         (this is NestableNode && children.any { it.isHighlighted() })
 
 /**
- * Checks whether the entry name explicitly marks a directory (`name/`).
+ * Trims trailing whitespace used around list item text before marker inspection.
  */
-private fun String.isExplicitDirectory(): Boolean = endsWith("/")
+private fun String.normalizeDirectoryMarkerInput(): String = trimEnd()
 
 /**
- * Removes a trailing directory marker slash from an entry name.
+ * Checks whether the entry name explicitly marks a directory (`name/`).
+ * A single `/` is treated as a literal file name, not as a marker.
  */
-private fun String.stripDirectoryMarker(): String = if (isExplicitDirectory()) dropLast(1) else this
+private fun String.isExplicitDirectory(): Boolean {
+    val normalized = normalizeDirectoryMarkerInput()
+    return normalized.length > 1 && normalized.endsWith("/")
+}
+
+/**
+ * Removes a trailing directory marker slash from an entry name when present.
+ */
+private fun String.stripDirectoryMarker(): String {
+    val normalized = normalizeDirectoryMarkerInput()
+    return if (normalized.isExplicitDirectory()) normalized.dropLast(1) else this
+}
 
 /**
  * Recursively converts a Markdown [ListBlock] into a flat list of [FileTreeEntry] elements.
