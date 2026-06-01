@@ -6,16 +6,40 @@
 
 &nbsp;
 
-#### [Custom HTML title](https://quarkdown.com/wiki/html-options#custom-title)
+#### [Extending functions](https://quarkdown.com/wiki/extending-functions)
 
-The new `title` parameter of [`.htmloptions`](https://quarkdown.com/wiki/html-options) lets you override the text that appears in the browser tab and in search engine results, independently of the document name:
+The new `.extend` function lets you wrap any previously-declared function, transforming or replacing its output without losing the original definition:
 
 ```markdown
-.docname {Quarkdown}
-.htmloptions title:{Quarkdown | Markdown with superpowers}
+.function {greet}
+    greeting name:
+    .greeting, .name!
+
+.greet {Hello} {world}
+
+.extend {greet}
+    super name:
+    .if {.name::equals {world}}
+        .super::uppercase
+    .ifnot {.name::equals {world}}
+        .super
+
+.greet {Hello} {world}
+
+.greet {Hey} {everyone}
 ```
 
-The `docs` project creator was also updated to automatically include this attribute on each page as `.docname | My project`.
+Output:
+
+```markdown
+Hello, world!
+
+HELLO, WORLD!
+
+Hey, everyone!
+```
+
+The wrapper body receives the result of the original function (conventionally called `super`) as its first parameter, followed by the original function's parameters.
 
 &nbsp;
 
@@ -42,6 +66,21 @@ quarkdown
 ```
 
 This behavior can be turned off with the new [`--forbid-function-overwriting`](https://quarkdown.com/wiki/cli-compiler#function-overwriting) CLI flag, which raises a compilation error instead.
+
+Unlike `.extend`, which wraps the previous function and keeps its output reachable via `super`, this fully replaces the previous definition, so its return value and parameters are no longer accessible.
+
+&nbsp;
+
+#### [Custom HTML title](https://quarkdown.com/wiki/html-options#custom-title)
+
+The new `title` parameter of [`.htmloptions`](https://quarkdown.com/wiki/html-options) lets you override the text that appears in the browser tab and in search engine results, independently of the document name:
+
+```markdown
+.docname {Quarkdown}
+.htmloptions title:{Quarkdown | Markdown with superpowers}
+```
+
+The `docs` project creator was also updated to automatically include this attribute on each page as `.docname | My project name`.
 
 &nbsp;
 

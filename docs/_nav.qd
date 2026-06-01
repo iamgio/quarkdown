@@ -12,6 +12,7 @@
   - [Chaining calls](syntax-of-a-function-call.qd#chaining-calls)
   - [Block vs. inline calls](syntax-of-a-function-call.qd#block-vs-inline-function-calls)
 - [Declaring functions](declaring-functions.qd)
+- [Extending functions](extending-functions.qd)
 - [Dynamic typing](typing.qd)
 - [Localization](localization.qd)
 

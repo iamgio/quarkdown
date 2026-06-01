@@ -3,8 +3,8 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.ScopeContext
-import com.quarkdown.core.function.FunctionParameter
-import com.quarkdown.core.function.SimpleFunction
+import com.quarkdown.core.function.Function
+import com.quarkdown.core.function.call.executeAs
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
@@ -25,6 +25,8 @@ import com.quarkdown.core.function.value.data.LambdaParameter
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.stdlib.internal.CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX
+import com.quarkdown.stdlib.internal.declareFunction
 
 /**
  * `Flow` stdlib module exporter.
@@ -37,6 +39,7 @@ val Flow: QuarkdownModule =
         ::forEach,
         ::repeat,
         ::function,
+        ::extend,
         ::variable,
         ::let,
         ::node,
@@ -223,12 +226,6 @@ fun repeat(
 ): IterableValue<OutputValue<*>> = forEach(Range(1, times), body)
 
 /**
- * Custom functions (via [function]) and variables (via [variable]) are saved in a [Library]
- * whose name begins by this string.
- */
-private const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
-
-/**
  * Defines a custom function that can be called later in the document.
  *
  * The function is saved in the current context, and can be shared via mechanisms such as [include] or subdocuments.
@@ -306,28 +303,98 @@ fun function(
         }
     }
 
-    // Function parameters.
-    val parameters =
-        body.explicitParameters.mapIndexed { index, parameter ->
-            FunctionParameter(parameter.name, type = DynamicValue::class, index, parameter.isOptional)
+    declareFunction(context, name, body.explicitParameters) { call, args, _ ->
+        // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
+        // The calling context is propagated so that dynamic value references within the lambda body
+        // can resolve variables from the calling scope.
+        body.invokeDynamic(args, callingContext = call.context)
+    }
+
+    return VoidValue
+}
+
+/**
+ * Defines a custom function that extends an existing one by name, wrapping its output.
+ *
+ * The body lambda receives an optional first parameter (conventionally called `super`),
+ * which holds the result of the original function for the same arguments,
+ * followed by the original function's parameters in their declared order.
+ * All wrapper parameters are optional, regardless of whether the original parameters are.
+ *
+ * ```
+ * .function {greet}
+ *     name:
+ *     Hello, .name
+ *
+ * .extend {greet}
+ *     super:
+ *     .super::uppercase
+ *
+ * .greet {World}
+ * ```
+ *
+ * > Output: `HELLO, WORLD`
+ *
+ * The wrapper can also reference the original parameters by name to alter the behavior conditionally:
+ *
+ * ```
+ * .extend {greet}
+ *     super name:
+ *     .if {.name::equals {World}}
+ *         .super::uppercase
+ *     .ifnot {.name::equals {World}}
+ *         .super
+ * ```
+ *
+ * In implicit form, the parameters can be accessed positionally:
+ *
+ * ```
+ * .extend {greet}
+ *     .1::uppercase
+ * ```
+ *
+ * @param name name of the existing function to extend
+ * @param body wrapper content. Its first parameter is bound to the original function's output;
+ *             any further explicit parameters must match the original function's parameter names
+ * @throws IllegalArgumentException if no function named [name] exists, or if any explicit parameter
+ *         beyond `super` does not match an original parameter
+ * @wiki extending-functions
+ */
+fun extend(
+    @Injected context: MutableContext,
+    name: String,
+    @LikelyBody body: Lambda,
+): VoidValue {
+    val targetFunction: Function<*> =
+        context.getFunctionByName(name)
+            ?: throw IllegalArgumentException("Cannot extend function $name because it does not exist.")
+
+    // The wrapper exposes the same parameters as the target, plus `super` which is internal to the lambda.
+    val superParameter = body.explicitParameters.firstOrNull()?.copy(isOptional = true)
+    val wrapperParameters = targetFunction.parameters.map { LambdaParameter(it.name, isOptional = true) }
+    val lambdaParameters =
+        when (superParameter) {
+            null -> emptyList()
+            else -> listOf(superParameter) + wrapperParameters
         }
 
-    // The custom function itself.
-    val function =
-        SimpleFunction(name, parameters) { bindings, call ->
-            // Retrieving arguments from the function call.
-            // `None` is used as a default value if the argument for an optional parameter is not provided.
-            val args: List<Value<*>> = parameters.map { bindings[it]?.value ?: NoneValue }
+    // After the first (which represents `super`), every explicit body parameter must match an original parameter by name.
+    val targetNames = targetFunction.parameters.mapTo(mutableSetOf()) { it.name }
+    val unresolved = body.explicitParameters.drop(1).filter { it.name !in targetNames }
+    if (unresolved.isNotEmpty()) {
+        throw IllegalArgumentException(
+            "The following parameters are not part of ${targetFunction.signatureAsString()}: " +
+                unresolved.joinToString { it.name },
+        )
+    }
 
-            // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
-            // The calling context is propagated so that dynamic value references within the lambda body
-            // can resolve variables from the calling scope.
-            body.invokeDynamic(args, callingContext = call.context)
-        }
+    val lambda = Lambda(context, lambdaParameters, body.action)
 
-    // The function is registered and ready to be called.
-    val library = Library(CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name, setOf(function))
-    context.loadLibrary(library)
+    declareFunction(context, name, wrapperParameters) { call, args, _ ->
+        val wrappedResult = call.executeAs(targetFunction)
+        val lambdaArgs = listOf(wrappedResult) + args
+        lambda.invokeDynamic(lambdaArgs, callingContext = call.context)
+    }
 
     return VoidValue
 }
