@@ -186,6 +186,48 @@ class HeadingTest {
     }
 
     @Test
+    fun `custom identifiers that only collide after sanitization are disambiguated`() {
+        // The deduplication key is the sanitized identifier, so customIds whose only difference
+        // is stripped by sanitization (whitespace here) are recognised as a collision.
+        execute(
+            """
+            .noautopagebreak
+
+            ## A {#a b}
+
+            ## B {#ab}
+            """.trimIndent(),
+            options = DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h2 id=\"ab\">A</h2>" +
+                    "<h2 id=\"ab-2\">B</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `digit-leading identifiers that collide after sanitization are disambiguated`() {
+        execute(
+            """
+            .noautopagebreak
+
+            ## A {#123}
+
+            ## B {#_123}
+            """.trimIndent(),
+            options = DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h2 id=\"_123\">A</h2>" +
+                    "<h2 id=\"_123-2\">B</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `heading primitive depth out of range`() {
         assertFailsWith<FunctionCallRuntimeException> {
             execute(".heading {Hello} depth:{0}") {}

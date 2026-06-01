@@ -1,5 +1,7 @@
 package com.quarkdown.core.util
 
+import java.util.Locale
+
 /**
  * @param prefix prefix to remove
  * @param ignoreCase whether to ignore case when searching for the prefix
@@ -112,7 +114,7 @@ fun String.sanitizeFileName(replacement: String) = this.replace("^\\.|\\.$|[^\\p
 
 /**
  * Converts [this] string to a URI-like identifier:
- * - Lowercased.
+ * - Lowercased
  * - Whitespace runs are replaced with dashes.
  * - Characters other than Unicode letters, Unicode digits and `-` are stripped.
  *
@@ -121,9 +123,29 @@ fun String.sanitizeFileName(replacement: String) = this.replace("^\\.|\\.$|[^\\p
  */
 fun String.toUriIdentifier(): String =
     this
-        .lowercase()
+        .lowercase(Locale.ROOT)
         .replace("\\s+".toRegex(), "-")
         .replace("[^\\p{L}\\p{N}-]".toRegex(), "")
+
+/**
+ * Sanitizes [this] string for use as a stable, anchor-like identifier:
+ * - Strips characters that are problematic in CSS selectors and URL fragments
+ *   (whitespace, quotes, angle brackets, ampersands).
+ * - Ensures the result is not empty: an empty input becomes `_`.
+ * - Ensures the result does not start with a digit by prepending `_` when needed (see issue #86).
+ *
+ * Shared between rendering-time HTML id generation and deduplication keying, so that two
+ * identifiers that sanitize to the same string are recognised as collisions before they reach the output.
+ * @return a safe identifier string, possibly different from the original
+ */
+fun String.sanitizeAsIdentifier(): String {
+    val stripped = this.replace("[\\s\"'<>&]".toRegex(), "")
+    return when {
+        stripped.isEmpty() -> "_"
+        stripped.first().isDigit() -> "_$stripped"
+        else -> stripped
+    }
+}
 
 /**
  * @return [this] string with line separators replaced with `\n`,

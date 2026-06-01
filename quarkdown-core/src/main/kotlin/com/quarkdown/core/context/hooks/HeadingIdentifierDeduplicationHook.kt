@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.iterator.AstIteratorHook
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.util.node.toPlainText
+import com.quarkdown.core.util.sanitizeAsIdentifier
 import com.quarkdown.core.util.toUriIdentifier
 
 /**
@@ -26,7 +27,9 @@ class HeadingIdentifierDeduplicationHook(
         val occurrences = mutableMapOf<String, Int>()
 
         iterator.on<Heading> { heading ->
-            val baseId = heading.customId ?: heading.text.toPlainText().toUriIdentifier()
+            val baseId =
+                (heading.customId ?: heading.text.toPlainText().toUriIdentifier())
+                    .sanitizeAsIdentifier()
             val index = occurrences.getOrDefault(baseId, 0)
             occurrences[baseId] = index + 1
 

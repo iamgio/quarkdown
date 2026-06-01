@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.rendering.NodeRenderer
 import com.quarkdown.core.util.node.toPlainText
+import com.quarkdown.core.util.sanitizeAsIdentifier
 import com.quarkdown.core.util.toUriIdentifier
 
 /**
@@ -48,20 +49,8 @@ class HtmlIdentifierProvider private constructor(
         ) = HtmlIdentifierProvider(renderer, context)
 
         /**
-         * Sanitizes a string for use as an HTML element `id` attribute:
-         * - Strips characters that are problematic in CSS selectors and URL fragments
-         *   (spaces, quotes, angle brackets, etc.).
-         * - Ensures the result is not empty.
-         * - Ensures the result does not start with a digit (#86).
-         * @return a safe identifier string, possibly different from the original
+         * Sanitizes a string for use as an HTML element `id` attribute.
          */
-        fun sanitizeId(id: String): String {
-            val stripped = id.replace("[\\s\"'<>&]".toRegex(), "")
-            return when {
-                stripped.isEmpty() -> "_"
-                stripped.first().isDigit() -> "_$stripped"
-                else -> stripped
-            }
-        }
+        fun sanitizeId(id: String): String = id.sanitizeAsIdentifier()
     }
 }
