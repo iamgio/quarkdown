@@ -226,24 +226,11 @@ fun listFiles(
         throw IllegalArgumentException("Path $rootDirectory is not a directory.")
     }
 
-    val pattern = if (regex) path.toRegex() else null
-
     val files =
         listFiles(rootDirectory, recursive)
             .filter { listDirectories || it.isFile }
             .filter { currentFile ->
-                pattern == null ||
-                    pattern.matches(
-                        if (fullPath) {
-                            rootDirectory
-                                .toPath()
-                                .relativize(currentFile.toPath())
-                                .toString()
-                                .replace(File.separatorChar, '/')
-                        } else {
-                            currentFile.name
-                        },
-                    )
+                !regex || path.toRegex().matches(fileMatchingName(rootDirectory, currentFile, fullPath))
             }.let { sortBy.sort(it, order) }
             .map { if (fullPath) it.absolutePath else it.name }
             .map(::StringValue)
@@ -262,6 +249,26 @@ private fun listFiles(
         directory.walkTopDown().drop(1)
     } else {
         directory.listFiles()?.asSequence() ?: emptySequence()
+    }
+
+/**
+ * Returns the matching key for [file] used by [listFiles] regex filtering.
+ * When [fullPath] is `true`, the result is the forward-slash-normalised path
+ * relative to [rootDirectory]; otherwise it is simply the file name.
+ */
+private fun fileMatchingName(
+    rootDirectory: File,
+    file: File,
+    fullPath: Boolean,
+): String =
+    if (fullPath) {
+        rootDirectory
+            .toPath()
+            .relativize(file.toPath())
+            .toString()
+            .replace(File.separatorChar, '/')
+    } else {
+        file.name
     }
 
 /**
