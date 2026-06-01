@@ -46,7 +46,7 @@ class DocumentTypeConstraintsTransformerTest :
             "func",
         ) {
             assertContainsNormalGeneration(it)
-            assertFalse("Target" in it)
+            assertFalse(">Target<" in it)
         }
     }
 
@@ -67,7 +67,7 @@ class DocumentTypeConstraintsTransformerTest :
             "func",
         ) {
             assertContainsNormalGeneration(it)
-            assertContains(it, "Target")
+            assertContains(it, ">Target<")
             assertContains(it, "paged")
         }
     }
@@ -89,7 +89,7 @@ class DocumentTypeConstraintsTransformerTest :
             "func",
         ) {
             assertContainsNormalGeneration(it)
-            assertContains(it, "Target")
+            assertContains(it, ">Target<")
             assertContains(it, "paged")
             assertContains(it, "slides")
         }
@@ -113,7 +113,7 @@ class DocumentTypeConstraintsTransformerTest :
             "abc",
         ) {
             assertContainsNormalGeneration(it)
-            assertContains(it, "Target")
+            assertContains(it, ">Target<")
             assertContains(it, "paged")
             assertContains(it, "abc")
             assertFalse("(?<!/)oldFunc".toRegex() in it)
@@ -137,7 +137,7 @@ class DocumentTypeConstraintsTransformerTest :
             "func",
         ) {
             assertContainsNormalGeneration(it)
-            assertContains(it, "Target")
+            assertContains(it, ">Target<")
             assertContains(it, "plain")
             assertContains(it, "slides")
             assertFalse("paged" in it)
@@ -153,7 +153,7 @@ class DocumentTypeConstraintsTransformerTest :
             """.trimIndent(),
             "func",
         ) {
-            assertContains(it, "Target")
+            assertContains(it, ">Target<")
             assertContains(it, "plain")
             assertFalse("slides" in it)
             assertFalse("paged" in it)
@@ -169,7 +169,7 @@ class DocumentTypeConstraintsTransformerTest :
             """.trimIndent(),
             "func",
         ) {
-            assertContains(it, "Target")
+            assertContains(it, ">Target<")
             assertContains(it, "plain")
             assertContains(it, "slides")
             assertContains(it, "paged")

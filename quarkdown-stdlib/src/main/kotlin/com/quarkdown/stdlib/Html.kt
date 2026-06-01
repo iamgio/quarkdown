@@ -3,6 +3,8 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.base.block.Html
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.options.HtmlOptions
+import com.quarkdown.core.context.options.merge
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
@@ -32,23 +34,29 @@ val Html: QuarkdownModule =
  * Configures HTML generation options.
  *
  * ```markdown
- * .htmloptions baseurl:{https://example.com}
+ * .htmloptions baseurl:{https://example.com} title:{My Page}
  * ```
+ *
+ * Successive calls to this function merge with the previous options.
  *
  * @param baseUrl the base URL to use for resolving relative paths in the generated HTML, e.g. `https://example.com`.
  *                Trailing slashes are automatically ignored.
  *                If specified, a canonical link is set in the HTML's `<head>` and the sitemap is generated.
+ * @param title overrides the document name used in the HTML `<title>` tag.
+ *              If unspecified, the document name (set via `.docname`) is used.
  * @wiki html-options
  */
 @Name("htmloptions")
 fun htmlOptions(
     @Injected context: MutableContext,
     @Name("baseurl") baseUrl: String? = null,
+    title: String? = null,
 ) = VoidValue.also {
     context.options.html =
-        context.options.html.copy(
+        HtmlOptions(
             baseUrl = baseUrl?.trimEnd('/'),
-        )
+            title = title,
+        ).merge(context.options.html)
 }
 
 /**

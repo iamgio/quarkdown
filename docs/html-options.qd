@@ -19,3 +19,12 @@ The `baseurl` parameter sets the base URL of the generated website for SEO purpo
 ```
 
 > Tip: Setting a base URL is recommended when publishing a Quarkdown document as a website, especially for `docs` projects with multiple subdocuments.
+
+## Custom title
+
+The `title` parameter overrides the text shown in the browser tab and in search engine results, independently of the document name set via `.docname`.
+
+```markdown
+.docname {Quarkdown}
+.htmloptions title:{Quarkdown | Markdown with superpowers}
+```

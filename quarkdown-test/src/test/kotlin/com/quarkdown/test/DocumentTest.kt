@@ -195,10 +195,36 @@ class DocumentTest {
     }
 
     @Test
+    fun `html options title`() {
+        execute(
+            """
+            .docname {Doc name}
+            .htmloptions title:{Custom title}
+            """.trimIndent(),
+        ) {
+            assertEquals("Custom title", options.html.title)
+            assertEquals("Doc name", documentInfo.name)
+        }
+    }
+
+    @Test
     fun `html options default`() {
         execute("") {
             assertEquals(HtmlOptions(), options.html)
             assertNull(options.html.baseUrl)
+            assertNull(options.html.title)
+        }
+    }
+
+    @Test
+    fun `html options merging`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com} title:{Custom title}
+            .htmloptions title:{Overridden title}
+            """.trimIndent(),
+        ) {
+            assertEquals(HtmlOptions(baseUrl = "https://example.com", title = "Overridden title"), options.html)
         }
     }
 

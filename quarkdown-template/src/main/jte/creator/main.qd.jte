@@ -40,6 +40,10 @@ ${""}
 ${"  "}- ${item}
 @endfor
 @endif
+@if(docs)
+${""}
+.htmloptions baseurl:{https://example.com/docs}
+@endif
 @if(pageCounter)
 ${""}
 .pagemargin {bottomcenter}
@@ -47,6 +51,9 @@ ${""}
 @endif
 @if(docs && name != null)
 ${""}
+.ifnot {.docname::equals {${name}}}
+    .htmloptions title:{.docname | ${name}}
+
 .pagemargin {topleft}
     [${name}](@)
 @endif

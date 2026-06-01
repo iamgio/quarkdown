@@ -1,6 +1,10 @@
 .doclang {English}
 .theme {galactic} layout:{hyperlegible}
+
 .htmloptions baseurl:{https://quarkdown.com/wiki}
+
+.ifnot {.docname::equals {Quarkdown Wiki}}
+    .htmloptions title:{.docname | Quarkdown Wiki}
 
 .numbering
     - example: 1
@@ -50,7 +54,7 @@
     .row gap:{12px}
         [![Quarkdown](@/banner-light.svg)](https://quarkdown.com)
 
-        .read {../version.txt}::text classname:{version} url:{.repourl/releases/tag/latest}
+        .read {../version.txt}::text classname:{version} url:{.repourl/releases/latest}
 
 .pagemargin {topright}
     .row

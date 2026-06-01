@@ -2,7 +2,10 @@
 .include {docs}
 
 The **`.filetree`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.MiscElements/fileTree.html} function creates a visual file tree from a standard Markdown list.
-Each inline item becomes a file, and each nested list becomes a directory.
+Each inline item becomes a file by default; entries with nested children (or a trailing slash marker) become directories.
+
+Use a trailing slash (`/`) to explicitly mark an entry as a directory, even when it has no children.
+The slash is only a marker and is not rendered.
 
 .examplemirror
     .filetree
@@ -11,6 +14,7 @@ Each inline item becomes a file, and each nested list becomes a directory.
             - Button.ts
             - Card.ts
           - index.ts
+        - target/
         - README.md
 
 ## Ellipsis
