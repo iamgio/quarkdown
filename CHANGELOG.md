@@ -106,6 +106,17 @@ Thanks @CarmJos!
 
 &nbsp;
 
+#### [`listfiles` recursive traversal and regex filtering](https://quarkdown.com/wiki/file-data)
+
+The `.listfiles` function now supports two new options:
+
+- `recursive:{yes}` to include files from nested subdirectories.
+- `regex:{yes}` to treat the first argument as a regular expression pattern.
+
+This makes it easier to target files in deep folder trees and build pattern-based inclusion flows.
+
+Thanks @CarmJos!
+
 ### Fixed
 
 &nbsp;
