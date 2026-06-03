@@ -2,9 +2,11 @@
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-06-03
+
 ### Added
 
-&nbsp;
+ 
 
 #### [Extending functions](https://quarkdown.com/wiki/extending-functions)
 
@@ -41,7 +43,7 @@ Hey, everyone!
 
 The wrapper body receives the result of the original function (conventionally called `super`) as its first parameter, followed by the original function's parameters.
 
-&nbsp;
+ 
 
 #### [Function overwriting](https://quarkdown.com/wiki/declaring-functions#overwriting-functions)
 
@@ -69,7 +71,7 @@ This behavior can be turned off with the new [`--forbid-function-overwriting`](h
 
 Unlike `.extend`, which wraps the previous function and keeps its output reachable via `super`, this fully replaces the previous definition, so its return value and parameters are no longer accessible.
 
-&nbsp;
+ 
 
 #### [Custom HTML title](https://quarkdown.com/wiki/html-options#custom-title)
 
@@ -82,7 +84,7 @@ The new `title` parameter of [`.htmloptions`](https://quarkdown.com/wiki/html-op
 
 The `docs` project creator was also updated to automatically include this attribute on each page as `.docname | My project name`.
 
-&nbsp;
+ 
 
 #### [File tree explicit directories](https://quarkdown.com/wiki/file-tree)
 
@@ -104,24 +106,24 @@ In this example, `target/` is now rendered as an empty folder, while entries wit
 
 Thanks @CarmJos!
 
-&nbsp;
+ 
 
 #### [`listfiles` recursive traversal and name filtering](https://quarkdown.com/wiki/listing-files)
 
 The `.listfiles` function now supports two new optional parameters:
 
-- `recursive:{yes}` to include files from nested subdirectories.
-- `pattern:{regex}` to keep only entries whose file name matches the given regular expression.
+-   `recursive:{yes}` to include files from nested subdirectories.
+-   `pattern:{regex}` to keep only entries whose file name matches the given regular expression.
 
 This makes it easier to target files in deep folder trees and build pattern-based inclusion flows.
 
 Thanks @CarmJos!
 
-&nbsp;
+ 
 
 ### Changed
 
-&nbsp;
+ 
 
 #### [Dictionary lookup chaining](https://quarkdown.com/wiki/dictionary) (breaking change)
 
@@ -145,7 +147,7 @@ USA
 
 Previously, the dictionary had to be passed as a named `from` argument (`.get {John} from:{.docauthors}`). Existing documents using that form will need to switch to the new positional or chained syntax.
 
-&nbsp;
+ 
 
 #### Unique anchor identifiers for duplicate headings
 
@@ -167,11 +169,11 @@ For example, the following:
 
 now generates the identifiers `examples` and `examples-2` for the two `Examples` headings, and any link or table of contents entry points to the correct one.
 
-&nbsp;
+ 
 
 ### Fixed
 
-&nbsp;
+ 
 
 #### Preserve Unicode characters in output names
 
@@ -187,7 +189,7 @@ The generated PDF file is now `abc123我爱你.pdf`.
 
 Thanks @CarmJos!
 
-&nbsp;
+ 
 
 #### File tree font size shrinking at nested levels
 
@@ -197,17 +199,11 @@ Entries in a `.filetree` block used to incorrectly get progressively smaller at 
 
 ### Changed
 
- 
-
 #### Precompiled templates
 
 Templates, used in `quarkdown create` and live preview, are now precompiled at build time. This results in a smaller distribution size and faster startup times for these features.
 
- 
-
 ### Fixed
-
- 
 
 #### Preserve rich formatting in iterated lists
 
@@ -224,13 +220,9 @@ The following snippet now correctly preserves formatting when iterating over a M
         .1
 ```
 
- 
-
 #### Fixed live preview sometimes failing on edit
 
 Fixed an issue that caused live preview to crash with an _"Address already in use"_ error on recompile.
-
- 
 
 #### [theme/paperwhite] Cleaned up border around code snippets in error boxes
 
@@ -898,7 +890,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.1.2...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.2.0...HEAD
+
+[2.2.0]: https://github.com/iamgio/quarkdown/compare/v2.1.2...v2.2.0
 
 [2.1.2]: https://github.com/iamgio/quarkdown/compare/v2.1.1...v2.1.2
 
