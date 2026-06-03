@@ -86,6 +86,7 @@
 - [Table generation](table-generation.qd)
 - [Text content from file](file-data.qd#file-text-content)
 - [Table from CSV data](file-data.qd#table-from-csv)
+- [Listing files](listing-files.qd)
 
 ###! Charts & diagrams
 - [XY chart](xy-chart.qd)

@@ -192,19 +192,22 @@ enum class FileSorting(
 
 /**
  * Lists the files located in a directory.
- * @param path directory path when [regex] is `false`, or a regular expression pattern when [regex] is `true`
+ * @param path directory path
  * @param listDirectories whether to include directories in the listing
  * @param recursive whether to recursively list files in nested subdirectories
- * @param regex whether [path] should be interpreted as a regular expression pattern
+ * @param pattern optional regular expression to filter entries by name.
+ *                When non-`null`, only entries whose file name (always the bare name, regardless of [fullPath]) matches the pattern are returned.
  * @param fullPath whether to return the absolute path of each file, rather than just the file name
  * @param sortBy criterion to sort the files by
  * @param order order to sort the files in
- * @return an unordered collection of string values, each representing a file located in the directory, with extension
- * @throws IllegalArgumentException if the directory does not exist or if the path is not a directory when [regex] is `false`
+ * @return a collection of string values, each representing an entry (file or directory) located in the directory.
+ *         The collection is unordered when [sortBy] is [FileSorting.NONE], and ordered otherwise.
+ * @throws IllegalArgumentException if the directory does not exist, is not a directory,
+ *                                  or if [pattern] is not a valid regular expression
  * @permission [Permission.ProjectRead] to list files located in the project directory
  * @permission [Permission.GlobalRead] to list files located outside the project directory
  * @see fileName to exclude the extension from file names
- * @wiki file-data
+ * @wiki listing-files
  */
 @Name("listfiles")
 fun listFiles(
@@ -212,12 +215,12 @@ fun listFiles(
     path: String,
     @Name("directories") listDirectories: Boolean = true,
     @LikelyNamed recursive: Boolean = false,
-    @LikelyNamed regex: Boolean = false,
+    @LikelyNamed pattern: String? = null,
     @Name("fullpath") fullPath: Boolean = true,
     @Name("sortby") sortBy: FileSorting = FileSorting.NONE,
     @LikelyNamed order: Ordering = Ordering.ASCENDING,
 ): IterableValue<StringValue> {
-    val rootDirectory = if (regex) file(context, ".") else file(context, path)
+    val rootDirectory = file(context, path)
 
     if (!rootDirectory.exists()) {
         throw IllegalArgumentException("Directory $rootDirectory does not exist.")
@@ -226,12 +229,13 @@ fun listFiles(
         throw IllegalArgumentException("Path $rootDirectory is not a directory.")
     }
 
+    val nameRegex = pattern?.toRegex()
+
     val files =
         listFiles(rootDirectory, recursive)
             .filter { listDirectories || it.isFile }
-            .filter { currentFile ->
-                !regex || path.toRegex().matches(fileMatchingName(rootDirectory, currentFile, fullPath))
-            }.let { sortBy.sort(it, order) }
+            .filter { currentFile -> nameRegex == null || nameRegex.matches(currentFile.name) }
+            .let { sortBy.sort(it, order) }
             .map { if (fullPath) it.absolutePath else it.name }
             .map(::StringValue)
 
@@ -249,26 +253,6 @@ private fun listFiles(
         directory.walkTopDown().drop(1)
     } else {
         directory.listFiles()?.asSequence() ?: emptySequence()
-    }
-
-/**
- * Returns the matching key for [file] used by [listFiles] regex filtering.
- * When [fullPath] is `true`, the result is the forward-slash-normalised path
- * relative to [rootDirectory]; otherwise it is simply the file name.
- */
-private fun fileMatchingName(
-    rootDirectory: File,
-    file: File,
-    fullPath: Boolean,
-): String =
-    if (fullPath) {
-        rootDirectory
-            .toPath()
-            .relativize(file.toPath())
-            .toString()
-            .replace(File.separatorChar, '/')
-    } else {
-        file.name
     }
 
 /**
