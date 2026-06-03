@@ -464,6 +464,40 @@ class TableOfContentsTest {
     }
 
     @Test
+    fun `table of contents duplicate heading identifiers`() {
+        execute(
+            """
+            .noautopagebreak
+            .tableofcontents title:{Examples}
+
+            # Chapter 1
+
+            ## Examples
+
+            # Chapter 2
+
+            ## Examples
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h1 id=\"table-of-contents\">Examples</h1>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"chapter-1\" data-depth=\"1\"><a href=\"#chapter-1\">Chapter 1</a>" +
+                    "<ol><li data-target-id=\"examples\" data-depth=\"2\"><a href=\"#examples\">Examples</a></li></ol></li>" +
+                    "<li data-target-id=\"chapter-2\" data-depth=\"1\"><a href=\"#chapter-2\">Chapter 2</a>" +
+                    "<ol><li data-target-id=\"examples-2\" data-depth=\"2\"><a href=\"#examples-2\">Examples</a></li></ol></li>" +
+                    "</ol></nav>" +
+                    "<h1 id=\"chapter-1\">Chapter 1</h1>" +
+                    "<h2 id=\"examples\">Examples</h2>" +
+                    "<h1 id=\"chapter-2\">Chapter 2</h1>" +
+                    "<h2 id=\"examples-2\">Examples</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `table of contents numbering`() {
         // Numbering
         execute(

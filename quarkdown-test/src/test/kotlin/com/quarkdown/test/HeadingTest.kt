@@ -123,6 +123,69 @@ class HeadingTest {
     }
 
     @Test
+    fun `duplicate auto identifiers are disambiguated`() {
+        execute(
+            """
+            ## Examples
+
+            ## Examples
+
+            ## Examples
+            """.trimIndent(),
+            options = DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h2 id=\"examples\">Examples</h2>" +
+                    "<h2 id=\"examples-2\">Examples</h2>" +
+                    "<h2 id=\"examples-3\">Examples</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `duplicate custom identifiers are disambiguated`() {
+        execute(
+            """
+            .noautopagebreak
+
+            ## A {#shared}
+
+            ## B {#shared}
+            """.trimIndent(),
+            options = DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h2 id=\"shared\">A</h2>" +
+                    "<h2 id=\"shared-2\">B</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `auto identifier collides with custom identifier`() {
+        // A custom id is just another base id: it still participates in deduplication
+        // when an auto-generated id from another heading would produce the same string.
+        execute(
+            """
+            .noautopagebreak
+
+            ## A {#examples}
+
+            ## Examples
+            """.trimIndent(),
+            options = DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<h2 id=\"examples\">A</h2>" +
+                    "<h2 id=\"examples-2\">Examples</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `heading primitive depth out of range`() {
         assertFailsWith<FunctionCallRuntimeException> {
             execute(".heading {Hello} depth:{0}") {}

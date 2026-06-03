@@ -2,6 +2,7 @@ package com.quarkdown.core.flavor.base
 
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.hooks.HeadingIdentifierDeduplicationHook
 import com.quarkdown.core.context.hooks.LinkUrlResolverHook
 import com.quarkdown.core.context.hooks.SubdocumentRegistrationHook
 import com.quarkdown.core.context.hooks.presence.CodePresenceHook
@@ -25,6 +26,8 @@ class BaseMarkdownTreeIteratorFactory : TreeIteratorFactory {
             .attach(LinkUrlResolverHook(context))
             // Resolves footnotes.
             .attach(FootnoteResolverHook(context))
+            // Assigns a deterministic occurrence index to headings that share a base identifier.
+            .attach(HeadingIdentifierDeduplicationHook(context))
             // Allows loading code libraries (e.g. highlight.js syntax highlighting)
             // if at least one code block is present.
             .attach(CodePresenceHook(context))

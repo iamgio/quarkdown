@@ -111,6 +111,21 @@ fun StringBuilder.replace(
 fun String.sanitizeFileName(replacement: String) = this.replace("^\\.|\\.$|[^\\p{L}\\p{N}\\p{M}\\-_.@]+".toRegex(), replacement)
 
 /**
+ * Converts [this] string to a URI-like identifier:
+ * - Lowercased.
+ * - Whitespace runs are replaced with dashes.
+ * - Characters other than Unicode letters, Unicode digits and `-` are stripped.
+ *
+ * Example: `"Hello, World!"` -> `"hello-world"`.
+ * @return URI-like identifier string
+ */
+fun String.toUriIdentifier(): String =
+    this
+        .lowercase()
+        .replace("\\s+".toRegex(), "-")
+        .replace("[^\\p{L}\\p{N}-]".toRegex(), "")
+
+/**
  * @return [this] string with line separators replaced with `\n`,
  *         or the string itself if `\n` is already the line separator
  */
