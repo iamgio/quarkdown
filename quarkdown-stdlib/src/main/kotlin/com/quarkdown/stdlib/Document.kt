@@ -268,7 +268,7 @@ fun docAuthor(
  * ```
  * .foreach {.docauthors}
  *     name info:
- *     .name, .get {email} from:{.info}
+ *     .name, .info::get {email}
  * ```
  *
  * > Output:

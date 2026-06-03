@@ -21,6 +21,7 @@ val Dictionary: QuarkdownModule =
 
 /**
  * Makes the initialization of a dictionary explicit, to avoid ambiguity with collection initialization.
+ *
  * ```
  * .var {dict}
  *   .dictionary
@@ -34,6 +35,7 @@ val Dictionary: QuarkdownModule =
  * .foreach {.dict}
  *   It would not iterate key-value pairs properly without the explicit `.dictionary` call.
  * ```
+ *
  * @param dictionary dictionary to initialize
  * @return the dictionary
  * @wiki dictionary
@@ -44,15 +46,25 @@ fun dictionary(
 
 /**
  * Gets a value from a dictionary by its key.
- * @param key key to get the value of
+ *
+ * ```
+ * .var {dict}
+ *   .dictionary
+ *     - a: 1
+ *     - b: 2
+ *
+ * .dict::get {a}
+ * ```
+ *
  * @param dictionary dictionary to get the value from
- * @param fallback value to return if the key is not present. If unset, `false` is returned.
- * @return value corresponding to the given key, or [NOT_FOUND] if the key is not present
+ * @param key key to get the value of
+ * @param fallback value to return if the key is not present. If unset, defaults to [NOT_FOUND].
+ * @return value corresponding to the given key, or [fallback] if the key is not present
  */
 @Name("get")
 @LikelyChained
 fun dictionaryGet(
+    dictionary: Map<String, OutputValue<*>>,
     key: String,
-    @Name("from") dictionary: Map<String, OutputValue<*>>,
     @Name("orelse") fallback: DynamicValue = DynamicValue(NOT_FOUND),
 ): OutputValue<*> = dictionary[key] ?: fallback

@@ -123,6 +123,30 @@ Thanks @CarmJos!
 
 &nbsp;
 
+#### [Dictionary lookup chaining](https://quarkdown.com/wiki/dictionary) (breaking change)
+
+The `.get` function now takes the dictionary as its first argument, making chained lookups feel natural:
+
+```markdown
+.docauthors
+  - John
+    - country: USA
+  - Maria
+    - country: Italy
+
+.docauthors::get {John}::get {country}
+```
+
+Output:
+
+```markdown
+USA
+```
+
+Previously, the dictionary had to be passed as a named `from` argument (`.get {John} from:{.docauthors}`). Existing documents using that form will need to switch to the new positional or chained syntax.
+
+&nbsp;
+
 #### Unique anchor identifiers for duplicate headings
 
 Two or more headings sharing the same title used to produce the same HTML anchor identifier, making in-document links (such as table of contents entries and cross-references) always navigate to the first match.

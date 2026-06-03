@@ -68,7 +68,7 @@ class DestructuringTest {
 
             .foreach {.docauthors}
                 name info:
-                .name's country is .get {country} {.info}
+                .name's country is .info::get {country}
             """.trimIndent(),
         ) {
             assertEquals(
@@ -110,7 +110,7 @@ class DestructuringTest {
             .grid columns:{2} alignment:{spacearound}
                 .foreach {.docauthors}
                     name info:
-                    .author {.name} {.get {branch} from:{.info} orelse:{-}} {.get {email} from:{.info}}
+                    .author {.name} {.info::get {branch} orelse:{-}} {.info::get {email}}
             """.trimIndent(),
         ) {
             assertEquals(
