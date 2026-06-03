@@ -1,6 +1,9 @@
 @use "util/icon" as *;
 
 .quarkdown .file-tree.file-tree.file-tree {
+  font-family: var(--qd-code-font), monospace;
+  font-size: var(--qd-code-span-font-size);
+
   ul {
     list-style: none;
     margin: 0.5em 0 0 0.5em;
@@ -12,9 +15,6 @@
     }
 
     li {
-      font-family: var(--qd-code-font), monospace;
-      font-size: var(--qd-code-span-font-size);
-
       &::before {
         margin-right: 0.5em;
         vertical-align: middle;

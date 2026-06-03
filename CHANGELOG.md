@@ -187,6 +187,12 @@ The generated PDF file is now `abc123我爱你.pdf`.
 
 Thanks @CarmJos!
 
+&nbsp;
+
+#### File tree font size shrinking at nested levels
+
+Entries in a `.filetree` block used to incorrectly get progressively smaller at each level of nesting.
+
 ## [2.1.2] - 2026-05-24
 
 ### Changed
