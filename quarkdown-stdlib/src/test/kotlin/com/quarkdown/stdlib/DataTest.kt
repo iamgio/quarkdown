@@ -303,28 +303,28 @@ class DataTest {
     }
 
     @Test
-    fun `list files with regex in current directory`() {
+    fun `list files with name pattern`() {
         val files =
             listFiles(
                 context,
-                "^listfiles$",
-                regex = true,
+                LIST_FILES_FOLDER,
+                pattern = ".*\\.txt",
                 fullPath = false,
                 sortBy = FileSorting.NAME,
             )
         val names = files.unwrappedValue.map { it.unwrappedValue }.toList()
-        assertEquals(listOf("listfiles"), names)
+        assertEquals(listOf("a.txt", "b.txt", "c.txt"), names)
     }
 
     @Test
-    fun `list files with recursive regex by relative path`() {
+    fun `list files with name pattern recursively`() {
         val files =
             listFiles(
                 context,
-                "^listfiles/d/d\\.txt$",
+                LIST_FILES_FOLDER,
                 listDirectories = false,
                 recursive = true,
-                regex = true,
+                pattern = "d\\.txt",
                 fullPath = true,
                 sortBy = FileSorting.NAME,
             )
@@ -334,19 +334,28 @@ class DataTest {
     }
 
     @Test
-    fun `list files with non-recursive regex does not traverse nested directories`() {
+    fun `list files with name pattern does not match path separators`() {
         val files =
             listFiles(
                 context,
-                "^listfiles/d/d\\.txt$",
+                LIST_FILES_FOLDER,
+                recursive = true,
+                pattern = "d/d\\.txt",
+            )
+        assertTrue(files.unwrappedValue.toList().isEmpty())
+    }
+
+    @Test
+    fun `list files with non-recursive pattern does not traverse nested directories`() {
+        val files =
+            listFiles(
+                context,
+                LIST_FILES_FOLDER,
                 listDirectories = false,
                 recursive = false,
-                regex = true,
-                fullPath = true,
-                sortBy = FileSorting.NAME,
+                pattern = "d\\.txt",
             )
-        val paths = files.unwrappedValue.map { it.unwrappedValue }.toList()
-        assertTrue(paths.isEmpty())
+        assertTrue(files.unwrappedValue.toList().isEmpty())
     }
 
     @Test
