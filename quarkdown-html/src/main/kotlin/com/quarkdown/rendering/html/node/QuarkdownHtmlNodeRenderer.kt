@@ -351,7 +351,7 @@ class QuarkdownHtmlNodeRenderer(
                 this@QuarkdownHtmlNodeRenderer,
                 tableOfContents.items,
                 linkUrlMapper = { item ->
-                    "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(item.target)
+                    "#" + HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer, context).getId(item.target)
                 },
             )
 
@@ -445,7 +445,7 @@ class QuarkdownHtmlNodeRenderer(
         // The target node could have an ID. If so, the reference is a link to that node.
         // Headings use Identifiable for auto-generated IDs; other nodes use their referenceId directly.
         val anchorId =
-            (definition as? Identifiable)?.accept(HtmlIdentifierProvider.of(this))
+            (definition as? Identifiable)?.accept(HtmlIdentifierProvider.of(this, context))
                 ?: definition.linkableReferenceId?.let(::sanitizeId)
 
         val reference =
@@ -671,7 +671,7 @@ class QuarkdownHtmlNodeRenderer(
                 "id",
                 // Generate an automatic identifier if allowed by settings.
                 HtmlIdentifierProvider
-                    .of(renderer = this)
+                    .of(renderer = this, context = context)
                     .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                     ?.getId(node),
             ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
@@ -774,7 +774,7 @@ class QuarkdownHtmlNodeRenderer(
         {
             attribute(
                 "data-target-id",
-                HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer).getId(variant.item.target),
+                HtmlIdentifierProvider.of(this@QuarkdownHtmlNodeRenderer, context).getId(variant.item.target),
             )
             attribute("data-depth", variant.item.depth.toString())
         }

@@ -27,7 +27,7 @@ object SidebarRenderer {
                 renderer,
                 items = toc.items,
                 linkUrlMapper = { item ->
-                    "#" + HtmlIdentifierProvider.of(renderer).getId(item.target)
+                    "#" + HtmlIdentifierProvider.of(renderer, context).getId(item.target)
                 },
             )
 

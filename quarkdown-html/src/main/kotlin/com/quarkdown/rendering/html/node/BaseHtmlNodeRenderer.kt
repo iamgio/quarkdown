@@ -166,7 +166,7 @@ open class BaseHtmlNodeRenderer(
 
         return buildTag("span") {
             className("footnote-definition")
-            optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(node))
+            optionalAttribute("id", HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer, context).getId(node))
             optionalAttribute("data-footnote-index", index)
 
             tag("sup") {
@@ -309,7 +309,7 @@ open class BaseHtmlNodeRenderer(
 
         return buildTag("sup") {
             classNames("footnote-reference", "footnote-label")
-            val definitionId = HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer).getId(definition)
+            val definitionId = HtmlIdentifierProvider.of(this@BaseHtmlNodeRenderer, context).getId(definition)
             attribute("data-definition", definitionId)
             tag("a") {
                 optionalAttribute("href", "#$definitionId")

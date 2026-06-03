@@ -1,6 +1,7 @@
 package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.attributes.id.setIdentifierDeduplicationIndex
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
@@ -123,6 +124,38 @@ class SearchIndexGeneratorTest {
                     ),
             ),
             index,
+        )
+    }
+
+    @Test
+    fun `subdocument with duplicate headings`() {
+        val context = MutableContext(QuarkdownFlavor, subdocument = Subdocument.Root)
+        val graph: Graph<Subdocument> = DirectedGraph<Subdocument>().addVertex(Subdocument.Root)
+        context.documentInfo =
+            DocumentInfo(
+                name = "Document with Duplicate Headings",
+                description = "",
+                keywords = emptyList(),
+            )
+
+        val first = Heading(depth = 1, text = buildInline { text("Examples") })
+        val second = Heading(depth = 1, text = buildInline { text("Examples") })
+
+        second.setIdentifierDeduplicationIndex(context, 1)
+
+        context.attributes.tableOfContents = TableOfContents.generate(sequenceOf(first, second))
+
+        context.subdocumentGraph = VisitableOnceGraph(graph)
+        context.attachMockPipeline()
+
+        val index = SearchIndexGenerator.generate(context.sharedSubdocumentsData)
+
+        assertEquals(
+            listOf(
+                SearchHeading(anchor = "examples", text = "Examples", level = 1),
+                SearchHeading(anchor = "examples-2", text = "Examples", level = 1),
+            ),
+            index.entries.single().headings,
         )
     }
 

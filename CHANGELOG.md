@@ -117,6 +117,34 @@ This makes it easier to target files in deep folder trees and build pattern-base
 
 Thanks @CarmJos!
 
+&nbsp;
+
+### Changed
+
+&nbsp;
+
+#### Unique anchor identifiers for duplicate headings
+
+Two or more headings sharing the same title used to produce the same HTML anchor identifier, making in-document links (such as table of contents entries and cross-references) always navigate to the first match.
+
+Each subsequent occurrence now receives an automatic `-2`, `-3`, ... suffix on its identifier, so links target the intended heading.
+
+For example, the following:
+
+```markdown
+# Chapter 1
+
+## Examples
+
+# Chapter 2
+
+## Examples
+```
+
+now generates the identifiers `examples` and `examples-2` for the two `Examples` headings, and any link or table of contents entry points to the correct one.
+
+&nbsp;
+
 ### Fixed
 
 &nbsp;
