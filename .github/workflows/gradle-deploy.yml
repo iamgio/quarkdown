@@ -43,6 +43,17 @@ jobs:
       if: github.ref_type == 'tag'
       uses: ffurrer2/extract-release-notes@v3
 
+    # Reads SPONSORS.md into a step output, to be appended to the release notes.
+    - name: Read sponsors
+      id: sponsors
+      if: github.ref_type == 'tag' && hashFiles('SPONSORS.md') != ''
+      run: |
+        {
+          echo 'content<<SPONSORS_EOF'
+          cat SPONSORS.md
+          echo SPONSORS_EOF
+        } >> "$GITHUB_OUTPUT"
+
     - name: Commit release updates
       uses: stefanzweifel/git-auto-commit-action@v7
       if: github.ref_type == 'tag'
@@ -102,7 +113,10 @@ jobs:
       if: github.ref_type == 'tag'
       with:
         token: "${{ secrets.GITHUB_TOKEN }}"
-        body: ${{ steps.release-notes.outputs.release_notes }}
+        body: |
+          ${{ steps.release-notes.outputs.release_notes }}
+
+          ${{ steps.sponsors.outputs.content }}
         files: build/distributions/quarkdown-*.zip
 
     - name: Generate docs

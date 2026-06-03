@@ -236,16 +236,6 @@ Fixed an issue that caused live preview to crash with an _"Address already in us
 
 Fixed unexpected borders around code snippets in error boxes when using the `paperwhite` color theme.
 
-* * *
-
-### Sponsors
-
-Thanks to our sponsors! 🎉
-
-@vitto4
-
-<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
-
 ## [2.1.1] - 2026-05-23
 
 ### Fixed
@@ -253,16 +243,6 @@ Thanks to our sponsors! 🎉
 #### Fixed project creator and live preview crashing on bundled Java runtime
 
 Fixed an issue that caused `quarkdown create` and live preview to crash with a template compilation error on distributions that use the bundled Java runtime. 
-
-* * *
-
-### Sponsors
-
-Thanks to our sponsors! 🎉
-
-@vitto4
-
-<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
 ## [2.1.0] - 2026-05-23
 
@@ -338,16 +318,6 @@ Compact footnotes like ``[^: text with `code`]`` were incorrectly parsed as plai
 
 Thanks @Shreyansh-Kushwaha!
 
-* * *
-
-### Sponsors
-
-Thanks to our sponsors! 🎉
-
-@vitto4
-
-<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
-
 ## [2.0.1] - 2026-05-04
 
 ### Added
@@ -377,16 +347,6 @@ When creating a `docs` project, `quarkdown create` now links the top-left title 
 #### Fixed trailing `\` in Quarkdoc multiline signatures
 
 When a function signature in Quarkdoc was long enough to split across multiple lines, the last parameter line incorrectly displayed a trailing `\` before the return type. 
-
-* * *
-
-### Sponsors
-
-Thanks to our sponsors! 🎉
-
-@vitto4
-
-<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
 ## [2.0.0] - 2026-04-23
 
@@ -515,16 +475,6 @@ The transition background now matches the target's background color.
 
 Wiki links at [/docs](https://quarkdown.com/docs) now correctly point to the new wiki.
 
-* * *
-
-### Sponsors
-
-Thanks to our sponsors! 🎉
-
-@vitto4
-
-<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
-
 ## [1.15.1] - 2026-03-31
 
 ### Changed
@@ -577,16 +527,6 @@ Captions now follow the global configuration for line spacing and letter spacing
 #### Fixed Quarkdoc `Wiki page` broken links if they contain anchors
 
 The `@wiki` documentation tag now correctly preserves `#` anchor separators in wiki URLs.
-
-* * *
-
-### Sponsors
-
-Thanks to our sponsors! 🎉
-
-@vitto4
-
-<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
 ## [1.15.0] - 2026-03-24
 
@@ -738,16 +678,6 @@ Fixed an issue that caused tree traversal-dependent features, such as cross-refe
 #### Improved lexer performance
 
 The lexer has been optimized to reduce regex builds to a minimum, resulting in significantly improved performance for large documents.
-
-* * *
-
-### Sponsors
-
-Thanks to our sponsors! 🎉
-
-@vitto4
-
-<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
 ## [1.14.1] - 2026-03-06
 
@@ -967,18 +897,6 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 #### Fixed line spacing in table cells
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
-
-* * *
-
-### Sponsors
-
-Shout out to our sponsors! 🎉
-
-@vitto4
-
-@serkonda7
-
-<a href="https://falconer.com"><img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/sponsors/falconer.jpeg" alt="Falconer" width="350"></a>
 
 [Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.1.2...HEAD
 
