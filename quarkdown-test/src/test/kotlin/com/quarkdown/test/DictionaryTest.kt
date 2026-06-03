@@ -23,9 +23,21 @@ class DictionaryTest {
         execute(
             authors +
                 """
-                .var {john} {.get {John} from:{.docauthors}}
+                .var {john} {.docauthors::get {John}}
 
-                .get {from} from:{.john}
+                .john::get {from}
+                """.trimIndent(),
+        ) {
+            assertEquals("<p>USA</p>", it)
+        }
+    }
+
+    @Test
+    fun `lookup via inline chained get calls`() {
+        execute(
+            authors +
+                """
+                .docauthors::get {John}::get {from}
                 """.trimIndent(),
         ) {
             assertEquals("<p>USA</p>", it)
@@ -38,7 +50,7 @@ class DictionaryTest {
             authors +
                 """
                 .foreach {.docauthors}
-                  An author is .first {.1}, from .get {from} from:{.second {.1}}
+                  An author is .first {.1}, from .second {.1}::get {from}
                 """.trimIndent(),
         ) {
             assertEquals(
@@ -58,7 +70,7 @@ class DictionaryTest {
               - b: 2
               - c: 3
 
-            .get {b} from:{.x}
+            .x::get {b}
             """.trimIndent(),
         ) {
             assertEquals("<p>2</p>", it)
@@ -74,7 +86,7 @@ class DictionaryTest {
               - b: 2
               - c: 3
 
-            .get {d} from:{.x}
+            .x::get {d}
             """.trimIndent(),
         ) {
             assertEquals(
@@ -92,7 +104,7 @@ class DictionaryTest {
               - a: 1
               - b: 2
 
-            .get {z} from:{.x} orelse:{fallback}
+            .x::get {z} orelse:{fallback}
             """.trimIndent(),
         ) {
             assertEquals("<p>fallback</p>", it)
@@ -111,7 +123,7 @@ class DictionaryTest {
                 - ba: 3
                 - bb: 4
 
-            .get {ba} from:{.get {b} from:{.x}}
+            .x::get {b}::get {ba}
             """.trimIndent(),
         ) {
             assertEquals("<p>3</p>", it)
@@ -135,7 +147,7 @@ class DictionaryTest {
                 .var {name} {.first {.1}}
                 .var {dict} {.second {.1}}
                 .var {key} {.concatenate {.name} {b}}
-                .var {value} {.get {.key} {.dict}}
+                .var {value} {.dict::get {.key}}
 
                 .name, .value
             """.trimIndent(),

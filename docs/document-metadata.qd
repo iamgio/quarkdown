@@ -52,7 +52,7 @@ Calling the function without arguments returns the dictionary itself, which you 
         .row gap:{1cm}
             **.name**
 
-            .get {email} from:{.info}
+            .info::get {email}
     ```
     .quarkdownoutput
         .row gap:{1cm}
