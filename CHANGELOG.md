@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+### Added
+
+&nbsp;
+
+#### [LSP] Embeddable language server
+
+The Quarkdown language server API now allows the LSP to be embedded in custom hosts and run across multiple instances inside a single JVM, thanks to customizable IO streams and pluggable hooks.
+
+&nbsp;
+
+### Fixed
+
+&nbsp;
+
+#### [LSP] Concurrency issue in document state
+
+Document state and request dispatching now run through thread-safe primitives, ensuring consistent behavior even under heavy load.
+
 ## [2.2.0] - 2026-06-03
 
 ### Added
