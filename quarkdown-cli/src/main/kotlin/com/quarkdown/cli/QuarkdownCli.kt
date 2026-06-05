@@ -9,6 +9,7 @@ import com.quarkdown.cli.doctor.DoctorCommand
 import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.cli.exec.ReplCommand
 import com.quarkdown.cli.lsp.LanguageServerCommand
+import com.quarkdown.cli.lsp.LanguageServerWebSocketCommand
 import com.quarkdown.cli.server.StartWebServerCommand
 
 /**
@@ -33,5 +34,6 @@ fun main(args: Array<String>) =
             StartWebServerCommand(),
             CreateProjectCommand(),
             LanguageServerCommand(),
+            LanguageServerWebSocketCommand(),
             DoctorCommand(),
         ).main(args)

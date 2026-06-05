@@ -6,9 +6,17 @@
 
 &nbsp;
 
-#### [LSP] Embeddable language server
+#### Language server over WebSocket
 
-The Quarkdown language server API now allows the LSP to be embedded in custom hosts and run across multiple instances inside a single JVM, thanks to customizable IO streams and pluggable hooks.
+The Quarkdown language server can now accept connections over WebSocket, enabling integration with browser-based editors such as Monaco (via `monaco-languageclient`) that cannot use standard input/output transport.
+
+To start the WebSocket server:
+
+```shell
+quarkdown language-server-ws --port 8090 --path /lsp
+```
+
+Each WebSocket connection spawns its own language server instance, with all connections sharing a single JVM and thread pool.
 
 &nbsp;
 
@@ -18,7 +26,7 @@ The Quarkdown language server API now allows the LSP to be embedded in custom ho
 
 #### [LSP] Concurrency issue in document state
 
-Document state and request dispatching now run through thread-safe primitives, ensuring consistent behavior even under heavy load.
+The language server's open-document map is now thread-safe, so background diagnostics no longer race with document updates.
 
 ## [2.2.0] - 2026-06-03
 
