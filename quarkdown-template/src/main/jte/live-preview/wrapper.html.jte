@@ -1,6 +1,6 @@
 @param String srcFile
-@param String serverHost
-@param String serverPort
+@param String serverHost = null
+@param String serverPort = null
 
 <!DOCTYPE html>
 <html>
@@ -87,6 +87,7 @@
     <iframe id="frame-0" class="content-frame visible" src="${srcFile}"></iframe>
     <iframe id="frame-1" class="content-frame hidden" src="${srcFile}"></iframe>
 </div>
+@if(serverHost != null && serverPort != null)
 <script data-name="websockets">
     /**
      * Starts a WebSocket connection to the specified server and endpoint.
@@ -124,6 +125,7 @@
         startWebSocket(serverUrl, 'reload', reload);
     }
 </script>
+@endif
 <script data-name="messaging">
     // Scalable message listener registry, with event type as the key and the handler function as the value.
     const messageListeners = new Map();
@@ -432,6 +434,8 @@
 
     messageListeners.set('postRenderingCompleted', onFrameRendered);
 </script>
+@if(serverHost != null && serverPort != null)
 <script>startReloadWebSocket("${serverHost}:${serverPort}")</script>
+@endif
 </body>
 </html>
