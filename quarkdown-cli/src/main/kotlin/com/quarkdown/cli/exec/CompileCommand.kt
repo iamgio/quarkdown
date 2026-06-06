@@ -9,19 +9,15 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.restrictTo
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
-import com.quarkdown.cli.server.WebServerOptions
-import com.quarkdown.cli.server.WebServerStarter
+import com.quarkdown.cli.preview.PreviewStrategy
+import com.quarkdown.cli.preview.WebServerPreviewStrategy
 import com.quarkdown.cli.server.browserLauncherOption
 import com.quarkdown.cli.util.MillisStopwatch
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.interaction.Env
-import com.quarkdown.server.ServerEndpoints
 import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
-import com.quarkdown.server.message.ServerMessage
-import com.quarkdown.server.message.ServerMessageSession
-import com.quarkdown.server.stop.Stoppable
 import java.io.File
 
 /**
@@ -31,9 +27,18 @@ private const val DEFAULT_TIMEOUT_SECONDS = 30
 
 /**
  * Command to compile a Quarkdown file into an output.
- * @see FileExecutionStrategy
+ * @param previewStrategyProvider factory invoked once to produce the [PreviewStrategy] used after each successful
+ *                                compile when preview mode is enabled.
  */
-class CompileCommand : ExecuteCommand("compile") {
+class CompileCommand(
+    previewStrategyProvider: CompileCommand.() -> PreviewStrategy = {
+        WebServerPreviewStrategy(
+            port = serverPort,
+            browser = browser,
+            preferLivePreviewUrl = preview && watch,
+        )
+    },
+) : ExecuteCommand("compile") {
     /**
      * Quarkdown source file to process.
      */
@@ -81,21 +86,7 @@ class CompileCommand : ExecuteCommand("compile") {
         shouldValidate = { preview },
     )
 
-    /**
-     * Session to communicate with the server in order to trigger reloads of the preview.
-     */
-    private val reloadSession: ServerMessageSession by lazy {
-        ServerMessageSession(
-            port = super.serverPort,
-            endpoint = ServerEndpoints.RELOAD_LIVE_PREVIEW,
-        )
-    }
-
-    /**
-     * Handle to the running preview server, set once on the first compile.
-     */
-    @Volatile
-    private var server: Stoppable? = null
+    private val previewStrategy: PreviewStrategy by lazy { previewStrategyProvider() }
 
     /**
      * Finalizes the CLI options before execution.
@@ -115,7 +106,8 @@ class CompileCommand : ExecuteCommand("compile") {
     /**
      * Stopwatch to measure the duration of the compilation.
      */
-    @get:Synchronized @set:Synchronized
+    @get:Synchronized
+    @set:Synchronized
     private lateinit var stopwatch: MillisStopwatch
 
     override fun createExecutionStrategy(cliOptions: CliOptions) = FileExecutionStrategy(source)
@@ -154,45 +146,7 @@ class CompileCommand : ExecuteCommand("compile") {
         this.logCompletion(output = outcome.directory)
 
         if (super.preview) {
-            runServerCommunication(outcome.directory)
-        }
-    }
-
-    private fun runServerCommunication(directory: File) {
-        // Communicates with the server to reload the requested resources.
-        // If enabled and the server is not running, also starts the server
-        // (this is shorthand for `quarkdown start -f <generated directory> -p <server port> -b default`).
-        val options =
-            WebServerOptions(
-                port = super.serverPort,
-                targetFile = directory,
-                browserLauncher = browser,
-                preferLivePreviewUrl = super.preview && super.watch,
-            )
-
-        if (server == null) {
-            Log.info("Starting server...")
-            WebServerStarter.start(
-                options,
-                reloadSession,
-                onServerStarted = { server = it },
-                onSessionReady = { sendReloadMessage() },
-            )
-            return
-        }
-
-        // The server is already running from a previous compile in this CLI session;
-        // just push a reload message. ServerMessageSession reconnects transparently
-        // if the underlying WebSocket has dropped.
-        sendReloadMessage()
-    }
-
-    private fun sendReloadMessage() {
-        try {
-            ServerMessage().send(reloadSession)
-        } catch (e: Exception) {
-            Log.error("Could not communicate with the server on port ${super.serverPort}: ${e.message}")
-            Log.debug(e)
+            this.previewStrategy.update(pipelineOptions, outcome)
         }
     }
 }
