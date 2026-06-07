@@ -29,15 +29,21 @@ import org.eclipse.lsp4j.TextEdit
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.TextDocumentService
 import java.util.concurrent.CompletableFuture
-import kotlin.concurrent.thread
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executor
 
 private typealias CompletionResult = CompletableFuture<Either<List<CompletionItem>, CompletionList>>
 
 /**
  * Service for handling text document operations in the Quarkdown Language Server.
+ *
+ * @param server the parent language server
+ * @param executor executor used to dispatch background work (e.g. diagnostics).
+ *                 Should be shared across instances when hosting multiple servers in the same JVM.
  */
 class QuarkdownTextDocumentService(
     private val server: QuarkdownLanguageServer,
+    private val executor: Executor,
     completionSuppliers: List<CompletionSupplier>,
     tokensSuppliers: List<SemanticTokensSupplier>,
     hoverSuppliers: List<HoverSupplier>,
@@ -52,8 +58,10 @@ class QuarkdownTextDocumentService(
 
     /**
      * Maps document URIs to their text content.
+     * Backed by a [ConcurrentHashMap] since the map is written from the LSP4J dispatcher thread
+     * (didOpen/didChange/didClose) and read from background diagnostics tasks submitted to [executor].
      */
-    private val documents = mutableMapOf<String, TextDocument>()
+    private val documents = ConcurrentHashMap<String, TextDocument>()
 
     /**
      * Adds or updates a document in the internal URI association map,
@@ -81,7 +89,7 @@ class QuarkdownTextDocumentService(
 
         documents[uri] = new
 
-        thread { processDiagnostics(uri, new) }
+        executor.execute { processDiagnostics(uri, new) }
     }
 
     /**
@@ -139,10 +147,10 @@ class QuarkdownTextDocumentService(
     override fun completion(params: CompletionParams): CompletionResult {
         val document = getDocument(params.textDocument)
 
-        return CompletableFuture.supplyAsync {
+        return CompletableFuture.supplyAsync({
             server.log("Operation 'text/completion'")
             Either.forLeft(completionService.process(params, document))
-        }
+        }, executor)
     }
 
     override fun resolveCompletionItem(unresolved: CompletionItem): CompletableFuture<CompletionItem> =
