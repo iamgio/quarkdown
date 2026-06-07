@@ -14,7 +14,7 @@ dependencies {
         exclude(group = "io.netty", module = "netty-codec-marshalling")
         exclude(group = "io.netty", module = "netty-codec-protobuf")
     }
-    implementation("io.ktor:ktor-server-websockets:$ktorVersion")
+    implementation("io.ktor:ktor-server-sse:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("org.slf4j:slf4j-simple:2.0.18")

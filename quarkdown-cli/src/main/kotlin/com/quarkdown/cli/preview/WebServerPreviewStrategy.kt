@@ -7,8 +7,7 @@ import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.server.ServerEndpoints
 import com.quarkdown.server.browser.BrowserLauncher
-import com.quarkdown.server.message.ServerMessage
-import com.quarkdown.server.message.ServerMessageSession
+import com.quarkdown.server.reload.ReloadTrigger
 import com.quarkdown.server.stop.Stoppable
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -16,9 +15,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  * [PreviewStrategy] backed by the bundled Quarkdown web server (the same one exposed by `quarkdown start`).
  *
  * On the first call to [update] the server is started lazily and pointed at the just-generated output directory;
- * subsequent calls reuse the running server and only push a reload message over the live-preview WebSocket session,
- * which transparently reconnects if the underlying socket has been dropped.
- * @param port port on which the preview server is started and contacted for reload messages
+ * subsequent calls reuse the running server and only push a reload trigger over a stateless HTTP call,
+ * which the server fans out as Server-Sent Events to every subscribed browser tab.
+ * @param port port on which the preview server is started and contacted for reload triggers
  * @param browser optional browser launcher used to open the served URL the first time the server starts
  * @param preferLivePreviewUrl whether to open the live-preview endpoint URL rather than the direct file URL,
  *                             typically enabled when both preview and watch modes are active
@@ -44,10 +43,10 @@ class WebServerPreviewStrategy(
     private val starting = AtomicBoolean(false)
 
     /**
-     * Session to communicate with the server in order to trigger reloads of the preview.
+     * Stateless reload trigger pointed at the running server.
      */
-    private val reloadSession: ServerMessageSession by lazy {
-        ServerMessageSession(
+    private val reloadTrigger: ReloadTrigger by lazy {
+        ReloadTrigger(
             port = this.port,
             endpoint = ServerEndpoints.RELOAD_LIVE_PREVIEW,
         )
@@ -64,14 +63,13 @@ class WebServerPreviewStrategy(
 
         if (server != null) {
             // The server is already running from a previous compile in this CLI session;
-            // just push a reload message. ServerMessageSession reconnects transparently
-            // if the underlying WebSocket has dropped.
-            sendReloadMessage()
+            // just push a reload trigger.
+            reloadTrigger.trigger()
             return
         }
 
         if (!starting.compareAndSet(false, true)) {
-            // A startup is already in flight on another thread; the in-flight onSessionReady
+            // A startup is already in flight on another thread; the in-flight onServerReady
             // will reload against the now-updated output directory, so just drop this call.
             return
         }
@@ -87,18 +85,8 @@ class WebServerPreviewStrategy(
         Log.info("Starting server...")
         WebServerStarter.start(
             serverOptions,
-            reloadSession,
             onServerStarted = { server = it },
-            onSessionReady = { sendReloadMessage() },
+            onServerReady = { reloadTrigger.trigger() },
         )
-    }
-
-    private fun sendReloadMessage() {
-        try {
-            ServerMessage().send(reloadSession)
-        } catch (e: Exception) {
-            Log.error("Could not communicate with the server on port ${this.port}: ${e.message}")
-            Log.debug(e)
-        }
     }
 }

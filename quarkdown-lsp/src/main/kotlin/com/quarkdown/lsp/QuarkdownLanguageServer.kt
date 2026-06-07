@@ -28,20 +28,27 @@ import org.eclipse.lsp4j.services.TextDocumentService
 import org.eclipse.lsp4j.services.WorkspaceService
 import java.io.File
 import java.util.concurrent.CompletableFuture
-import kotlin.concurrent.thread
+import java.util.concurrent.Executor
+import java.util.concurrent.ForkJoinPool
 import kotlin.system.exitProcess
 
 /**
  * Quarkdown Language Server implementation.
  * @param quarkdownDirectory the directory containing the Quarkdown distribution, if available
+ * @param executor executor used to dispatch background work (catalogue warm-up, diagnostics, completion)
+ * @param onExit hook invoked when the client sends the LSP `exit` notification. Defaults to
+ *               terminating the JVM, which is appropriate for stdio mode
  */
 class QuarkdownLanguageServer(
     private val quarkdownDirectory: File?,
+    private val executor: Executor = ForkJoinPool.commonPool(),
+    private val onExit: () -> Unit = { exitProcess(0) },
 ) : LanguageServer,
     LanguageClientAware {
     private val textDocumentService: TextDocumentService =
         QuarkdownTextDocumentService(
             this,
+            executor,
             CompletionSuppliersFactory.default(this),
             SemanticTokensSuppliersFactory.default(),
             HoverSuppliersFactory.default(this),
@@ -95,8 +102,8 @@ class QuarkdownLanguageServer(
         val response = InitializeResult(serverCaps)
 
         // Caching the available function catalogue for improved performance.
-        thread {
-            docsDirectory?.let(CacheableFunctionCatalogue::storeCatalogue)
+        docsDirectory?.let { dir ->
+            executor.execute { CacheableFunctionCatalogue.storeCatalogue(dir) }
         }
 
         return CompletableFuture.completedFuture(response)
@@ -104,7 +111,7 @@ class QuarkdownLanguageServer(
 
     override fun shutdown(): CompletableFuture<in Any>? = CompletableFuture.completedFuture(null)
 
-    override fun exit() = exitProcess(0)
+    override fun exit() = onExit()
 
     override fun getTextDocumentService() = textDocumentService
 

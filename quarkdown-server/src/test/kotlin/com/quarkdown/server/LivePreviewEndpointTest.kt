@@ -71,8 +71,8 @@ class LivePreviewEndpointTest {
                 val body = response.bodyAsText()
                 // The wrapper must contain an iframe whose src is an absolute path from the root.
                 assertTrue(body.contains("src=\"/test.html\""), "Expected iframe src=\"/test.html\" in wrapper")
-                // The wrapper must include the WebSocket script with the correct server port.
-                assertTrue(body.contains("$SERVER_HOST:$port"), "Expected server host and port in WebSocket script")
+                // The wrapper must include the reload event-stream script with the correct server host and port.
+                assertTrue(body.contains("$SERVER_HOST:$port"), "Expected server host and port in reload event-stream script")
             }
         }
 

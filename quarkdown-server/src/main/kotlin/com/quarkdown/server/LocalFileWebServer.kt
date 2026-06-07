@@ -11,13 +11,11 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticFiles
 import io.ktor.server.netty.Netty
 import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
-import io.ktor.server.websocket.WebSockets
-import io.ktor.server.websocket.pingPeriod
-import io.ktor.server.websocket.timeout
-import io.ktor.server.websocket.webSocket
+import io.ktor.server.sse.SSE
+import io.ktor.server.sse.sse
 import java.io.File
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * Loopback address used by the server and all clients.
@@ -34,7 +32,9 @@ val SERVER_HOST: String =
  * Web server that:
  * - Serves local file at [targetFile];
  * - Supports live preview of HTML files at `/live/{file...}` ([LivePreviewEndpoint]);
- * - Supports live-reloading via WebSockets at `/reload` ([ReloadEndpoint]).
+ * - Supports live reloading at `/reload` ([ReloadEndpoint]):
+ *   `GET` opens a Server-Sent Events stream for subscribers (browser clients),
+ *   `POST` broadcasts a reload event to every active subscriber (Quarkdown CLI).
  * @param targetFile file to serve
  */
 class LocalFileWebServer(
@@ -58,11 +58,7 @@ class LocalFileWebServer(
 
         val server =
             embeddedServer(Netty, port) {
-                install(WebSockets) {
-                    pingPeriod = 10.seconds
-                    timeout = 15.seconds
-                    maxFrameSize = Long.MAX_VALUE
-                }
+                install(SSE)
 
                 routing {
                     // Serves the target file directly at the root path.
@@ -73,9 +69,14 @@ class LocalFileWebServer(
                         livePreview.handleRequest(call, port)
                     }
 
-                    // WebSocket endpoint for reloading live previews.
-                    webSocket(ServerEndpoints.RELOAD_LIVE_PREVIEW) {
-                        reload.handleRequest(this)
+                    // SSE stream that delivers reload events to subscribers.
+                    sse(ServerEndpoints.RELOAD_LIVE_PREVIEW) {
+                        reload.handleSubscription(this)
+                    }
+
+                    // Trigger: broadcasts a reload event to every active SSE subscriber.
+                    post(ServerEndpoints.RELOAD_LIVE_PREVIEW) {
+                        reload.handleTrigger(call)
                     }
                 }
             }

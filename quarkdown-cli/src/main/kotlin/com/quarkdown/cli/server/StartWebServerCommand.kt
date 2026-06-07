@@ -7,9 +7,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.server.LocalFileWebServer
-import com.quarkdown.server.ServerEndpoints
 import com.quarkdown.server.browser.BrowserLauncher
-import com.quarkdown.server.message.ServerMessageSession
 import java.io.File
 
 /**
@@ -44,12 +42,6 @@ class StartWebServerCommand : CliktCommand(name = "start") {
 
     override fun run() {
         val options = WebServerOptions(port, targetFile, browser, preferLivePreviewUrl = true)
-        val session =
-            ServerMessageSession(
-                port = port,
-                endpoint = ServerEndpoints.RELOAD_LIVE_PREVIEW,
-            )
-
-        WebServerStarter.start(options, session)
+        WebServerStarter.start(options, wait = true)
     }
 }
