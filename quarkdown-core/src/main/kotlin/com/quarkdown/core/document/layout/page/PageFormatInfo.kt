@@ -21,6 +21,7 @@ import com.quarkdown.core.misc.color.Color
  * @param margin blank space around the content of each page
  * @param contentBorderWidth width of the border around the content area of each page
  * @param contentBorderColor color of the border around the content area of each page
+ * @param backgroundColor background color of each page
  * @param columnCount number of columns on each page. If set, the layout becomes multi-column
  * @param alignment text alignment of the content of each page
  */
@@ -32,6 +33,7 @@ data class PageFormatInfo(
     val margin: Sizes? = null,
     val contentBorderWidth: Sizes? = null,
     val contentBorderColor: Color? = null,
+    val backgroundColor: Color? = null,
     val columnCount: Int? = null,
     val alignment: Container.TextAlignment? = null,
 )

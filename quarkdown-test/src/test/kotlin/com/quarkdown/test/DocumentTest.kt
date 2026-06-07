@@ -68,7 +68,7 @@ class DocumentTest {
             .doctype {slides}
             .doclang {english}
             .theme {darko} layout:{minimal}
-            .pageformat size:{A3} orientation:{landscape} margin:{3cm 2px} bordercolor:{green} columns:{4} alignment:{end}
+            .pageformat size:{A3} orientation:{landscape} margin:{3cm 2px} bordercolor:{green} background:{red} columns:{4} alignment:{end}
             .paragraphstyle lineheight:{2.0} spacing:{1.5} indent:{2}
             .slides transition:{zoom} speed:{fast}
             .autopagebreak maxdepth:{3}
@@ -107,6 +107,7 @@ class DocumentTest {
 
             assertNull(pageFormat.contentBorderWidth)
             assertEquals(NamedColor.GREEN.color, pageFormat.contentBorderColor)
+            assertEquals(NamedColor.RED.color, pageFormat.backgroundColor)
             assertEquals(4, pageFormat.columnCount)
             assertEquals(Container.TextAlignment.END, pageFormat.alignment)
 

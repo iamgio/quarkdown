@@ -97,6 +97,9 @@ class HtmlDocumentStylesheet(
                         "--qd-page-content-border-color" value it
                         "--qd-page-content-border-style" value "solid"
                     }
+                    format.backgroundColor?.let {
+                        "--qd-background-color" value it
+                    }
                 }
             }
 
