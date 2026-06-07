@@ -379,6 +379,7 @@ A special thanks to all the sponsors who [supported this project](https://github
 
 <p align="center">
   <a href="https://github.com/vitto4"><img src="https://avatars.githubusercontent.com/u/128498605?v=4" alt="vitto4" width="60"></a>
+  <a href="https://github.com/aaditkamat"><img src="https://avatars.githubusercontent.com/u/30969577?v=4" alt="aaditkamat" width="60"></a>
 </p>
 
 <p align="center">
