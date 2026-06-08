@@ -16,27 +16,21 @@ object CacheableFunctionCatalogue {
     private val catalogue = ConcurrentHashMap<DocsDirectory, Set<DocumentedFunction>>()
 
     /**
-     * Stores the functions extracted from the documentation files in the cache,
-     * overwriting any existing entries for the given directory.
-     * Results are not stored if no functions are found.
+     * Walks the documentation files in [docsDirectory] and caches the extracted functions
+     * if the cache is not already populated for that directory.
+     *
+     * Concurrent calls for the same directory only run the walk once: the lock prevents
+     * parallel callers from re-walking the docs N times.
+     * Empty results are not cached, so a subsequent call will retry.
+     *
      * @param docsDirectory the directory containing the documentation files
      */
     fun storeCatalogue(docsDirectory: DocsDirectory) {
-        val functions =
-            DokkaHtmlWalker(docsDirectory)
-                .walk()
-                .filter { it.isInModule }
-                .mapNotNull {
-                    val extractor = it.extractor()
-                    DocumentedFunction(
-                        data = extractor.extractFunctionData() ?: return@mapNotNull null,
-                        rawData = it,
-                        documentationAsMarkup = extractor.extractContentAsMarkup(),
-                    )
-                }.toSet()
-
-        if (functions.isNotEmpty()) {
-            catalogue[docsDirectory] = functions
+        if (catalogue.containsKey(docsDirectory)) return
+        synchronized(this) {
+            if (catalogue.containsKey(docsDirectory)) return
+            val functions = walk(docsDirectory)
+            if (functions.isNotEmpty()) catalogue[docsDirectory] = functions
         }
     }
 
@@ -47,10 +41,24 @@ object CacheableFunctionCatalogue {
      * @param docsDirectory the directory containing the documentation files
      * @return a sequence of documented functions
      */
-    fun getCatalogue(docsDirectory: DocsDirectory): Sequence<DocumentedFunction> =
-        this.catalogue[docsDirectory]?.asSequence()
-            ?: storeCatalogue(docsDirectory).let { this.catalogue[docsDirectory] }?.asSequence()
-            ?: emptySequence()
+    fun getCatalogue(docsDirectory: DocsDirectory): Sequence<DocumentedFunction> {
+        catalogue[docsDirectory]?.let { return it.asSequence() }
+        storeCatalogue(docsDirectory)
+        return catalogue[docsDirectory]?.asSequence() ?: emptySequence()
+    }
+
+    private fun walk(docsDirectory: DocsDirectory): Set<DocumentedFunction> =
+        DokkaHtmlWalker(docsDirectory)
+            .walk()
+            .filter { it.isInModule }
+            .mapNotNull {
+                val extractor = it.extractor()
+                DocumentedFunction(
+                    data = extractor.extractFunctionData() ?: return@mapNotNull null,
+                    rawData = it,
+                    documentationAsMarkup = extractor.extractContentAsMarkup(),
+                )
+            }.toSet()
 
     /**
      * Searches for functions whose names start with the given query string, case-insensitively.
