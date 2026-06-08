@@ -1,6 +1,4 @@
 @param String srcFile
-@param String serverHost = null
-@param String serverPort = null
 
 <!DOCTYPE html>
 <html>
@@ -87,18 +85,16 @@
     <iframe id="frame-0" class="content-frame visible" src="${srcFile}"></iframe>
     <iframe id="frame-1" class="content-frame hidden" src="${srcFile}"></iframe>
 </div>
-@if(serverHost != null && serverPort != null)
 <script data-name="reload-events">
     /**
      * Subscribes to a Server-Sent Events stream and invokes the callback for every event.
      * EventSource handles reconnection automatically; no manual retry loop is required.
-     * @param {string} serverUrl - The server URL (e.g., `localhost:8080`).
-     * @param {string} endpoint - The SSE endpoint (e.g., `reload`).
+     * @param {string} endpoint - The SSE endpoint, relative to the wrapper's origin (e.g. `reload`).
      * @param {function} onMessage - Handler invoked with each incoming event.
      * @returns {EventSource} The event source instance.
      */
-    function startEventStream(serverUrl, endpoint, onMessage) {
-        const source = new EventSource(`http://${'$'}{serverUrl}/${'$'}{endpoint}`);
+    function startEventStream(endpoint, onMessage) {
+        const source = new EventSource(`/${'$'}{endpoint}`);
 
         source.addEventListener('open', () => {
             console.log('Connected to event stream ' + source.url);
@@ -117,11 +113,10 @@
     /**
      * Starts the event stream that reloads the content when an event is received.
      */
-    function startReloadEventStream(serverUrl) {
-        startEventStream(serverUrl, 'reload', reload);
+    function startReloadEventStream() {
+        startEventStream('reload', reload);
     }
 </script>
-@endif
 <script data-name="messaging">
     // Scalable message listener registry, with event type as the key and the handler function as the value.
     const messageListeners = new Map();
@@ -430,8 +425,6 @@
 
     messageListeners.set('postRenderingCompleted', onFrameRendered);
 </script>
-@if(serverHost != null && serverPort != null)
-<script>startReloadEventStream("${serverHost}:${serverPort}")</script>
-@endif
+<script>startReloadEventStream()</script>
 </body>
 </html>

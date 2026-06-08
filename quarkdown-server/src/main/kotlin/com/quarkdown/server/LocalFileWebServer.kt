@@ -66,7 +66,7 @@ class LocalFileWebServer(
 
                     // Serves files for live preview.
                     get(ServerEndpoints.LIVE_PREVIEW + "/{file...}") {
-                        livePreview.handleRequest(call, port)
+                        livePreview.handleRequest(call)
                     }
 
                     // SSE stream that delivers reload events to subscribers.
