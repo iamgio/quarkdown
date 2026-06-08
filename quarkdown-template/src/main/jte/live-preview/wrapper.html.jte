@@ -88,41 +88,37 @@
     <iframe id="frame-1" class="content-frame hidden" src="${srcFile}"></iframe>
 </div>
 @if(serverHost != null && serverPort != null)
-<script data-name="websockets">
+<script data-name="reload-events">
     /**
-     * Starts a WebSocket connection to the specified server and endpoint.
+     * Subscribes to a Server-Sent Events stream and invokes the callback for every event.
+     * EventSource handles reconnection automatically; no manual retry loop is required.
      * @param {string} serverUrl - The server URL (e.g., `localhost:8080`).
-     * @param {string} endpoint - The WebSocket endpoint (e.g., `reload`).
-     * @param {function} onMessage - The callback function to handle incoming messages.
-     * @returns {WebSocket} The WebSocket instance.
+     * @param {string} endpoint - The SSE endpoint (e.g., `reload`).
+     * @param {function} onMessage - Handler invoked with each incoming event.
+     * @returns {EventSource} The event source instance.
      */
-    function startWebSocket(serverUrl, endpoint, onMessage) {
-        const socket = new WebSocket(`ws://${'$'}{serverUrl}/${'$'}{endpoint}`);
+    function startEventStream(serverUrl, endpoint, onMessage) {
+        const source = new EventSource(`http://${'$'}{serverUrl}/${'$'}{endpoint}`);
 
-        socket.addEventListener('open', () => {
-            console.log('Connected to server ' + socket.url);
+        source.addEventListener('open', () => {
+            console.log('Connected to event stream ' + source.url);
         });
 
-        socket.addEventListener("message", onMessage);
+        source.addEventListener('message', onMessage);
 
-        socket.addEventListener('close', (event) => {
-            console.log(`WebSocket closed: Code=${'$'}{event.code}, Reason=${'$'}{event.reason}`);
-            // Automatically reconnect after a brief delay.
-            setTimeout(() => startWebSocket(serverUrl, endpoint, onMessage), 1000);
+        source.addEventListener('error', (error) => {
+            // EventSource transitions to the 'connecting' state and retries on its own.
+            console.warn('Event stream interrupted; auto-reconnecting.', error);
         });
 
-        socket.addEventListener("error", (error) => {
-            console.error("WebSocket error:", error);
-        });
-
-        return socket;
+        return source;
     }
 
     /**
-     * Starts the WebSocket that reload the content when a message is received.
+     * Starts the event stream that reloads the content when an event is received.
      */
-    function startReloadWebSocket(serverUrl) {
-        startWebSocket(serverUrl, 'reload', reload);
+    function startReloadEventStream(serverUrl) {
+        startEventStream(serverUrl, 'reload', reload);
     }
 </script>
 @endif
@@ -435,7 +431,7 @@
     messageListeners.set('postRenderingCompleted', onFrameRendered);
 </script>
 @if(serverHost != null && serverPort != null)
-<script>startReloadWebSocket("${serverHost}:${serverPort}")</script>
+<script>startReloadEventStream("${serverHost}:${serverPort}")</script>
 @endif
 </body>
 </html>

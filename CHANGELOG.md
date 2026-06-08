@@ -12,6 +12,16 @@ The Quarkdown language server API now allows the LSP to be embedded in custom ho
 
 &nbsp;
 
+### Changed
+
+&nbsp;
+
+#### Live preview now uses SSE
+
+The live preview connection between the local server and the browser now runs over Server-Sent Events instead of WebSockets. 
+
+&nbsp;
+
 ### Fixed
 
 &nbsp;

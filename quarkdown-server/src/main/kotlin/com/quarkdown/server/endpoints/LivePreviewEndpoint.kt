@@ -16,7 +16,7 @@ private const val DEFAULT_FILE = "index.html"
 
 /**
  * Handler of the live preview endpoint (`/live/<file>`) which serves static files relative to a target file or directory.
- * Additionally, for HTML files, it serves a wrapper HTML that includes a WebSocket script + iframe for live previewing.
+ * Additionally, for HTML files, it serves a wrapper HTML that includes a reload event-stream subscription + iframe for live previewing.
  * @param origin the root directory from which files are served
  */
 class LivePreviewEndpoint(
