@@ -1,5 +1,5 @@
 /* package.module.Abc => Abc */
-#sideMenu a[href*='module.']:has(wbr) > span:not(:last-child) {
+#sideMenu .toc--link[href*='.module.']:has(wbr) > span:not(:last-child) {
     display: none;
 }
 
@@ -17,24 +17,24 @@
 }
 
 /* User libraries (e.g. stdlib) show on top. */
-#sideMenu .sideMenu > .toc--part:has(a[href*='module.']) {
+#sideMenu .sideMenu > .toc--part:has(.toc--link[href*='.module.']) {
     order: 1;
 }
 
 /* Shows a label on top of user libraries. */
-.toc--part[data-nesting-level="0"]:has(a[href*='module.']) > .toc--row > a:before {
+.toc--part[data-nesting-level="0"]:has(.toc--link[href*='.module.']) > .toc--row > .toc--link:before {
     content: 'User Library';
     display: block;
     text-transform: uppercase;
     opacity: .5;
 }
 
-#sideMenu .sideMenu > .toc--part:has(a[href*='module.']) > .toc--row {
+#sideMenu .sideMenu > .toc--part:has(.toc--link[href*='.module.']) > .toc--row {
     background-color: rgba(77, 187, 95, .1);
 }
 
 /* If a package contains Quarkdown modules, non-module packages are semi-hidden. */
-.toc--part:has(a[href*='module.']) > .toc--part:has(a:not([href*='module.'])) > .toc--row {
+.toc--part:has(.toc--link[href*='.module.']) > .toc--part:has(.toc--link:not([href*='.module.'])) > .toc--row {
     opacity: .5;
 }
 
