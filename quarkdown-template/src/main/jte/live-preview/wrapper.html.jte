@@ -1,4 +1,5 @@
 @param String srcFile
+@param String endpointRoot = "/"
 
 <!DOCTYPE html>
 <html>
@@ -89,12 +90,18 @@
     /**
      * Subscribes to a Server-Sent Events stream and invokes the callback for every event.
      * EventSource handles reconnection automatically; no manual retry loop is required.
-     * @param {string} endpoint - The SSE endpoint, relative to the wrapper's origin (e.g. `reload`).
+     *
+     * The endpoint URL is built by concatenating the JTE-injected `endpointRoot` (a path prefix
+     * such as `/` for a same-origin root, or `../` when the wrapper is embedded under a nested
+     * URL layout) with the `endpoint` name. Routing through a relative URL keeps the request
+     * same-origin in every case and avoids CORS-blocked SSE handshakes.
+     *
+     * @param {string} endpoint - The SSE endpoint name (e.g. `reload`).
      * @param {function} onMessage - Handler invoked with each incoming event.
      * @returns {EventSource} The event source instance.
      */
     function startEventStream(endpoint, onMessage) {
-        const source = new EventSource(`/${'$'}{endpoint}`);
+        const source = new EventSource(`${endpointRoot}${'$'}{endpoint}`);
 
         source.addEventListener('open', () => {
             console.log('Connected to event stream ' + source.url);
@@ -103,7 +110,6 @@
         source.addEventListener('message', onMessage);
 
         source.addEventListener('error', (error) => {
-            // EventSource transitions to the 'connecting' state and retries on its own.
             console.warn('Event stream interrupted; auto-reconnecting.', error);
         });
 

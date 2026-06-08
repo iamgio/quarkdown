@@ -8,18 +8,27 @@ import com.quarkdown.template.TemplateProcessor
 private const val TEMPLATE_NAME = "live-preview/wrapper.html.jte"
 
 private const val TEMPLATE_SOURCE_FILE_PLACEHOLDER = "srcFile"
+private const val TEMPLATE_ENDPOINT_ROOT_PLACEHOLDER = "endpointRoot"
+
+/**
+ * Default endpoint root: the wrapper assumes the reload endpoint sits at `/<endpoint>` relative to
+ * the document origin. Matches the layout used by the bundled Quarkdown server.
+ */
+const val DEFAULT_ENDPOINT_ROOT: String = "/"
 
 /**
  * Renders the live-preview HTML wrapper, which embeds a target document inside double-buffered iframes
- * with scroll preservation, and subscribes to a same-origin Server-Sent Events reload stream at
- * `/reload`. The wrapper is meant to be served by a Quarkdown server: the SSE subscription always
- * resolves against the document's own origin, so it inherits whatever host:port the wrapper was loaded
- * from (`localhost`, `127.0.0.1`, an embedder-picked loopback, etc.) without any CORS coordination.
+ * with scroll preservation, and subscribes to a Server-Sent Events reload stream.
+ *
+ * The reload URL is built by concatenating [endpointRoot] with the endpoint name (`reload`).
  *
  * @param srcFile URL or path used as the iframe's `src`
+ * @param endpointRoot path prefix concatenated with the endpoint name to form the SSE URL. Defaults to
+ *                     [DEFAULT_ENDPOINT_ROOT] (`/`); pass e.g. `"../"` to produce `../reload`.
  */
 class HtmlLivePreviewWrapper(
     private val srcFile: String,
+    private val endpointRoot: String = DEFAULT_ENDPOINT_ROOT,
 ) {
     /**
      * Renders the wrapper into a self-contained HTML document.
@@ -28,6 +37,7 @@ class HtmlLivePreviewWrapper(
     fun render(): String =
         TemplateProcessor(TEMPLATE_NAME)
             .value(TEMPLATE_SOURCE_FILE_PLACEHOLDER, srcFile)
+            .value(TEMPLATE_ENDPOINT_ROOT_PLACEHOLDER, endpointRoot)
             .process()
             .toString()
 }
