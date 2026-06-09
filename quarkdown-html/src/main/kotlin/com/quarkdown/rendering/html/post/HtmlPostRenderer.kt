@@ -52,13 +52,18 @@ class HtmlPostRenderer(
         ),
     private val resourcesProvider: () -> Set<PostRendererResource> =
         {
+            // During live preview, symlink file references instead of deep copying.
+            val symlinkDependencies = context.attachedPipeline?.options?.symlinkDependencies ?: false
             setOfNotNull(
                 ThemePostRendererResource(
                     theme = context.documentInfo.theme.orDefault(DEFAULT_THEME),
                     locale = context.documentInfo.locale,
                     themeLayout = resourcesLayout?.themes,
                 ),
-                ScriptPostRendererResource(scriptsLayout = resourcesLayout?.scripts),
+                ScriptPostRendererResource(
+                    scriptsLayout = resourcesLayout?.scripts,
+                    symlink = symlinkDependencies,
+                ),
                 MediaPostRendererResource(context.mediaStorage),
                 context.fileSystem.workingDirectory
                     ?.let(::StaticAssetsPostRendererResource),
@@ -67,7 +72,11 @@ class HtmlPostRenderer(
                     .takeIf { context.documentInfo.type == DocumentType.DOCS }
                     ?.generate(context.sharedSubdocumentsData)
                     ?.let(::SearchIndexPostRendererResource),
-                ThirdPartyPostRendererResource(context, librariesLayout = resourcesLayout?.libraries),
+                ThirdPartyPostRendererResource(
+                    context,
+                    librariesLayout = resourcesLayout?.libraries,
+                    symlink = symlinkDependencies,
+                ),
             )
         },
 ) : PostRenderer by base {

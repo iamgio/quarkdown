@@ -56,9 +56,14 @@ HELLO, world
 
 &nbsp;
 
-#### Live preview now uses SSE
+#### Faster live preview
 
-The live preview connection between the local server and the browser now runs over Server-Sent Events instead of WebSockets.
+Live preview now references third-party libraries through symbolic links instead of copying them (although already checksum-optimized). Preview rebuilds are faster and use less disk space, especially in documents that include code blocks, equations, or Mermaid diagrams.
+
+Additionally, the live preview connection between the local server and the browser now runs over Server-Sent Events (SSE) instead of WebSockets.
+
+> [!NOTE]
+> If you experience errors after launching live preview for the first time after updating, delete the output directory and run again (or run with `--clean`).
 
 &nbsp;
 

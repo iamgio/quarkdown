@@ -4,6 +4,7 @@ import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
+import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.test.util.DATA_FOLDER
 import com.quarkdown.test.util.execute
@@ -316,6 +317,59 @@ class HtmlOutputResourceTest {
                 assertContains(resources, "theme")
                 assertContains(resources, "script")
                 assertContains(resources, "index")
+            },
+        ) {}
+    }
+
+    /**
+     * Returns the [FileReferenceOutputArtifact]s nested inside the third-party `lib/` group,
+     * which is where the symlink-vs-copy decision for dependencies is wired through.
+     */
+    private fun getThirdPartyLibraryArtifacts(group: OutputResource?): List<FileReferenceOutputArtifact> {
+        val libGroup =
+            getSubResources(group)
+                .filterIsInstance<OutputResourceGroup>()
+                .firstOrNull { it.name == "lib" }
+        assertNotNull(libGroup, "Expected a 'lib' group with third-party dependencies")
+        return libGroup.resources.filterIsInstance<FileReferenceOutputArtifact>()
+    }
+
+    /**
+     * Returns the top-level `script` artifact.
+     */
+    private fun getScriptArtifact(group: OutputResource?): FileReferenceOutputArtifact {
+        val script =
+            getSubResources(group)
+                .filterIsInstance<FileReferenceOutputArtifact>()
+                .firstOrNull { it.name == "script" }
+        assertNotNull(script)
+        return script
+    }
+
+    @Test
+    fun `preview mode marks third-party libraries and script as symlinks`() {
+        execute(
+            source = "",
+            previewMode = true,
+            outputResourceHook = { group ->
+                val libs = getThirdPartyLibraryArtifacts(group)
+                assertTrue(libs.isNotEmpty())
+                assertTrue(libs.all { it.symlink })
+                assertTrue(getScriptArtifact(group).symlink)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `non-preview mode copies third-party libraries and script instead of symlinking`() {
+        execute(
+            source = "",
+            previewMode = false,
+            outputResourceHook = { group ->
+                val libs = getThirdPartyLibraryArtifacts(group)
+                assertTrue(libs.isNotEmpty())
+                assertTrue(libs.none { it.symlink })
+                assertFalse(getScriptArtifact(group).symlink)
             },
         ) {}
     }

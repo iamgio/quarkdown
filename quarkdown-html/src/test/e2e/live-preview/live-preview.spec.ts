@@ -136,6 +136,50 @@ for (const docType of SCROLLABLE_DOC_TYPES) {
     });
 }
 
+// --- Third-party library re-applied across multiple live edits ---
+
+test("highlight.js re-applies tokenization across multiple live edits [plain]", async ({page}) => {
+    test.setTimeout(TEST_TIMEOUT);
+
+    await runLivePreviewTest(
+        TEST_DIR,
+        page,
+        async (ctx) => {
+            // Initial load.
+            await expect(ctx.activeFrame.locator("body")).toContainText("Marker Alpha", {
+                timeout: RELOAD_TIMEOUT,
+            });
+
+            // First edit: introduce a Kotlin code block. `fun` should be tagged as a keyword.
+            ctx.editFile(
+                "main.qd",
+                'Marker Beta\n\n```kotlin\nfun greet(name: String) {\n    println("Hello, $name")\n}\n```\n',
+            );
+            await expect(ctx.activeFrame.locator("body")).toContainText("Marker Beta", {
+                timeout: RELOAD_TIMEOUT,
+            });
+
+            const kotlinCode = ctx.activeFrame.locator("pre code.hljs");
+            await expect(kotlinCode).toBeVisible({timeout: RELOAD_TIMEOUT});
+            await expect(kotlinCode.locator(".hljs-keyword").first()).toHaveText("fun");
+
+            // Second edit: swap in a Python code block. `def` should now be the highlighted keyword.
+            ctx.editFile(
+                "main.qd",
+                'Marker Gamma\n\n```python\ndef greet(name):\n    print(f"Hello, {name}")\n```\n',
+            );
+            await expect(ctx.activeFrame.locator("body")).toContainText("Marker Gamma", {
+                timeout: RELOAD_TIMEOUT,
+            });
+
+            const pythonCode = ctx.activeFrame.locator("pre code.hljs");
+            await expect(pythonCode).toBeVisible({timeout: RELOAD_TIMEOUT});
+            await expect(pythonCode.locator(".hljs-keyword").first()).toHaveText("def");
+        },
+        {docType: "plain"},
+    );
+});
+
 // --- Sticky-to-bottom scroll preserved across reload ---
 
 for (const docType of SCROLLABLE_DOC_TYPES) {

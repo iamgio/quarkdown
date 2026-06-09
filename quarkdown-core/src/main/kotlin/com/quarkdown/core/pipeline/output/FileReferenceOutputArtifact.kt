@@ -8,12 +8,15 @@ import java.io.File
  * @param name the output file name (with extension, since the original file name is used as-is)
  * @param file the source file (or directory) to copy
  * @param useChecksumInvalidation whether to also create a checksum file for this artifact, used for incremental builds
- *                                to determine whether the artifact has changed since the last build and should be recreated.
+ *                                to determine whether the artifact has changed since the last build and should be recreated
+ * @param symlink whether to create a symbolic link to the source file instead of copying it.
+ *                Takes precedence over [useChecksumInvalidation]
  */
 data class FileReferenceOutputArtifact(
     override val name: String,
     val file: File,
     val useChecksumInvalidation: Boolean = false,
+    val symlink: Boolean = false,
 ) : OutputResource {
     override fun <T> accept(visitor: OutputResourceVisitor<T>): T = visitor.visit(this)
 }

@@ -240,7 +240,7 @@ class HtmlResourceGenerationTest {
         val bogusLibDir = InstallLayoutDirectory(File("nonexistent"))
         val resources =
             buildSet {
-                ThirdPartyPostRendererResource(context, librariesLayout = bogusLibDir)
+                ThirdPartyPostRendererResource(context, librariesLayout = bogusLibDir, symlink = false)
                     .includeTo(this, plainHtml)
             }
         assertNull(resources.filterIsInstance<OutputResourceGroup>().firstOrNull { it.name == HTML_LIBRARY_OUTPUT_PATH })
