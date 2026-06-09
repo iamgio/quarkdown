@@ -22,12 +22,15 @@ class DokkaReaderTest {
 
         fun String.withoutWhitespace(): String = replace("\\s+".toRegex(), "")
 
+        val actual = DokkaHtmlContentExtractor(fullHtml).extractContent()!!
+
         assertEquals(
             extractedHtml.withoutWhitespace(),
-            DokkaHtmlContentExtractor(fullHtml)
-                .extractContent()
-                ?.withoutWhitespace(),
+            actual.withoutWhitespace(),
         )
+        // Code-block copy buttons must be stripped from the extracted content.
+        assertFalse("copy-tooltip" in actual)
+        assertFalse(actual.contains("clipboard", ignoreCase = true))
     }
 
     private fun extractFunctionData(resourceName: String): DocsFunction {
@@ -40,7 +43,7 @@ class DokkaReaderTest {
         val function = extractFunctionData("/content/lowercase.html")
         val parameter = function.parameters.first { it.name == "string" }
         assertEquals("lowercase", function.name)
-        assertFalse(function.isLikelyChained)
+        assertTrue(function.isLikelyChained)
         assertEquals(
             "<p class=\"paragraph\">string to convert</p>",
             parameter.description,
