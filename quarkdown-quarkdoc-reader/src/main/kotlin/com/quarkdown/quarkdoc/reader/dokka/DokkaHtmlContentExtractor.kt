@@ -24,7 +24,7 @@ class DokkaHtmlContentExtractor(
             .selectFirst("#main .content")
             ?.apply {
                 // Removes copy buttons from code blocks.
-                select(".top-right-position:has(.copy-icon)").remove()
+                select(".copy-tooltip").remove()
             }?.outerHtml()
 
     override fun extractFunctionData(): DocsFunction? {
