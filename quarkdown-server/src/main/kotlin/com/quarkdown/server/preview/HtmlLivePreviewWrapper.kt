@@ -8,25 +8,27 @@ import com.quarkdown.template.TemplateProcessor
 private const val TEMPLATE_NAME = "live-preview/wrapper.html.jte"
 
 private const val TEMPLATE_SOURCE_FILE_PLACEHOLDER = "srcFile"
-private const val TEMPLATE_SERVER_HOST_PLACEHOLDER = "serverHost"
-private const val TEMPLATE_SERVER_PORT_PLACEHOLDER = "serverPort"
+private const val TEMPLATE_ENDPOINT_ROOT_PLACEHOLDER = "endpointRoot"
 
 /**
- * Renders the live-preview HTML wrapper, which embeds a target document inside double-buffered iframes and scroll preservation.
+ * Default endpoint root: the wrapper assumes the reload endpoint sits at `/<endpoint>` relative to
+ * the document origin. Matches the layout used by the bundled Quarkdown server.
+ */
+const val DEFAULT_ENDPOINT_ROOT: String = "/"
+
+/**
+ * Renders the live-preview HTML wrapper, which embeds a target document inside double-buffered iframes
+ * with scroll preservation, and subscribes to a Server-Sent Events reload stream.
  *
- * - When [reloadSource] is provided, the wrapper additionally opens a WebSocket against the given host and port
- *   and refreshes the embedded page whenever a reload message arrives. This is the form served by the live preview
- *   endpoint (`/live/<file>`).
- * - When [reloadSource] is `null`, the wrapper carries no reload client and the embedded page must be refreshed
- *   by other means. This is the form written to disk by serverless preview strategies.
+ * The reload URL is built by concatenating [endpointRoot] with the endpoint name (`reload`).
  *
- * @param srcFile URL or path used as the iframe's `src`. Both absolute server paths (e.g. `/index.html`) and
- *                document-relative paths (e.g. `index.html`) are supported; the value is forwarded as-is to the template.
- * @param reloadSource optional WebSocket coordinates the wrapper should connect to for live reload notifications
+ * @param srcFile URL or path used as the iframe's `src`
+ * @param endpointRoot path prefix concatenated with the endpoint name to form the SSE URL. Defaults to
+ *                     [DEFAULT_ENDPOINT_ROOT] (`/`); pass e.g. `"../"` to produce `../reload`.
  */
 class HtmlLivePreviewWrapper(
     private val srcFile: String,
-    private val reloadSource: ReloadSource? = null,
+    private val endpointRoot: String = DEFAULT_ENDPOINT_ROOT,
 ) {
     /**
      * Renders the wrapper into a self-contained HTML document.
@@ -35,18 +37,7 @@ class HtmlLivePreviewWrapper(
     fun render(): String =
         TemplateProcessor(TEMPLATE_NAME)
             .value(TEMPLATE_SOURCE_FILE_PLACEHOLDER, srcFile)
-            .value(TEMPLATE_SERVER_HOST_PLACEHOLDER, reloadSource?.host)
-            .value(TEMPLATE_SERVER_PORT_PLACEHOLDER, reloadSource?.port?.toString())
+            .value(TEMPLATE_ENDPOINT_ROOT_PLACEHOLDER, endpointRoot)
             .process()
             .toString()
-
-    /**
-     * WebSocket coordinates the wrapper should connect to for live reload notifications.
-     * @param host host name or address the reload endpoint is reachable on (e.g. `localhost`)
-     * @param port port number the reload endpoint is exposed on
-     */
-    data class ReloadSource(
-        val host: String,
-        val port: Int,
-    )
 }

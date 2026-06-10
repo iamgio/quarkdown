@@ -1,132 +1,75 @@
 package com.quarkdown.server.endpoints
 
-import io.ktor.websocket.CloseReason
-import io.ktor.websocket.Frame
-import io.ktor.websocket.WebSocketSession
-import io.ktor.websocket.close
-import io.ktor.websocket.readText
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.response.respond
+import io.ktor.server.sse.ServerSSESession
+import io.ktor.sse.ServerSentEvent
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * Handler of the reload endpoint (`/reload`) which manages WebSocket connections for live reloading.
+ * Default reload event payload broadcast to subscribers.
+ */
+private const val DEFAULT_RELOAD_PAYLOAD = "reload"
+
+/**
+ * Handler of the reload endpoint (`/reload`).
  *
- * Whenever a client sends a message, it is broadcast to all connected clients.
- *
- * A distinction between sender and receiver is not made.
- * In practice, the sender is Quarkdown CLI and the receivers are the browser clients
- * that were served by the live preview endpoint (`/live/<file>`).
+ * The endpoint is split across two HTTP methods, both routed on the same path:
+ * - `GET /reload`: opens a Server-Sent Events stream that receives `reload` events whenever a trigger occurs.
+ *   In practice, browser clients served by the live preview endpoint (`/live/<file>`) subscribe here
+ *   and use the incoming events to refresh the embedded page.
+ * - `POST /reload`: broadcasts a `reload` event to every active subscriber. The optional request body
+ *   (text/plain) is forwarded as the event payload; if absent, a default value is used.
+ *   In practice, Quarkdown CLI calls this endpoint after each successful compilation.
  */
 class ReloadEndpoint {
     private val logger: Logger = LoggerFactory.getLogger(ReloadEndpoint::class.java)
 
-    // Trackers of active connections.
-    private val activeConnections = ConcurrentHashMap<String, Boolean>()
-    private val connectionCounter = AtomicInteger(0)
-
-    // Shared flow to broadcast messages to all connected clients.
-    // No replay is needed: a newly connected client already has the latest content,
-    // and replaying stale messages would trigger redundant reloads.
-    private val messageResponseFlow = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 10)
-    private val sharedFlow = messageResponseFlow.asSharedFlow()
+    private val subscriberCounter = AtomicInteger(0)
 
     /**
-     * Handles the logic for the WebSocket endpoint.
-     * - A new tracked connection is created;
-     * - Incoming messages from a client are broadcast to all connected clients.
-     * @param session the WebSocket session
+     * Shared flow that broadcasts reload events to all currently subscribed sessions.
+     * No replay is needed: a newly connected client already has the latest content,
+     * and replaying stale events would trigger redundant reloads.
      */
-    suspend fun handleRequest(session: WebSocketSession) {
-        val connectionId = newConnectionId()
-        registerConnection(connectionId)
-        val forwarderJob = session.launch { forwardMessagesToClient(session, connectionId) }
+    private val broadcasts = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 10)
+    private val sharedBroadcasts = broadcasts.asSharedFlow()
 
+    /**
+     * Handles a new SSE subscription: keeps the session open and forwards every broadcast event to it.
+     * Returns when the client disconnects (the surrounding [ServerSSESession] is then closed by Ktor).
+     */
+    suspend fun handleSubscription(session: ServerSSESession) {
+        val subscriberId = "subscriber-${subscriberCounter.incrementAndGet()}"
+        logger.info("SSE subscriber connected: $subscriberId")
         try {
-            receiveAndBroadcast(session, connectionId)
+            sharedBroadcasts.collect { payload ->
+                session.send(ServerSentEvent(data = payload))
+                logger.debug("Sent event to $subscriberId: $payload")
+            }
         } catch (e: CancellationException) {
-            logger.debug("WebSocket cancelled: $connectionId")
+            logger.debug("SSE subscription cancelled: $subscriberId")
             throw e
         } catch (e: Exception) {
-            logger.error("WebSocket error for $connectionId: ${e.message}")
+            logger.error("SSE subscription error for $subscriberId: ${e.message}")
         } finally {
-            cleanupConnection(session, connectionId, forwarderJob)
+            logger.info("SSE subscriber disconnected: $subscriberId")
         }
     }
 
     /**
-     * @return a new unique connection ID
+     * Handles a reload trigger: broadcasts a reload event to every subscriber
+     * and responds with `204 No Content`.
      */
-    private fun newConnectionId(): String = "connection-${connectionCounter.incrementAndGet()}"
-
-    /**
-     * Registers a new active connection.
-     */
-    private fun registerConnection(connectionId: String) {
-        activeConnections[connectionId] = true
-        logger.info("WebSocket connection established: $connectionId")
-    }
-
-    /**
-     * Forwards messages from the shared flow to the specific client session, if still active.
-     */
-    private suspend fun forwardMessagesToClient(
-        session: WebSocketSession,
-        connectionId: String,
-    ) {
-        try {
-            sharedFlow.collect { message ->
-                if (activeConnections.containsKey(connectionId)) {
-                    session.send(Frame.Text(message))
-                    logger.debug("Sent message to $connectionId: $message")
-                }
-            }
-        } catch (_: CancellationException) {
-            logger.debug("Forwarder cancelled for $connectionId")
-        } catch (e: Exception) {
-            logger.error("Error sending message to $connectionId: ${e.message}")
-        }
-    }
-
-    /**
-     * Listens for messages from the client session and broadcasts them to all connected clients.
-     */
-    private suspend fun receiveAndBroadcast(
-        session: WebSocketSession,
-        connectionId: String,
-    ) {
-        session.incoming.consumeEach { frame ->
-            if (frame is Frame.Text) {
-                val receivedText = frame.readText()
-                logger.info("Received reload request from $connectionId")
-                logger.debug("Broadcasting message to all connections: $receivedText")
-                messageResponseFlow.emit(receivedText)
-            }
-        }
-    }
-
-    /**
-     * Cleans up resources associated with a connection.
-     */
-    private suspend fun cleanupConnection(
-        session: WebSocketSession,
-        connectionId: String,
-        forwarderJob: Job,
-    ) {
-        activeConnections.remove(connectionId)
-        logger.info("WebSocket connection closed: $connectionId")
-        try {
-            forwarderJob.cancel()
-            session.close(CloseReason(CloseReason.Codes.NORMAL, "Connection closed"))
-        } catch (e: Exception) {
-            logger.debug("Error during cleanup for $connectionId: ${e.message}")
-        }
+    suspend fun handleTrigger(call: ApplicationCall) {
+        logger.info("Reload triggered, broadcasting to subscribers")
+        broadcasts.emit(DEFAULT_RELOAD_PAYLOAD)
+        call.respond(HttpStatusCode.NoContent)
     }
 }

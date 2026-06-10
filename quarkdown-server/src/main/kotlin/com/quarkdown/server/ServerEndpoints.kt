@@ -18,9 +18,10 @@ object ServerEndpoints {
     const val LIVE_PREVIEW = "/live"
 
     /**
-     * Endpoint to trigger a reload of the live preview.
+     * Endpoint that drives live-preview reloading.
      *
-     * Sending a message to this endpoint will trigger a reload in all connected clients.
+     * - `GET` opens a Server-Sent Events stream that delivers reload events to subscribers.
+     * - `POST` broadcasts a reload event to every active subscriber.
      */
     const val RELOAD_LIVE_PREVIEW = "/reload"
 }
