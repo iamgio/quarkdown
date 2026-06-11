@@ -371,7 +371,15 @@ fun extend(
 
     // The wrapper exposes the same parameters as the target, plus `super` which is internal to the lambda.
     val superParameter = body.explicitParameters.firstOrNull()?.copy(isOptional = true)
-    val wrapperParameters = targetFunction.parameters.map { LambdaParameter(it.name, isOptional = true) }
+    val wrapperParameters =
+        targetFunction.parameters
+            .mapNotNull { parameter ->
+                LambdaParameter(
+                    parameter.name,
+                    isOptional = true,
+                ).takeUnless { parameter.isInjected }
+            }
+
     val lambdaParameters =
         when (superParameter) {
             null -> emptyList()

@@ -44,6 +44,12 @@ The live preview connection between the local server and the browser now runs ov
 
 &nbsp;
 
+#### Fixed `.extend` on functions with injected parameters
+
+The `.extend` function now maps parameters correctly when wrapping native functions that feature `@Injected` parameters, such as document metadata functions. 
+
+&nbsp;
+
 #### [LSP] Concurrency issue in document state
 
 Document state and request dispatching now run through thread-safe primitives, ensuring consistent behavior even under heavy load.
