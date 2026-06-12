@@ -6,6 +6,24 @@
 
 &nbsp;
 
+#### [Page background color](https://quarkdown.com/wiki/page-format)
+
+`.pageformat` now accepts a `background` parameter to set the background color of each page:
+
+```markdown
+.pageformat background:{orange}
+```
+
+In `paged` documents, the background can be scoped to specific pages, as usual:
+
+```markdown
+.pageformat pages:{1..3} background:{orange}
+```
+
+Thanks @gggeon96!
+
+&nbsp;
+
 #### [LSP] Embeddable language server
 
 The Quarkdown language server API now allows the LSP to be embedded in custom hosts and run across multiple instances inside a single JVM, thanks to customizable IO streams and pluggable hooks.
