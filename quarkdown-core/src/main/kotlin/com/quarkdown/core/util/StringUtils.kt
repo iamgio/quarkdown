@@ -158,6 +158,32 @@ fun CharSequence.normalizeLineSeparators(): CharSequence =
     }
 
 /**
+ * Normalizes soft line breaks within paragraph text.
+ *
+ * In Quarkdown, paragraphs can span multiple lines, and the line break (soft break)
+ * is normally rendered as a space. However, for CJK and other non-Latin scripts,
+ * inserting a space at every soft break produces incorrect spacing.
+ *
+ * This function normalizes `\n` within a paragraph:
+ *  - If the character before the newline is a Latin letter, digit, or common Latin
+ *    punctuation (.,"'?!;:-), the newline is replaced with a space.
+ *  - Otherwise (e.g., CJK characters, Chinese punctuation), the newline is removed,
+ *    joining the text without a space.
+ *
+ * Hard line breaks (preceded by two spaces or a backslash) are preserved.
+ *
+ * @return the paragraph text with soft line breaks normalized
+ */
+fun String.normalizeSoftBreaks(): String {
+    val latinBefore = "[a-zA-Z0-9.,\"'?!;:()\\[\\]{}\\-]"
+    // Replace \n with space when preceded by a Latin character, leaving hard breaks intact.
+    var result = this.replace(Regex("(?<=$latinBefore)\n"), " ")
+    // Remove remaining standalone \n that are not part of hard line breaks.
+    result = result.replace(Regex("(?<!  )(?<!\\\\)\n"), "")
+    return result
+}
+
+/**
  * Discards blank entries and trims each remaining entry.
  * @return a list of non-blank, trimmed strings
  */

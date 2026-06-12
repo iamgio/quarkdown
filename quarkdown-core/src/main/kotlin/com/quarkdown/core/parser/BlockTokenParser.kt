@@ -51,6 +51,7 @@ import com.quarkdown.core.lexer.tokens.TableToken
 import com.quarkdown.core.lexer.tokens.UnorderedListToken
 import com.quarkdown.core.util.iterator
 import com.quarkdown.core.util.nextOrNull
+import com.quarkdown.core.util.normalizeSoftBreaks
 import com.quarkdown.core.util.removeOptionalPrefix
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.BlockTokenVisitor
@@ -433,6 +434,7 @@ class BlockTokenParser(
         val text =
             token.data.text
                 .trim()
+                .normalizeSoftBreaks()
                 .toInline()
 
         // If the paragraph only consists of a single child, it could be a special block.
