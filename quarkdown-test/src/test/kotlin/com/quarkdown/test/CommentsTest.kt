@@ -100,7 +100,7 @@ class CommentsTest {
                 Hi
             """.trimIndent(),
         ) {
-            assertEquals("<p><!-- COMMENT -->\nHI</p>", it)
+            assertEquals("<p>&lt;!-- COMMENT --&gt;\nHI</p>", it)
         }
     }
 

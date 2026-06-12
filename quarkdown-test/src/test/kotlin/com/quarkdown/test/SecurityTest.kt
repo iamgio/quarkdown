@@ -29,6 +29,22 @@ class SecurityTest {
     }
 
     @Test
+    fun `plaintext injection`() {
+        execute(".plaintext {\"><script>alert('XSS')</script>}") {
+            assertContains(it, "&lt;script&gt;")
+            assertContains(it, "&lt;/script&gt;")
+        }
+    }
+
+    @Test
+    fun `string manipulation injection`() {
+        execute(".uppercase {\"><script>alert('XSS')</script>}") {
+            assertContains(it, "&lt;SCRIPT&gt;")
+            assertContains(it, "&lt;/SCRIPT&gt;")
+        }
+    }
+
+    @Test
     fun `mermaid injection`() {
         execute(
             """

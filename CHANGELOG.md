@@ -44,6 +44,12 @@ The live preview connection between the local server and the browser now runs ov
 
 &nbsp;
 
+#### [Security] Fixed native content injection via string manipulation
+
+Fixed an issue that allowed string->string functions to let unsanitized HTML through, even when the `native-content` permission was not granted.
+
+&nbsp;
+
 #### Fixed `.extend` on functions with injected parameters
 
 The `.extend` function now maps parameters correctly when wrapping native functions that feature `@Injected` parameters, such as document metadata functions. 
