@@ -25,7 +25,7 @@ class EmojiTest {
     @Test
     fun `emoji with two skin tones`() {
         execute(".emoji {people-holding-hands~medium-light,medium-dark}") {
-            assertEquals("<p>\uD83E\uDDD1\uD83C\uDFFC\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1\uD83C\uDFFE</p>", it)
+            assertEquals("<p>\uD83E\uDDD1\uD83C\uDFFC&zwj;\uD83E\uDD1D&zwj;\uD83E\uDDD1\uD83C\uDFFE</p>", it)
         }
     }
 

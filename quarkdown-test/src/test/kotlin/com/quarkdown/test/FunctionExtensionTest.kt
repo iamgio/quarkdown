@@ -302,6 +302,21 @@ class FunctionExtensionTest {
     fun `stdlib extension`() {
         execute(
             """
+            .extend {lowercase}
+                super:
+                .super::uppercase
+            
+            .lowercase {hello}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>HELLO</p>", it)
+        }
+    }
+
+    @Test
+    fun `stdlib extension with injected parameter`() {
+        execute(
+            """
             .extend {heading}
                 super content:
                 .if {.content::equals {Hi}}

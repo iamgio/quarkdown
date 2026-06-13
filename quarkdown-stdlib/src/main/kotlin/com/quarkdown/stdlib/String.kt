@@ -1,5 +1,6 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
@@ -8,6 +9,7 @@ import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.StringCase
 import com.quarkdown.core.util.case
+import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.core.util.trimDelimiters
 
 /**
@@ -23,6 +25,7 @@ val String: QuarkdownModule =
         ::capitalize,
         ::isEmpty,
         ::isNotEmpty,
+        ::toPlainText,
     )
 
 /**
@@ -124,3 +127,14 @@ fun isEmpty(string: String) = string.isEmpty().wrappedAsValue()
 @Name("isnotempty")
 @LikelyChained
 fun isNotEmpty(string: String) = string.isNotEmpty().wrappedAsValue()
+
+/**
+ * Converts Markdown content to plain text.
+ *
+ * Example: `Hello, **world**!` -> `Hello, world!`
+ *
+ * @param content inline content to convert
+ * @return a new string that is the plain text of the content
+ */
+@Name("plaintext")
+fun toPlainText(content: InlineMarkdownContent): StringValue = content.children.toPlainText().wrappedAsValue()

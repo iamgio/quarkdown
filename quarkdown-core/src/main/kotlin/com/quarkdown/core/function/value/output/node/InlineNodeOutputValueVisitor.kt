@@ -2,6 +2,7 @@ package com.quarkdown.core.function.value.output.node
 
 import com.quarkdown.core.ast.base.inline.CheckBox
 import com.quarkdown.core.ast.base.inline.CodeSpan
+import com.quarkdown.core.ast.base.inline.CriticalContent
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.value.BooleanValue
@@ -19,13 +20,13 @@ import com.quarkdown.core.function.value.factory.ValueFactory
 class InlineNodeOutputValueVisitor(
     private val context: Context,
 ) : NodeOutputValueVisitor() {
-    override fun visit(value: StringValue) = Text(value.unwrappedValue)
+    override fun visit(value: StringValue) = CriticalContent(value.unwrappedValue)
 
     override fun visit(value: NumberValue) = Text(value.unwrappedValue.toString())
 
     override fun visit(value: BooleanValue) = CheckBox(isChecked = value.unwrappedValue)
 
-    override fun visit(value: ObjectValue<*>) = Text(value.unwrappedValue.toString())
+    override fun visit(value: ObjectValue<*>) = CriticalContent(value.unwrappedValue.toString())
 
     override fun visit(value: NoneValue) = CodeSpan(value.unwrappedValue.toString())
 
