@@ -87,6 +87,7 @@ class WebServerPreviewStrategy(
             serverOptions,
             onServerStarted = { server = it },
             onServerReady = { reloadTrigger.trigger() },
+            wait = true,
         )
     }
 }
