@@ -44,6 +44,25 @@ The live preview connection between the local server and the browser now runs ov
 
 &nbsp;
 
+#### [Extra spaces in CJK paragraph soft line breaks](https://quarkdown.com/wiki/localization#cjk-locales)
+
+Soft line breaks within paragraphs (newlines in the source that are not preceded by two or more spaces or a backslash) no longer insert a space when the document language is a CJK locale (Chinese, Japanese, Korean) set via [`.doclang`](https://quarkdown.com/wiki/document-metadata).
+
+For example, with `.doclang {zh}`:
+
+```markdown
+这是一个
+中文段落
+```
+
+is now rendered as `这是一个中文段落` instead of `这是一个 中文段落`.
+
+In all other languages, soft line breaks continue to render as a single space, following the CommonMark specification.
+
+Thanks @CarmJos!
+
+&nbsp;
+
 #### [Security] Fixed native content injection via string manipulation
 
 Fixed an issue that allowed string->string functions to let unsanitized HTML through, even when the `native-content` permission was not granted.
