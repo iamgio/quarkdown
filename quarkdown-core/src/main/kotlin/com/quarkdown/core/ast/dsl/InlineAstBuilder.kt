@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
+import com.quarkdown.core.ast.base.inline.SoftBreak
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.Text
@@ -103,6 +104,11 @@ class InlineAstBuilder : AstBuilder() {
      * @see LineBreak
      */
     fun lineBreak() = +LineBreak
+
+    /**
+     * @see SoftBreak
+     */
+    fun softBreak() = +SoftBreak
 }
 
 /**

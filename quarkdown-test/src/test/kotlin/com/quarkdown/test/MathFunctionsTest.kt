@@ -55,7 +55,7 @@ class MathFunctionsTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<p>If we try to calculate the <strong>surface</strong> of a circle of <strong>radius 8</strong>,\n" +
+                "<p>If we try to calculate the <strong>surface</strong> of a circle of <strong>radius 8</strong>, " +
                     "we will find out it is <strong>201.06194</strong></p>",
                 it,
             )
@@ -73,7 +73,7 @@ class MathFunctionsTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<p>If we try to calculate the <strong>surface</strong> of a circle of <strong>radius 8</strong>,\n" +
+                "<p>If we try to calculate the <strong>surface</strong> of a circle of <strong>radius 8</strong>, " +
                     "we will find out it is <strong>201.06194</strong></p>",
                 it,
             )

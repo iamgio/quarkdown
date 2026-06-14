@@ -260,7 +260,7 @@ class FunctionDefinitionTest {
             .countdown {3}
             """.trimIndent(),
         ) {
-            assertEquals("<p>3\n2\n1</p>", it)
+            assertEquals("<p>3 2 1</p>", it)
         }
     }
 }

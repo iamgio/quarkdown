@@ -74,7 +74,7 @@ class TextTest {
                 "<blockquote><p>" +
                     "This is a <strong>&ldquo;quote&rdquo;</strong> with &lsquo;text <em>replacement</em>&rsquo;.<br />" +
                     "This is a feature of Quarkdown&mdash;the Turing complete Markdown&mdash;by iamgio &copy; 2024 " +
-                    "&ndash; all rights reserved.\n" +
+                    "&ndash; all rights reserved. " +
                     "&rArr; Quarkdown &ne; other Markdown flavors&hellip; &larr;" +
                     "</p></blockquote>",
                 it,

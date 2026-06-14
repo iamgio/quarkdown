@@ -77,7 +77,9 @@ open class BaseMarkdownInlineTokenRegexPatterns {
     }
 
     /**
-     * A hard line break given by two or more spaces at the end of the line.
+     * A line break given by a newline that is not at the end of a paragraph.
+     * If preceded by two or more spaces or a backslash, the line break is a hard line break;
+     * otherwise it is a soft line break.
      * @see LineBreakToken
      */
     val lineBreak by lazy {
@@ -85,7 +87,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             name = "InlineLineBreak",
             wrap = ::LineBreakToken,
             regex =
-                "( {2,}|\\\\)\\R(?!\\s*$)",
+                "(?:( {2,}|\\\\))?\\R(?!\\s*$)",
         )
     }
 

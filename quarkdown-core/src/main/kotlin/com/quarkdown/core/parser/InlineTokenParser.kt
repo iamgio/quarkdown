@@ -14,6 +14,7 @@ import com.quarkdown.core.ast.base.inline.ReferenceDefinitionFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
+import com.quarkdown.core.ast.base.inline.SoftBreak
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
@@ -157,7 +158,10 @@ class InlineTokenParser(
         return Comment
     }
 
-    override fun visit(token: LineBreakToken): Node = LineBreak
+    override fun visit(token: LineBreakToken): Node {
+        val text = token.data.text
+        return if (text.first() == ' ' || text.first() == '\\') LineBreak else SoftBreak
+    }
 
     override fun visit(token: LinkToken): LinkNode {
         val groups = token.data.groups.iterator(consumeAmount = 2)

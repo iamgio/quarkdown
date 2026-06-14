@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.inline.CriticalContent
 import com.quarkdown.core.ast.base.inline.PlainTextNode
+import com.quarkdown.core.ast.base.inline.SoftBreak
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.visitor.node.NodeVisitor
@@ -84,6 +85,7 @@ fun InlineContent.toPlainText(renderer: NodeVisitor<CharSequence>? = null): Stri
             is CriticalContent if renderer != null -> builder.append(renderer.visit(it))
             is TextSymbol if renderer != null -> builder.append(renderer.visit(it))
             is PlainTextNode -> builder.append(it.text)
+            is SoftBreak -> builder.append('\n')
         }
     }
 

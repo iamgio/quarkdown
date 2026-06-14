@@ -70,10 +70,9 @@ class BlockParserTest {
 
     private val TextNode.rawText: String
         get() {
-            (children.singleOrNull() as? PlainTextNode)?.let {
-                return it.text
-            }
-            throw IllegalStateException("rawText requires a single PlainText node")
+            return children
+                .filterIsInstance<PlainTextNode>()
+                .joinToString("\n") { it.text }
         }
 
     /**
@@ -383,7 +382,7 @@ class BlockParserTest {
         with(nodes.next()) {
             val paragraph = children.first() as Paragraph
             assertIs<ReferenceLink>(paragraph.children.first())
-            assertEquals("not a typed quote.", (paragraph.children[1] as Text).text.trimStart())
+            assertEquals("not a typed quote.", paragraph.text.toPlainText().trimStart())
             assertNull(type)
         }
 
@@ -446,12 +445,12 @@ class BlockParserTest {
         with(nodes.next()) {
             assertEquals("label", rawText)
             assertEquals("https://google.com", url)
-            assertNodeEquals(listOf(Text("Multiline\ntitle")), title!!)
+            assertEquals("Multiline\ntitle", title!!.toPlainText())
         }
         with(nodes.next()) {
             assertEquals("label", rawText)
             assertEquals("https://google.com", url)
-            assertNodeEquals(listOf(Text("Line 1\nLine 2\nLine 3")), title!!)
+            assertEquals("Line 1\nLine 2\nLine 3", title!!.toPlainText())
         }
         with(nodes.next()) {
             assertEquals("label", rawText)
