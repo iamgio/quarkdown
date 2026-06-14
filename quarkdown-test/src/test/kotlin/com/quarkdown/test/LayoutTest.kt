@@ -46,7 +46,7 @@ class LayoutTest {
         ) {
             assertEquals(
                 "<div style=\"justify-content: flex-start; align-items: center;\" class=\"stack stack-row\">" +
-                    "<p>Hello 1\nHello 2</p><p>Hello 3</p>" +
+                    "<p>Hello 1 Hello 2</p><p>Hello 3</p>" +
                     "</div>",
                 it,
             )

@@ -85,7 +85,7 @@ class FlowTest {
             // Inline node conversion
             val inlineNode = InlineNodeOutputValueVisitor(context).visit(it)
             assertIs<InlineMarkdownContent>(inlineNode)
-            assertEquals(3, inlineNode.children.size)
+            assertEquals(4, inlineNode.children.size)
 
             val list = blockNode.children.first()
             assertIs<UnorderedList>(list)

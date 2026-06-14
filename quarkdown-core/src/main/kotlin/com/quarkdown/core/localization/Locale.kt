@@ -45,3 +45,15 @@ interface Locale {
      */
     val shortTag: String
 }
+
+/**
+ * The set of CJK (Chinese, Japanese, Korean) language codes.
+ */
+private val CJK_LANGUAGE_CODES = setOf("zh", "ja", "ko", "yue", "cmn", "wuu", "hak")
+
+/**
+ * Returns `true` if this locale's language is a CJK (Chinese, Japanese, Korean) language,
+ * where soft line breaks within paragraphs should not insert a space.
+ * Returns `false` if the locale is null.
+ */
+fun Locale?.isCJK(): Boolean = this != null && (code.lowercase() in CJK_LANGUAGE_CODES || shortTag.lowercase() in CJK_LANGUAGE_CODES)

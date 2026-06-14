@@ -62,3 +62,10 @@ For instance, [typed boxes](box.qd) feature a localized title by default, such a
 After that, assuming Canadian French is set in `.doclang`, the new entries will be available to the `.box` function.
 
 Built-in table names and entries are listed in this page's [*Built-in localization*](#built-in-localization).
+
+## CJK locales
+
+When the document language is set to a CJK locale (Chinese, Japanese, Korean):
+
+- Default paragraph spacing and indentation are affected.
+- Soft line breaks within paragraphs render with no space between lines.

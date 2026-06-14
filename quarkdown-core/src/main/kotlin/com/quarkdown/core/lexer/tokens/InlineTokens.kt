@@ -55,13 +55,14 @@ class CodeSpanToken(
 }
 
 /**
- * A soft line break.
+ * A line break.
  * Example:
  * ```
  * Line 1<space><space>
  * Line 2
  * ```
  * @see com.quarkdown.core.ast.base.inline.LineBreak
+ * @see com.quarkdown.core.ast.base.inline.SoftBreak
  */
 class LineBreakToken(
     data: TokenData,

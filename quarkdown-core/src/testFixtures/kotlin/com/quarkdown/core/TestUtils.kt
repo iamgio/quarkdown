@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.Node
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.lexer.Lexer
+import com.quarkdown.core.lexer.tokens.LineBreakToken
 import com.quarkdown.core.lexer.tokens.NewlineToken
 import com.quarkdown.core.lexer.tokens.PlainTextToken
 import com.quarkdown.core.permissions.Permission
@@ -69,6 +70,7 @@ inline fun <reified T : Node> nodesIterator(
         .tokenize()
         .filterNot { it is NewlineToken }
         .filterNot { it is PlainTextToken && it.data.text.isBlank() }
+        .filterNot { it is LineBreakToken && it.data.text.first() != ' ' && it.data.text.first() != '\\' }
         .map { it to it.accept(parser) }
         .onEach { (token, node) ->
             if (assertType) {

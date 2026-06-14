@@ -158,4 +158,43 @@ class LocalizationTest {
             assertContains(it, "<h4>Avertissement</h4>")
         }
     }
+
+    @Test
+    fun `soft line break renders differently in CJK locales`() {
+        execute(
+            """
+            .doclang {en}
+
+            This is a soft
+            line break.
+
+            This is a hard  |
+            line break
+            """.trimIndent().replace("|", ""),
+        ) {
+            assertEquals(
+                "<p>This is a soft line break.</p>" +
+                    "<p>This is a hard<br />line break</p>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .doclang {zh}
+            
+            This is a soft
+            line break.
+            
+            This is a hard  |
+            line break
+            """.trimIndent().replace("|", ""),
+        ) {
+            assertEquals(
+                "<p>This is a softline break.</p>" +
+                    "<p>This is a hard<br />line break</p>",
+                it,
+            )
+        }
+    }
 }

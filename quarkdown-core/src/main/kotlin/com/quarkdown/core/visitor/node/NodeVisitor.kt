@@ -26,6 +26,7 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
 import com.quarkdown.core.ast.base.inline.ReferenceLink
+import com.quarkdown.core.ast.base.inline.SoftBreak
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
@@ -108,6 +109,8 @@ interface NodeVisitor<T> {
     fun visit(node: Comment): T
 
     fun visit(node: LineBreak): T
+
+    fun visit(node: SoftBreak): T
 
     fun visit(node: CriticalContent): T
 

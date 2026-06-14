@@ -30,6 +30,7 @@ import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceFootnote
 import com.quarkdown.core.ast.base.inline.ReferenceImage
+import com.quarkdown.core.ast.base.inline.SoftBreak
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
@@ -76,6 +77,7 @@ import com.quarkdown.core.ast.quarkdown.reference.CrossReference
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.getOutputFileName
+import com.quarkdown.core.localization.isCJK
 import com.quarkdown.core.rendering.UnsupportedRenderException
 import com.quarkdown.core.rendering.tag.TagNodeRenderer
 import com.quarkdown.core.rendering.tag.buildMultiTag
@@ -98,6 +100,8 @@ open class BaseHtmlNodeRenderer(
     // For instance, a checked/unchecked task of attached to a list item.
     // These flavors directly affect the behavior of the HTML list item builder.
     ListItemVariantVisitor<HtmlTagBuilder.() -> Unit> {
+    private val isCJK by lazy { context.documentInfo.locale.isCJK() }
+
     override fun createBuilder(
         name: String,
         pretty: Boolean,
@@ -271,6 +275,8 @@ open class BaseHtmlNodeRenderer(
         tagBuilder("br")
             .void(true)
             .build()
+
+    override fun visit(node: SoftBreak) = if (isCJK) "" else " "
 
     private fun buildLinkTag(node: Link): HtmlTagBuilder =
         tagBuilder("a", node.label)
