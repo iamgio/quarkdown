@@ -168,9 +168,9 @@ class LocalizationTest {
             This is a soft
             line break.
 
-            This is a hard
+            This is a hard  |
             line break
-            """.trimIndent(),
+            """.trimIndent().replace("|", ""),
         ) {
             assertEquals(
                 "<p>This is a soft line break.</p>" +
@@ -186,9 +186,9 @@ class LocalizationTest {
             This is a soft
             line break.
             
-            This is a hard  
+            This is a hard  |
             line break
-            """.trimIndent(),
+            """.trimIndent().replace("|", ""),
         ) {
             assertEquals(
                 "<p>This is a softline break.</p>" +
