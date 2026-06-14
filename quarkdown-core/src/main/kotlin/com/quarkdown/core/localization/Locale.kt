@@ -48,8 +48,6 @@ interface Locale {
 
 /**
  * The set of CJK (Chinese, Japanese, Korean) language codes.
- * CJK scripts do not use spaces between words, so soft line breaks
- * should not insert a space.
  */
 private val CJK_LANGUAGE_CODES = setOf("zh", "ja", "ko", "yue", "cmn", "wuu", "hak")
 

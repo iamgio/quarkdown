@@ -1,6 +1,7 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.localization.LocaleLoader
+import com.quarkdown.core.localization.isCJK
 import com.quarkdown.core.localization.jvm.JVMLocaleLoader
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -82,6 +83,26 @@ class LocaleTest {
             assertEquals("français (Canada)", localizedName)
             assertEquals("CA", countryCode)
             assertEquals("Canada", localizedCountryName)
+        }
+    }
+
+    @Test
+    fun cjk() {
+        with(retriever.find("zh")) {
+            assertNotNull(this)
+            assertTrue(isCJK())
+        }
+        with(retriever.find("Chinese")) {
+            assertNotNull(this)
+            assertTrue(isCJK())
+        }
+        with(retriever.find("ja")) {
+            assertNotNull(this)
+            assertTrue(isCJK())
+        }
+        with(retriever.find("ko")) {
+            assertNotNull(this)
+            assertTrue(isCJK())
         }
     }
 

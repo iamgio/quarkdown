@@ -100,7 +100,7 @@ open class BaseHtmlNodeRenderer(
     // For instance, a checked/unchecked task of attached to a list item.
     // These flavors directly affect the behavior of the HTML list item builder.
     ListItemVariantVisitor<HtmlTagBuilder.() -> Unit> {
-    val isCJK by lazy { context.documentInfo.locale.isCJK() }
+    private val isCJK by lazy { context.documentInfo.locale.isCJK() }
 
     override fun createBuilder(
         name: String,
