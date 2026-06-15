@@ -69,16 +69,20 @@ class BlockTokenParser(
     private val context: MutableContext,
 ) : BlockTokenVisitor<Node> {
     /**
-     * @return the parsed content of the tokenization from [this] lexer
+     * @return the parsed content of the tokenization from [this] lexer.
+     *         Nested [com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode]s
+     *         (e.g. a heading inside a blockquote or list) are wrapped here too, mirroring the
+     *         top-level wrap done by [com.quarkdown.core.pipeline.stages.ParsingStage].
      */
     private fun Lexer.tokenizeAndParse(): List<Node> =
         this
             .tokenize()
-            .acceptAll(context.flavor.parserFactory.newParser(context))
+            .acceptAll(context.flavor.parserFactory.newParser(context), context, isBlock = true)
+            .toList()
 
     /**
      * @return [this] raw string tokenized and parsed into processed inline content,
-     *                based on this [flavor]'s specifics
+     *                based on this flavor's specifics
      */
     private fun String.toInline(): InlineContent =
         context.flavor.lexerFactory

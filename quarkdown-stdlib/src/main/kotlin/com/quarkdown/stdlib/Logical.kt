@@ -6,6 +6,7 @@ import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
+import com.quarkdown.stdlib.internal.asComparablePlainText
 
 /**
  * `Logical` stdlib module exporter.
@@ -69,7 +70,11 @@ fun isGreater(
 fun equals(
     a: DynamicValue,
     @Name("to") b: DynamicValue,
-) = BooleanValue(a == b || a.unwrappedValue == b.unwrappedValue)
+) = BooleanValue(
+    a == b ||
+        a.unwrappedValue == b.unwrappedValue ||
+        asComparablePlainText(a.unwrappedValue) == asComparablePlainText(b.unwrappedValue),
+)
 
 /**
  * Negates a boolean value.

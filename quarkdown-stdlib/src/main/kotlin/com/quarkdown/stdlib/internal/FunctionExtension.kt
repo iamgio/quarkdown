@@ -53,13 +53,19 @@ internal fun extendFunction(
 
     val lambda = Lambda(context, lambdaParameters, body.action)
 
+    context.markFunctionAsExtended(targetName)
+
     declareFunction(context, targetName, lambdaParameters) { call, args, outerBindings ->
         // `super` is exposed as a callable within the body: its explicit arguments override the outer call's bindings.
         val superFunction =
             SimpleFunction(SUPER_NAME, parameters = wrapperParameters) { overrides, _ ->
                 // Each merged argument is re-emitted as named so the relative order of named overrides
                 // and positional fall-throughs cannot violate the "named arguments come last" rule.
-                val mergedArgs = (outerBindings + overrides).map { (param, arg) -> arg.copy(name = param.name) }
+                val mergedArgs =
+                    (outerBindings.entries + overrides.entries)
+                        .associate { (param, arg) -> param.name to arg.copy(name = param.name) }
+                        .values
+                        .toList()
                 call.executeAs(targetFunction, arguments = mergedArgs)
             }
 

@@ -87,6 +87,8 @@ open class BaseContext(
             .flatMap { it.functions }
             .find { it.name == name }
 
+    override fun isFunctionExtended(name: String): Boolean = false
+
     override fun resolve(call: FunctionCallNode): FunctionCall<*>? {
         val function = getFunctionByName(call.name)
 

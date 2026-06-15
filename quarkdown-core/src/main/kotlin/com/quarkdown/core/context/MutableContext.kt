@@ -45,6 +45,22 @@ open class MutableContext(
     // Prevents function calls from being enqueued.
     private var lockFunctionCallEnqueuing = false
 
+    private val extendedFunctionNames: MutableSet<String> = mutableSetOf()
+
+    /**
+     * Whether a function with [name] has been wrapped via an `.extend` call visible from this context.
+     * Used for optimization of [com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode].
+     */
+    override fun isFunctionExtended(name: String): Boolean = name in extendedFunctionNames
+
+    /**
+     * Marks [name] as extended in this context.
+     * Used for optimization of [com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode], so it can know whether to short-circuit or not.
+     */
+    open fun markFunctionAsExtended(name: String) {
+        extendedFunctionNames += name
+    }
+
     /**
      * Enqueues a new [FunctionCallNode], which is executed in the next stage of the pipeline.
      * Nothing happens if enqueuing is locked via [lockFunctionCallEnqueuing].

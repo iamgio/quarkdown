@@ -2,6 +2,7 @@ package com.quarkdown.core.pipeline.stages
 
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.acceptAll
 import com.quarkdown.core.pipeline.PipelineHooks
@@ -17,6 +18,12 @@ import com.quarkdown.core.visitor.token.TokenVisitor
  *
  * The AST represents the hierarchical structure of the document and is used by
  * subsequent stages for further processing and rendering.
+ *
+ * Primitive Markdown nodes that implement [PrimitiveFunctionBackedNode] (e.g. headings) are wrapped here
+ * into a [com.quarkdown.core.ast.quarkdown.FunctionCallNode] that delegates to their backing stdlib function. When the document
+ * later wraps that function via `.extend`, the wrapper sees the node's properties as named
+ * arguments and can override them; when it does not, the `FunctionCallNode` short-circuits and
+ * renders the original node directly with no reflection overhead.
  */
 object ParsingStage : PipelineStage<Sequence<Token>, AstRoot> {
     override val hook = PipelineHooks::afterParsing
@@ -29,6 +36,11 @@ object ParsingStage : PipelineStage<Sequence<Token>, AstRoot> {
             data.context.flavor.parserFactory
                 .newParser(data.context)
 
-        return AstRoot(children = input.acceptAll(parser))
+        val nodes =
+            input
+                .acceptAll(parser, data.context, isBlock = true)
+                .toList()
+
+        return AstRoot(children = nodes)
     }
 }

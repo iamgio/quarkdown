@@ -53,4 +53,10 @@ open class SubdocumentContext(
      * @see Context.getFunctionByName
      */
     override fun getFunctionByName(name: String): Function<*>? = super.getFunctionByName(name) ?: parent.getFunctionByName(name)
+
+    /**
+     * A subdocument inherits the parent's `.extend` registrations, but new ones declared inside it
+     * stay local and don't propagate back to the main document's context.
+     */
+    override fun isFunctionExtended(name: String): Boolean = super.isFunctionExtended(name) || parent.isFunctionExtended(name)
 }
