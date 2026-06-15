@@ -13,15 +13,15 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "devDependencies": {
-    "esbuild": "^0.27.4",
-    "reveal.js": "^6.0.0",
+    "esbuild": "^0.28.1",
+    "reveal.js": "^6.0.1",
     "pagedjs": "^0.4.3",
-    "katex": "^0.16.23",
+    "katex": "^0.17.0",
     "@types/katex": "^0.16.3",
     "highlight.js": "^11.11.1",
     "highlightjs-copy": "^1.0.5",
     "highlightjs-line-numbers.js": "^2.9.0",
-    "mermaid": "^11.12.0",
+    "mermaid": "^11.15.0",
     "bootstrap-icons": "^1.13.1",
     "@fontsource/lato": "^5.2.0",
     "@fontsource/inter": "^5.2.0",
@@ -29,10 +29,10 @@
     "@fontsource/source-sans-pro": "^5.2.0",
     "@fontsource/fira-sans": "^5.2.0",
     "minisearch": "^7.2.0",
-    "vitest": "^4.1.2",
-    "happy-dom": "^20.0.2",
-    "@types/node": "^25.5.0",
-    "@playwright/test": "^1.57.0",
+    "vitest": "^4.1.8",
+    "happy-dom": "^20.10.3",
+    "@types/node": "^25.9.3",
+    "@playwright/test": "^1.60.0",
     "romans": "^3.1.0"
   }
 }
