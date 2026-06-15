@@ -9,14 +9,17 @@ You can extend any previously-declared function using the **`.extend`** .docslin
         Hello, .name!
 
     .extend {greet}
-        super:
         .super::uppercase
 
     .greet {world}
 
+## Accessing the original
+
+Within the wrapper body, the original function is exposed as **`.super`**. Calling it invokes the original with the same arguments.
+
 ## Parameters
 
-The wrapper body is a [lambda](lambda.qd). Its first explicit parameter, conventionally called `super`, is bound to the result of the original function. Any further parameters must match the names of the original function's parameters and let you read the arguments the caller passed.
+The wrapper body is a [lambda](lambda.qd). Its explicit parameters, if any, must match the names of the original function's parameters and let you read the arguments the caller passed.
 
 .examplemirror prelude:{The output may depend on an argument's value:}
     .function {greet}
@@ -24,7 +27,7 @@ The wrapper body is a [lambda](lambda.qd). Its first explicit parameter, convent
         Hello, .name!
 
     .extend {greet}
-        super name:
+        name:
         .if {.name::equals {world}}
             .super::uppercase
         .ifnot {.name::equals {world}}
@@ -38,7 +41,7 @@ All wrapper parameters are always optional. You only need to declare the paramet
 
 .examplemirror prelude:{Built-in functions can be extended:}
     .extend {heading}
-        super depth:
+        depth:
         .let {.depth::islower than:{4}}
             .if {.1}
                 .container background:{teal} fullwidth:{yes}
@@ -51,3 +54,29 @@ All wrapper parameters are always optional. You only need to declare the paramet
     .heading {H3} depth:{3} indexed:{no}
 
     .heading {H4} depth:{4} indexed:{no}
+
+## Overriding arguments
+
+Because `.super` is the original function itself, it accepts the same arguments. Any argument you pass overrides the one the wrapper was called with, while everything you leave out falls through unchanged. This lets the wrapper invoke the original with adjusted inputs.
+
+.examplemirror
+    .function {greet}
+        greeting name:
+        .greeting, .name!
+
+    .extend {greet}
+        name:
+        .super greeting:{Howdy}
+
+    .greet {Hello} {world}
+
+.examplemirror prelude:{New argument values can also rely on the original arguments, letting you transform them before passing them on:}
+    .function {greet}
+        greeting name:
+        .greeting, .name!
+
+    .extend {greet}
+        greeting name:
+        .super greeting:{.greeting::uppercase}
+
+    .greet {Hello} {world}

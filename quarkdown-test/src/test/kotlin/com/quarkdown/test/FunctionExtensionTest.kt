@@ -48,7 +48,6 @@ class FunctionExtensionTest {
                Hello
             
             .extend {test}
-               super:
                .super::uppercase
             
             .test
@@ -67,7 +66,7 @@ class FunctionExtensionTest {
                 Hello, .name
             
             .extend {test}
-                super name:
+                name:
                 .if {.name::equals {World}}
                     .super::uppercase
                 .ifnot {.name::equals {World}}
@@ -92,7 +91,7 @@ class FunctionExtensionTest {
                     Hello, .name
                 
                 .extend {test}
-                    super unknown:
+                    unknown:
                     .super
                 
                 .test {World}
@@ -112,7 +111,6 @@ class FunctionExtensionTest {
                 Hello, .name
             
             .extend {test}
-                super:
                 .super::uppercase
             
             .test {World}
@@ -131,7 +129,7 @@ class FunctionExtensionTest {
                 .greeting, .name
             
             .extend {test}
-                super name greeting:
+                name greeting:
                 .greeting .super .name
             
             .test {World} {Hello}
@@ -151,7 +149,7 @@ class FunctionExtensionTest {
                     Hello, .name .lastname
                 
                 .extend {test}
-                    super name firstunknown secondunknown:
+                    name firstunknown secondunknown:
                     .super
                 
                 .test {World}
@@ -171,7 +169,6 @@ class FunctionExtensionTest {
                 .greeting, .name .lastname
             
             .extend {test}
-                super:
                 .super!
             
             .test {John} {Doe} {Hello}
@@ -190,7 +187,7 @@ class FunctionExtensionTest {
                 .greeting, .name .lastname
             
             .extend {test}
-                super name:
+                name:
                 .name, .super!
             
             .test {John} {Doe} {Hello}
@@ -209,7 +206,7 @@ class FunctionExtensionTest {
                 .greeting, .name .lastname
 
             .extend {test}
-                super greeting:
+                greeting:
                 .greeting, .super!
 
             .test {John} {Doe} {Hello}
@@ -228,7 +225,7 @@ class FunctionExtensionTest {
                 .greeting, .name .lastname
 
             .extend {test}
-                super name lastname greeting:
+                name lastname greeting:
                 .greeting .name .lastname: .super
 
             .test greeting:{Hi} name:{John} lastname:{Doe}
@@ -247,7 +244,7 @@ class FunctionExtensionTest {
                 .greeting::otherwise {Hello}, .name::otherwise {?} .lastname::otherwise {?}
 
             .extend {test}
-                super name? lastname? greeting?:
+                name? lastname? greeting?:
                 .greeting::otherwise {none}/.name::otherwise {none}/.lastname::otherwise {none}: .super
 
             .test name:{John} greeting:{Hi}
@@ -266,11 +263,9 @@ class FunctionExtensionTest {
                 Hello, .name
 
             .extend {greet}
-                super:
                 .super::uppercase
 
             .extend {greet}
-                super:
                 [.super]
 
             .greet {world}
@@ -281,20 +276,59 @@ class FunctionExtensionTest {
     }
 
     @Test
-    fun `super access via implicit parameter`() {
+    fun `super argument override, single param`() {
         execute(
             """
             .function {test}
                 name:
                 Hello, .name
-
+            
             .extend {test}
-                .1::uppercase
-
-            .test {World}
+                name:
+                .super name:{World}
+            
+            .test {John}
             """.trimIndent(),
         ) {
-            assertEquals("<p>HELLO, WORLD</p>", it)
+            assertEquals("<p>Hello, World</p>", it)
+        }
+    }
+
+    @Test
+    fun `super argument override, multiple partial params`() {
+        execute(
+            """
+            .function {greet}
+                greeting name:
+                .greeting, .name!
+
+            .extend {greet}
+                name:
+                .name, .super greeting:{Howdy}
+
+            .greet {Hello} {world}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>world, Howdy, world!</p>", it)
+        }
+    }
+
+    @Test
+    fun `super argument override, argument transformation`() {
+        execute(
+            """
+            .function {test}
+                name lastname greeting:
+                .greeting, .name .lastname
+            
+            .extend {test}
+                name greeting:
+                .name, .super greeting:{.greeting::uppercase}
+            
+            .test {John} {Doe} {Hello}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>John, HELLO, John Doe</p>", it)
         }
     }
 
@@ -303,7 +337,6 @@ class FunctionExtensionTest {
         execute(
             """
             .extend {lowercase}
-                super:
                 .super::uppercase
             
             .lowercase {hello}
@@ -318,7 +351,7 @@ class FunctionExtensionTest {
         execute(
             """
             .extend {heading}
-                super content:
+                content:
                 .if {.content::equals {Hi}}
                     .container
                         .super

@@ -60,10 +60,14 @@ data class FunctionCall<T : OutputValue<*>>(
  * the caller's arguments, as in the `extend` stdlib function.
  *
  * @param function function to re-dispatch the call to
+ * @param arguments optional new arguments to use instead of the original ones
  * @return the output of executing [function] against this call's arguments
  */
 @Suppress("UNCHECKED_CAST")
-fun FunctionCall<*>.executeAs(function: Function<*>): OutputValue<*> =
+fun FunctionCall<*>.executeAs(
+    function: Function<*>,
+    arguments: List<FunctionCallArgument> = this.arguments,
+): OutputValue<*> =
     (this as FunctionCall<OutputValue<*>>)
-        .copy(function = function as Function<OutputValue<*>>)
+        .copy(function = function as Function<OutputValue<*>>, arguments = arguments)
         .execute()

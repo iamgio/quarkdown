@@ -38,23 +38,26 @@ open class Lambda(
     /**
      * Registers the arguments in the context, which can be accessed as function calls.
      * @param arguments arguments of the lambda action
+     * @param additionalFunctions additional functions to register in the lambda execution context, alongside the lambda parameters.
      */
-    private fun createLambdaParametersLibrary(arguments: List<Value<*>>) =
-        Library(
-            LAMBDA_LIBRARY_NAME,
-            functions =
-                arguments
-                    .mapIndexed { index, argument ->
-                        val parameterName = explicitParameters.getOrNull(index)?.name ?: (index + 1).toString()
-                        SimpleFunction(
-                            parameterName,
-                            parameters = emptyList(),
-                        ) { _, call ->
-                            // Value associated to the lambda argument.
-                            DynamicValue(argument.unwrappedValue, evaluationContext = call.context)
-                        }
-                    }.toSet(),
-        )
+    private fun createLambdaParametersLibrary(
+        arguments: List<Value<*>>,
+        additionalFunctions: Set<SimpleFunction<*>> = emptySet(),
+    ) = Library(
+        LAMBDA_LIBRARY_NAME,
+        functions =
+            arguments
+                .mapIndexed { index, argument ->
+                    val parameterName = explicitParameters.getOrNull(index)?.name ?: (index + 1).toString()
+                    SimpleFunction(
+                        parameterName,
+                        parameters = emptyList(),
+                    ) { _, call ->
+                        // Value associated to the lambda argument.
+                        DynamicValue(argument.unwrappedValue, evaluationContext = call.context)
+                    }
+                }.toSet() + additionalFunctions,
+    )
 
     /**
      * Checks if the amount of arguments matches the amount of expected parameters.
@@ -76,6 +79,7 @@ open class Lambda(
      *                       When provided, its own libraries (e.g. lambda parameters, local variables)
      *                       are propagated to the forked execution context, allowing body arguments
      *                       containing dynamic references to resolve variables from the calling scope.
+     * @param additionalFunctions additional functions to register in the lambda execution context, alongside the lambda parameters.
      * @param allowDestructuring if `true`, [arguments] has only 1 element which is [Destructurable], and the lambda has N>1 explicit parameters,
      *                           the argument is destructured into N parts.
      *                           For example, a dictionary may be destructured into its key and value.
@@ -84,13 +88,20 @@ open class Lambda(
     fun invokeDynamic(
         arguments: List<Value<*>>,
         callingContext: Context? = null,
+        additionalFunctions: Set<SimpleFunction<*>> = emptySet(),
         allowDestructuring: Boolean = true,
     ): OutputValue<*> {
         // Destructuring
         if (allowDestructuring && explicitParameters.size > 1) {
             // The lambda is invoked with the first N destructured components.
             (arguments.singleOrNull() as? Destructurable<*>)
-                ?.let { return invokeDynamic(it.destructured(componentCount = explicitParameters.size), callingContext) }
+                ?.let {
+                    return invokeDynamic(
+                        it.destructured(componentCount = explicitParameters.size),
+                        callingContext,
+                        additionalFunctions,
+                    )
+                }
         }
 
         // Check if the amount of arguments matches the amount of expected parameters.
@@ -127,7 +138,7 @@ open class Lambda(
 
         // Register the arguments in the context, which can be accessed as function calls.
         // Lambda parameters are registered last so they shadow any same-named declarations from the calling context.
-        context.loadLibrary(createLambdaParametersLibrary(actualArguments))
+        context.loadLibrary(createLambdaParametersLibrary(actualArguments, additionalFunctions))
 
         // The result of the lambda action is processed.
         return action(actualArguments, context)
