@@ -34,9 +34,37 @@ The Quarkdown language server API now allows the LSP to be embedded in custom ho
 
 &nbsp;
 
+#### [Changed `.extend` behavior](https://quarkdown.com/wiki/extending-functions) (breaking change)
+
+`.extend`, introduced in v2.2.0 as experimental, has undergone a shift in behavior.
+
+`super` now exposes the original function, rather than its precomputed output, and no longer needs to be declared as a parameter.
+
+Because `.super` is the original function itself, it accepts the same arguments: anything you pass overrides the corresponding argument the wrapper was called with, while anything you leave out falls through unchanged. This lets the wrapper invoke the original with adjusted inputs.
+
+```markdown
+.function {greet}
+    greeting name:
+    .greeting, .name!
+
+.extend {greet}
+    name greeting:
+    .super greeting:{.greeting::uppercase}
+
+.greet {Hello} {world}
+```
+
+Output:
+
+```markdown
+HELLO, world
+```
+
+&nbsp;
+
 #### Live preview now uses SSE
 
-The live preview connection between the local server and the browser now runs over Server-Sent Events instead of WebSockets. 
+The live preview connection between the local server and the browser now runs over Server-Sent Events instead of WebSockets.
 
 &nbsp;
 

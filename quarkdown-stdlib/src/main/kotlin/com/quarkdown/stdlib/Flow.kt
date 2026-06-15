@@ -3,8 +3,6 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.ScopeContext
-import com.quarkdown.core.function.Function
-import com.quarkdown.core.function.call.executeAs
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
@@ -27,6 +25,7 @@ import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.stdlib.internal.CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX
 import com.quarkdown.stdlib.internal.declareFunction
+import com.quarkdown.stdlib.internal.extendFunction
 
 /**
  * `Flow` stdlib module exporter.
@@ -316,9 +315,9 @@ fun function(
 /**
  * Defines a custom function that extends an existing one by name, wrapping its output.
  *
- * The body lambda receives an optional first parameter (conventionally called `super`),
- * which holds the result of the original function for the same arguments,
- * followed by the original function's parameters in their declared order.
+ * Within the body, the original function is exposed as `.super`: calling it invokes the original
+ * with the arguments the wrapper was called with. The body's explicit parameters, if any, must match
+ * the original function's parameters by name and let the wrapper read those same arguments.
  * All wrapper parameters are optional, regardless of whether the original parameters are.
  *
  * ```
@@ -327,7 +326,6 @@ fun function(
  *     Hello, .name
  *
  * .extend {greet}
- *     super:
  *     .super::uppercase
  *
  * .greet {World}
@@ -335,29 +333,36 @@ fun function(
  *
  * > Output: `HELLO, WORLD`
  *
- * The wrapper can also reference the original parameters by name to alter the behavior conditionally:
+ * The wrapper can reference the original parameters by name to alter the behavior conditionally:
  *
  * ```
  * .extend {greet}
- *     super name:
+ *     name:
  *     .if {.name::equals {World}}
  *         .super::uppercase
  *     .ifnot {.name::equals {World}}
  *         .super
  * ```
  *
- * In implicit form, the parameters can be accessed positionally:
+ * Because `.super` is the original function itself, it accepts the same arguments. Anything you pass
+ * overrides the corresponding argument the wrapper was called with, while anything you leave out
+ * falls through unchanged:
  *
  * ```
  * .extend {greet}
- *     .1::uppercase
+ *     name:
+ *     .super name:{.name::uppercase}
+ *
+ * .greet {John}
  * ```
  *
+ * > Output: `Hello, JOHN`
+ *
  * @param name name of the existing function to extend
- * @param body wrapper content. Its first parameter is bound to the original function's output;
- *             any further explicit parameters must match the original function's parameter names
+ * @param body wrapper content. Its explicit parameters, if any, must match the original function's
+ *             parameter names. `.super` is implicitly available within the body
  * @throws IllegalArgumentException if no function named [name] exists, or if any explicit parameter
- *         beyond `super` does not match an original parameter
+ *         does not match an original parameter
  * @wiki extending-functions
  */
 fun extend(
@@ -365,45 +370,7 @@ fun extend(
     name: String,
     @LikelyBody body: Lambda,
 ): VoidValue {
-    val targetFunction: Function<*> =
-        context.getFunctionByName(name)
-            ?: throw IllegalArgumentException("Cannot extend function $name because it does not exist.")
-
-    // The wrapper exposes the same parameters as the target, plus `super` which is internal to the lambda.
-    val superParameter = body.explicitParameters.firstOrNull()?.copy(isOptional = true)
-    val wrapperParameters =
-        targetFunction.parameters
-            .mapNotNull { parameter ->
-                LambdaParameter(
-                    parameter.name,
-                    isOptional = true,
-                ).takeUnless { parameter.isInjected }
-            }
-
-    val lambdaParameters =
-        when (superParameter) {
-            null -> emptyList()
-            else -> listOf(superParameter) + wrapperParameters
-        }
-
-    // After the first (which represents `super`), every explicit body parameter must match an original parameter by name.
-    val targetNames = targetFunction.parameters.mapTo(mutableSetOf()) { it.name }
-    val unresolved = body.explicitParameters.drop(1).filter { it.name !in targetNames }
-    if (unresolved.isNotEmpty()) {
-        throw IllegalArgumentException(
-            "The following parameters are not part of ${targetFunction.signatureAsString()}: " +
-                unresolved.joinToString { it.name },
-        )
-    }
-
-    val lambda = Lambda(context, lambdaParameters, body.action)
-
-    declareFunction(context, name, wrapperParameters) { call, args, _ ->
-        val wrappedResult = call.executeAs(targetFunction)
-        val lambdaArgs = listOf(wrappedResult) + args
-        lambda.invokeDynamic(lambdaArgs, callingContext = call.context)
-    }
-
+    extendFunction(context, name, body)
     return VoidValue
 }
 
