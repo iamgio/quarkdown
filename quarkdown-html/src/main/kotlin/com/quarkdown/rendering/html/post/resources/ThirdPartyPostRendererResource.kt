@@ -22,10 +22,12 @@ const val HTML_LIBRARY_OUTPUT_PATH = "lib"
  * @param librariesLayout the install layout node for the `lib/` directory containing third-party
  *        library files, typically [InstallLayout.Html.libraries][com.quarkdown.installlayout.InstallLayout.Html.libraries].
  *        If `null`, no libraries are bundled.
+ * @param symlink whether to create symbolic links to library files instead of copying
  */
 class ThirdPartyPostRendererResource(
     private val context: Context,
     private val librariesLayout: InstallLayoutDirectory?,
+    private val symlink: Boolean,
 ) : PostRendererResource {
     override fun includeTo(
         resources: MutableSet<OutputResource>,
@@ -51,7 +53,7 @@ class ThirdPartyPostRendererResource(
                             librariesLayout
                                 .resolveDirectory(libraryName)
                                 .also { if (!it.exists()) error("HTML library directory not found: ${it.file.path}") }
-                                .asOutputResource()
+                                .asOutputResource(symlink = symlink)
                         }.toSet(),
             )
     }

@@ -28,9 +28,11 @@ const val HTML_SCRIPT_FILE_NAME = "quarkdown.min.js"
  *
  * @param scriptsLayout the install layout node for the `script/` directory,
  *        typically [com.quarkdown.installlayout.InstallLayout.Html.scripts]
+ * @param symlink whether to create a symbolic link instead of copying
  */
 class ScriptPostRendererResource(
     private val scriptsLayout: InstallLayoutDirectory?,
+    private val symlink: Boolean,
 ) : PostRendererResource {
     override fun includeTo(
         resources: MutableSet<OutputResource>,
@@ -43,6 +45,6 @@ class ScriptPostRendererResource(
                 "This likely indicates a broken Quarkdown installation."
         }
 
-        resources += scriptsLayout.asOutputResource()
+        resources += scriptsLayout.asOutputResource(symlink = symlink)
     }
 }

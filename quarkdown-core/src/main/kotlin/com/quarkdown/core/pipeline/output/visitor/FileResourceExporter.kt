@@ -14,6 +14,7 @@ import com.quarkdown.core.pipeline.output.visitor.FileResourceExporter.NameProvi
 import com.quarkdown.core.util.IOUtils
 import com.quarkdown.core.util.sanitizeFileName
 import java.io.File
+import java.nio.file.Files
 
 /**
  * A visitor that saves each type of [OutputResource] to a file and returns it.
@@ -84,13 +85,17 @@ class FileResourceExporter(
         }
 
     /**
-     * Copies a [FileReferenceOutputArtifact] to the output location.
+     * Exports a [FileReferenceOutputArtifact] to the output location.
      * If the source is a directory, it is copied recursively.
      *
-     * When [FileReferenceOutputArtifact.useChecksumInvalidation] is enabled, a sibling
-     * `.checksum` file is maintained next to the output. If the checksum of the source
-     * matches the stored value, the copy is skipped entirely. This avoids redundant I/O
-     * for large assets (fonts, third-party libraries) that rarely change between builds.
+     * Resolution order:
+     * 1. If [FileReferenceOutputArtifact.symlink] is set and the platform supports symbolic links,
+     *    a link is created instead of copying.
+     * 2. Otherwise, if [FileReferenceOutputArtifact.useChecksumInvalidation] is enabled, a sibling
+     *    `.checksum` file is maintained next to the output; the copy is skipped when the source's
+     *    checksum matches the stored value. This avoids redundant I/O for large assets (fonts,
+     *    third-party libraries) that rarely change between builds.
+     * 3. Otherwise, the source is copied unconditionally.
      *
      * @return the copied file or directory
      */
@@ -100,26 +105,36 @@ class FileResourceExporter(
 
             target.parentFile?.mkdirs()
 
+            if (artifact.symlink && IOUtils.trySymlink(target.toPath(), artifact.file.toPath())) return@also
+
             if (artifact.useChecksumInvalidation) {
-                val checksumFile = target.resolveSibling("${target.name}.checksum")
-                val currentChecksum = IOUtils.computeChecksum(artifact.file)
-                val storedChecksum = checksumFile.takeIf { it.isFile }?.readText()
-
-                if (currentChecksum == storedChecksum && target.exists()) {
-                    Log.debug { "Skipping '${artifact.name}': checksum unchanged ($currentChecksum)" }
-                    return@also
-                }
-
-                Log.debug {
-                    "Copying '${artifact.name}': checksum changed " +
-                        "(stored=${storedChecksum ?: "<none>"}, current=$currentChecksum)"
-                }
-                copyFileOrDirectory(artifact.file, target)
-                checksumFile.writeText(currentChecksum)
+                copyWithChecksumInvalidation(artifact, target)
             } else {
                 copyFileOrDirectory(artifact.file, target)
             }
         }
+
+    private fun copyWithChecksumInvalidation(
+        artifact: FileReferenceOutputArtifact,
+        target: File,
+    ) {
+        val checksumFile = target.resolveSibling("${target.name}.checksum")
+        val currentChecksum = IOUtils.computeChecksum(artifact.file)
+        val storedChecksum = checksumFile.takeIf { it.isFile }?.readText()
+
+        if (currentChecksum == storedChecksum && target.exists() && !Files.isSymbolicLink(target.toPath())) {
+            Log.debug { "Skipping '${artifact.name}': checksum unchanged ($currentChecksum)" }
+            return
+        }
+
+        Log.debug {
+            "Copying '${artifact.name}': checksum changed " +
+                "(stored=${storedChecksum ?: "<none>"}, current=$currentChecksum)"
+        }
+
+        copyFileOrDirectory(artifact.file, target)
+        checksumFile.writeText(currentChecksum)
+    }
 
     private fun copyFileOrDirectory(
         source: File,

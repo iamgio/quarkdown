@@ -45,4 +45,11 @@ data class PipelineOptions(
     val permissions: Set<Permission> = Permission.DEFAULT_SET,
     val mediaStorageOptionsOverrides: MediaStorageOptions = ReadOnlyMediaStorageOptions(),
     val errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
-)
+) {
+    /**
+     * Whether to symlink or copy dependency files from the installation layout,
+     * such as third-party JavaScript libraries.
+     */
+    val symlinkDependencies: Boolean
+        get() = this.isPreview
+}

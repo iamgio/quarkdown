@@ -1,8 +1,8 @@
 package com.quarkdown.cli.util
 
+import com.quarkdown.core.util.IOUtils
 import java.io.File
 import kotlin.io.path.ExperimentalPathApi
-import kotlin.io.path.deleteRecursively
 
 /**
  * Cleans [this] directory by deleting all files and directories inside it.
@@ -10,5 +10,5 @@ import kotlin.io.path.deleteRecursively
  */
 @OptIn(ExperimentalPathApi::class)
 fun File.cleanDirectory() {
-    listFiles()?.forEach { it.toPath().deleteRecursively() }
+    listFiles()?.forEach { IOUtils.deleteWithoutFollowingLinks(it.toPath()) }
 }

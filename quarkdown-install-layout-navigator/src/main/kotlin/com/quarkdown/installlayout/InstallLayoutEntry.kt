@@ -24,8 +24,17 @@ interface InstallLayoutEntry {
     /** Resolves a child directory relative to this entry's [file]. */
     fun resolveDirectory(relativePath: String): InstallLayoutDirectory = InstallLayoutDirectory(file.resolve(relativePath))
 
-    /** Wraps this entry as an [OutputResource] for the pipeline to output. */
-    fun asOutputResource(): OutputResource = FileReferenceOutputArtifact(name, file, useChecksumInvalidation = true)
+    /**
+     * Wraps this entry as an [OutputResource] for the pipeline to output.
+     * @param symlink whether to create a symbolic link to the source file instead of copying it
+     */
+    fun asOutputResource(symlink: Boolean = false): OutputResource =
+        FileReferenceOutputArtifact(
+            name,
+            file,
+            useChecksumInvalidation = true,
+            symlink = symlink,
+        )
 }
 
 /**
