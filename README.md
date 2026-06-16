@@ -116,6 +116,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 - **Versatile:** a single source compiles to multiple targets
 - **Reactive:** low-latency live previews for rapid iteration. The official wiki (100+ pages) compiles in ~2 seconds
 - **Reusable:** repeated content can be turned into one-line function calls
+- **Easily deployable:** set a CD workflow up in under 3 minutes ([example](https://github.com/iamgio/iamgio.github.io/blob/main/.github/workflows/build.yml))
 
 &nbsp;
 
