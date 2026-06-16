@@ -22,3 +22,8 @@
     display: none;
   }
 }
+
+#{$headings} {
+  // #549: avoid headings as the last line of a page.
+  break-after: avoid;
+}

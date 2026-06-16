@@ -1,0 +1,5 @@
+- issue: 549
+- pr: 554
+- next-release: 2.3.0
+- cause: "`break-after: avoid` not set in _heading.scss"
+- notes: "The #{$headings} selector cannot be nested into .quarkdown, probably because of a pagedjs bug"
