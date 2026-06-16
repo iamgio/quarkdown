@@ -24,12 +24,6 @@ Thanks @gggeon96!
 
 &nbsp;
 
-#### [LSP] Embeddable language server
-
-The Quarkdown language server API now allows the LSP to be embedded in custom hosts and run across multiple instances inside a single JVM, thanks to customizable IO streams and pluggable hooks.
-
-&nbsp;
-
 ### Changed
 
 &nbsp;
@@ -91,13 +85,19 @@ Thanks @CarmJos!
 
 &nbsp;
 
-#### [Security] Fixed native content injection via string manipulation
+#### `.container`'s `foreground` color not applied to headings
+
+`.container foreground:{color}` now correctly applies to headings.
+
+&nbsp;
+
+#### [Security] Native content injection via string manipulation
 
 Fixed an issue that allowed string->string functions to let unsanitized HTML through, even when the `native-content` permission was not granted.
 
 &nbsp;
 
-#### Fixed `.extend` on functions with injected parameters
+#### `.extend` on functions with injected parameters
 
 The `.extend` function now maps parameters correctly when wrapping native functions that feature `@Injected` parameters, such as document metadata functions. 
 

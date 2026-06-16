@@ -24,6 +24,10 @@
     }
   }
 
+  &[style*="color"] > :not([style*="color"]) {
+    color: inherit !important;
+  }
+
   > .stack {
     width: 100%;
     height: 100%;

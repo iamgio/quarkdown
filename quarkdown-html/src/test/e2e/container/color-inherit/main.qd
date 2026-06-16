@@ -1,0 +1,20 @@
+.theme {galactic}
+
+# Standalone heading
+
+Standalone paragraph.
+
+- Standalone list item
+
+.container fullwidth:{yes} foreground:{#ff0000}
+    # Inside heading
+
+    Inside paragraph.
+
+    - Inside list item
+
+.container fullwidth:{yes} foreground:{#ff0000}
+    .container fullwidth:{yes} foreground:{#0000ff}
+        # Nested heading
+
+        Nested paragraph.
