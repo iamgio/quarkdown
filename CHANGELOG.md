@@ -85,6 +85,12 @@ Thanks @CarmJos!
 
 &nbsp;
 
+#### Orphan headings at the bottom of a page
+
+In `paged` documents, a heading that would otherwise land as the last line of a page is now pushed to the top of the next page, keeping it close to the content it introduces.
+
+&nbsp;
+
 #### `.container`'s `foreground` color not applied to headings
 
 `.container foreground:{color}` now correctly applies to headings.
