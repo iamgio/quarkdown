@@ -106,6 +106,19 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 
 &nbsp;
 
+*In a nutshell, Quarkdown is...*
+
+- **Familiar:** built on the well-known Markdown syntax, for a flat learning curve
+- **Elegant:** produces output that matches the quality of industry-leading tools
+- **Agent-friendly:** comes with a built-in skill for idiomatic fluency of your coding agents ([read the eval](https://quarkdown.com/blog/agent-skill/))
+- **Customizable:** full control over document layout, aesthetics, and properties
+- **Secure by default:** a restrictive permission system limits access to system resources
+- **Versatile:** a single source compiles to multiple targets
+- **Reactive:** low-latency live previews for rapid iteration. The official wiki (100+ pages) compiles in ~2 seconds
+- **Reusable:** repeated content can be turned into one-line function calls
+
+&nbsp;
+
 ---
 
 <h2 align="center">Looking for something?</h2>
