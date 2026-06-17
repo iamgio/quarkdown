@@ -18,6 +18,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
+import java.net.Socket
+import java.net.SocketTimeoutException
 import java.nio.file.Files
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -206,7 +208,7 @@ class LocalFileWebServerTest {
                     install(SSE)
                 }
 
-            try {
+            client.use { client ->
                 // Broadcast before any subscriber is listening.
                 client.post("$baseUrl/reload")
                 delay(300)
@@ -228,8 +230,70 @@ class LocalFileWebServerTest {
                 lateSubscriber.cancel()
 
                 assertEquals(false, gotStale, "Late-connecting subscriber should not receive stale broadcasts")
-            } finally {
-                client.close()
+            }
+        }
+
+    @Test
+    fun `abruptly disconnected subscriber does not break the server`() =
+        runBlocking {
+            // Open a raw TCP connection and start an SSE subscription, then force a TCP RST (rather than a graceful FIN) by closing with SO_LINGER(0).
+            Socket(SERVER_HOST, port).use { socket ->
+                val out = socket.getOutputStream()
+                out.write(
+                    (
+                        "GET ${ServerEndpoints.RELOAD_LIVE_PREVIEW} HTTP/1.1\r\n" +
+                            "Host: $SERVER_HOST:$port\r\n" +
+                            "Accept: text/event-stream\r\n" +
+                            "Connection: keep-alive\r\n" +
+                            "\r\n"
+                    ).toByteArray(),
+                )
+                out.flush()
+
+                // Wait for the end of HTTP headers so we know the server has registered the subscription.
+                // Bound the read so a stalled handshake fails the test fast instead of hanging the suite.
+                socket.soTimeout = 2_000
+                val reader = socket.getInputStream().bufferedReader()
+                try {
+                    while (true) {
+                        val line = reader.readLine() ?: break
+                        if (line.isEmpty()) break
+                    }
+                } catch (_: SocketTimeoutException) {
+                    // Treat as "headers stalled": proceed with the abrupt close anyway,
+                    // which is what the test is here to exercise.
+                }
+
+                // Force an immediate RST instead of a graceful close.
+                socket.setSoLinger(true, 0)
+            }
+
+            // Give the server a moment to either notice the disconnect or queue a write to the dead socket.
+            delay(200)
+
+            HttpClient(CIO) {
+                install(SSE)
+            }.use { client ->
+                // Server must still respond to triggers after the abrupt disconnect.
+                val triggerStatus = client.post("$baseUrl/reload").status
+                assertEquals(HttpStatusCode.NoContent, triggerStatus)
+
+                // A fresh subscriber must still receive subsequent broadcasts, proving the broadcast
+                // flow was not poisoned by the failed write to the dead subscriber.
+                val received = CompletableDeferred<String>()
+                val subscriber =
+                    launch {
+                        client.sse("$baseUrl/reload") {
+                            val event = incoming.first()
+                            received.complete(event.data ?: "")
+                        }
+                    }
+                delay(500)
+                client.post("$baseUrl/reload")
+
+                val payload = withTimeout(5.seconds) { received.await() }
+                assertEquals("reload", payload)
+                subscriber.cancel()
             }
         }
 
