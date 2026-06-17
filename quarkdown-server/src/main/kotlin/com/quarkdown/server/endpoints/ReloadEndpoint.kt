@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.IOException
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -56,8 +57,10 @@ class ReloadEndpoint {
         } catch (e: CancellationException) {
             logger.debug("SSE subscription cancelled: $subscriberId")
             throw e
+        } catch (e: IOException) {
+            logger.debug("SSE subscriber $subscriberId disconnected: ${e.message ?: e.javaClass.simpleName}")
         } catch (e: Exception) {
-            logger.error("SSE subscription error for $subscriberId: ${e.message}")
+            logger.error("SSE subscription error for $subscriberId: ${e.message ?: e.javaClass.simpleName}", e)
         } finally {
             logger.info("SSE subscriber disconnected: $subscriberId")
         }
