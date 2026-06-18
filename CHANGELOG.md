@@ -2,9 +2,11 @@
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-06-18
+
 ### Added
 
-&nbsp;
+ 
 
 #### [Page background color](https://quarkdown.com/wiki/page-format)
 
@@ -22,11 +24,11 @@ In `paged` documents, the background can be scoped to specific pages, as usual:
 
 Thanks @gggeon96!
 
-&nbsp;
+ 
 
 ### Changed
 
-&nbsp;
+ 
 
 #### [Changed `.extend` behavior](https://quarkdown.com/wiki/extending-functions) (breaking change)
 
@@ -54,7 +56,7 @@ Output:
 HELLO, world
 ```
 
-&nbsp;
+ 
 
 #### Faster live preview
 
@@ -65,11 +67,11 @@ Additionally, the live preview connection between the local server and the brows
 > [!NOTE]
 > If you experience errors after launching live preview for the first time after updating, delete the output directory and run again (or run with `--clean`).
 
-&nbsp;
+ 
 
 ### Fixed
 
-&nbsp;
+ 
 
 #### [Extra spaces in CJK paragraph soft line breaks](https://quarkdown.com/wiki/localization#cjk-locales)
 
@@ -88,31 +90,31 @@ In all other languages, soft line breaks continue to render as a single space, f
 
 Thanks @CarmJos!
 
-&nbsp;
+ 
 
 #### Orphan headings at the bottom of a page
 
 In `paged` documents, a heading that would otherwise land as the last line of a page is now pushed to the top of the next page, keeping it close to the content it introduces.
 
-&nbsp;
+ 
 
 #### `.container`'s `foreground` color not applied to headings
 
 `.container foreground:{color}` now correctly applies to headings.
 
-&nbsp;
+ 
 
 #### [Security] Native content injection via string manipulation
 
 Fixed an issue that allowed string->string functions to let unsanitized HTML through, even when the `native-content` permission was not granted.
 
-&nbsp;
+ 
 
 #### `.extend` on functions with injected parameters
 
 The `.extend` function now maps parameters correctly when wrapping native functions that feature `@Injected` parameters, such as document metadata functions. 
 
-&nbsp;
+ 
 
 #### [LSP] Concurrency issue in document state
 
@@ -121,8 +123,6 @@ Document state and request dispatching now run through thread-safe primitives, e
 ## [2.2.0] - 2026-06-03
 
 ### Added
-
- 
 
 #### [Extending functions](https://quarkdown.com/wiki/extending-functions)
 
@@ -159,8 +159,6 @@ Hey, everyone!
 
 The wrapper body receives the result of the original function (conventionally called `super`) as its first parameter, followed by the original function's parameters.
 
- 
-
 #### [Function overwriting](https://quarkdown.com/wiki/declaring-functions#overwriting-functions)
 
 It is now possible to overwrite any previously-declared function:
@@ -187,8 +185,6 @@ This behavior can be turned off with the new [`--forbid-function-overwriting`](h
 
 Unlike `.extend`, which wraps the previous function and keeps its output reachable via `super`, this fully replaces the previous definition, so its return value and parameters are no longer accessible.
 
- 
-
 #### [Custom HTML title](https://quarkdown.com/wiki/html-options#custom-title)
 
 The new `title` parameter of [`.htmloptions`](https://quarkdown.com/wiki/html-options) lets you override the text that appears in the browser tab and in search engine results, independently of the document name:
@@ -199,8 +195,6 @@ The new `title` parameter of [`.htmloptions`](https://quarkdown.com/wiki/html-op
 ```
 
 The `docs` project creator was also updated to automatically include this attribute on each page as `.docname | My project name`.
-
- 
 
 #### [File tree explicit directories](https://quarkdown.com/wiki/file-tree)
 
@@ -222,8 +216,6 @@ In this example, `target/` is now rendered as an empty folder, while entries wit
 
 Thanks @CarmJos!
 
- 
-
 #### [`listfiles` recursive traversal and name filtering](https://quarkdown.com/wiki/listing-files)
 
 The `.listfiles` function now supports two new optional parameters:
@@ -235,11 +227,7 @@ This makes it easier to target files in deep folder trees and build pattern-base
 
 Thanks @CarmJos!
 
- 
-
 ### Changed
-
- 
 
 #### [Dictionary lookup chaining](https://quarkdown.com/wiki/dictionary) (breaking change)
 
@@ -263,8 +251,6 @@ USA
 
 Previously, the dictionary had to be passed as a named `from` argument (`.get {John} from:{.docauthors}`). Existing documents using that form will need to switch to the new positional or chained syntax.
 
- 
-
 #### Unique anchor identifiers for duplicate headings
 
 Two or more headings sharing the same title used to produce the same HTML anchor identifier, making in-document links (such as table of contents entries and cross-references) always navigate to the first match.
@@ -285,11 +271,7 @@ For example, the following:
 
 now generates the identifiers `examples` and `examples-2` for the two `Examples` headings, and any link or table of contents entry points to the correct one.
 
- 
-
 ### Fixed
-
- 
 
 #### Preserve Unicode characters in output names
 
@@ -304,8 +286,6 @@ quarkdown c main.qd --pdf --out-name abc123我爱你
 The generated PDF file is now `abc123我爱你.pdf`.
 
 Thanks @CarmJos!
-
- 
 
 #### File tree font size shrinking at nested levels
 
@@ -1006,7 +986,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.3.0...HEAD
+
+[2.3.0]: https://github.com/iamgio/quarkdown/compare/v2.2.0...v2.3.0
 
 [2.2.0]: https://github.com/iamgio/quarkdown/compare/v2.1.2...v2.2.0
 
