@@ -20,6 +20,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: [test]
+    permissions:
+      contents: read
+      packages: write
 
     steps:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@main
@@ -78,6 +81,24 @@ jobs:
 
     - name: Echo output files
       run: ls -d "$PWD/build/"* && ls build/distributions
+
+    - name: Login to GitHub Container Registry
+      if: github.ref_type == 'tag'
+      uses: docker/login-action@v4
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      if: github.ref_type == 'tag'
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          ghcr.io/${{ github.repository }}:latest
 
     - name: Deploy wiki
       if: github.ref_type == 'tag'
