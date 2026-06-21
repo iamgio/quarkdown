@@ -331,9 +331,6 @@ class LexerTest {
         assertIs<LineBreakToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
         assertIs<FunctionCallToken>(tokens.next())
-        assertIs<LineBreakToken>(tokens.next())
-        assertIs<PlainTextToken>(tokens.next())
-        assertIs<LineBreakToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
         assertIs<LineBreakToken>(tokens.next())
         assertIs<PlainTextToken>(tokens.next())
@@ -348,10 +345,6 @@ class LexerTest {
         assertIs<PlainTextToken>(tokens.next())
         assertIs<LineBreakToken>(tokens.next())
         assertIs<FunctionCallToken>(tokens.next())
-        assertIs<LineBreakToken>(tokens.next())
-        assertIs<PlainTextToken>(tokens.next())
-        assertIs<LineBreakToken>(tokens.next())
-        assertIs<PlainTextToken>(tokens.next())
 
         assertFalse(tokens.hasNext())
     }

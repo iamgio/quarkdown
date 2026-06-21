@@ -29,6 +29,26 @@ Inline binding keeps working as before, so the following is still valid:
 
 Parameter lookup now performs a single pass over the arguments, improving performance.
 
+&nbsp;
+
+#### Body arguments for inline function calls
+
+Inline function calls now accept body arguments, just like block-level calls do. 
+
+The following is now valid:
+
+```markdown
+.heading depth:{1}
+    .text size:{large}
+        Content
+```
+
+Whereas previously, this was the only valid form:
+
+```markdown
+.heading {.text {Content} size:{large}} depth:{1}
+```
+
 ## [2.3.1] - 2026-06-23
 
 ### Added

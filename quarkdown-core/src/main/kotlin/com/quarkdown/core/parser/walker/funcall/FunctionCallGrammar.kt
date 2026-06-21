@@ -34,8 +34,7 @@ import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar.Companion.ID
  * as they may represent Markdown content (argument type checking is performed in the function expansion stage of the pipeline instead, see [com.quarkdown.core.function.call.binding]).
  * In order to achieve context-awareness, this grammar is stateful and mutable, as it needs to know whether it is currently parsing the outer 'rigid' syntax or an argument.
  *
- * @param allowsBody whether the function call allows an indented body argument.
- *                   Generally, this is true for block functions, false for inline functions.
+ * @param allowsBody whether the function call allows an indented body argument
  */
 class FunctionCallGrammar(
     private val allowsBody: Boolean,

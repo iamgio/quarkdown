@@ -31,7 +31,7 @@ class FunctionCallPatterns {
                     .withReference("name", FunctionCallGrammar.IDENTIFIER_PATTERN)
                     .build(),
             walker = { data, remaining ->
-                val result = FunctionCallWalkerParser(remaining, allowsBody = false).parse()
+                val result = FunctionCallWalkerParser(remaining, allowsBody = true).parse()
                 WalkedToken(
                     token = FunctionCallToken(data, isBlock = false, walkerResult = result),
                     charsConsumed = result.endIndex,

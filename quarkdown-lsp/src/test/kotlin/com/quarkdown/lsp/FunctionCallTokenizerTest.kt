@@ -162,6 +162,23 @@ class FunctionCallTokenizerTest {
     }
 
     @Test
+    fun `function calls inside body arguments`() {
+        val text =
+            """
+            .outer
+                .inner {arg}
+            """.trimIndent()
+        val calls = tokenizer.getFunctionCalls(text)
+
+        val functionNames =
+            calls.flatMap { call ->
+                call.tokens.filter { it.type == FunctionCallToken.Type.FUNCTION_NAME }.map { it.lexeme }
+            }
+        assertTrue("outer" in functionNames)
+        assertTrue("inner" in functionNames, "nested call inside body was not recognized")
+    }
+
+    @Test
     fun `multiple function calls in text`() {
         val text = "Text .function1 {arg1} more text .function2 param:{value}"
         val calls = tokenizer.getFunctionCalls(text)
