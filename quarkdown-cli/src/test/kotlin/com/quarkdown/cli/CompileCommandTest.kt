@@ -155,6 +155,22 @@ class CompileCommandTest : TempDirectory() {
     }
 
     @Test
+    fun `clean refuses output directory containing source file`() {
+        val sibling = File(directory, "neighbor.txt").apply { writeText("important") }
+        val result =
+            CompileCommand().test(
+                main.absolutePath,
+                "-o",
+                directory.absolutePath,
+                "--clean",
+            )
+        assertEquals(1, result.statusCode)
+        assertTrue(result.stderr.contains("Refusing to clean"), result.stderr)
+        assertTrue(main.exists(), "Source file must not be deleted")
+        assertTrue(sibling.exists(), "Sibling files must not be deleted")
+    }
+
+    @Test
     fun `forbid function overwriting`() {
         val (_, pipelineOptions) = test("--forbid-function-overwriting")
         assertTrue(pipelineOptions.forbidFunctionOverwriting)
