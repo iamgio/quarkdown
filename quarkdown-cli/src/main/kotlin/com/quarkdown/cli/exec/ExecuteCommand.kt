@@ -1,6 +1,7 @@
 package com.quarkdown.cli.exec
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.CliktError
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
@@ -12,6 +13,7 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.cli.server.DEFAULT_SERVER_PORT
+import com.quarkdown.cli.util.checkCleanSafety
 import com.quarkdown.cli.util.runWithTimeout
 import com.quarkdown.cli.watcher.DirectoryWatcher
 import com.quarkdown.core.TIMEOUT_EXIT_CODE
@@ -274,6 +276,18 @@ abstract class ExecuteCommand(
     override fun run() {
         val cliOptions = this.createCliOptions()
         val pipelineOptions = this.createPipelineOptions(cliOptions)
+
+        // Prevents `--clean` from deleting sensitive directories.
+        if (cliOptions.clean) {
+            cliOptions.outputDirectory?.let { dir ->
+                dir.checkCleanSafety(cliOptions.source)?.let { refusal ->
+                    throw CliktError(
+                        "Refusing to clean output directory '${dir.absolutePath}': ${refusal.message}. " +
+                            "Please pick a different --out directory or omit --clean.",
+                    )
+                }
+            }
+        }
 
         // If pipe mode is enabled, all logging is disabled, so that only the rendered content is printed to stdout.
         if (cliOptions.pipe) {

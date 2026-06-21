@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Fixed
+
+&nbsp;
+
+#### Safer `--clean`
+
+The `--clean` flag now refuses to clean the output directory in case it contains source files or git repos, or if it's the filesystem root or home directory. It also stops if the directory would (recursively) contain the source file passed to the command.
+
+&nbsp;
+
 ## [2.3.0] - 2026-06-18
 
 ### Added
