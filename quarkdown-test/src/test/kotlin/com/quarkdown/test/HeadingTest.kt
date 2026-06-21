@@ -228,6 +228,18 @@ class HeadingTest {
     }
 
     @Test
+    fun `heading primitive with body argument`() {
+        execute(
+            """
+            .heading depth:{3}
+                Hello
+            """.trimIndent(),
+        ) {
+            assertEquals("<h3>Hello</h3>", it)
+        }
+    }
+
+    @Test
     fun `heading primitive depth out of range`() {
         assertFailsWith<FunctionCallRuntimeException> {
             execute(".heading {Hello} depth:{0}") {}

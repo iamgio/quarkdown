@@ -7,7 +7,7 @@ import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
-import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.IterableValue
@@ -68,7 +68,7 @@ private fun mermaidFigure(
 fun mermaid(
     @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,
-    @LikelyBody code: EvaluableString,
+    @Body code: EvaluableString,
 ) = mermaidFigure(
     caption = caption?.children,
     referenceId = referenceId,
@@ -205,7 +205,7 @@ fun xyChart(
     @Name("yrange") yAxisRange: Range? = null,
     @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,
-    @LikelyBody values: Iterable<OutputValue<*>>,
+    @Body values: Iterable<OutputValue<*>>,
 ): NodeValue {
     val lines: List<ChartLine> = extractLines(values)
     val (minY, maxY) = lines.flatten().let { (it.minOrNull() ?: 0.0) to (it.maxOrNull() ?: 1.0) }

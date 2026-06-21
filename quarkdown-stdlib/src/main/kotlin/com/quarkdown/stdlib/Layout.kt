@@ -22,6 +22,7 @@ import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -115,7 +116,7 @@ fun container(
     @LikelyNamed float: Container.FloatAlignment? = null,
     @Name("fullspan") fullColumnSpan: Boolean = false,
     @Name("classname") className: String? = null,
-    @LikelyBody body: MarkdownContent? = null,
+    @Body body: MarkdownContent? = null,
 ) = Container(
     width,
     height,
@@ -148,7 +149,7 @@ fun container(
  */
 fun align(
     alignment: Container.Alignment,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = container(
     fullWidth = true,
     alignment = alignment,
@@ -165,7 +166,7 @@ fun align(
  * @wiki align
  */
 fun center(
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = align(Container.Alignment.CENTER, body)
 
 /**
@@ -178,7 +179,7 @@ fun center(
  */
 fun float(
     @LikelyNamed alignment: Container.FloatAlignment,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = container(
     float = alignment,
     body = body,
@@ -220,7 +221,7 @@ fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     @LikelyNamed gap: Size? = null,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, null, gap, body)
 
 /**
@@ -237,7 +238,7 @@ fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
     @LikelyNamed gap: Size? = null,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, null, body)
 
 /**
@@ -263,7 +264,7 @@ fun grid(
     @LikelyNamed gap: Size? = null,
     @Name("vgap") rowGap: Size? = gap,
     @Name("hgap") columnGap: Size? = gap,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = when {
     columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")
     else -> stack(Stacked.Grid(columnCount), mainAxisAlignment, crossAxisAlignment, rowGap ?: gap, columnGap ?: gap, body)
@@ -279,7 +280,7 @@ fun grid(
  * @wiki landscape-content
  */
 fun landscape(
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = Landscape(body.children).wrappedAsValue()
 
 /**
@@ -294,7 +295,7 @@ fun landscape(
  */
 @Name("fullspan")
 fun fullColumnSpan(
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = container(fullColumnSpan = true, body = body)
 
 /**
@@ -322,7 +323,7 @@ fun whitespace(
  */
 fun clip(
     clip: Clipped.Clip,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = Clipped(clip, body.children).wrappedAsValue()
 
 /**
@@ -346,7 +347,7 @@ fun box(
     @LikelyNamed padding: Size? = null,
     @Name("background") backgroundColor: Color? = null,
     @Name("foreground") foregroundColor: Color? = null,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ): NodeValue {
     // Localizes the title according to the box type,
     // if the title is not manually set.
@@ -400,7 +401,7 @@ fun toDo(
 fun collapse(
     title: InlineMarkdownContent,
     @LikelyNamed open: Boolean = false,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ) = Collapse(title.children, open, body.children).wrappedAsValue()
 
 /**
@@ -446,7 +447,7 @@ fun inlineCollapse(
 fun numbered(
     @LikelyNamed key: String,
     @Name("ref") referenceId: String? = null,
-    @LikelyBody body: Lambda,
+    @Body body: Lambda,
 ): NodeValue {
     val node =
         Numbered(
@@ -480,7 +481,7 @@ fun numbered(
  */
 fun table(
     @Injected context: Context,
-    @LikelyBody subTables: Iterable<Value<String>>,
+    @Body subTables: Iterable<Value<String>>,
 ): NodeValue {
     val columns =
         subTables

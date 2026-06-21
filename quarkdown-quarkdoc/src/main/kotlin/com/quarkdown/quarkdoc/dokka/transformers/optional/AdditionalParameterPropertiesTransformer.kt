@@ -1,5 +1,6 @@
 package com.quarkdown.quarkdoc.dokka.transformers.optional
 
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -45,7 +46,7 @@ class AdditionalParameterPropertiesTransformer(
         ParameterProperties(
             isOptional = parameter.extra[DefaultValue] != null,
             isLikelyNamed = parameter.hasAnnotation<LikelyNamed>() || parameter.hasAnnotation<Name>(),
-            isLikelyBody = parameter.hasAnnotation<LikelyBody>(),
+            isLikelyBody = parameter.hasAnnotation<LikelyBody>() || parameter.hasAnnotation<Body>(),
         )
 
     /**

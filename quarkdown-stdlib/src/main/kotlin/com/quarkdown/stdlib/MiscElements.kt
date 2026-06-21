@@ -6,7 +6,7 @@ import com.quarkdown.core.ast.quarkdown.block.FileTree
 import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
-import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
@@ -45,7 +45,7 @@ val MiscElements: QuarkdownModule =
  */
 @Name("filetree")
 fun fileTree(
-    @LikelyBody content: MarkdownContent,
+    @Body content: MarkdownContent,
 ): NodeValue {
     val rawListNode =
         content.children.firstOrNull() as? ListBlock

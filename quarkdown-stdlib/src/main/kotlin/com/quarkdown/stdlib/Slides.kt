@@ -8,6 +8,7 @@ import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.slides.Transition
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -67,7 +68,7 @@ fun setSlidesConfiguration(
 @OnlyForDocumentType(DocumentType.SLIDES)
 fun fragment(
     behavior: SlidesFragment.Behavior = SlidesFragment.Behavior.SHOW,
-    @LikelyBody content: MarkdownContent,
+    @Body content: MarkdownContent,
 ) = SlidesFragment(behavior, content.children).wrappedAsValue()
 
 /**

@@ -9,6 +9,7 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -48,7 +49,7 @@ val Text: QuarkdownModule =
  * @param className CSS class name to apply to the element, if supported by the renderer. None if not specified.
  */
 fun text(
-    text: InlineMarkdownContent,
+    @Body text: InlineMarkdownContent,
     @LikelyNamed size: TextTransformData.Size? = null,
     @LikelyNamed weight: TextTransformData.Weight? = null,
     @LikelyNamed style: TextTransformData.Style? = null,

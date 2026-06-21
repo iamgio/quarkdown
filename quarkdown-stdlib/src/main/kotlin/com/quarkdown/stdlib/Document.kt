@@ -41,6 +41,7 @@ import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -1004,7 +1005,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
 @Name("navigation")
 fun navigationContainer(
     role: NavigationContainer.Role? = null,
-    @LikelyBody content: MarkdownContent,
+    @Body content: MarkdownContent,
 ): NodeValue =
     NavigationContainer(
         role,

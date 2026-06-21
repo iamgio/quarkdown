@@ -4,8 +4,8 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
@@ -34,7 +34,7 @@ val Localization: QuarkdownModule =
 private fun buildLocalizationTable(contents: Map<String, DictionaryValue<OutputValue<String>>>): LocalizationTable =
     contents
         .asSequence()
-        .map { (key, value) ->
+        .associate { (key, value) ->
             // The locale name is the first element of each list item:
             // English <-- this is the locale name
             //   - key1: value1
@@ -47,7 +47,7 @@ private fun buildLocalizationTable(contents: Map<String, DictionaryValue<OutputV
                 value.unwrappedValue.mapValues { (_, value) -> value.unwrappedValue }
 
             locale to entries
-        }.toMap()
+        }
 
 /**
  * Merges two localization tables, giving priority to the new one.
@@ -112,7 +112,7 @@ fun localization(
     @Injected context: MutableContext,
     @Name("name") tableName: String,
     @LikelyNamed merge: Boolean = false,
-    @LikelyBody contents: Map<String, DictionaryValue<OutputValue<String>>>,
+    @Body contents: Map<String, DictionaryValue<OutputValue<String>>>,
 ): VoidValue {
     val tableExists = tableName in context.localizationTables
 

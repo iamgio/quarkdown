@@ -149,7 +149,7 @@ Paragraph 2
 
 ### The body argument
 
-The main difference between inline and block function calls is a special argument called **body argument**. This argument **always** refers to the **last parameter** of the signature (even if named arguments were used).
+The main difference between inline and block function calls is a special argument called **body argument**. This argument refers to the function's **body parameter**, which is usually the last one in the signature, although some functions designate a different parameter as their body (showing as *Likely body* in its documentation).
 
 A body argument expands over multiple lines, is not wrapped by brackets, and requires each line to be **indented** by at least two spaces or one tab:
 

@@ -6,6 +6,7 @@ import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.binding.ArgumentBindings
 import com.quarkdown.core.function.call.validate.FunctionCallValidator
 import com.quarkdown.core.function.error.FunctionCallRuntimeException
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.NoAutoArgumentUnwrapping
@@ -55,6 +56,7 @@ class KFunctionAdapter<T : OutputValue<*>>(
                 type = it.type.classifier as KClass<out InputValue<T>>,
                 index = it.index,
                 isOptional = it.isOptional,
+                isExplicitlyBody = it.hasAnnotation<Body>(),
                 isInjected = it.hasAnnotation<Injected>(),
                 isNullable = it.type.isMarkedNullable,
             )

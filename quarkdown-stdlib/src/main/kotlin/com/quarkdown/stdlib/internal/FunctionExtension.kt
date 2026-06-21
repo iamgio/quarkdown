@@ -55,7 +55,7 @@ internal fun extendFunction(
 
     context.markFunctionAsExtended(targetName)
 
-    declareFunction(context, targetName, lambdaParameters) { call, args, outerBindings ->
+    declareFunction(context, targetName, wrapperParameters) { call, args, outerBindings ->
         // `super` is exposed as a callable within the body: its explicit arguments override the outer call's bindings.
         val superFunction =
             SimpleFunction(SUPER_NAME, parameters = wrapperParameters) { overrides, _ ->

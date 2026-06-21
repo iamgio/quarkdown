@@ -34,7 +34,9 @@ class RegularArgumentsBinder(
      * Binds an argument to its corresponding parameter.
      * @param argument argument to bind
      * @param argumentIndex index of the argument in the call
-     * @param parameters available parameters of the called function
+     * @param bindable parameters available for positional and named binding (excludes any parameter reserved for the body argument)
+     * @param byName name-indexed view of [bindable] for O(1) named-argument lookup
+     * @param bodyParameter parameter reserved for the body argument, if any
      * @return the parameter bound to the given argument
      * @throws InvalidArgumentCountException if the number of arguments exceeds the number of parameters
      * @throws UnresolvedParameterException if the argument is named and refers to a non-existent parameter
@@ -43,24 +45,26 @@ class RegularArgumentsBinder(
     private fun findParameter(
         argument: FunctionCallArgument,
         argumentIndex: Int,
-        parameters: List<FunctionParameter<*>>,
+        bindable: List<FunctionParameter<*>>,
+        byName: Map<String, FunctionParameter<*>>,
+        bodyParameter: FunctionParameter<*>?,
     ): FunctionParameter<*> =
         when {
-            // A body parameter is always the last one in the function signature.
+            // A body argument binds to its reserved parameter, or falls back to the last one in the signature.
             argument.isBody -> {
-                parameters.lastOrNull()
+                bodyParameter ?: bindable.lastOrNull()
             }
 
             // A non-body parameter that refers to a parameter by its name.
             argument.isNamed -> {
                 encounteredNamedArgument = true
-                parameters.find { it.name == argument.name }
+                byName[argument.name]
                     ?: throw UnresolvedParameterException(argument, call)
             }
 
             // Non-body, unnamed parameters follow the index and cannot appear after a named argument has been encountered.
             !encounteredNamedArgument -> {
-                parameters.getOrNull(argumentIndex)
+                bindable.getOrNull(argumentIndex)
             }
 
             // Unnamed arguments cannot appear after a named one.
@@ -156,6 +160,22 @@ class RegularArgumentsBinder(
     }
 
     override fun createBindings(parameters: List<FunctionParameter<*>>): ArgumentBindings {
+        // A parameter is reserved for the body argument when it is explicitly marked as such
+        // (see FunctionParameter.isExplicitlyBody) and the call provides a body argument.
+        // The reservation excludes the parameter from positional and named bindings,
+        // so the body argument is its only possible binding source.
+        val bodyParameter: FunctionParameter<*>? =
+            when {
+                call.arguments.any { it.isBody } -> parameters.firstOrNull { it.isExplicitlyBody }
+                else -> null
+            }
+
+        // Parameters available for binding non-body arguments.
+        val bindable = if (bodyParameter == null) parameters else parameters - bodyParameter
+
+        // Name-indexed view of bindable parameters, for O(1) named-argument lookup.
+        val byName = bindable.associateBy { it.name }
+
         // Parameters that have been already bound to arguments.
         val boundParameters = mutableSetOf<FunctionParameter<*>>()
 
@@ -163,7 +183,7 @@ class RegularArgumentsBinder(
             .withIndex()
             .associate { (index, argument) ->
                 // Corresponding parameter.
-                val parameter = findParameter(argument, index, parameters)
+                val parameter = findParameter(argument, index, bindable, byName, bodyParameter)
 
                 // Check if the parameter is already bound.
                 when {
