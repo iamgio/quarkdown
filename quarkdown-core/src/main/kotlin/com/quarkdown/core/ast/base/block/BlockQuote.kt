@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
@@ -17,7 +18,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 class BlockQuote(
     val type: Type? = null,
     val attribution: InlineContent? = null,
-    val content: List<Node>,
+    @Diverge val content: List<Node>,
 ) : NestableNode {
     override val children: List<Node>
         get() = content + attribution.group()

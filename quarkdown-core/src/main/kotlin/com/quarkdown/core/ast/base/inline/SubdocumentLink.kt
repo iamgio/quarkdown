@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.inline
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.context.Context
@@ -15,7 +16,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param anchor an optional anchor to a specific section within the subdocument
  */
 class SubdocumentLink(
-    val link: Link,
+    @Diverge val link: Link,
     val anchor: String? = null,
 ) : LinkNode,
     TextNode {

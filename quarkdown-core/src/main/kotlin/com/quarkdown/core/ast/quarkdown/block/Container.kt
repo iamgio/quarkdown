@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
@@ -48,7 +49,7 @@ class Container(
     val float: FloatAlignment? = null,
     val fullColumnSpan: Boolean = false,
     val className: String? = null,
-    override val children: List<Node>,
+    @Diverge override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 

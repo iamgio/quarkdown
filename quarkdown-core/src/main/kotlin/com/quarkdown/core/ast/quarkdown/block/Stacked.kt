@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.document.size.Size
@@ -21,7 +22,7 @@ class Stacked(
     val crossAxisAlignment: CrossAxisAlignment,
     val rowGap: Size?,
     val columnGap: Size?,
-    override val children: List<Node>,
+    @Diverge override val children: List<Node>,
 ) : NestableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 

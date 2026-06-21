@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
@@ -15,7 +16,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param fileSystem optional file system this link is relative to
  */
 class LinkDefinition(
-    override val label: InlineContent,
+    @Diverge override val label: InlineContent,
     override val url: String,
     override val title: InlineContent?,
     override val fileSystem: FileSystem? = null,

@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.attributes.id.Identifiable
@@ -34,7 +35,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  */
 class Heading(
     val depth: Int,
-    override val text: InlineContent,
+    @Diverge override val text: InlineContent,
     val customId: String? = null,
     val canBreakPage: Boolean = true,
     override val canTrackLocation: Boolean = true,

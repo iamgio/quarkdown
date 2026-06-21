@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.inline
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.reference.ReferenceNode
@@ -19,7 +20,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param fileSystem optional file system where this link is defined, used for resolving relative paths
  */
 class Link(
-    override val label: InlineContent,
+    @Diverge override val label: InlineContent,
     override val url: String,
     override val title: InlineContent?,
     override val fileSystem: FileSystem? = null,
@@ -60,7 +61,7 @@ class Link(
  * @see com.quarkdown.core.context.hooks.reference.LinkDefinitionResolverHook
  */
 class ReferenceLink(
-    val label: InlineContent,
+    @Diverge val label: InlineContent,
     val referenceLabel: InlineContent,
     val fallback: () -> Node,
     val onResolve: MutableList<(resolved: LinkNode) -> Unit> = mutableListOf(),

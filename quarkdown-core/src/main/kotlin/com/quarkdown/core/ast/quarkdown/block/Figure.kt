@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.SingleChildNestableNode
@@ -21,7 +22,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param T type of the wrapped child node
  */
 open class Figure<T : Node>(
-    override val child: T,
+    @Diverge override val child: T,
     override val caption: InlineContent? = null,
     override val referenceId: String? = null,
 ) : SingleChildNestableNode<T>,
