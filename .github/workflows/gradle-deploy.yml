@@ -20,6 +20,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: [test]
+    permissions:
+      contents: write
 
     steps:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@main
@@ -158,6 +160,52 @@ jobs:
       with:
         version: ${{ github.ref_name }}
         committer_token: ${{ secrets.COMMITTER_TOKEN }}
+
+  image-publish:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    needs: [test]
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+
+    # Writes the new version (tag name without the leading 'v') to version.txt
+    - name: Bump version
+      run: printf "%s" "${GITHUB_REF_NAME#v}" > version.txt
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v4
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Docker metadata
+      id: meta
+      uses: docker/metadata-action@v6
+      with:
+        images: ghcr.io/${{ github.repository }}
+        tags: |
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        push: true
+        platforms: linux/amd64
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
 
   dependency-submission:
 
