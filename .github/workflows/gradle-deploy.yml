@@ -174,6 +174,10 @@ jobs:
       with:
         persist-credentials: false
 
+    # Writes the new version (tag name without the leading 'v') to version.txt
+    - name: Bump version
+      run: printf "%s" "${GITHUB_REF_NAME#v}" > version.txt
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v4
 
