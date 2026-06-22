@@ -161,7 +161,7 @@ jobs:
         version: ${{ github.ref_name }}
         committer_token: ${{ secrets.COMMITTER_TOKEN }}
 
-  publish:
+  image-publish:
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     needs: [test]
