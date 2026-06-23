@@ -197,6 +197,14 @@ jobs:
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
           type=semver,pattern={{major}}
+        labels: |
+          org.opencontainers.image.licenses=GPL-3.0-only AND AGPL-3.0-only
+        annotations: |
+          org.opencontainers.image.title=Quarkdown Docker image
+          org.opencontainers.image.description=Versatile Markdown-based typesetting system.
+          org.opencontainers.image.url=https://quarkdown.com
+      env:
+        DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v7
@@ -206,6 +214,7 @@ jobs:
         platforms: linux/amd64
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        annotations: ${{ steps.meta.outputs.annotations }}
 
   dependency-submission:
 
