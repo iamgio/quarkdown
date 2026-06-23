@@ -17,9 +17,17 @@ import com.quarkdown.core.function.value.factory.ValueFactory
 
 private const val LAMBDA_LIBRARY_NAME = "__lambda-parameters__"
 
+/**
+ * A declared parameter of a [Lambda].
+ * @param name name of the parameter
+ * @param isOptional whether the corresponding argument can be omitted
+ * @param isExplicitlyBody whether the parameter is reserved for the body argument when the lambda
+ *                         is registered as a function (see [com.quarkdown.core.function.FunctionParameter.isExplicitlyBody]).
+ */
 data class LambdaParameter(
     val name: String,
     val isOptional: Boolean = false,
+    val isExplicitlyBody: Boolean = false,
 )
 
 /**

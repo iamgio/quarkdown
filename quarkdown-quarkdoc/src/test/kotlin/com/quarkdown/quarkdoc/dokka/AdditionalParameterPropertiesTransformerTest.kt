@@ -1,5 +1,6 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.quarkdoc.reader.anchors.Anchors
@@ -18,8 +19,17 @@ private const val NAMED_TEXT = "Likely named"
  */
 class AdditionalParameterPropertiesTransformerTest :
     QuarkdocDokkaTest(
-        stringImports = listOf(LikelyBody::class.qualifiedName!!, LikelyNamed::class.qualifiedName!!),
-        stringPaths = listOf(LikelyBody::class.java.packageName + ".QuarkdocAnnotations"),
+        stringImports =
+            listOf(
+                Body::class.qualifiedName!!,
+                LikelyBody::class.qualifiedName!!,
+                LikelyNamed::class.qualifiedName!!,
+            ),
+        stringPaths =
+            listOf(
+                Body::class.java.packageName + ".Body",
+                LikelyBody::class.java.packageName + ".QuarkdocAnnotations",
+            ),
     ) {
     private fun containsAnchor(
         html: String,
@@ -72,6 +82,25 @@ class AdditionalParameterPropertiesTransformerTest :
              * @param x Test
              */
             fun func(@LikelyBody x: Int) = Unit
+            """.trimIndent(),
+            "func",
+        ) {
+            val parameters = getParametersTable(it).text()
+            assertContains(parameters, "x")
+            assertContains(parameters, BODY_TEXT)
+            assertTrue(containsAnchor(it, Anchors.LIKELY_BODY))
+            assertFalse(OPTIONAL_TEXT in parameters)
+        }
+    }
+
+    @Test
+    fun `body parameter via Body annotation`() {
+        test(
+            """
+            /**
+             * @param x Test
+             */
+            fun func(@Body x: Int) = Unit
             """.trimIndent(),
             "func",
         ) {

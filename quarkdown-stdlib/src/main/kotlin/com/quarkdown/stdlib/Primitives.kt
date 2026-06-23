@@ -11,8 +11,8 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
@@ -53,7 +53,7 @@ val Primitives: QuarkdownModule =
  * @throws IllegalArgumentException if [depth] is not in the 1-6 range
  */
 fun heading(
-    content: InlineMarkdownContent,
+    @Body content: InlineMarkdownContent,
     @LikelyNamed depth: Int,
     @Name("ref") customId: String? = null,
     @Name("numbered") canTrackLocation: Boolean = true,
@@ -160,7 +160,7 @@ fun pageBreak() = PageBreak().wrappedAsValue()
 fun figure(
     @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,
-    @LikelyBody body: MarkdownContent,
+    @Body body: MarkdownContent,
 ): NodeValue =
     Figure(
         body,

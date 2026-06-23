@@ -113,6 +113,21 @@ class TextTest {
     }
 
     @Test
+    fun `text with body argument`() {
+        execute(
+            """
+            .text size:{tiny} variant:{smallcaps}
+                small text
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<span class=\"size-tiny\" style=\"font-variant: small-caps;\">small text</span>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `subscript and superscript`() {
         execute("H{.text {2} script:{sub}}O is water. E = mc{.text {2} script:{sup}}") {
             assertEquals(

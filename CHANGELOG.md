@@ -2,6 +2,33 @@
 
 ## [Unreleased]
 
+### Changed
+
+&nbsp;
+
+#### [Body argument binding](https://quarkdown.com/wiki/syntax-of-a-function-call#block-vs-inline-function-calls)
+
+Native functions can now explicitly designate a body parameter. Previously, the body argument of a function call always bound to the last parameter of the function.
+
+Affected functions are `.text` and `.heading`.
+
+This means the following now works as expected:
+
+```markdown
+.text size:{large} weight:{bold}
+    Inline content
+```
+
+Inline binding keeps working as before, so the following is still valid:
+
+```markdown
+.text {Inline content} size:{large} weight:{bold}
+```
+
+#### Optimized argument binding
+
+Parameter lookup now performs a single pass over the arguments, improving performance.
+
 ## [2.3.1] - 2026-06-23
 
 ### Added

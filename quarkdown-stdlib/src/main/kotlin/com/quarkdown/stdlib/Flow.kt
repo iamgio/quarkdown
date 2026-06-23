@@ -6,6 +6,7 @@ import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.module.QuarkdownModule
 import com.quarkdown.core.function.library.module.moduleOf
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -24,7 +25,7 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.stdlib.internal.CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX
-import com.quarkdown.stdlib.internal.declareFunction
+import com.quarkdown.stdlib.internal.declareFunctionFromLambda
 import com.quarkdown.stdlib.internal.extendFunction
 
 /**
@@ -291,7 +292,7 @@ fun repeat(
 fun function(
     @Injected context: MutableContext,
     name: String,
-    @LikelyBody body: Lambda,
+    @Body body: Lambda,
 ): VoidValue {
     if (context.attachedPipeline?.options?.forbidFunctionOverwriting == true) {
         val existingFunction = context.getFunctionByName(name)
@@ -302,7 +303,7 @@ fun function(
         }
     }
 
-    declareFunction(context, name, body.explicitParameters) { call, args, _ ->
+    declareFunctionFromLambda(context, name, body.explicitParameters) { call, args, _ ->
         // The final result is evaluated and returned as a dynamic, hence it can be used as any type.
         // The calling context is propagated so that dynamic value references within the lambda body
         // can resolve variables from the calling scope.
@@ -368,7 +369,7 @@ fun function(
 fun extend(
     @Injected context: MutableContext,
     name: String,
-    @LikelyBody body: Lambda,
+    @Body body: Lambda,
 ): VoidValue {
     extendFunction(context, name, body)
     return VoidValue
@@ -489,7 +490,7 @@ fun variable(
  */
 fun let(
     value: DynamicValue,
-    @LikelyBody body: Lambda,
+    @Body body: Lambda,
 ): OutputValue<*> = body.invokeDynamic(value)
 
 /**
