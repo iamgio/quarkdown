@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+### Added
+
+&nbsp;
+
+#### GHCR image
+
+An image for Quarkdown is now available on GitHub Container Registry.
+
+Thanks @dddanielliu!
+
+&nbsp;
+
 ### Fixed
 
 &nbsp;
