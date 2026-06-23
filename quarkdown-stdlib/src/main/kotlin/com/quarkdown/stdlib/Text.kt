@@ -1,5 +1,6 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.inline.CodeSpan
@@ -13,12 +14,15 @@ import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
+import com.quarkdown.core.function.value.InlineMarkdownContentValue
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.data.EvaluableString
+import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.node.toPlainText
+import com.quarkdown.stdlib.internal.replaceMatches
 
 /**
  * `Text` stdlib module exporter.
@@ -30,6 +34,7 @@ val Text: QuarkdownModule =
         ::lineBreak,
         ::code,
         ::codeSpan,
+        ::match,
         ::loremIpsum,
     )
 
@@ -137,6 +142,62 @@ fun code(
  */
 @Name("codespan")
 fun codeSpan(text: String) = CodeSpan(text).wrappedAsValue()
+
+/**
+ * Finds every substring of [content] that matches the regular expression [pattern]
+ * and replaces each match with the inline content produced by [replacement].
+ *
+ * Matches are searched within plain text leaves only: existing inline structure
+ * (links, emphasis, code spans, transformed text, etc.) is preserved around the matches.
+ *
+ * The [replacement] lambda receives the matched substring as its single argument
+ * and returns inline content to insert in its place. If [pattern] is empty,
+ * [content] is returned unchanged.
+ *
+ * Example:
+ *
+ * ```
+ * .match {Quarkdown takes its name from quarks} pattern:{[Qq]uark(down|s)?}
+ *     match:
+ *     **.match**
+ * ```
+ *
+ * Output:
+ *
+ * > **Quarkdown** takes its name from **quarks**
+ *
+ * @param content inline content to scan for matches
+ * @param pattern regular expression to match
+ * @param replacement lambda invoked with each matched substring,
+ *                    producing the inline content that replaces it
+ * @return [content] with every match of [pattern] replaced by the output of [replacement]
+ * @throws IllegalArgumentException if [pattern] is not a valid regular expression
+ */
+fun match(
+    content: InlineMarkdownContent,
+    pattern: String,
+    @Body replacement: Lambda,
+): NodeValue {
+    val regex =
+        try {
+            pattern.toRegex()
+        } catch (e: Exception) {
+            throw IllegalArgumentException("Invalid regular expression: $pattern", e)
+        }
+
+    val replacementAction: (String) -> InlineContent = { matched ->
+        replacement
+            .invoke<InlineMarkdownContent, InlineMarkdownContentValue>(
+                matched.wrappedAsValue(),
+            ).unwrappedValue.children
+    }
+    val children =
+        when {
+            pattern.isEmpty() -> content.children
+            else -> content.children.flatMap { it.replaceMatches(regex, replacementAction) }
+        }
+    return InlineMarkdownContent(children).wrappedAsValue()
+}
 
 /**
  * @return a fixed Lorem Ipsum text.

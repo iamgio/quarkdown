@@ -1,0 +1,42 @@
+.docname {Regex-based styling}
+.include {docs}
+
+The **`.match {content} {pattern} {replacement}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Text/match.html} function:
+1. finds every substring of inline content that matches a regular expression,
+2. replaces each match with the inline content produced by a [lambda](lambda.qd).
+
+## Basic example
+
+.examplemirror
+    .match {Quarkdown takes its name from quarks} pattern:{[Qq]uark(down|s)?}
+        match:
+        ***.match***
+
+The lambda runs once per matched substring, with its argument referring to the matched text.
+
+.examplemirror prelude:{Using the implicit `\.1` instead of a named parameter:}
+    .match {Hello, world} pattern:{world}
+        ***.1***
+
+## Chained call
+
+`.match` works naturally in a [chain](syntax-of-a-function-call.qd), since `content` is its first parameter.
+
+.examplemirror
+    .var {greeting} {Hello, world}
+
+    .greeting::match {world}
+        **.1**
+
+## Inside a function extension
+
+A common use case is rewriting a function's output through a regex transformation. For example, you can extend `.heading` so every occurrence of certain words is highlighted across all headings in the document:
+
+.examplemirror
+    .extend {heading}
+        content:
+        .super
+            .content::match {[Qq]uark(down|s)?}
+                *.1::uppercase*
+
+    ###! Quarkdown takes its name from quarks

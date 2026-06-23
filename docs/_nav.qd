@@ -93,6 +93,7 @@
 - [Mermaid diagrams](mermaid-diagrams.qd)
 
 ###! Text & code
+- [Regex-based styling](regex-match.qd)
 - [Advanced text formatting](text.qd)
 - [Advanced code block](code.qd)
 - [Explicit line breaks](line-breaks.qd)
