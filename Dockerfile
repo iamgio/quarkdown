@@ -28,7 +28,8 @@ RUN unzip quarkdown.zip && rm quarkdown.zip
 FROM ghcr.io/puppeteer/puppeteer:24.15.0 AS runner
 
 ENV QD_NPM_PREFIX="/home/pptruser" \
-    NODE_PATH="/home/pptruser/node_modules"
+    NODE_PATH="/home/pptruser/node_modules" \
+    PUPPETEER_CACHE_DIR="/home/pptruser/.cache/puppeteer"
 
 USER pptruser
 WORKDIR /app
