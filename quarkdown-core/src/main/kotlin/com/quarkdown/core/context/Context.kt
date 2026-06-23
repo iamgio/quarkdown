@@ -110,6 +110,12 @@ interface Context : PermissionHolder {
     fun getFunctionByName(name: String): Function<*>?
 
     /**
+     * Whether a function with [name] has been wrapped via an `.extend` call visible from this context.
+     * Used for optimization of [com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode].
+     */
+    fun isFunctionExtended(name: String): Boolean
+
+    /**
      * @param call function call node to get a function call from
      * @return a new function call that [call] references to, with [call]'s arguments,
      * or `null` if [call] references to an unknown function

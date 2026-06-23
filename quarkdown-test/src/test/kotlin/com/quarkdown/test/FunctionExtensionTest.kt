@@ -1,10 +1,12 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.context.MutableContext
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertTrue
 
 /**
  * Tests for function extension via `.extend`.
@@ -24,6 +26,7 @@ class FunctionExtensionTest {
             """.trimIndent(),
             forbidFunctionOverwriting = true,
         ) {
+            assertTrue((this as MutableContext).isFunctionExtended("test"))
             assertEquals("<p>Hi</p>", it)
         }
     }

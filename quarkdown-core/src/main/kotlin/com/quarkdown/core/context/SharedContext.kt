@@ -29,4 +29,8 @@ open class SharedContext(
     override var sharedSubdocumentsData by parent::sharedSubdocumentsData
 
     override fun getFunctionByName(name: String): Function<*>? = parent.getFunctionByName(name)
+
+    override fun isFunctionExtended(name: String): Boolean = parent.isFunctionExtended(name)
+
+    override fun markFunctionAsExtended(name: String) = parent.markFunctionAsExtended(name)
 }

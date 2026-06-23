@@ -74,7 +74,15 @@ class FunctionCallRefiner(
      * Refines the walked function [call] into a [FunctionCallNode].
      */
     fun toNode(): FunctionCallNode {
-        val node = FunctionCallNode(context, call.name, extractArguments(), isBlock, sourceText, sourceRange)
+        val node =
+            FunctionCallNode(
+                context,
+                call.name,
+                extractArguments(),
+                isBlock,
+                sourceText = sourceText,
+                sourceRange = sourceRange,
+            )
 
         // Chaining: if this function call (A) is chained with another one (B),
         // then the result node is B(A).

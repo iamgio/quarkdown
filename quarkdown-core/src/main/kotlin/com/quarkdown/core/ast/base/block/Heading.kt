@@ -1,13 +1,21 @@
 package com.quarkdown.core.ast.base.block
 
 import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.IdentifierProvider
 import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
+import com.quarkdown.core.function.call.FunctionCallArgument
+import com.quarkdown.core.function.value.BooleanValue
+import com.quarkdown.core.function.value.InlineMarkdownContentValue
+import com.quarkdown.core.function.value.NoneValue
+import com.quarkdown.core.function.value.NumberValue
+import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -35,7 +43,8 @@ class Heading(
     Identifiable,
     LocationTrackableNode,
     CrossReferenceableNode,
-    LocalizedKind {
+    LocalizedKind,
+    PrimitiveFunctionBackedNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     override fun <T> accept(visitor: IdentifierProvider<T>) = visitor.visit(this)
@@ -54,6 +63,20 @@ class Heading(
      */
     override val referenceId: String?
         get() = this.customId
+
+    override fun toFunctionCall() =
+        "heading" to
+            listOf(
+                FunctionCallArgument(
+                    name = "content",
+                    expression = InlineMarkdownContentValue(InlineMarkdownContent(text)),
+                ),
+                FunctionCallArgument(name = "depth", expression = NumberValue(depth)),
+                FunctionCallArgument(name = "ref", expression = referenceId?.let(::StringValue) ?: NoneValue),
+                FunctionCallArgument(name = "numbered", expression = BooleanValue(canTrackLocation)),
+                FunctionCallArgument(name = "indexed", expression = BooleanValue(!excludeFromTableOfContents)),
+                FunctionCallArgument(name = "breakpage", expression = BooleanValue(canBreakPage)),
+            )
 
     companion object {
         /**
