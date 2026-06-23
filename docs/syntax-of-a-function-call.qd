@@ -149,7 +149,7 @@ Paragraph 2
 
 ### The body argument
 
-The main difference between inline and block function calls is a special argument called **body argument**. This argument refers to the function's **body parameter**, which is usually the last one in the signature, although some functions designate a different parameter as their body (showing as *Likely body* in its documentation).
+Functions accept up to one **body argument**, which refers to the function's **body parameter**: usually the last one in the signature, although some functions designate a different parameter as their body (showing as *Likely body* in their documentation).
 
 A body argument expands over multiple lines, is not wrapped by brackets, and requires each line to be **indented** by at least two spaces or one tab:
 
@@ -180,23 +180,4 @@ Other functions, block or inline, can be nested inside body arguments:
         The document name is .docname      <!-- Inline -->
 
         .loremipsum                        <!-- Block  -->
-```
-
-### Body arguments and inline calls
-
-When nested inside inline arguments, function calls are always inline. Thus, the following is invalid since body arguments are accepted only in block calls:
-
-```markdown
-.center {
-    .row
-        Hi
-}
-```
-
-While this is valid as `.row` is called within a body argument:
-
-```markdown
-.center
-    .row
-        Hi
 ```

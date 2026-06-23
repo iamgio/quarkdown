@@ -14,6 +14,7 @@ private const val FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME = "argContent"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_BEGIN_TOKEN_NAME = "argumentBegin"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_END_TOKEN_NAME = "argumentEnd"
 private const val FUNCTION_CALL_INLINE_ARGUMENT_CONTENT_TOKEN_NAME = "argContent"
+private const val FUNCTION_CALL_BODY_ARGUMENT_CONTENT_TOKEN_NAME = "bodyArgContent"
 private const val FUNCTION_CALL_LINE_CONTINUATION_TOKEN_NAME = "lineContinuation"
 
 /**
@@ -59,8 +60,11 @@ class FunctionCallTokenizer {
                             .mapNotNull { match ->
                                 val start = token.data.position.first + match.offset
 
-                                // Enqueuing the tokenization of function call arguments.
-                                if (match.type.name == FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME) {
+                                // Enqueuing the tokenization of function call arguments,
+                                // including both inline (`{...}`) and indented body arguments.
+                                if (match.type.name == FUNCTION_CALL_ARGUMENT_CONTENT_TOKEN_NAME ||
+                                    match.type.name == FUNCTION_CALL_BODY_ARGUMENT_CONTENT_TOKEN_NAME
+                                ) {
                                     tokenizationQueue += start to match.text
                                 }
 
