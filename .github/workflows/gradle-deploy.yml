@@ -201,7 +201,7 @@ jobs:
           org.opencontainers.image.licenses=GPL-3.0-only AND AGPL-3.0-only
         annotations: |
           org.opencontainers.image.title=Quarkdown Docker image
-          org.opencontainers.image.description=Versatile Markdown-based typsetting system.
+          org.opencontainers.image.description=Versatile Markdown-based typesetting system.
           org.opencontainers.image.url=https://quarkdown.com
       env:
         DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
