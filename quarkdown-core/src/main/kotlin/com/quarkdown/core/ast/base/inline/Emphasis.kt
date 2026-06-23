@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.inline
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.visitor.node.NodeVisitor
@@ -9,7 +10,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param text content
  */
 class Emphasis(
-    override val text: InlineContent,
+    @Diverge override val text: InlineContent,
 ) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
@@ -19,7 +20,7 @@ class Emphasis(
  * @param text content
  */
 class Strong(
-    override val text: InlineContent,
+    @Diverge override val text: InlineContent,
 ) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
@@ -29,7 +30,7 @@ class Strong(
  * @param text content
  */
 class StrongEmphasis(
-    override val text: InlineContent,
+    @Diverge override val text: InlineContent,
 ) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
@@ -39,7 +40,7 @@ class StrongEmphasis(
  * @param text content
  */
 class Strikethrough(
-    override val text: InlineContent,
+    @Diverge override val text: InlineContent,
 ) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

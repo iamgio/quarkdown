@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
@@ -15,7 +16,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 class Collapse(
     val title: InlineContent,
     val isOpen: Boolean,
-    val content: List<Node>,
+    @Diverge val content: List<Node>,
 ) : NestableNode {
     override val children: List<Node>
         get() = content + title.group()

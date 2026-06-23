@@ -1,7 +1,8 @@
 package com.quarkdown.core.ast.quarkdown.inline
 
-import com.quarkdown.core.ast.NestableNode
-import com.quarkdown.core.ast.Node
+import com.quarkdown.amber.annotations.Diverge
+import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
@@ -220,7 +221,7 @@ class TextTransformData(
 class TextTransform(
     val data: TextTransformData,
     val className: String? = null,
-    override val children: List<Node>,
-) : NestableNode {
+    @Diverge override val text: InlineContent,
+) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 }

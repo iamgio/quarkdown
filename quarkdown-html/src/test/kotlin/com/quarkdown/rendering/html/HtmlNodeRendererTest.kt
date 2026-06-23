@@ -1061,7 +1061,7 @@ class HtmlNodeRendererTest {
                     style = TextTransformData.Style.ITALIC,
                     decoration = TextTransformData.Decoration.STRIKETHROUGH,
                 ),
-                children = buildInline { text("Foo") },
+                text = buildInline { text("Foo") },
             ).render(),
         )
 
@@ -1074,7 +1074,7 @@ class HtmlNodeRendererTest {
                     decoration = TextTransformData.Decoration.UNDEROVERLINE,
                     variant = TextTransformData.Variant.SMALL_CAPS,
                 ),
-                children =
+                text =
                     buildInline {
                         emphasis { text("Foo") }
                         text("bar")
@@ -1090,7 +1090,7 @@ class HtmlNodeRendererTest {
                     decoration = TextTransformData.Decoration.ALL,
                     color = Color(255, 0, 0),
                 ),
-                children = buildInline { text("Foo") },
+                text = buildInline { text("Foo") },
             ).render(),
         )
 
@@ -1098,7 +1098,7 @@ class HtmlNodeRendererTest {
             out.next(),
             TextTransform(
                 TextTransformData(),
-                children = buildInline { text("Foo") },
+                text = buildInline { text("Foo") },
             ).render(),
         )
 
@@ -1107,7 +1107,7 @@ class HtmlNodeRendererTest {
             TextTransform(
                 TextTransformData(size = TextTransformData.Size.LARGE),
                 className = "custom-class",
-                children = buildInline { text("Foo") },
+                text = buildInline { text("Foo") },
             ).render(),
         )
 
@@ -1116,7 +1116,7 @@ class HtmlNodeRendererTest {
             out.next(),
             TextTransform(
                 TextTransformData(script = TextTransformData.Script.SUB),
-                children = buildInline { text("2") },
+                text = buildInline { text("2") },
             ).render(),
         )
 
@@ -1128,7 +1128,7 @@ class HtmlNodeRendererTest {
                     script = TextTransformData.Script.SUP,
                     weight = TextTransformData.Weight.BOLD,
                 ),
-                children = buildInline { text("2") },
+                text = buildInline { text("2") },
             ).render(),
         )
     }

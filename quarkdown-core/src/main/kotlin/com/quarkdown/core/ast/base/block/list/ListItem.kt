@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.block.list
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.visitor.node.NodeVisitor
@@ -12,7 +13,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  */
 class ListItem(
     val variants: List<ListItemVariant> = emptyList(),
-    override val children: List<Node>,
+    @Diverge override val children: List<Node>,
     val rawContent: String? = null,
 ) : NestableNode {
     /**

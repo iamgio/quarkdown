@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.block.list
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.visitor.node.NodeVisitor
@@ -27,7 +28,7 @@ interface ListBlock : NestableNode {
  */
 class UnorderedList(
     override val isLoose: Boolean,
-    override val children: List<Node>,
+    @Diverge override val children: List<Node>,
 ) : ListBlock {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }
@@ -41,7 +42,7 @@ class UnorderedList(
 class OrderedList(
     val startIndex: Int,
     override val isLoose: Boolean,
-    override val children: List<Node>,
+    @Diverge override val children: List<Node>,
 ) : ListBlock {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

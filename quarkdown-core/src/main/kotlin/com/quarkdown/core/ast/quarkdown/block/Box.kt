@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
@@ -35,7 +36,7 @@ class Box(
     val padding: Size? = null,
     val backgroundColor: Color? = null,
     val foregroundColor: Color? = null,
-    val content: List<Node>,
+    @Diverge val content: List<Node>,
 ) : NestableNode {
     override val children: List<Node>
         get() = content + title.group()

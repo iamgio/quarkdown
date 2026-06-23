@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.base.block
 
+import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.visitor.node.NodeVisitor
@@ -9,7 +10,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param text text content
  */
 class Paragraph(
-    override val text: InlineContent,
+    @Diverge override val text: InlineContent,
 ) : TextNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

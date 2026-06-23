@@ -118,7 +118,7 @@ internal class CslTokenConverter(
             result =
                 TextTransform(
                     data = TextTransformData(variant = TextTransformData.Variant.SMALL_CAPS),
-                    children = listOf(result),
+                    text = listOf(result),
                 )
         }
 
