@@ -2,9 +2,11 @@
 
 ## [Unreleased]
 
+## [2.3.1] - 2026-06-23
+
 ### Added
 
-&nbsp;
+ 
 
 #### GHCR image
 
@@ -12,23 +14,21 @@ An image for Quarkdown is now available on GitHub Container Registry.
 
 Thanks @dddanielliu!
 
-&nbsp;
+ 
 
 ### Fixed
 
-&nbsp;
+ 
 
 #### Safer `--clean`
 
 The `--clean` flag now refuses to clean the output directory in case it contains source files or git repos, or if it's the filesystem root or home directory. It also stops if the directory would (recursively) contain the source file passed to the command.
 
-&nbsp;
+ 
 
 ## [2.3.0] - 2026-06-18
 
 ### Added
-
- 
 
 #### [Page background color](https://quarkdown.com/wiki/page-format)
 
@@ -46,11 +46,7 @@ In `paged` documents, the background can be scoped to specific pages, as usual:
 
 Thanks @gggeon96!
 
- 
-
 ### Changed
-
- 
 
 #### [Changed `.extend` behavior](https://quarkdown.com/wiki/extending-functions) (breaking change)
 
@@ -78,8 +74,6 @@ Output:
 HELLO, world
 ```
 
- 
-
 #### Faster live preview
 
 Live preview now references third-party libraries through symbolic links instead of copying them (although already checksum-optimized). Preview rebuilds are faster and use less disk space, especially in documents that include code blocks, equations, or Mermaid diagrams.
@@ -89,11 +83,7 @@ Additionally, the live preview connection between the local server and the brows
 > [!NOTE]
 > If you experience errors after launching live preview for the first time after updating, delete the output directory and run again (or run with `--clean`).
 
- 
-
 ### Fixed
-
- 
 
 #### [Extra spaces in CJK paragraph soft line breaks](https://quarkdown.com/wiki/localization#cjk-locales)
 
@@ -112,31 +102,21 @@ In all other languages, soft line breaks continue to render as a single space, f
 
 Thanks @CarmJos!
 
- 
-
 #### Orphan headings at the bottom of a page
 
 In `paged` documents, a heading that would otherwise land as the last line of a page is now pushed to the top of the next page, keeping it close to the content it introduces.
-
- 
 
 #### `.container`'s `foreground` color not applied to headings
 
 `.container foreground:{color}` now correctly applies to headings.
 
- 
-
 #### [Security] Native content injection via string manipulation
 
 Fixed an issue that allowed string->string functions to let unsanitized HTML through, even when the `native-content` permission was not granted.
 
- 
-
 #### `.extend` on functions with injected parameters
 
 The `.extend` function now maps parameters correctly when wrapping native functions that feature `@Injected` parameters, such as document metadata functions. 
-
- 
 
 #### [LSP] Concurrency issue in document state
 
@@ -1008,7 +988,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.3.1...HEAD
+
+[2.3.1]: https://github.com/iamgio/quarkdown/compare/v2.3.0...v2.3.1
 
 [2.3.0]: https://github.com/iamgio/quarkdown/compare/v2.2.0...v2.3.0
 
