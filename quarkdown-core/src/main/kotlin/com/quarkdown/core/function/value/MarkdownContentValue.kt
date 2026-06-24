@@ -44,3 +44,8 @@ data class InlineMarkdownContentValue(
      */
     fun asNodeValue(): NodeValue = NodeValue(unwrappedValue)
 }
+
+/**
+ * @return [this] inline Markdown content wrapped into a [InlineMarkdownContentValue]
+ */
+fun InlineMarkdownContent.wrappedAsValue() = InlineMarkdownContentValue(this)

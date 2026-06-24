@@ -5,9 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * Tests for `.extend` applied to Markdown headings via the [com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode]
- * mechanism, exercising every parameter the [com.quarkdown.core.ast.base.block.Heading] node materializes
- * into the backing `heading` function call.
+ * Tests for `.extend` applied to Markdown headings.
  */
 class HeadingPrimitiveFunctionTest {
     @Test
