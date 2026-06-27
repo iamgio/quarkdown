@@ -1,5 +1,6 @@
 package com.quarkdown.core.flavor.quarkdown
 
+import com.quarkdown.core.ast.iterator.AstRewriter
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.MediaStorerHook
@@ -30,4 +31,6 @@ class QuarkdownTreeIteratorFactory : TreeIteratorFactory {
                     attach(MediaStorerHook(context))
                 }
             }
+
+    override fun rewriter(context: MutableContext) = AstRewriter(context)
 }

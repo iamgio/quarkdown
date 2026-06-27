@@ -1,6 +1,6 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.NestableNode
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.block.Code
@@ -34,7 +34,7 @@ class CrossReferenceResolutionTest {
             .attach(LocationAwarenessHook(context))
             .attach(LocationAwareLabelStorerHook(context))
             .attach(CrossReferenceResolverHook(context))
-            .traverse(root as NestableNode)
+            .traverse(root as AstRoot)
     }
 
     @Test

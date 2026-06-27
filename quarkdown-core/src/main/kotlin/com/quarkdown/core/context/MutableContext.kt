@@ -47,11 +47,9 @@ open class MutableContext(
 
     private val extendedFunctionNames: MutableSet<String> = mutableSetOf()
 
-    /**
-     * Whether a function with [name] has been wrapped via an `.extend` call visible from this context.
-     * Used for optimization of [com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode].
-     */
     override fun isFunctionExtended(name: String): Boolean = name in extendedFunctionNames
+
+    override fun hasFunctionsExtended(): Boolean = extendedFunctionNames.isNotEmpty()
 
     /**
      * Marks [name] as extended in this context.

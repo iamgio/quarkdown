@@ -1,6 +1,6 @@
 package com.quarkdown.core.ast.iterator
 
-import com.quarkdown.core.ast.NestableNode
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.util.node.flattenedChildren
 
@@ -8,7 +8,7 @@ import com.quarkdown.core.util.node.flattenedChildren
  * An iterator that performs a DFS traversal through the nodes of an AST,
  * allowing the registration of observers that will be notified when a node of a certain type is visited.
  */
-class ObservableAstIterator : AstIterator {
+class ObservableAstIterator : AstIterator<Unit> {
     /**
      * Hooks that will be called when a node of a certain type is visited.
      */
@@ -71,7 +71,7 @@ class ObservableAstIterator : AstIterator {
             hook.attach(this)
         }
 
-    override fun traverse(root: NestableNode) {
+    override fun traverse(root: AstRoot) {
         root.flattenedChildren().forEach { node ->
             hooks.forEach { hook -> hook(node) }
         }

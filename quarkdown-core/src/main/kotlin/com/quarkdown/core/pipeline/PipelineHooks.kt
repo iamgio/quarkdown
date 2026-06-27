@@ -10,7 +10,10 @@ import com.quarkdown.core.pipeline.output.OutputResource
  * @param afterRegisteringLibraries action to run after the libraries have been registered and are ready to be looked up (libraries as arguments)
  * @param afterLexing action to run after the tokens have been produced (output tokens as arguments)
  * @param afterParsing action to run after the AST has been generated (root as an argument)
- * @param afterExpanding action to run after the queued function calls have been expanded (root as an argument)
+ * @param afterExpanding action to run after the source-level function call queue has been expanded (root as an argument).
+ *                       Further expansion may still happen during [afterTreeRewrite] if any `.extend` was registered:
+ *                       use that hook when the consumer needs to observe the fully rewritten tree
+ * @param afterTreeRewrite action to run after the AST rewrite has been completed (root as an argument)
  * @param afterTreeTraversal action to run after the produced AST has been visited
  * @param afterRendering action to run after the rendered output code has been generated (output code as an argument)
  * @param afterPostRendering action to run after the rendered output code has been manipulated (e.g. wrapped) (output code as an argument)
@@ -24,6 +27,7 @@ data class PipelineHooks(
     val afterLexing: Pipeline.(Sequence<Token>) -> Unit = {},
     val afterParsing: Pipeline.(AstRoot) -> Unit = {},
     val afterExpanding: Pipeline.(AstRoot) -> Unit = {},
+    val afterTreeRewrite: Pipeline.(AstRoot) -> Unit = {},
     val afterTreeTraversal: Pipeline.(AstRoot) -> Unit = {},
     val afterRendering: Pipeline.(CharSequence) -> Unit = {},
     val afterPostRendering: Pipeline.(CharSequence) -> Unit = {},

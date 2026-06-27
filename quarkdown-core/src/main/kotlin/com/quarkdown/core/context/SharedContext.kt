@@ -32,5 +32,7 @@ open class SharedContext(
 
     override fun isFunctionExtended(name: String): Boolean = parent.isFunctionExtended(name)
 
+    override fun hasFunctionsExtended(): Boolean = parent.hasFunctionsExtended()
+
     override fun markFunctionAsExtended(name: String) = parent.markFunctionAsExtended(name)
 }

@@ -15,10 +15,6 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param name name of the function to call
  * @param arguments arguments to call the function with
  * @param isBlock whether this function call is an isolated block (opposite: inline)
- * @param delegator if this call was synthesized at parse time from a primitive Markdown node
- *                  (see [com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode]), the original node.
- *                  When set, the expander falls back to rendering this node directly if no `.extend`
- *                  has been registered for [name], skipping function dispatch overhead
  * @param sourceText if available, the source code of the whole function call
  * @param sourceRange if available, the range of the function call in the source code
  */
@@ -27,7 +23,6 @@ class FunctionCallNode(
     val name: String,
     val arguments: List<FunctionCallArgument>,
     val isBlock: Boolean,
-    val delegator: Node? = null,
     val sourceText: CharSequence? = null,
     val sourceRange: IntRange? = null,
 ) : NestableNode,

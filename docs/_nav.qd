@@ -148,6 +148,7 @@
   - [Lexing](pipeline---lexing.qd)
   - [Parsing](pipeline---parsing.qd)
   - [Function call expansion](pipeline---function-call-expansion.qd)
+  - [Tree rewrite](pipeline---tree-rewrite.qd)
   - [Tree traversal](pipeline---tree-traversal.qd)
   - [Rendering](pipeline---rendering.qd)
   - [Post-rendering](pipeline---post-rendering.qd)

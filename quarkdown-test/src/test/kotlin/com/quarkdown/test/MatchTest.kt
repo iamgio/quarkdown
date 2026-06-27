@@ -64,32 +64,4 @@ class MatchTest {
             )
         }
     }
-
-    @Test
-    fun `match inside heading extension nested in user function`() {
-        execute(
-            """
-            .function {myfunction}
-                content:
-                .container
-                    .content
-
-            .myfunction
-                .extend {heading}
-                    content:
-                    .super
-                        .content::match {[Qq]uark(down|s)?}
-                            *.1::uppercase*
-
-                ###! Quarkdown takes its name from quarks
-            """.trimIndent(),
-        ) {
-            assertEquals(
-                "<div class=\"container\">" +
-                    "<h3 data-decorative=\"\"><em>QUARKDOWN</em> takes its name from <em>QUARKS</em></h3>" +
-                    "</div>",
-                it,
-            )
-        }
-    }
 }

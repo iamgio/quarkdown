@@ -6,9 +6,10 @@ When you supply an input file to Quarkdown, it undergoes a process of elaboratio
 1. [**Lexing**](pipeline---lexing.qd)
 2. [**Parsing**](pipeline---parsing.qd)
 3. [**Function call expansion**](pipeline---function-call-expansion.qd)
-4. [**Tree traversal**](pipeline---tree-traversal.qd)
-5. [**Rendering**](pipeline---rendering.qd)
-6. [**Post-rendering**](pipeline---post-rendering.qd)
+4. [**Tree rewrite**](pipeline---tree-rewrite.qd)
+5. [**Tree traversal**](pipeline---tree-traversal.qd)
+6. [**Rendering**](pipeline---rendering.qd)
+7. [**Post-rendering**](pipeline---post-rendering.qd)
 
 
 

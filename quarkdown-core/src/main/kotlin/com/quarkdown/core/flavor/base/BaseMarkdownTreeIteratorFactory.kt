@@ -1,5 +1,7 @@
 package com.quarkdown.core.flavor.base
 
+import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.iterator.AstIterator
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.hooks.HeadingIdentifierDeduplicationHook
@@ -37,4 +39,12 @@ class BaseMarkdownTreeIteratorFactory : TreeIteratorFactory {
             // Allows loading math libraries (e.g. KaTeX)
             // if at least one math block is present.
             .attach(MathPresenceHook(context))
+
+    /**
+     * Base Markdown has no notion of function extensions, so the rewriter is a no-op that returns the input tree unchanged.
+     */
+    override fun rewriter(context: MutableContext): AstIterator<AstRoot> =
+        object : AstIterator<AstRoot> {
+            override fun traverse(root: AstRoot) = root
+        }
 }

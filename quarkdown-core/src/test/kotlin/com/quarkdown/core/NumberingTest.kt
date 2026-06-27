@@ -1,7 +1,6 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.AstRoot
-import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.location.getLocation
 import com.quarkdown.core.ast.attributes.location.getLocationLabel
@@ -27,7 +26,7 @@ import kotlin.test.assertEquals
  */
 class NumberingTest {
     private fun getLabels(
-        tree: NestableNode,
+        tree: AstRoot,
         numbering: DocumentNumbering,
     ): List<String> {
         val context = MutableContext(QuarkdownFlavor)
