@@ -13,10 +13,10 @@ import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.function.call.FunctionCallArgument
 import com.quarkdown.core.function.value.BooleanValue
-import com.quarkdown.core.function.value.InlineMarkdownContentValue
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.NumberValue
 import com.quarkdown.core.function.value.StringValue
+import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -68,10 +68,7 @@ class Heading(
     override fun toFunctionCall() =
         "heading" to
             listOf(
-                FunctionCallArgument(
-                    name = "content",
-                    expression = InlineMarkdownContentValue(InlineMarkdownContent(text)),
-                ),
+                FunctionCallArgument(name = "content", expression = InlineMarkdownContent(text).wrappedAsValue()),
                 FunctionCallArgument(name = "depth", expression = NumberValue(depth)),
                 FunctionCallArgument(name = "ref", expression = referenceId?.let(::StringValue) ?: NoneValue),
                 FunctionCallArgument(name = "numbered", expression = BooleanValue(canTrackLocation)),

@@ -196,7 +196,7 @@ fun match(
             pattern.isEmpty() -> content.children
             else -> content.children.flatMap { it.replaceMatches(regex, replacementAction) }
         }
-    return InlineMarkdownContent(children).wrappedAsValue()
+    return NodeValue(InlineMarkdownContent(children))
 }
 
 /**
