@@ -825,6 +825,55 @@ class NumberingTest {
         }
     }
 
+    @Test
+    fun `custom numbering from function`() {
+        execute(
+            """
+            .numbering
+                - key: 1
+
+            .function {myfunc}
+                .numbered {key}
+                    num:
+                    .num
+
+            .myfunc
+            
+            .myfunc
+            """.trimIndent(),
+            options = DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>1</p><p>2</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `custom numbering used as value`() {
+        execute(
+            """
+            .numbering
+                - key: 1
+
+            .function {myfunc}
+                .numbered {key}
+                    num:
+                    Value is .num::pow {2}
+
+            .repeat {3}
+                .myfunc
+            """.trimIndent(),
+            options = DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+        ) {
+            assertEquals(
+                "<p>Value is 1</p><p>Value is 4</p><p>Value is 9</p>",
+                it,
+            )
+        }
+    }
+
     /**
      * To understand why this is a special case, see [com.quarkdown.core.ast.quarkdown.block.Numbered]'s documentation.
      */
