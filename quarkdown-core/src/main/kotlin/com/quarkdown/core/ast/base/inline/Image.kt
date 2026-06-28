@@ -1,10 +1,18 @@
 package com.quarkdown.core.ast.base.inline
 
+import com.quarkdown.amber.annotations.Diverge
+import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.attributes.error.ErrorCapableNode
+import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.document.size.Size
+import com.quarkdown.core.function.call.FunctionCallArgument
+import com.quarkdown.core.function.value.BooleanValue
+import com.quarkdown.core.function.value.NoneValue
+import com.quarkdown.core.function.value.ObjectValue
+import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -17,13 +25,14 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  *                         if the media storage is enabled in the context
  */
 class Image(
-    val link: LinkNode,
+    @Diverge val link: LinkNode,
     val width: Size?,
     val height: Size?,
     override val referenceId: String? = null,
     val usesMediaStorage: Boolean = true,
 ) : CrossReferenceableNode,
-    ErrorCapableNode {
+    ErrorCapableNode,
+    PrimitiveFunctionBackedNode {
     /**
      * Any error associated with the link will be surfaced as an error on the image itself.
      */
@@ -31,16 +40,23 @@ class Image(
 
     override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 
-    /**
-     * Creates a copy of this image with the given [link].
-     */
-    fun copy(link: LinkNode) =
-        Image(
-            link = link,
-            width = width,
-            height = height,
-            referenceId = referenceId,
-            usesMediaStorage = usesMediaStorage,
+    override val backingFunctionName = "image"
+
+    override fun toFunctionCallArguments() =
+        listOf(
+            FunctionCallArgument(name = "url", expression = link.url.wrappedAsValue()),
+            FunctionCallArgument(name = "label", expression = InlineMarkdownContent(link.label).wrappedAsValue()),
+            FunctionCallArgument(
+                name = "title",
+                expression = link.title?.let(::InlineMarkdownContent)?.wrappedAsValue() ?: NoneValue,
+            ),
+            FunctionCallArgument(name = "width", expression = width?.let(::ObjectValue) ?: NoneValue),
+            FunctionCallArgument(name = "height", expression = height?.let(::ObjectValue) ?: NoneValue),
+            FunctionCallArgument(name = "ref", expression = referenceId?.wrappedAsValue() ?: NoneValue),
+            FunctionCallArgument(name = "mediastorage", expression = usesMediaStorage.wrappedAsValue()),
+            // Suppress the default Figure wrap — the parser already wraps the Image in an
+            // ImageFigure when relevant, so .super must return a bare Image to avoid double-figuring.
+            FunctionCallArgument(name = "figure", expression = BooleanValue(false)),
         )
 }
 

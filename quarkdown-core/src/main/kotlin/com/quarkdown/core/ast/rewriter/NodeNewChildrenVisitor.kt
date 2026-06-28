@@ -178,7 +178,8 @@ private class NodeNewChildrenVisitor(
             it.children.addAll(newChildren)
         }
 
-    override fun visit(node: Figure<*>) = node
+    @Suppress("UNCHECKED_CAST")
+    override fun visit(node: Figure<*>) = (node as Figure<Node>).diverge(child = newChildren.first())
 
     override fun visit(node: PageBreak) = node
 
