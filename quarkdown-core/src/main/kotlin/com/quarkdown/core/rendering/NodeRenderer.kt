@@ -5,6 +5,7 @@ import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.ReferenceLink
+import com.quarkdown.core.ast.base.inline.diverge
 import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.media.passthrough.MediaPassthrough
@@ -55,7 +56,7 @@ abstract class NodeRenderer(
             node.link.getStoredMedia(context)?.path
                 ?: node.link.getResolvedUrl(context).let(::replaceMediaPassthroughPrefix)
 
-        val image = node.copy(link = node.link.copy(url = url))
+        val image = node.diverge(link = node.link.copy(url = url))
         return visitTransformed(image)
     }
 }
