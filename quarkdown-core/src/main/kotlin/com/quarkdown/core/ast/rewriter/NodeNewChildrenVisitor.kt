@@ -130,7 +130,8 @@ private class NodeNewChildrenVisitor(
 
     override fun visit(node: Paragraph) = node.diverge(newChildren)
 
-    override fun visit(node: BlockQuote) = node.diverge(newChildren)
+    // BlockQuote exposes content + attribution as children
+    override fun visit(node: BlockQuote) = node.diverge(newChildren.take(node.content.size))
 
     override fun visit(node: BlankNode) = node
 
@@ -170,7 +171,12 @@ private class NodeNewChildrenVisitor(
 
     override fun visit(node: Strikethrough) = node.diverge(newChildren)
 
-    override fun visit(node: FunctionCallNode) = node
+    // FunctionCallNode's children are a mutable list.
+    override fun visit(node: FunctionCallNode) =
+        node.also {
+            it.children.clear()
+            it.children.addAll(newChildren)
+        }
 
     override fun visit(node: Figure<*>) = node
 

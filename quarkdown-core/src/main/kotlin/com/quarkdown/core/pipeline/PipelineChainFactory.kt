@@ -14,6 +14,7 @@ import com.quarkdown.core.pipeline.stages.ParsingStage
 import com.quarkdown.core.pipeline.stages.PostRenderingStage
 import com.quarkdown.core.pipeline.stages.RenderingStage
 import com.quarkdown.core.pipeline.stages.ResourceGenerationStage
+import com.quarkdown.core.pipeline.stages.TreeRewriteStage
 import com.quarkdown.core.pipeline.stages.TreeTraversalStage
 import com.quarkdown.core.rendering.RenderingComponents
 
@@ -40,6 +41,7 @@ object PipelineChainFactory {
             ParsingStage then
             AttributesUpdateStage(preferredMediaStorageOptions = renderingComponents.postRenderer.preferredMediaStorageOptions) then
             FunctionCallExpansionStage then
+            TreeRewriteStage then
             TreeTraversalStage then
             RenderingStage(renderingComponents.nodeRenderer) thenOptionally
             PostRenderingStage(renderingComponents.postRenderer).takeIf { options.wrapOutput } then

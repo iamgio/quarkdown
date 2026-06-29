@@ -1,6 +1,6 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.NestableNode
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
@@ -67,7 +67,7 @@ class SubdocumentRegistrationTest {
             context.sharedSubdocumentsData.copy(graph = context.sharedSubdocumentsData.graph.addVertex(Subdocument.Root))
         ObservableAstIterator()
             .attach(SubdocumentRegistrationHook(context))
-            .traverse(root as NestableNode)
+            .traverse(root as AstRoot)
     }
 
     @Test
@@ -216,7 +216,7 @@ class SubdocumentRegistrationTest {
 
         ObservableAstIterator()
             .attach(SubdocumentRegistrationHook(noPermissionsContext))
-            .traverse(root as NestableNode)
+            .traverse(root as AstRoot)
 
         assertEquals(
             1,

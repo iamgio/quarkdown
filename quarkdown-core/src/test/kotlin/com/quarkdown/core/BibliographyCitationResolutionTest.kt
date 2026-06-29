@@ -1,6 +1,6 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.NestableNode
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.dsl.buildBlock
@@ -60,7 +60,7 @@ class BibliographyCitationResolutionTest {
     private fun traverse(root: Node) {
         ObservableAstIterator()
             .attach(BibliographyCitationResolverHook(context))
-            .traverse(root as NestableNode)
+            .traverse(root as AstRoot)
     }
 
     @Test

@@ -76,13 +76,6 @@ class BlockParserTest {
         }
 
     /**
-     * Strips the primitive-function wrap added by the parser so tests can keep asserting on the
-     * underlying node (e.g. a heading inside a list item) instead of the synthetic [FunctionCallNode]
-     * that backs it.
-     */
-    private fun Node.unwrapPrimitive(): Node = (this as? FunctionCallNode)?.delegator ?: this
-
-    /**
      * @param node parent node
      * @param childIndex index of the text child
      * @return text content of the [childIndex]-th child
@@ -90,7 +83,7 @@ class BlockParserTest {
     private fun rawText(
         node: NestableNode,
         childIndex: Int = 0,
-    ): String = (node.children[childIndex].unwrapPrimitive() as TextNode).rawText
+    ): String = (node.children[childIndex] as TextNode).rawText
 
     @Test
     fun paragraph() {
@@ -835,7 +828,7 @@ class BlockParserTest {
 
             with(items.next()) {
                 assertIs<ListItem>(this)
-                assertIs<Heading>(children[0].unwrapPrimitive())
+                assertIs<Heading>(children[0])
                 assertEquals("Heading", rawText(this))
             }
             with(items.next()) {
@@ -845,7 +838,7 @@ class BlockParserTest {
             }
             with(items.next()) {
                 assertIs<ListItem>(this)
-                assertIs<Heading>(children[0].unwrapPrimitive())
+                assertIs<Heading>(children[0])
                 assertEquals("Heading", rawText(this, childIndex = 0))
                 assertIs<Paragraph>(children[1])
                 assertEquals("Some paragraph", rawText(this, childIndex = 1))

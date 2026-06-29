@@ -65,16 +65,18 @@ class Heading(
     override val referenceId: String?
         get() = this.customId
 
-    override fun toFunctionCall() =
-        "heading" to
-            listOf(
-                FunctionCallArgument(name = "content", expression = InlineMarkdownContent(text).wrappedAsValue()),
-                FunctionCallArgument(name = "depth", expression = NumberValue(depth)),
-                FunctionCallArgument(name = "ref", expression = referenceId?.let(::StringValue) ?: NoneValue),
-                FunctionCallArgument(name = "numbered", expression = BooleanValue(canTrackLocation)),
-                FunctionCallArgument(name = "indexed", expression = BooleanValue(!excludeFromTableOfContents)),
-                FunctionCallArgument(name = "breakpage", expression = BooleanValue(canBreakPage)),
-            )
+    override val backingFunctionName: String
+        get() = "heading"
+
+    override fun toFunctionCallArguments() =
+        listOf(
+            FunctionCallArgument(name = "content", expression = InlineMarkdownContent(text).wrappedAsValue()),
+            FunctionCallArgument(name = "depth", expression = NumberValue(depth)),
+            FunctionCallArgument(name = "ref", expression = referenceId?.let(::StringValue) ?: NoneValue),
+            FunctionCallArgument(name = "numbered", expression = BooleanValue(canTrackLocation)),
+            FunctionCallArgument(name = "indexed", expression = BooleanValue(!excludeFromTableOfContents)),
+            FunctionCallArgument(name = "breakpage", expression = BooleanValue(canBreakPage)),
+        )
 
     companion object {
         /**

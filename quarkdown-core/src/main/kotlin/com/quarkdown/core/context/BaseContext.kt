@@ -89,6 +89,8 @@ open class BaseContext(
 
     override fun isFunctionExtended(name: String): Boolean = false
 
+    override fun hasFunctionsExtended(): Boolean = false
+
     override fun resolve(call: FunctionCallNode): FunctionCall<*>? {
         val function = getFunctionByName(call.name)
 

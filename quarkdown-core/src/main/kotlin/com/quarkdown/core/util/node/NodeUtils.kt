@@ -55,7 +55,6 @@ fun List<Node>?.group(): AstRoot = AstRoot(this.orEmpty())
  */
 fun NestableNode.flattenedChildren(): Sequence<Node> =
     sequence {
-        // DFS traversal.
         for (child in children) {
             yield(child)
             if (child is NestableNode) {

@@ -59,4 +59,6 @@ open class SubdocumentContext(
      * stay local and don't propagate back to the main document's context.
      */
     override fun isFunctionExtended(name: String): Boolean = super.isFunctionExtended(name) || parent.isFunctionExtended(name)
+
+    override fun hasFunctionsExtended(): Boolean = super.hasFunctionsExtended() || parent.hasFunctionsExtended()
 }

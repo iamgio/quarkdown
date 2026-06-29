@@ -1,5 +1,6 @@
 package com.quarkdown.test.primitive
 
+import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -187,6 +188,40 @@ class HeadingPrimitiveFunctionTest {
         ) {
             assertEquals(
                 "<ul><li><div class=\"container\"><h2>Item heading</h2></div></li></ul>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `extension reaches the generated nodes`() {
+        execute(
+            """
+            .doclang {en}
+
+            .extend {heading}
+                content:
+                .container
+                    .super
+
+            # a
+
+            ## b
+
+            .tableofcontents
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+        ) {
+            assertEquals(
+                "<div class=\"container\"><h1 class=\"page-break\" id=\"a\">a</h1></div>" +
+                    "<div class=\"container\"><h2 id=\"b\">b</h2></div>" +
+                    "<div class=\"container\">" +
+                    "<h1 class=\"page-break\" id=\"table-of-contents\">Table of Contents</h1>" +
+                    "</div>" +
+                    "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
+                    "<li data-target-id=\"a\" data-depth=\"1\"><a href=\"#a\">a</a>" +
+                    "<ol><li data-target-id=\"b\" data-depth=\"2\"><a href=\"#b\">b</a></li></ol></li>" +
+                    "</ol></nav>",
                 it,
             )
         }

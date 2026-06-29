@@ -83,7 +83,7 @@ class InlineTokenParser(
     private fun Lexer.tokenizeAndParse(): List<Node> =
         this
             .tokenize()
-            .acceptAll(context.flavor.parserFactory.newParser(context), context, isBlock = false)
+            .acceptAll(context.flavor.parserFactory.newParser(context))
             .toList()
 
     /**

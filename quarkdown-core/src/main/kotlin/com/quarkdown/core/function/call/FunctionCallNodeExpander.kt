@@ -34,14 +34,6 @@ class FunctionCallNodeExpander(
             return
         }
 
-        // Fast path: a call to a Node's primitive function (delegated by such node, see PrimitiveFunctionBacked) whose
-        // backing function has not been extended (see .extend) renders directly from the original node, skipping the reflection-based function dispatch entirely.
-        val delegator = node.delegator
-        if (delegator != null && !node.context.isFunctionExtended(node.name)) {
-            node.children += delegator
-            return
-        }
-
         try {
             // The function call node is used to retrieve its corresponding function call.
             // By resolving it from the node's context instead of the root one,
