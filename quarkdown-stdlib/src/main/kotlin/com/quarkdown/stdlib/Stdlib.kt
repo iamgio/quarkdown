@@ -34,7 +34,7 @@ object Stdlib : LibraryExporter {
                     Collection,
                     Dictionary,
                     Optionality,
-                    Logger,
+                    Logger.Module,
                     Flow,
                     TableComputation,
                     Data,

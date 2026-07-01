@@ -1,25 +1,17 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.log.Log
-
-/**
- * `Logger` stdlib module exporter.
- * This module contains logging utility.
- */
-val Logger: QuarkdownModule =
-    moduleOf(
-        ::log,
-        ::debug,
-        ::error,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Logs a message (info level) to the standard output.
  * @param message message to log
  */
+@QFunction
 fun log(message: String) = VoidValue.also { Log.info(message) }
 
 /**
@@ -27,6 +19,7 @@ fun log(message: String) = VoidValue.also { Log.info(message) }
  * Note that `-Dloglevel=debug` must be enabled to see debug messages.
  * @param message message to log
  */
+@QFunction
 fun debug(message: String) = VoidValue.also { Log.debug(message) }
 
 /**
@@ -36,4 +29,5 @@ fun debug(message: String) = VoidValue.also { Log.debug(message) }
  * If the program is run on strict mode, the stack trace is printed and the process will be stopped.
  * @param message error message
  */
+@QFunction
 fun error(message: String) = VoidValue.also { throw Exception(message) }
