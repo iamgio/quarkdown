@@ -30,8 +30,11 @@ class ModuleDiscovery(
         val moduleFiles: Set<KSFile> = findModuleFiles()
         ModuleValidator(resolver, logger).validate(moduleFiles)
 
+        // Round-scoped registry of @Name exports: populated as functions are described and
+        // available downstream (e.g. to the default-value extractor's parameter-rename map).
+        val mappings = NameMappings()
         return moduleFiles.map { file ->
-            ModuleDescriber.describe(file).also { descriptor ->
+            ModuleDescriber.describe(file, mappings).also { descriptor ->
                 if (descriptor.functions.isEmpty()) {
                     logger.warn(
                         "@QModule file '${file.fileName}' declares no @QFunction; the generated module will be empty.",

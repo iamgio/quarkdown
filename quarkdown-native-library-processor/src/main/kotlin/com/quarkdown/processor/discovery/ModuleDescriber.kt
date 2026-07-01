@@ -1,6 +1,5 @@
 package com.quarkdown.processor.discovery
 
-import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSFile
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSValueParameter
@@ -9,38 +8,33 @@ import com.quarkdown.processor.model.FunctionDescriptor
 import com.quarkdown.processor.model.ModuleDescriptor
 import com.quarkdown.processor.model.ParameterDescriptor
 import com.quarkdown.processor.util.hasAnnotation
+import com.quarkdown.processor.util.quarkdownName
 
 /**
  * Pure transformation from KSP symbols to the descriptor types consumed by the code generator.
  *
- * Held as a stateless `object` because every input is a KSP node and every output is a data class:
- * there is no per-round or per-file state to manage. Splitting this stage out of [ModuleDiscovery]
- * keeps the orchestrator small (scan -> validate -> describe) and lets us unit-test the
- * KSP-to-descriptor mapping in isolation if needed.
+ * Splitting this stage out of [ModuleDiscovery] keeps the orchestrator small
+ * (scan -> validate -> describe) and lets us unit-test the KSP-to-descriptor mapping in isolation.
  *
- * `@Name` is resolved here so the generator's output is mechanical: every descriptor already
- * carries the exported name to render, the original name to delegate to, and the resolved type
- * to print. The annotation is looked up by FQN string so the processor module does not have to
- * depend on `quarkdown-core` where `@Name` lives.
+ * `@Name` resolution flows through [NameMappings]: every declaration this stage visits has its
+ * exported name recorded there before descriptors are built, so parameters can read their own
+ * exported name and defaults can look up the function's rename map from the same registry
+ * downstream consumers will use.
  */
 internal object ModuleDescriber {
     /**
-     * FQN of `@com.quarkdown.core.function.reflect.annotation.Name`.
-     * Referenced as a string to avoid pulling `quarkdown-core` into the processor's classpath.
+     * Builds a [ModuleDescriptor] from a `@file:QModule` source by collecting its `@QFunction`
+     * declarations. The module name is the file name without the `.kt` extension.
      */
-    private const val QUARKDOWN_NAME_ANNOTATION_FQN = "com.quarkdown.core.function.reflect.annotation.Name"
-
-    /**
-     * Builds a [ModuleDescriptor] from a `@file:QModule` source by collecting its `@QFunction` declarations.
-     * The module name is the file name without the `.kt` extension, matching the convention previously
-     * encoded by the manually written `val Logger: QuarkdownModule = moduleOf(...)` declarations.
-     */
-    fun describe(file: KSFile): ModuleDescriptor {
+    fun describe(
+        file: KSFile,
+        mappings: NameMappings,
+    ): ModuleDescriptor {
         val functions =
             file.declarations
                 .filterIsInstance<KSFunctionDeclaration>()
                 .filter { it.hasAnnotation<QFunction>() }
-                .map(::describe)
+                .map { describe(it, mappings) }
                 .toList()
 
         return ModuleDescriptor(
@@ -48,41 +42,48 @@ internal object ModuleDescriber {
             packageName = file.packageName.asString(),
             file = file,
             functions = functions,
+            sourceImports = ImportExtractor.extract(file),
         )
     }
 
-    private fun describe(function: KSFunctionDeclaration): FunctionDescriptor {
+    private fun describe(
+        function: KSFunctionDeclaration,
+        mappings: NameMappings,
+    ): FunctionDescriptor {
         val originalName = function.simpleName.asString()
+        val exportedName = function.quarkdownName() ?: originalName
+        mappings.record(function, exportedName)
+        // Record every parameter's export up-front so the rename map is complete before any
+        // default expression on this function is extracted.
+        function.parameters.forEach { param ->
+            val paramOriginal = param.name?.asString() ?: return@forEach
+            mappings.record(param, param.quarkdownName() ?: paramOriginal)
+        }
+
+        val renames = mappings.parameterRenames(function)
         return FunctionDescriptor(
             originalName = originalName,
-            exportedName = function.annotations.findNameValue() ?: originalName,
+            exportedName = exportedName,
             qualifiedName = function.qualifiedName?.asString() ?: originalName,
             returnType = function.returnType?.resolve() ?: error("Cannot resolve return type of '$originalName'"),
-            parameters = function.parameters.map(::describe),
+            parameters = function.parameters.map { describe(it, mappings, renames) },
             declaration = function,
+            sourceAnnotations = AnnotationExtractor.forFunction(function),
         )
     }
 
-    private fun describe(parameter: KSValueParameter): ParameterDescriptor {
+    private fun describe(
+        parameter: KSValueParameter,
+        mappings: NameMappings,
+        renames: Map<String, String>,
+    ): ParameterDescriptor {
         val originalName = parameter.name?.asString() ?: error("Unnamed parameter in @QFunction is not supported")
         return ParameterDescriptor(
             originalName = originalName,
-            exportedName = parameter.annotations.findNameValue() ?: originalName,
+            exportedName = mappings.exportedName(parameter) ?: originalName,
             type = parameter.type.resolve(),
+            defaultExpression = DefaultValueExtractor.extract(parameter, renames),
+            sourceAnnotations = AnnotationExtractor.forParameter(parameter),
         )
     }
-
-    /**
-     * Finds the `value` of a `@Name(...)` annotation in this annotation sequence, if present.
-     * Returns `null` when no such annotation is attached.
-     */
-    private fun Sequence<KSAnnotation>.findNameValue(): String? =
-        firstOrNull { annotation ->
-            annotation.annotationType
-                .resolve()
-                .declaration.qualifiedName
-                ?.asString() == QUARKDOWN_NAME_ANNOTATION_FQN
-        }?.arguments
-            ?.firstOrNull { it.name?.asString() == "name" || it.name == null }
-            ?.value as? String
 }

@@ -41,7 +41,10 @@ class ModuleCodeGenerator(
             appendLine("    \"ktlint:standard:chain-method-continuation\",")
             appendLine("    \"ktlint:standard:filename\",")
             appendLine("    \"ktlint:standard:function-signature\",")
+            appendLine("    \"ktlint:standard:import-ordering\",")
             appendLine("    \"ktlint:standard:max-line-length\",")
+            appendLine("    \"ktlint:standard:no-unused-imports\",")
+            appendLine("    \"ktlint:standard:parameter-list-wrapping\",")
             appendLine("    \"ktlint:standard:paren-spacing\",")
             appendLine(")")
             appendLine()
@@ -49,6 +52,13 @@ class ModuleCodeGenerator(
             appendLine()
             appendLine("import $QUARKDOWN_MODULE_FQN")
             appendLine("import $MODULE_OF_FQN")
+            // Carry over the source file's imports so default expressions that reference
+            // imported types (`= Stacked.MainAxisAlignment.START`, `= Range.INFINITE`, ...)
+            // resolve in the wrapper's package scope.
+            module.sourceImports?.let {
+                appendLine()
+                appendLine(it)
+            }
             appendLine()
             appendLine("object ${module.name} {")
             appendModuleVal(module)
@@ -73,12 +83,19 @@ class ModuleCodeGenerator(
         val returnType = KSTypeRenderer.render(function.returnType)
         val delegateArguments =
             function.parameters.joinToString(", ") { "${it.originalName} = ${it.exportedName}" }
+        // Function-level annotations (@OnlyForDocumentType, @LikelyChained, ...) go above the
+        // declaration; @Name and @QFunction were filtered out during discovery.
+        function.sourceAnnotations?.let { appendLine("    $it") }
         appendLine("    public fun ${function.exportedName}($parameters): $returnType =")
         appendLine("        ${function.qualifiedName}($delegateArguments)")
     }
 
-    private fun renderParameter(parameter: ParameterDescriptor): String =
-        "${parameter.exportedName}: ${KSTypeRenderer.render(parameter.type)}"
+    private fun renderParameter(parameter: ParameterDescriptor): String {
+        // Parameter annotations (@Injected, @Body, @LikelyNamed, ...) precede the declaration.
+        val annotations = parameter.sourceAnnotations?.let { "$it " } ?: ""
+        val signature = "$annotations${parameter.exportedName}: ${KSTypeRenderer.render(parameter.type)}"
+        return parameter.defaultExpression?.let { "$signature = $it" } ?: signature
+    }
 
     private companion object {
         const val KOTLIN_EXTENSION = "kt"

@@ -27,7 +27,7 @@ object Stdlib : LibraryExporter {
                     Primitives,
                     MiscElements,
                     Math,
-                    Logical,
+                    Logical.Module,
                     String,
                     Icon,
                     Emoji,
@@ -45,7 +45,7 @@ object Stdlib : LibraryExporter {
                     Html,
                     Mermaid,
                     Reference,
-                    Bibliography,
+                    Bibliography.Module,
                     Process,
                 ).withHooks(
                     PipelineHooks(

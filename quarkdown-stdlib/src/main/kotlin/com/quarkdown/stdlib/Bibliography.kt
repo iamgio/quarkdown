@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.AstRoot
@@ -8,8 +10,6 @@ import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.bibliography.style.csl.CslBibliographyStyle
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -17,22 +17,13 @@ import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.util.trimEntries
-
-/**
- * `Bibliography` stdlib module exporter.
- * This module handles bibliographies and citations.
- * @see com.quarkdown.core.bibliography.Bibliography
- */
-val Bibliography: QuarkdownModule =
-    moduleOf(
-        ::bibliography,
-        ::cite,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * The default [CSL](https://citationstyles.org) style used when no explicit style is specified.
  */
-private const val DEFAULT_CSL_STYLE = "ieee"
+internal const val DEFAULT_CSL_STYLE = "ieee"
 
 /**
  * Generates a bibliography from a bibliography file.
@@ -70,6 +61,7 @@ private const val DEFAULT_CSL_STYLE = "ieee"
  * @permission [Permission.GlobalRead] to read bibliography files located outside the project directory
  * @wiki bibliography
  */
+@QFunction
 fun bibliography(
     @Injected context: Context,
     path: String,
@@ -145,6 +137,7 @@ fun bibliography(
  * @throws IllegalArgumentException if no non-blank citation key is provided
  * @wiki bibliography#citations
  */
+@QFunction
 fun cite(key: String): NodeValue {
     val keys = key.split(",").trimEntries()
 
