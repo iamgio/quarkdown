@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineContent
@@ -8,8 +10,6 @@ import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -22,21 +22,9 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.node.toPlainText
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.replaceMatches
-
-/**
- * `Text` stdlib module exporter.
- * This module handles text formatting.
- */
-val Text: QuarkdownModule =
-    moduleOf(
-        ::text,
-        ::lineBreak,
-        ::code,
-        ::codeSpan,
-        ::match,
-        ::loremIpsum,
-    )
 
 /**
  * Creates an inline text node with specified formatting and transformation.
@@ -53,6 +41,7 @@ val Text: QuarkdownModule =
  * @param url optional URL to link the text to. If empty (but specified), the URL will match the text content
  * @param className CSS class name to apply to the element, if supported by the renderer. None if not specified.
  */
+@QFunction
 fun text(
     @Body text: InlineMarkdownContent,
     @LikelyNamed size: TextTransformData.Size? = null,
@@ -94,6 +83,7 @@ fun text(
  * but this function provides a more explicit and unambiguous way to insert a line break.
  * @return a [LineBreak] node
  */
+@QFunction
 @Name("br")
 fun lineBreak() = LineBreak.wrappedAsValue()
 
@@ -117,6 +107,7 @@ fun lineBreak() = LineBreak.wrappedAsValue()
  * @param referenceId optional identifier for cross-referencing this code block elsewhere via [reference]
  * @param code code content
  */
+@QFunction
 fun code(
     @Name("lang") language: String? = null,
     @LikelyNamed caption: InlineMarkdownContent? = null,
@@ -140,6 +131,7 @@ fun code(
  * @param text code content
  * @return a [CodeSpan] node
  */
+@QFunction
 @Name("codespan")
 fun codeSpan(text: String) = CodeSpan(text).wrappedAsValue()
 
@@ -173,6 +165,7 @@ fun codeSpan(text: String) = CodeSpan(text).wrappedAsValue()
  * @return [content] with every match of [pattern] replaced by the output of [replacement]
  * @throws IllegalArgumentException if [pattern] is not a valid regular expression
  */
+@QFunction
 fun match(
     content: InlineMarkdownContent,
     pattern: String,
@@ -202,6 +195,7 @@ fun match(
 /**
  * @return a fixed Lorem Ipsum text.
  */
+@QFunction
 @Name("loremipsum")
 fun loremIpsum() =
     object {}::class.java

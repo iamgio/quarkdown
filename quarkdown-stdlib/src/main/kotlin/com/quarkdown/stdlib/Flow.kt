@@ -1,11 +1,11 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
@@ -24,26 +24,11 @@ import com.quarkdown.core.function.value.data.LambdaParameter
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX
 import com.quarkdown.stdlib.internal.declareFunctionFromLambda
 import com.quarkdown.stdlib.internal.extendFunction
-
-/**
- * `Flow` stdlib module exporter.
- * This module handles the control flow and other statements.
- */
-val Flow: QuarkdownModule =
-    moduleOf(
-        ::`if`,
-        ::ifNot,
-        ::forEach,
-        ::repeat,
-        ::function,
-        ::extend,
-        ::variable,
-        ::let,
-        ::node,
-    )
 
 /**
  * Performs a conditional evaluation of content, including the evaluation of body only if the condition is met.
@@ -92,6 +77,7 @@ val Flow: QuarkdownModule =
  * @return the evaluation of [body] if [condition] is `true`, nothing otherwise
  * @wiki conditional-statements
  */
+@QFunction
 @Name("if")
 @Suppress("ktlint:standard:function-naming")
 fun `if`(
@@ -111,6 +97,7 @@ fun `if`(
  * @return [body] if [condition] is false, nothing otherwise
  * @wiki conditional-statements
  */
+@QFunction
 @Name("ifnot")
 fun ifNot(
     condition: Boolean?,
@@ -185,6 +172,7 @@ fun ifNot(
  * @return a collection that contains the output of each iteration
  * @wiki loops
  */
+@QFunction
 @Name("foreach")
 fun forEach(
     iterable: Iterable<Value<*>>,
@@ -220,6 +208,7 @@ fun forEach(
  * @return a collection that contains the output of each iteration
  * @wiki loops
  */
+@QFunction
 fun repeat(
     times: Int,
     @LikelyBody body: Lambda,
@@ -289,6 +278,7 @@ fun repeat(
  * @throws IllegalStateException if a function with the same name already exists and function overwriting is forbidden by the current options
  * @wiki declaring-functions
  */
+@QFunction
 fun function(
     @Injected context: MutableContext,
     name: String,
@@ -366,6 +356,7 @@ fun function(
  *         does not match an original parameter
  * @wiki extending-functions
  */
+@QFunction
 fun extend(
     @Injected context: MutableContext,
     name: String,
@@ -404,6 +395,7 @@ fun extend(
  * @param value value to assign
  * @wiki variables
  */
+@QFunction
 @Name("var")
 fun variable(
     @Injected context: MutableContext,
@@ -488,6 +480,7 @@ fun variable(
  * @return the evaluation of [body] with [value] as a parameter
  * @wiki let
  */
+@QFunction
 fun let(
     value: DynamicValue,
     @Body body: Lambda,
@@ -501,4 +494,5 @@ fun let(
  *
  * @return an invisible node
  */
+@QFunction
 fun node(): NodeValue = BlankNode.wrappedAsValue()

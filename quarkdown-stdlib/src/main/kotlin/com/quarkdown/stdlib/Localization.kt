@@ -1,9 +1,9 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -17,16 +17,8 @@ import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.localization.LocalizationEntries
 import com.quarkdown.core.localization.LocalizationTable
-
-/**
- * `Localization` stdlib module exporter.
- * This module handles localization-related features.
- */
-val Localization: QuarkdownModule =
-    moduleOf(
-        ::localization,
-        ::localize,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Builds a localization table from the given dictionary of locales and their key-value entries.
@@ -108,6 +100,7 @@ private fun mergeLocalizationTables(
  * or if the table name is already defined and [merge] is false
  * @wiki localization
  */
+@QFunction
 fun localization(
     @Injected context: MutableContext,
     @Name("name") tableName: String,
@@ -151,6 +144,7 @@ fun localization(
  * @see localization
  * @wiki localization
  */
+@QFunction
 fun localize(
     @Injected context: Context,
     key: String,

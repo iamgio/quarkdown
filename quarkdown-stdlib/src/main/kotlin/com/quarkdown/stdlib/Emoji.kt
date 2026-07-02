@@ -1,24 +1,16 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import org.kodein.emoji.Emoji
 import org.kodein.emoji.EmojiTemplateCatalog
 import org.kodein.emoji.list
-
-/**
- * `Emoji` stdlib module exporter.
- * This module handles emojis.
- */
-val Emoji: QuarkdownModule =
-    moduleOf(
-        ::emoji,
-        ::allEmojis,
-    )
 
 private val allEmojis by lazy { Emoji.list() }
 
@@ -42,6 +34,7 @@ private val emojiCatalog by lazy { EmojiTemplateCatalog(allEmojis) }
  * @return the emoji as a string, or the shortcode as plain text, surrounded by colons, if not found
  * @wiki emojis
  */
+@QFunction
 fun emoji(shortcode: String) = emojiCatalog.replaceShortcodes(":$shortcode:").wrappedAsValue()
 
 /**
@@ -58,6 +51,7 @@ fun emoji(shortcode: String) = emojiCatalog.replaceShortcodes(":$shortcode:").wr
  * @return a dictionary where keys are emoji characters and values are their shortest shortcodes
  * @wiki emojis
  */
+@QFunction
 @Name("allemojis")
 fun allEmojis(): DictionaryValue<StringValue> =
     allEmojis

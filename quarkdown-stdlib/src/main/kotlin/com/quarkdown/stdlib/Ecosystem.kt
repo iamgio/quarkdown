@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
@@ -9,8 +11,6 @@ import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.context.SharedContext
 import com.quarkdown.core.context.SubdocumentContext
 import com.quarkdown.core.context.file.FileSystem
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -23,19 +23,10 @@ import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.asString
 import java.io.Reader
-
-/**
- * `Ecosystem` stdlib module exporter.
- * This module handles interaction between Quarkdown sources.
- */
-val Ecosystem: QuarkdownModule =
-    moduleOf(
-        ::include,
-        ::includeAll,
-        ::subdocument,
-    )
 
 /**
  * Includes the parsed content of the given raw Quarkdown [code], read by [reader], in the current document.
@@ -99,6 +90,7 @@ enum class ContextSandbox {
  * @throws IllegalArgumentException if the loaded Quarkdown source cannot be evaluated
  * @wiki including-other-quarkdown-files
  */
+@QFunction
 fun include(
     @Injected context: MutableContext,
     path: String,
@@ -130,6 +122,7 @@ fun include(
  * @see include for information about file inclusion
  * @wiki including-other-quarkdown-files
  */
+@QFunction
 @Name("includeall")
 fun includeAll(
     @Injected context: MutableContext,
@@ -153,6 +146,7 @@ fun includeAll(
  * @return a [SubdocumentLink] node, which may be hidden if [label] is not provided
  * @wiki subdocuments
  */
+@QFunction
 fun subdocument(
     path: String,
     label: InlineMarkdownContent? = null,

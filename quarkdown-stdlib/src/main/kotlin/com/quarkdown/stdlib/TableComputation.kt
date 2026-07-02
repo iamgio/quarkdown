@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineContent
@@ -6,8 +8,6 @@ import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -21,25 +21,11 @@ import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.node.toPlainText
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.sortedBy
-
-/**
- * `TableComputation` stdlib module exporter.
- * This module provides advanced functionality for tables, enhancing their capabilities
- * beyond basic data representation.
- * It adds dynamic operations like sorting, filtering, calculations.
- */
-val TableComputation: QuarkdownModule =
-    moduleOf(
-        ::tableSort,
-        ::tableFilter,
-        ::tableCompute,
-        ::tableColumn,
-        ::tableColumns,
-        ::generateTableByRows,
-    )
 
 /**
  * Finds a table nested in a given content.
@@ -153,6 +139,7 @@ private fun reconstructTable(
  * @return the sorted [Table] node
  * @wiki table-manipulation
  */
+@QFunction
 @Name("tablesort")
 fun tableSort(
     @Name("column") columnIndex: Int,
@@ -201,6 +188,7 @@ fun tableSort(
  * @return the filtered [Table] node
  * @wiki table-manipulation
  */
+@QFunction
 @Name("tablefilter")
 fun tableFilter(
     @Name("column") columnIndex: Int,
@@ -248,6 +236,7 @@ fun tableFilter(
  * @return the computed [Table] node, of size `columns * (rows + 1)`
  * @wiki table-manipulation
  */
+@QFunction
 @Name("tablecompute")
 fun tableCompute(
     @Name("column") columnIndex: Int,
@@ -298,6 +287,7 @@ fun tableCompute(
  * @return the extracted cells
  * @wiki table-manipulation
  */
+@QFunction
 @Name("tablecolumn")
 fun tableColumn(
     @Name("column") columnIndex: Int,
@@ -339,6 +329,7 @@ fun tableColumn(
  * @return the extracted cells, grouped by column
  * @wiki table-manipulation
  */
+@QFunction
 @Name("tablecolumns")
 fun tableColumns(
     @Name("of") @Body content: MarkdownContent,
@@ -389,6 +380,7 @@ fun tableColumns(
  * @return the generated [Table] node
  * @wiki table-generation
  */
+@QFunction
 @Name("tablebyrows")
 fun generateTableByRows(
     @Injected context: Context,

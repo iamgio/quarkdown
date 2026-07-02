@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.AstRoot
@@ -39,8 +41,6 @@ import com.quarkdown.core.document.numbering.merge
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.tex.TexInfo
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
@@ -60,43 +60,9 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.font.FontFamily
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.loadFontFamily
-
-/**
- * `Document` stdlib module exporter.
- * This module handles document information and details.
- * @see com.quarkdown.core.document.DocumentInfo
- */
-val Document: QuarkdownModule =
-    moduleOf(
-        ::docType,
-        ::docName,
-        ::docDescription,
-        ::docAuthor,
-        ::docAuthors,
-        ::docKeywords,
-        ::docLanguage,
-        ::theme,
-        ::numbering,
-        ::disableNumbering,
-        ::font,
-        ::paragraphStyle,
-        ::captionPosition,
-        ::texMacro,
-        ::pageFormat,
-        ::pageMarginContent,
-        ::footer,
-        ::formatPageNumber,
-        ::resetPageNumber,
-        ::currentPage,
-        ::totalPages,
-        ::lastHeading,
-        ::autoPageBreak,
-        ::disableAutoPageBreak,
-        ::marker,
-        ::navigationContainer,
-        ::tableOfContents,
-    )
 
 /**
  * If [value] is not `null`, it updates document information (according to [modify]).
@@ -138,6 +104,7 @@ private fun <T> MutableContext.modifyOrEchoDocumentInfo(
  * @return the lowercase name of the current document type if [type] is unset, nothing otherwise
  * @wiki document-types
  */
+@QFunction
 @Name("doctype")
 fun docType(
     @Injected context: MutableContext,
@@ -172,6 +139,7 @@ fun docType(
  * @throws IllegalArgumentException if [name] is blank
  * @wiki document-metadata
  */
+@QFunction
 @Name("docname")
 fun docName(
     @Injected context: MutableContext,
@@ -205,6 +173,7 @@ fun docName(
  * @return the current document description if [description] is unset, nothing otherwise
  * @wiki document-metadata
  */
+@QFunction
 @Name("docdescription")
 fun docDescription(
     @Injected context: MutableContext,
@@ -237,6 +206,7 @@ fun docDescription(
  * @return the current document author if [author] is unset, nothing otherwise
  * @wiki document-metadata
  */
+@QFunction
 @Name("docauthor")
 fun docAuthor(
     @Injected context: MutableContext,
@@ -283,6 +253,7 @@ fun docAuthor(
  * @return the current document authors if [authors] is unset, nothing otherwise
  * @wiki document-metadata
  */
+@QFunction
 @Name("docauthors")
 fun docAuthors(
     @Injected context: MutableContext,
@@ -338,6 +309,7 @@ fun docAuthors(
  * @return the current document keywords if [keywords] is unset, nothing otherwise
  * @wiki document-metadata
  */
+@QFunction
 @Name("dockeywords")
 fun docKeywords(
     @Injected context: MutableContext,
@@ -381,6 +353,7 @@ fun docKeywords(
  * @throws IllegalArgumentException if the locale tag is invalid or not found
  * @wiki document-metadata
  */
+@QFunction
 @Name("doclang")
 fun docLanguage(
     @Injected context: MutableContext,
@@ -413,6 +386,7 @@ fun docLanguage(
  * @param layout layout format to assign
  * @wiki themes
  */
+@QFunction
 fun theme(
     @Injected context: MutableContext,
     color: String? = null,
@@ -470,6 +444,7 @@ fun theme(
  * Any other key can be addressed by custom elements (see [numbered]).
  * @wiki numbering
  */
+@QFunction
 fun numbering(
     @Injected context: MutableContext,
     @LikelyNamed merge: Boolean = true,
@@ -513,6 +488,7 @@ fun numbering(
  * @see numbering
  * @wiki numbering
  */
+@QFunction
 @Name("nonumbering")
 fun disableNumbering(
     @Injected context: MutableContext,
@@ -550,6 +526,7 @@ fun disableNumbering(
  * @param size main font size of the text on each page. Other elements, such as headings, will scale accordingly
  * @wiki font-configuration
  */
+@QFunction
 fun font(
     @Injected context: MutableContext,
     main: String? = null,
@@ -588,6 +565,7 @@ fun font(
  *               LaTeX's policy is used: indenting the first line of paragraphs, except the first one and aligned ones
  * @wiki paragraph-style
  */
+@QFunction
 @Name("paragraphstyle")
 fun paragraphStyle(
     @Injected context: MutableContext,
@@ -620,6 +598,7 @@ fun paragraphStyle(
  * @param codeBlocks caption position for code blocks. If set, overrides [default] for code blocks
  * @wiki caption-position
  */
+@QFunction
 @Name("captionposition")
 fun captionPosition(
     @Injected context: MutableContext,
@@ -655,6 +634,7 @@ fun captionPosition(
  * @param macro TeX code
  * @wiki tex-macros
  */
+@QFunction
 @Name("texmacro")
 fun texMacro(
     @Injected context: MutableContext,
@@ -722,6 +702,7 @@ fun texMacro(
  * @throws IllegalArgumentException if [range] is open-ended (has no finite end)
  * @wiki page-format
  */
+@QFunction
 @Name("pageformat")
 fun pageFormat(
     @Injected context: MutableContext,
@@ -792,6 +773,7 @@ fun pageFormat(
  * @return a [PageMarginContentInitializer] node
  * @wiki page-margin-content
  */
+@QFunction
 @Name("pagemargin")
 fun pageMarginContent(
     position: PageMarginPosition,
@@ -813,6 +795,7 @@ fun pageMarginContent(
  * @see pageMarginContent
  * @wiki page-margin-content
  */
+@QFunction
 fun footer(
     @LikelyBody content: MarkdownContent,
 ): NodeValue =
@@ -829,6 +812,7 @@ fun footer(
  * @return a new [PageCounter] node
  * @wiki page-counter
  */
+@QFunction
 @Name("currentpage")
 fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
 
@@ -840,6 +824,7 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
  * @return a new [PageCounter] node
  * @wiki page-counter
  */
+@QFunction
 @Name("totalpages")
 fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
 
@@ -854,6 +839,7 @@ fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
  *
  * @param format page number format to apply from the page where this function appears
  */
+@QFunction
 @Name("formatpagenumber")
 fun formatPageNumber(format: String): NodeValue = PageNumberFormatter(format).wrappedAsValue()
 
@@ -869,6 +855,7 @@ fun formatPageNumber(format: String): NodeValue = PageNumberFormatter(format).wr
  *
  * @param startFrom page number to assign to the page where this function appears
  */
+@QFunction
 @Name("resetpagenumber")
 fun resetPageNumber(
     @Name("start") startFrom: Int = 1,
@@ -927,6 +914,7 @@ fun resetPageNumber(
  * @see pageMarginContent
  * @wiki persistent-headings
  */
+@QFunction
 @NotForDocumentType(DocumentType.PLAIN)
 @Name("lastheading")
 fun lastHeading(depth: Int) = LastHeading(depth).wrappedAsValue()
@@ -946,6 +934,7 @@ fun lastHeading(depth: Int) = LastHeading(depth).wrappedAsValue()
  * @see disableAutoPageBreak
  * @wiki page-break
  */
+@QFunction
 @Name("autopagebreak")
 fun autoPageBreak(
     @Injected context: MutableContext,
@@ -964,6 +953,7 @@ fun autoPageBreak(
  * @see autoPageBreak
  * @wiki page-break
  */
+@QFunction
 @Name("noautopagebreak")
 fun disableAutoPageBreak(
     @Injected context: MutableContext,
@@ -980,6 +970,7 @@ fun disableAutoPageBreak(
  * @see tableOfContents
  * @wiki table-of-contents
  */
+@QFunction
 fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedAsValue()
 
 /**
@@ -1002,6 +993,7 @@ fun marker(name: InlineMarkdownContent) = Heading.marker(name.children).wrappedA
  * @param content content of the container
  * @return a [NavigationContainer] node
  */
+@QFunction
 @Name("navigation")
 fun navigationContainer(
     role: NavigationContainer.Role? = null,
@@ -1034,6 +1026,7 @@ fun navigationContainer(
  * @return an [AstRoot] containing an optional heading and a [TableOfContentsView]
  * @wiki table-of-contents
  */
+@QFunction
 @Name("tableofcontents")
 fun tableOfContents(
     @Injected context: Context,

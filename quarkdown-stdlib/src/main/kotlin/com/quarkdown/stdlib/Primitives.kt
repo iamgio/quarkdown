@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
@@ -9,26 +11,14 @@ import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.size.Size
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
-
-/**
- * `Primitives` stdlib module exporter.
- * This module handles wrappers of primitive Markdown nodes with more granular control.
- */
-val Primitives: QuarkdownModule =
-    moduleOf(
-        ::heading,
-        ::image,
-        ::pageBreak,
-        ::figure,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Creates a heading with fine-grained control over its behavior.
@@ -52,6 +42,7 @@ val Primitives: QuarkdownModule =
  * @return a wrapped [Heading] node
  * @throws IllegalArgumentException if [depth] is not in the 1-6 range
  */
+@QFunction
 fun heading(
     @Body content: InlineMarkdownContent,
     @LikelyNamed depth: Int,
@@ -97,6 +88,7 @@ fun heading(
  *                         Useful for images that should reference a fixed relative path rather than a stored copy
  * @return a wrapped [Figure] or [Image] node, depending on [wrapInFigure]
  */
+@QFunction
 fun image(
     @Injected context: Context,
     url: String,
@@ -144,6 +136,7 @@ fun image(
  *
  * @return a [PageBreak] node
  */
+@QFunction
 @Name("pagebreak")
 fun pageBreak() = PageBreak().wrappedAsValue()
 
@@ -157,6 +150,7 @@ fun pageBreak() = PageBreak().wrappedAsValue()
  * @param body content of the figure
  * @return the new [Figure] node
  */
+@QFunction
 fun figure(
     @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,

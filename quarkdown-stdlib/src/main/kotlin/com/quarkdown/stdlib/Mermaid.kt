@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineContent
@@ -5,8 +7,6 @@ import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -18,18 +18,9 @@ import com.quarkdown.core.function.value.data.EvaluableString
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.indent
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.asDouble
-
-/**
- * `Mermaid` stdlib module exporter.
- * This module handles generation of Mermaid diagrams.
- */
-val Mermaid: QuarkdownModule =
-    moduleOf(
-        ::mermaid,
-        ::xyChart,
-        ::subdocumentGraph,
-    )
 
 private fun mermaidFigure(
     caption: InlineContent?,
@@ -65,6 +56,7 @@ private fun mermaidFigure(
  * @param code the Mermaid code of the diagram
  * @return a new [Figure] node
  */
+@QFunction
 fun mermaid(
     @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("ref") referenceId: String? = null,
@@ -194,6 +186,7 @@ private fun StringBuilder.axis(
  * @throws IllegalArgumentException if both [xAxisRange] and [xAxisTags] are set
  * @wiki xy-chart
  */
+@QFunction
 @Name("xychart")
 fun xyChart(
     @Name("lines") showLines: Boolean = true,
@@ -246,5 +239,6 @@ fun xyChart(
  * @return a new [SubdocumentGraph] node
  * @wiki subdocuments
  */
+@QFunction
 @Name("subdocumentgraph")
 fun subdocumentGraph() = SubdocumentGraph().wrappedAsValue()
