@@ -15,14 +15,14 @@ class AnnotationPropagationTest {
 
     @Test
     fun `parameter-level annotations propagate to the wrapper`() {
-        assertContains(source, "@Injected context")
-        assertContains(source, "@LikelyNamed text")
+        assertContains(source, "@Injected `context`")
+        assertContains(source, "@LikelyNamed `text`")
     }
 
     @Test
     fun `annotations on a renamed parameter stay with the renamed identity`() {
         // `@Name("count") @LikelyNamed size` becomes `@LikelyNamed count` in the wrapper.
-        assertContains(source, "@LikelyNamed count")
+        assertContains(source, "@LikelyNamed `count`")
     }
 
     @Test

@@ -18,13 +18,13 @@ class NameMappingTest {
     @Test
     fun `function rename affects the wrapper and the module ref, delegation still uses source name`() {
         val source = GeneratedFiles.sourceOf("NamedFunction")
-        assertContains(source, "this::renamedLog,")
-        assertContains(source, "public fun renamedLog(message: kotlin.String)")
-        assertContains(source, "com.quarkdown.processor.fixtures.logInternal(message = message)")
+        assertContains(source, "this::`renamedLog`,")
+        assertContains(source, "public fun `renamedLog`(`message`: kotlin.String)")
+        assertContains(source, "com.quarkdown.processor.fixtures.`logInternal`(`message` = `message`)")
         // The source-level name should not appear as an exposed wrapper or a module reference,
         // otherwise callers could still reach it under its pre-rename identity.
-        assertTrue("public fun logInternal(" !in source, "wrapper still uses original function name")
-        assertTrue("this::logInternal," !in source, "moduleOf still references original function name")
+        assertTrue("public fun `logInternal`(" !in source, "wrapper still uses original function name")
+        assertTrue("this::`logInternal`," !in source, "moduleOf still references original function name")
     }
 
     @Test
@@ -36,7 +36,7 @@ class NameMappingTest {
     @Test
     fun `parameter rename changes the wrapper param but the delegation keeps the source keyword`() {
         val source = GeneratedFiles.sourceOf("NamedParameter")
-        assertContains(source, "public fun logWithNamedParam(renamedText: kotlin.String)")
-        assertContains(source, "com.quarkdown.processor.fixtures.logWithNamedParam(text = renamedText)")
+        assertContains(source, "public fun `logWithNamedParam`(`renamedText`: kotlin.String)")
+        assertContains(source, "com.quarkdown.processor.fixtures.`logWithNamedParam`(`text` = `renamedText`)")
     }
 }

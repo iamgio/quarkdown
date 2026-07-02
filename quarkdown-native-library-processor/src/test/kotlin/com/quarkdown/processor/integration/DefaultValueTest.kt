@@ -8,8 +8,8 @@ class DefaultValueTest {
     @Test
     fun `literal defaults are copied verbatim onto the wrapper parameter`() {
         val source = GeneratedFiles.sourceOf("Defaults")
-        assertContains(source, "prefix: kotlin.String = \"[quarkdown]\"")
-        assertContains(source, "repeat: kotlin.Int = 1")
+        assertContains(source, "`prefix`: kotlin.String = \"[quarkdown]\"")
+        assertContains(source, "`repeat`: kotlin.Int = 1")
     }
 
     @Test
@@ -17,6 +17,6 @@ class DefaultValueTest {
         val source = GeneratedFiles.sourceOf("Defaults")
         // Source: `@Name("primary") first: String, second: String = first`
         // Wrapper: `primary: kotlin.String, second: kotlin.String = primary`
-        assertContains(source, "second: kotlin.String = primary")
+        assertContains(source, "`second`: kotlin.String = primary")
     }
 }

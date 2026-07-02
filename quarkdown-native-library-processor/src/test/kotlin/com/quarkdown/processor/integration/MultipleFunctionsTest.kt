@@ -17,12 +17,12 @@ class MultipleFunctionsTest {
     fun `each function gets its own wrapper and its own moduleOf entry`() {
         val source = GeneratedFiles.sourceOf("MultipleFunctions")
 
-        assertContains(source, "public fun alpha(): com.quarkdown.core.function.value.VoidValue")
-        assertContains(source, "public fun bravo(text: kotlin.String)")
-        assertContains(source, "public fun charlie(a: kotlin.Int, b: kotlin.Int)")
+        assertContains(source, "public fun `alpha`(): com.quarkdown.core.function.value.VoidValue")
+        assertContains(source, "public fun `bravo`(`text`: kotlin.String)")
+        assertContains(source, "public fun `charlie`(`a`: kotlin.Int, `b`: kotlin.Int)")
 
-        assertContains(source, "this::alpha,")
-        assertContains(source, "this::bravo,")
-        assertContains(source, "this::charlie,")
+        assertContains(source, "this::`alpha`,")
+        assertContains(source, "this::`bravo`,")
+        assertContains(source, "this::`charlie`,")
     }
 }

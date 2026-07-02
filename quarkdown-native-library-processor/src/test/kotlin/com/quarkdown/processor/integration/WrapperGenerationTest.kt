@@ -17,13 +17,13 @@ class WrapperGenerationTest {
     fun `moduleOf references the wrapper via this-qualification`() {
         val source = GeneratedFiles.sourceOf("SimpleLogger")
         assertContains(source, "moduleOf(")
-        assertContains(source, "this::logSimple,")
+        assertContains(source, "this::`logSimple`,")
     }
 
     @Test
     fun `wrapper delegates to the source function via FQN and a named argument`() {
         val source = GeneratedFiles.sourceOf("SimpleLogger")
-        assertContains(source, "public fun logSimple(message: kotlin.String)")
-        assertContains(source, "com.quarkdown.processor.fixtures.logSimple(message = message)")
+        assertContains(source, "public fun `logSimple`(`message`: kotlin.String)")
+        assertContains(source, "com.quarkdown.processor.fixtures.`logSimple`(`message` = `message`)")
     }
 }

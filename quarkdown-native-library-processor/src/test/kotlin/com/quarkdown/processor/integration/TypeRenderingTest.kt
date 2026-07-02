@@ -17,9 +17,9 @@ class TypeRenderingTest {
     fun `generic, nullable, multi-argument and nested types all render fully qualified`() {
         val source = GeneratedFiles.sourceOf("Generics")
 
-        assertContains(source, "items: kotlin.collections.List<kotlin.String>")
-        assertContains(source, "nullable: kotlin.String?")
-        assertContains(source, "mapping: kotlin.collections.Map<kotlin.String, kotlin.Int>")
-        assertContains(source, "nested: kotlin.collections.List<kotlin.collections.List<kotlin.String>>")
+        assertContains(source, "`items`: kotlin.collections.List<kotlin.String>")
+        assertContains(source, "`nullable`: kotlin.String?")
+        assertContains(source, "`mapping`: kotlin.collections.Map<kotlin.String, kotlin.Int>")
+        assertContains(source, "`nested`: kotlin.collections.List<kotlin.collections.List<kotlin.String>>")
     }
 }

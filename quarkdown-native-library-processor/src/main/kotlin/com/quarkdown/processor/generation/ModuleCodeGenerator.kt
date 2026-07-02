@@ -5,6 +5,8 @@ import com.google.devtools.ksp.processing.Dependencies
 import com.quarkdown.processor.model.FunctionDescriptor
 import com.quarkdown.processor.model.ModuleDescriptor
 import com.quarkdown.processor.model.ParameterDescriptor
+import com.quarkdown.processor.util.backtick
+import com.quarkdown.processor.util.backtickLastSegment
 
 /**
  * Emits one Kotlin source per discovered [ModuleDescriptor]: an `object <ModuleName>`
@@ -36,15 +38,19 @@ class ModuleCodeGenerator(
             // suppressing at the file level keeps generated code out of the linter's way.
             appendLine("@file:Suppress(")
             appendLine("    \"RedundantVisibilityModifier\",")
+            appendLine("    \"RemoveRedundantBackticks\",")
             appendLine("    \"unused\",")
+            appendLine("    \"ktlint:standard:annotation\",")
             appendLine("    \"ktlint:standard:argument-list-wrapping\",")
             appendLine("    \"ktlint:standard:chain-method-continuation\",")
             appendLine("    \"ktlint:standard:filename\",")
+            appendLine("    \"ktlint:standard:function-naming\",")
             appendLine("    \"ktlint:standard:function-signature\",")
             appendLine("    \"ktlint:standard:import-ordering\",")
             appendLine("    \"ktlint:standard:max-line-length\",")
             appendLine("    \"ktlint:standard:no-unused-imports\",")
             appendLine("    \"ktlint:standard:parameter-list-wrapping\",")
+            appendLine("    \"ktlint:standard:parameter-wrapping\",")
             appendLine("    \"ktlint:standard:paren-spacing\",")
             appendLine(")")
             appendLine()
@@ -52,9 +58,6 @@ class ModuleCodeGenerator(
             appendLine()
             appendLine("import $QUARKDOWN_MODULE_FQN")
             appendLine("import $MODULE_OF_FQN")
-            // Carry over the source file's imports so default expressions that reference
-            // imported types (`= Stacked.MainAxisAlignment.START`, `= Range.INFINITE`, ...)
-            // resolve in the wrapper's package scope.
             module.sourceImports?.let {
                 appendLine()
                 appendLine(it)
@@ -73,7 +76,7 @@ class ModuleCodeGenerator(
         appendLine("    val Module: QuarkdownModule =")
         appendLine("        moduleOf(")
         module.functions.forEach { function ->
-            appendLine("            this::${function.exportedName},")
+            appendLine("            this::${function.exportedName.backtick()},")
         }
         appendLine("        )")
     }
@@ -82,18 +85,18 @@ class ModuleCodeGenerator(
         val parameters = function.parameters.joinToString(", ", transform = ::renderParameter)
         val returnType = KSTypeRenderer.render(function.returnType)
         val delegateArguments =
-            function.parameters.joinToString(", ") { "${it.originalName} = ${it.exportedName}" }
-        // Function-level annotations (@OnlyForDocumentType, @LikelyChained, ...) go above the
-        // declaration; @Name and @QFunction were filtered out during discovery.
+            function.parameters.joinToString(", ") {
+                "${it.originalName.backtick()} = ${it.exportedName.backtick()}"
+            }
         function.sourceAnnotations?.let { appendLine("    $it") }
-        appendLine("    public fun ${function.exportedName}($parameters): $returnType =")
-        appendLine("        ${function.qualifiedName}($delegateArguments)")
+        appendLine("    public fun ${function.exportedName.backtick()}($parameters): $returnType =")
+        appendLine("        ${function.qualifiedName.backtickLastSegment()}($delegateArguments)")
     }
 
     private fun renderParameter(parameter: ParameterDescriptor): String {
         // Parameter annotations (@Injected, @Body, @LikelyNamed, ...) precede the declaration.
         val annotations = parameter.sourceAnnotations?.let { "$it " } ?: ""
-        val signature = "$annotations${parameter.exportedName}: ${KSTypeRenderer.render(parameter.type)}"
+        val signature = "$annotations${parameter.exportedName.backtick()}: ${KSTypeRenderer.render(parameter.type)}"
         return parameter.defaultExpression?.let { "$signature = $it" } ?: signature
     }
 
