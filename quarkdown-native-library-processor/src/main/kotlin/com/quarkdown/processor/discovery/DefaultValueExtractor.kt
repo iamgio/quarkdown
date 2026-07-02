@@ -5,27 +5,31 @@ import com.quarkdown.processor.discovery.DefaultValueExtractor.extract
 
 /**
  * Extracts the source-level default expression of a [KSValueParameter] by reading the underlying
- * PSI `KtParameter` through the [KspPsi] / [PsiNode] abstraction.
+ * PSI `KtParameter` through [KspPsi] and [PsiNode].
  *
  * KSP's public symbol API exposes only [KSValueParameter.hasDefault]; the expression itself has
  * to come from the PSI KSP holds internally. If KSP renames the backing field or moves to a
  * non-PSI backend, [extract] returns `null` uniformly and the wrapper loses `isOptional`, which
  * is loud (`InvalidArgumentCountException` on any call site that omits the default).
+ *
+ * Identifier references in the extracted expression that name a sibling parameter renamed by
+ * `@Name` are rewritten to the exported name, so the emitted wrapper compiles against its own
+ * (potentially renamed) parameter list rather than the source-level names.
  */
-internal object DefaultValueExtractor {
+internal object DefaultValueExtractor : PsiExtractor<KSValueParameter, String> {
     /**
-     * Returns the source-level default expression of [parameter], with references to any
-     * parameter listed in [parameterRenames] (original name -> exported name) rewritten to the
-     * exported name. Returns `null` when the parameter has no default or PSI cannot be reached.
+     * Returns the source-level default expression of [target] with sibling-parameter references
+     * rewritten to their exported names. Returns `null` when the parameter has no default or
+     * PSI cannot be reached.
      */
-    fun extract(
-        parameter: KSValueParameter,
-        parameterRenames: Map<String, String> = emptyMap(),
+    override fun extract(
+        target: KSValueParameter,
+        ctx: DiscoveryContext,
     ): String? {
-        if (!parameter.hasDefault) return null
-        val ktParameter = KspPsi.of(parameter) ?: return null
-        val defaultValue = ktParameter.asNode(GET_DEFAULT_VALUE) ?: return null
-        return applyRenames(defaultValue, parameterRenames)
+        if (!target.hasDefault) return null
+        val ktParameter = ctx.kspPsi.of(target) ?: return null
+        val defaultValue = ktParameter.get(PsiOps.DefaultValue) ?: return null
+        return applyRenames(defaultValue, ctx.mappings.parameterRenames(target))
     }
 
     /**
@@ -62,7 +66,7 @@ internal object DefaultValueExtractor {
         baseOffset: Int,
         renames: Map<String, String>,
     ): Substitution? {
-        val name = node.call(GET_REFERENCED_NAME) as? String ?: return null
+        val name = node.get(PsiOps.ReferencedName) ?: return null
         val replacement = renames[name] ?: return null
         val start = node.startOffset ?: return null
         return Substitution(offset = start - baseOffset, length = name.length, replacement = replacement)
@@ -74,7 +78,5 @@ internal object DefaultValueExtractor {
         val replacement: String,
     )
 
-    private const val GET_DEFAULT_VALUE = "getDefaultValue"
-    private const val GET_REFERENCED_NAME = "getReferencedName"
     private const val KT_NAME_REFERENCE_EXPRESSION = "KtNameReferenceExpression"
 }

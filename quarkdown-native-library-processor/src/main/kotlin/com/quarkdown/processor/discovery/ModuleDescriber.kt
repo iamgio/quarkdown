@@ -7,6 +7,7 @@ import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.model.FunctionDescriptor
 import com.quarkdown.processor.model.ModuleDescriptor
 import com.quarkdown.processor.model.ParameterDescriptor
+import com.quarkdown.processor.util.ModuleNaming
 import com.quarkdown.processor.util.hasAnnotation
 import com.quarkdown.processor.util.quarkdownName
 
@@ -16,10 +17,9 @@ import com.quarkdown.processor.util.quarkdownName
  * Splitting this stage out of [ModuleDiscovery] keeps the orchestrator small
  * (scan -> validate -> describe) and lets us unit-test the KSP-to-descriptor mapping in isolation.
  *
- * `@Name` resolution flows through [NameMappings]: every declaration this stage visits has its
- * exported name recorded there before descriptors are built, so parameters can read their own
- * exported name and defaults can look up the function's rename map from the same registry
- * downstream consumers will use.
+ * All round-scoped state (the `NameMappings` registry, the reflective PSI facade, the logger)
+ * reaches this stage through the [DiscoveryContext] parameter, so the extractors it delegates to
+ * see the exact same view of the round.
  */
 internal object ModuleDescriber {
     /**
@@ -28,62 +28,72 @@ internal object ModuleDescriber {
      */
     fun describe(
         file: KSFile,
-        mappings: NameMappings,
+        ctx: DiscoveryContext,
     ): ModuleDescriptor {
         val functions =
             file.declarations
                 .filterIsInstance<KSFunctionDeclaration>()
                 .filter { it.hasAnnotation<QFunction>() }
-                .map { describe(it, mappings) }
+                .mapNotNull { describe(it, ctx) }
                 .toList()
 
         return ModuleDescriptor(
-            name = file.fileName.removeSuffix(".kt"),
+            name = ModuleNaming.moduleNameOf(file.fileName),
             packageName = file.packageName.asString(),
             file = file,
             functions = functions,
-            sourceImports = ImportExtractor.extract(file),
+            sourceImports = ImportExtractor.extract(file, ctx),
         )
     }
 
+    /**
+     * Returns `null` for functions that fail the precondition checks already reported by
+     * [ModuleValidator]. This keeps the describer from throwing when validation errors have
+     * been logged but the KSP round is still running.
+     */
     private fun describe(
         function: KSFunctionDeclaration,
-        mappings: NameMappings,
-    ): FunctionDescriptor {
+        ctx: DiscoveryContext,
+    ): FunctionDescriptor? {
         val originalName = function.simpleName.asString()
         val exportedName = function.quarkdownName() ?: originalName
-        mappings.record(function, exportedName)
-        // Record every parameter's export up-front so the rename map is complete before any
-        // default expression on this function is extracted.
-        function.parameters.forEach { param ->
-            val paramOriginal = param.name?.asString() ?: return@forEach
-            mappings.record(param, param.quarkdownName() ?: paramOriginal)
-        }
+        ctx.mappings.record(function, exportedName)
 
-        val renames = mappings.parameterRenames(function)
+        val returnType =
+            function.returnType?.resolve() ?: run {
+                ctx.logger.error("Cannot resolve return type of '$originalName'.", function)
+                return null
+            }
+        val parameters = function.parameters.map { describe(it, ctx) ?: return null }
+
         return FunctionDescriptor(
             originalName = originalName,
             exportedName = exportedName,
             qualifiedName = function.qualifiedName?.asString() ?: originalName,
-            returnType = function.returnType?.resolve() ?: error("Cannot resolve return type of '$originalName'"),
-            parameters = function.parameters.map { describe(it, mappings, renames) },
+            returnType = returnType,
+            parameters = parameters,
             declaration = function,
-            sourceAnnotations = AnnotationExtractor.forFunction(function),
+            sourceAnnotations = AnnotationExtractor.ForFunction.extract(function, ctx),
         )
     }
 
     private fun describe(
         parameter: KSValueParameter,
-        mappings: NameMappings,
-        renames: Map<String, String>,
-    ): ParameterDescriptor {
-        val originalName = parameter.name?.asString() ?: error("Unnamed parameter in @QFunction is not supported")
+        ctx: DiscoveryContext,
+    ): ParameterDescriptor? {
+        val originalName =
+            parameter.name?.asString() ?: run {
+                ctx.logger.error("Unnamed parameter in @QFunction is not supported.", parameter)
+                return null
+            }
+        val exportedName = parameter.quarkdownName() ?: originalName
+        ctx.mappings.record(parameter, exportedName)
         return ParameterDescriptor(
             originalName = originalName,
-            exportedName = mappings.exportedName(parameter) ?: originalName,
+            exportedName = exportedName,
             type = parameter.type.resolve(),
-            defaultExpression = DefaultValueExtractor.extract(parameter, renames),
-            sourceAnnotations = AnnotationExtractor.forParameter(parameter),
+            defaultExpression = DefaultValueExtractor.extract(parameter, ctx),
+            sourceAnnotations = AnnotationExtractor.ForParameter.extract(parameter, ctx),
         )
     }
 }

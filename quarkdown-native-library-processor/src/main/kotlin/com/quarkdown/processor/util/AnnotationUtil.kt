@@ -1,6 +1,7 @@
 package com.quarkdown.processor.util
 
 import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSAnnotation
 
 /**
  * FQN of `@com.quarkdown.core.function.reflect.annotation.Name`.
@@ -8,15 +9,28 @@ import com.google.devtools.ksp.symbol.KSAnnotated
  */
 private const val QUARKDOWN_NAME_ANNOTATION_FQN = "com.quarkdown.core.function.reflect.annotation.Name"
 
-/** Returns true if this [KSAnnotated] has an annotation of type [A]. */
-inline fun <reified A : Annotation> KSAnnotated.hasAnnotation(): Boolean {
-    val target = A::class.qualifiedName ?: return false
-    return annotations.any {
+/**
+ * Returns the first [KSAnnotation] on this declaration whose declaration FQN matches [fqn],
+ * or `null` when no such annotation is present.
+ *
+ * This is the primitive on top of which every other annotation query in this module is built,
+ * so that resolution logic (annotation type resolve + declaration FQN check) lives in one place.
+ */
+fun KSAnnotated.getAnnotation(fqn: String): KSAnnotation? =
+    annotations.firstOrNull {
         it.annotationType
             .resolve()
             .declaration.qualifiedName
-            ?.asString() == target
+            ?.asString() == fqn
     }
+
+/** True when this declaration carries the annotation whose FQN is [fqn]. */
+fun KSAnnotated.hasAnnotation(fqn: String): Boolean = getAnnotation(fqn) != null
+
+/** True when this declaration carries an annotation of type [A]. */
+inline fun <reified A : Annotation> KSAnnotated.hasAnnotation(): Boolean {
+    val fqn = A::class.qualifiedName ?: return false
+    return hasAnnotation(fqn)
 }
 
 /**
@@ -25,12 +39,7 @@ inline fun <reified A : Annotation> KSAnnotated.hasAnnotation(): Boolean {
  * (`@Name(name = "foo")`) argument forms.
  */
 fun KSAnnotated.quarkdownName(): String? =
-    annotations
-        .firstOrNull { annotation ->
-            annotation.annotationType
-                .resolve()
-                .declaration.qualifiedName
-                ?.asString() == QUARKDOWN_NAME_ANNOTATION_FQN
-        }?.arguments
+    getAnnotation(QUARKDOWN_NAME_ANNOTATION_FQN)
+        ?.arguments
         ?.firstOrNull { it.name?.asString() == "name" || it.name == null }
         ?.value as? String

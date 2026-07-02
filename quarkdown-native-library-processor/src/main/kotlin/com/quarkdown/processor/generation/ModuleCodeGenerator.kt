@@ -5,6 +5,7 @@ import com.google.devtools.ksp.processing.Dependencies
 import com.quarkdown.processor.model.FunctionDescriptor
 import com.quarkdown.processor.model.ModuleDescriptor
 import com.quarkdown.processor.model.ParameterDescriptor
+import com.quarkdown.processor.util.ModuleNaming
 import com.quarkdown.processor.util.backtick
 import com.quarkdown.processor.util.backtickLastSegment
 
@@ -23,10 +24,10 @@ class ModuleCodeGenerator(
      */
     fun generate(module: ModuleDescriptor) {
         val dependencies = Dependencies(aggregating = false, module.file)
-        val fileName = "${module.name}Module"
+        val fileName = ModuleNaming.generatedFileNameOf(module.name)
 
         codeGenerator
-            .createNewFile(dependencies, module.packageName, fileName, extensionName = KOTLIN_EXTENSION)
+            .createNewFile(dependencies, module.packageName, fileName, extensionName = ModuleNaming.KOTLIN_EXTENSION)
             .bufferedWriter()
             .use { writer -> writer.write(render(module)) }
     }
@@ -102,7 +103,6 @@ class ModuleCodeGenerator(
     }
 
     private companion object {
-        const val KOTLIN_EXTENSION = "kt"
         const val QUARKDOWN_MODULE_FQN = "com.quarkdown.core.function.library.module.QuarkdownModule"
         const val MODULE_OF_FQN = "com.quarkdown.core.function.library.module.moduleOf"
     }
