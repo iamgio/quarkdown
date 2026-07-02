@@ -22,7 +22,7 @@ object Stdlib : LibraryExporter {
             MultiFunctionLibraryLoader(name = "stdlib")
                 .load(
                     Document,
-                    Layout,
+                    Layout.Module,
                     Text,
                     Primitives,
                     MiscElements,

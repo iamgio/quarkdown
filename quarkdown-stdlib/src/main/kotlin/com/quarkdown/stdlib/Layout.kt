@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineContent
@@ -20,8 +22,6 @@ import com.quarkdown.core.context.localization.localizeOrDefault
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
@@ -36,31 +36,8 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.node.toPlainText
-
-/**
- * `Layout` stdlib module exporter.
- * This module handles position and shape of an element.
- */
-val Layout: QuarkdownModule =
-    moduleOf(
-        ::container,
-        ::align,
-        ::center,
-        ::float,
-        ::row,
-        ::column,
-        ::grid,
-        ::landscape,
-        ::fullColumnSpan,
-        ::whitespace,
-        ::clip,
-        ::box,
-        ::toDo,
-        ::collapse,
-        ::inlineCollapse,
-        ::numbered,
-        ::table,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * A general-purpose container that groups content.
@@ -93,6 +70,7 @@ val Layout: QuarkdownModule =
  * @return the new [Container] node
  * @wiki container
  */
+@QFunction
 fun container(
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
@@ -147,6 +125,7 @@ fun container(
  * @see container
  * @wiki align
  */
+@QFunction
 fun align(
     alignment: Container.Alignment,
     @Body body: MarkdownContent,
@@ -165,6 +144,7 @@ fun align(
  * @see align
  * @wiki align
  */
+@QFunction
 fun center(
     @Body body: MarkdownContent,
 ) = align(Container.Alignment.CENTER, body)
@@ -177,6 +157,7 @@ fun center(
  * @return the new floating [Container] node
  * @wiki float
  */
+@QFunction
 fun float(
     @LikelyNamed alignment: Container.FloatAlignment,
     @Body body: MarkdownContent,
@@ -217,6 +198,7 @@ private fun stack(
  * @return the new [Stacked] node
  * @wiki stacks
  */
+@QFunction
 fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
@@ -234,6 +216,7 @@ fun row(
  * @return the new [Stacked] node
  * @wiki stacks
  */
+@QFunction
 fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
@@ -257,6 +240,7 @@ fun column(
  * @throws IllegalArgumentException if [columnCount] is non-positive
  * @wiki stacks
  */
+@QFunction
 fun grid(
     @Name("columns") columnCount: Int,
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.CENTER,
@@ -279,6 +263,7 @@ fun grid(
  * @return the new [Landscape] node
  * @wiki landscape-content
  */
+@QFunction
 fun landscape(
     @Body body: MarkdownContent,
 ) = Landscape(body.children).wrappedAsValue()
@@ -293,6 +278,7 @@ fun landscape(
  * @return the new [Container] node with [Container.fullColumnSpan] enabled
  * @wiki multi-column-layout
  */
+@QFunction
 @Name("fullspan")
 fun fullColumnSpan(
     @Body body: MarkdownContent,
@@ -308,6 +294,7 @@ fun fullColumnSpan(
  * @param height height of the square. If unset, it defaults to zero
  * @return the new [Whitespace] node
  */
+@QFunction
 fun whitespace(
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
@@ -321,6 +308,7 @@ fun whitespace(
  * @return the new [Clipped] block
  * @wiki clip
  */
+@QFunction
 fun clip(
     clip: Clipped.Clip,
     @Body body: MarkdownContent,
@@ -340,6 +328,7 @@ fun clip(
  * @return the new [Box] node
  * @wiki box
  */
+@QFunction
 fun box(
     @Injected context: Context,
     title: InlineMarkdownContent? = null,
@@ -374,6 +363,7 @@ fun box(
  * @param body content to show in the box
  * @return the new box node
  */
+@QFunction
 @Name("todo")
 fun toDo(
     @Injected context: Context,
@@ -398,6 +388,7 @@ fun toDo(
  * @return the new [Collapse] node
  * @wiki collapsible
  */
+@QFunction
 fun collapse(
     title: InlineMarkdownContent,
     @LikelyNamed open: Boolean = false,
@@ -413,6 +404,7 @@ fun collapse(
  * @return the new [InlineCollapse] node
  * @wiki collapsible
  */
+@QFunction
 @Name("textcollapse")
 fun inlineCollapse(
     @LikelyNamed full: InlineMarkdownContent,
@@ -444,6 +436,7 @@ fun inlineCollapse(
  * @return the new [Numbered] node
  * @wiki numbering
  */
+@QFunction
 fun numbered(
     @LikelyNamed key: String,
     @Name("ref") referenceId: String? = null,
@@ -479,6 +472,7 @@ fun numbered(
  * @return a new [Table] node
  * @wiki table-generation
  */
+@QFunction
 fun table(
     @Injected context: Context,
     @Body subTables: Iterable<Value<String>>,
