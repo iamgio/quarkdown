@@ -14,7 +14,7 @@ import com.google.devtools.ksp.symbol.KSType
  * @param file the underlying KSP file declaration
  * @param functions exported functions discovered in this module, in source order
  * @param sourceImports verbatim text of the source file's import list, or `null` when the file has none;
- *   copied into the generated wrapper so default expressions can reference symbols the source imported
+ *                      copied into the generated wrapper so default expressions can reference symbols the source imported
  */
 data class ModuleDescriptor(
     val name: String,
@@ -36,6 +36,7 @@ data class ModuleDescriptor(
  * @param returnType resolved return type of the source function
  * @param parameters function parameters in declaration order
  * @param declaration the underlying KSP declaration
+ * @param sourceAnnotations verbatim source text of function-level annotations to propagate to the wrapper, or `null` when the function has none
  */
 data class FunctionDescriptor(
     val originalName: String,
@@ -44,11 +45,6 @@ data class FunctionDescriptor(
     val returnType: KSType,
     val parameters: List<ParameterDescriptor>,
     val declaration: KSFunctionDeclaration,
-    /**
-     * Verbatim source text of function-level annotations to propagate to the wrapper
-     * (e.g. `@OnlyForDocumentType(...) @LikelyChained`), or `null` when none apply.
-     * `@Name` and `@QFunction` are filtered out; renaming is handled at the symbol level.
-     */
     val sourceAnnotations: String?,
 )
 
@@ -59,16 +55,12 @@ data class FunctionDescriptor(
  * @param exportedName name to use on the generated wrapper, possibly rewritten by `@Name`
  * @param type the resolved parameter type
  * @param defaultExpression verbatim source text of the parameter's default value, or `null` when the parameter has no default
+ * @param sourceAnnotations verbatim source text of parameter-level annotations to propagate to the wrapper
  */
 data class ParameterDescriptor(
     val originalName: String,
     val exportedName: String,
     val type: KSType,
     val defaultExpression: String?,
-    /**
-     * Verbatim source text of parameter-level annotations to propagate to the wrapper
-     * (e.g. `@Injected`, `@Body`, `@LikelyNamed`), or `null` when none apply.
-     * `@Name` is filtered out; parameter renaming is handled at the symbol level.
-     */
     val sourceAnnotations: String?,
 )

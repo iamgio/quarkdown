@@ -37,21 +37,22 @@ class ModuleCodeGenerator(
             // Ktlint scans KSP output when the plugin is applied to a KSP-enabled source set;
             // suppressing at the file level keeps generated code out of the linter's way.
             appendLine("@file:Suppress(")
-            appendLine("    \"RedundantVisibilityModifier\",")
-            appendLine("    \"RemoveRedundantBackticks\",")
-            appendLine("    \"unused\",")
-            appendLine("    \"ktlint:standard:annotation\",")
-            appendLine("    \"ktlint:standard:argument-list-wrapping\",")
-            appendLine("    \"ktlint:standard:chain-method-continuation\",")
-            appendLine("    \"ktlint:standard:filename\",")
-            appendLine("    \"ktlint:standard:function-naming\",")
-            appendLine("    \"ktlint:standard:function-signature\",")
-            appendLine("    \"ktlint:standard:import-ordering\",")
-            appendLine("    \"ktlint:standard:max-line-length\",")
-            appendLine("    \"ktlint:standard:no-unused-imports\",")
-            appendLine("    \"ktlint:standard:parameter-list-wrapping\",")
-            appendLine("    \"ktlint:standard:parameter-wrapping\",")
-            appendLine("    \"ktlint:standard:paren-spacing\",")
+            appendLine("\t\"RedundantVisibilityModifier\",")
+            appendLine("\t\"RemoveRedundantBackticks\",")
+            appendLine("\t\"unused\",")
+            appendLine("\t\"ktlint:standard:annotation\",")
+            appendLine("\t\"ktlint:standard:argument-list-wrapping\",")
+            appendLine("\t\"ktlint:standard:chain-method-continuation\",")
+            appendLine("\t\"ktlint:standard:filename\",")
+            appendLine("\t\"ktlint:standard:function-naming\",")
+            appendLine("\t\"ktlint:standard:function-signature\",")
+            appendLine("\t\"ktlint:standard:import-ordering\",")
+            appendLine("\t\"ktlint:standard:indent\",")
+            appendLine("\t\"ktlint:standard:max-line-length\",")
+            appendLine("\t\"ktlint:standard:no-unused-imports\",")
+            appendLine("\t\"ktlint:standard:parameter-list-wrapping\",")
+            appendLine("\t\"ktlint:standard:parameter-wrapping\",")
+            appendLine("\t\"ktlint:standard:paren-spacing\",")
             appendLine(")")
             appendLine()
             appendLine("package ${module.packageName}")
@@ -73,12 +74,12 @@ class ModuleCodeGenerator(
         }
 
     private fun StringBuilder.appendModuleVal(module: ModuleDescriptor) {
-        appendLine("    val Module: QuarkdownModule =")
-        appendLine("        moduleOf(")
+        appendLine("\tval Module: QuarkdownModule =")
+        appendLine("\t\tmoduleOf(")
         module.functions.forEach { function ->
-            appendLine("            this::${function.exportedName.backtick()},")
+            appendLine("\t\t\tthis::${function.exportedName.backtick()},")
         }
-        appendLine("        )")
+        appendLine("\t\t)")
     }
 
     private fun StringBuilder.appendWrapper(function: FunctionDescriptor) {
@@ -88,9 +89,9 @@ class ModuleCodeGenerator(
             function.parameters.joinToString(", ") {
                 "${it.originalName.backtick()} = ${it.exportedName.backtick()}"
             }
-        function.sourceAnnotations?.let { appendLine("    $it") }
-        appendLine("    public fun ${function.exportedName.backtick()}($parameters): $returnType =")
-        appendLine("        ${function.qualifiedName.backtickLastSegment()}($delegateArguments)")
+        function.sourceAnnotations?.let { appendLine("\t$it") }
+        appendLine("\tpublic fun ${function.exportedName.backtick()}($parameters): $returnType =")
+        appendLine("\t\t${function.qualifiedName.backtickLastSegment()}($delegateArguments)")
     }
 
     private fun renderParameter(parameter: ParameterDescriptor): String {
