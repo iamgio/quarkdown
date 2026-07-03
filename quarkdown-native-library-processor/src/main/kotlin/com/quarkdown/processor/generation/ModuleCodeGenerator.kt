@@ -84,23 +84,51 @@ class ModuleCodeGenerator(
     }
 
     private fun StringBuilder.appendWrapper(function: FunctionDescriptor) {
-        val parameters = function.parameters.joinToString(", ", transform = ::renderParameter)
+        val signatureEntries = function.parameters.flatMap { it.signatureContributions() }
+        val parameters = signatureEntries.joinToString(", ", transform = ::renderPlain)
         val returnType = KSTypeRenderer.render(function.returnType)
-        val delegateArguments =
-            function.parameters.joinToString(", ") {
-                "${it.originalName.backtick()} = ${it.exportedName.backtick()}"
-            }
+        val delegateArguments = function.parameters.joinToString(", ", transform = ::renderDelegation)
         function.sourceAnnotations?.let { appendLine("\t$it") }
         appendLine("\tpublic fun ${function.exportedName.backtick()}($parameters): $returnType =")
         appendLine("\t\t${function.qualifiedName.backtickLastSegment()}($delegateArguments)")
     }
 
-    private fun renderParameter(parameter: ParameterDescriptor): String {
-        // Parameter annotations (@Injected, @Body, @LikelyNamed, ...) precede the declaration.
+    /**
+     * Wrapper parameters this descriptor puts on the generated function's signature:
+     * plain parameters contribute themselves; spread parameters contribute their components,
+     * so a data-class parameter turns into one wrapper parameter per constructor member.
+     */
+    private fun ParameterDescriptor.signatureContributions(): List<ParameterDescriptor.Plain> =
+        when (this) {
+            is ParameterDescriptor.Plain -> listOf(this)
+            is ParameterDescriptor.Spread -> components
+        }
+
+    private fun renderPlain(parameter: ParameterDescriptor.Plain): String {
         val annotations = parameter.sourceAnnotations?.let { "$it " } ?: ""
         val signature = "$annotations${parameter.exportedName.backtick()}: ${KSTypeRenderer.render(parameter.type)}"
         return parameter.defaultExpression?.let { "$signature = $it" } ?: signature
     }
+
+    /**
+     * Delegation argument for one source-level parameter: `original = exported` for a plain
+     * parameter, and `original = FQN(componentOriginal = componentExported, ...)` for a spread
+     * one, so the source function receives a reconstructed data-class instance.
+     */
+    private fun renderDelegation(parameter: ParameterDescriptor): String =
+        when (parameter) {
+            is ParameterDescriptor.Plain -> {
+                "${parameter.originalName.backtick()} = ${parameter.exportedName.backtick()}"
+            }
+
+            is ParameterDescriptor.Spread -> {
+                val reconstruction =
+                    parameter.components.joinToString(", ") {
+                        "${it.originalName.backtick()} = ${it.exportedName.backtick()}"
+                    }
+                "${parameter.originalName.backtick()} = ${parameter.dataClassFqn.backtickLastSegment()}($reconstruction)"
+            }
+        }
 
     private companion object {
         const val QUARKDOWN_MODULE_FQN = "com.quarkdown.core.function.library.module.QuarkdownModule"

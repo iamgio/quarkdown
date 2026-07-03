@@ -49,18 +49,56 @@ data class FunctionDescriptor(
 )
 
 /**
- * A single parameter of an exported [FunctionDescriptor].
+ * A parameter of an exported [FunctionDescriptor].
  *
- * @param originalName Kotlin parameter name on the source function
- * @param exportedName name to use on the generated wrapper, possibly rewritten by `@Name`
- * @param type the resolved parameter type
- * @param defaultExpression verbatim source text of the parameter's default value, or `null` when the parameter has no default
- * @param sourceAnnotations verbatim source text of parameter-level annotations to propagate to the wrapper
+ * Sealed so that each variant represents a distinct contribution to the wrapper:
+ * - [Plain] maps 1:1 to the source function's parameter list;
+ * - [Spread] expands a class type into one wrapper parameter per constructor member and
+ *   rebuilds the instance at the delegation call site.
+ *
+ * The code generator flat-maps every parameter to its Plain contributions when assembling the
+ * wrapper's signature and switches on the concrete variant when assembling the delegation.
  */
-data class ParameterDescriptor(
-    val originalName: String,
-    val exportedName: String,
-    val type: KSType,
-    val defaultExpression: String?,
-    val sourceAnnotations: String?,
-)
+sealed class ParameterDescriptor {
+    /** Kotlin parameter name on the source function (the name used as the delegation argument label). */
+    abstract val originalName: String
+
+    /** Verbatim source text of parameter-level annotations to propagate to the wrapper, or `null` when none apply. */
+    abstract val sourceAnnotations: String?
+
+    /**
+     * A plain parameter: exactly one entry in the source function's parameter list, exactly one
+     * entry in the wrapper's parameter list.
+     *
+     * @param originalName Kotlin parameter name on the source function
+     * @param exportedName name to use on the generated wrapper, possibly rewritten by `@Name`
+     * @param type the resolved parameter type
+     * @param defaultExpression verbatim source text of the parameter's default value, or `null` when the parameter has no default
+     * @param sourceAnnotations verbatim source text of parameter-level annotations to propagate to the wrapper
+     */
+    data class Plain(
+        override val originalName: String,
+        val exportedName: String,
+        val type: KSType,
+        val defaultExpression: String?,
+        override val sourceAnnotations: String?,
+    ) : ParameterDescriptor()
+
+    /**
+     * A spread parameter: the source function declared one parameter of a class type marked with
+     * `@Spread`; the wrapper exposes one [Plain] per primary-constructor member of that class
+     * and reconstructs an instance via named-argument constructor invocation at the delegation.
+     *
+     * @param originalName Kotlin parameter name of the outer spread parameter on the source function
+     * @param dataClassFqn fully qualified name of the class being spread, used to emit the reconstruction call
+     * @param components one [Plain] per primary-constructor parameter of the spread class, in declaration order
+     * @param sourceAnnotations verbatim source text of the outer parameter's annotations
+     *                          (the processor filters `@Spread` out; anything else is retained but currently not emitted since the outer parameter itself is not part of the wrapper signature)
+     */
+    data class Spread(
+        override val originalName: String,
+        val dataClassFqn: String,
+        val components: List<Plain>,
+        override val sourceAnnotations: String?,
+    ) : ParameterDescriptor()
+}
