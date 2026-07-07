@@ -26,7 +26,6 @@ import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.MarkdownContentValue
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.Value
@@ -36,6 +35,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.node.toPlainText
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.processor.annotation.Spread
@@ -116,7 +116,14 @@ fun container(
     style.cornerRadius,
     alignment,
     textAlignment,
-    TextTransformData(style.fontSize, style.fontWeight, style.fontStyle, style.textDecoration, style.textCase, style.fontVariant),
+    TextTransformData(
+        style.fontSize,
+        style.fontWeight,
+        style.fontStyle,
+        style.textDecoration,
+        style.textCase,
+        style.fontVariant,
+    ),
     float,
     fullColumnSpan,
     className,
@@ -257,8 +264,20 @@ fun grid(
     @Name("hgap") columnGap: Size? = gap,
     @Body body: MarkdownContent,
 ) = when {
-    columnCount <= 0 -> throw IllegalArgumentException("Column count must be at least 1")
-    else -> stack(Stacked.Grid(columnCount), mainAxisAlignment, crossAxisAlignment, rowGap ?: gap, columnGap ?: gap, body)
+    columnCount <= 0 -> {
+        throw IllegalArgumentException("Column count must be at least 1")
+    }
+
+    else -> {
+        stack(
+            Stacked.Grid(columnCount),
+            mainAxisAlignment,
+            crossAxisAlignment,
+            rowGap ?: gap,
+            columnGap ?: gap,
+            body,
+        )
+    }
 }
 
 /**

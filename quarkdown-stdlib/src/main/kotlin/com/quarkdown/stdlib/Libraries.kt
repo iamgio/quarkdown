@@ -5,10 +5,10 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.UnorderedCollectionValue
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 

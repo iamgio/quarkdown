@@ -21,7 +21,6 @@ import com.quarkdown.core.function.library.LibraryRegistrant
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -53,7 +52,6 @@ class FunctionNodeExpansionTest {
         b: Number,
     ) = NumberValue(a.toFloat() + b.toFloat())
 
-    @Name("customfunction")
     @NotForDocumentType(DocumentType.SLIDES)
     fun myFunction(x: String) = StringValue(x)
 
@@ -157,50 +155,6 @@ class FunctionNodeExpansionTest {
             assertEquals(Box.Type.ERROR, this.type)
             assertTrue("sum(" in (this.children.first() as TextNode).text.toPlainText()) // Error message
         }
-    }
-
-    @Test
-    fun `custom function name`() {
-        val node =
-            FunctionCallNode(
-                context,
-                "customfunction",
-                listOf(
-                    FunctionCallArgument(DynamicValue("abc")),
-                ),
-                isBlock = false,
-            )
-
-        context.register(node)
-
-        assertTrue(node.children.isEmpty())
-
-        expander.expandAll()
-
-        assertEquals(1, node.children.size)
-        assertNodeEquals(Text("abc"), node.children.first())
-    }
-
-    @Test
-    fun `custom function name, failing`() {
-        val node =
-            FunctionCallNode(
-                context,
-                "myFunction",
-                listOf(
-                    FunctionCallArgument(DynamicValue("abc")),
-                ),
-                isBlock = false,
-            )
-
-        context.register(node)
-
-        assertTrue(node.children.isEmpty())
-
-        expander.expandAll()
-
-        assertEquals(0, node.children.size)
-        assertContains(node.error!!.first.message!!, "reference")
     }
 
     @Test

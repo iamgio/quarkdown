@@ -9,7 +9,6 @@ import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.signatureAsString
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
@@ -24,6 +23,7 @@ import com.quarkdown.core.function.value.data.LambdaParameter
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX

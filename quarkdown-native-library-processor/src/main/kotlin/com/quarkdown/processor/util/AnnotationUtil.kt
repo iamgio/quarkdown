@@ -2,12 +2,7 @@ package com.quarkdown.processor.util
 
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSAnnotation
-
-/**
- * FQN of `@com.quarkdown.core.function.reflect.annotation.Name`.
- * Referenced as a string to avoid pulling `quarkdown-core` into the processor's classpath.
- */
-private const val QUARKDOWN_NAME_ANNOTATION_FQN = "com.quarkdown.core.function.reflect.annotation.Name"
+import com.quarkdown.processor.annotation.Name
 
 /**
  * Returns the first [KSAnnotation] on this declaration whose declaration FQN matches [fqn],
@@ -24,14 +19,14 @@ fun KSAnnotated.getAnnotation(fqn: String): KSAnnotation? =
             ?.asString() == fqn
     }
 
-/** True when this declaration carries the annotation whose FQN is [fqn]. */
-fun KSAnnotated.hasAnnotation(fqn: String): Boolean = getAnnotation(fqn) != null
+/** Returns the first [KSAnnotation] on this declaration of type [A], or `null` when absent. */
+inline fun <reified A : Annotation> KSAnnotated.getAnnotation(): KSAnnotation? {
+    val fqn = A::class.qualifiedName ?: return null
+    return getAnnotation(fqn)
+}
 
 /** True when this declaration carries an annotation of type [A]. */
-inline fun <reified A : Annotation> KSAnnotated.hasAnnotation(): Boolean {
-    val fqn = A::class.qualifiedName ?: return false
-    return hasAnnotation(fqn)
-}
+inline fun <reified A : Annotation> KSAnnotated.hasAnnotation(): Boolean = getAnnotation<A>() != null
 
 /**
  * Returns the string value of Quarkdown's `@Name(...)` annotation on this declaration, or `null`
@@ -39,7 +34,7 @@ inline fun <reified A : Annotation> KSAnnotated.hasAnnotation(): Boolean {
  * (`@Name(name = "foo")`) argument forms.
  */
 fun KSAnnotated.quarkdownName(): String? =
-    getAnnotation(QUARKDOWN_NAME_ANNOTATION_FQN)
+    getAnnotation<Name>()
         ?.arguments
         ?.firstOrNull { it.name?.asString() == "name" || it.name == null }
         ?.value as? String

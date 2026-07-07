@@ -13,7 +13,6 @@ import com.quarkdown.core.context.file.RootGranularity
 import com.quarkdown.core.context.file.getRootFileSystem
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.OrderedCollectionValue
@@ -26,6 +25,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.requireReadPermission
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.AlphanumericComparator

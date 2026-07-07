@@ -14,7 +14,6 @@ import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.GeneralCollectionValue
 import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NodeValue
@@ -23,6 +22,7 @@ import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.asString

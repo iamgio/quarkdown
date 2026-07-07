@@ -7,10 +7,10 @@ import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.ast.quarkdown.block.FileTree
 import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.function.reflect.annotation.Body
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.trimEntries
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.fileTreeFromList

@@ -3,8 +3,8 @@
 package com.quarkdown.processor.fixtures
 
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.VoidValue
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.processor.annotation.Spread

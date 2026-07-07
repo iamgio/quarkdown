@@ -8,7 +8,6 @@ import com.quarkdown.core.function.call.validate.FunctionCallValidator
 import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.NoAutoArgumentUnwrapping
 import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
 import com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType
@@ -40,18 +39,12 @@ class KFunctionAdapter<T : OutputValue<*>>(
     /** Cached KParameter array, indexed by parameter position, used by [invoke] to avoid repeated reflection lookups per call. */
     private val kParameters: Array<KParameter> = function.parameters.toTypedArray()
 
-    /**
-     * If the [Name] annotation is present on [function], the Quarkdown function name is set from there.
-     * Otherwise, it is [function]'s original name.
-     */
-    override val name: String =
-        function.findAnnotation<Name>()?.name ?: function.name
+    override val name: String = function.name
 
     @Suppress("UNCHECKED_CAST")
     override val parameters: List<FunctionParameter<*>> =
         kParameters.map {
             FunctionParameter(
-                // If @Name is present, a custom name is set.
                 name = it.name ?: "<unnamed parameter>",
                 type = it.type.classifier as KClass<out InputValue<T>>,
                 index = it.index,

@@ -13,7 +13,6 @@ import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.InlineMarkdownContentValue
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.data.EvaluableString
@@ -22,6 +21,7 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.node.toPlainText
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.replaceMatches

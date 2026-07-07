@@ -4,7 +4,6 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.None
@@ -12,6 +11,7 @@ import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 

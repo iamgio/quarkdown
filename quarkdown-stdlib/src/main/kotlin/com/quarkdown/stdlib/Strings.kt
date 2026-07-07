@@ -4,13 +4,13 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.StringCase
 import com.quarkdown.core.util.case
 import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.core.util.trimDelimiters
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 
