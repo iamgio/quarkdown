@@ -695,7 +695,7 @@ fun texMacro(
  * @param borderBottom border width of the bottom content area of each page
  * @param borderLeft border width of the left content area of each page
  * @param borderColor color of the border around the content area of each page
- * @param background background color of each page
+ * @param backgroundColor background color of each page
  * @param columns positive number of columns on each page.
  *                If set and greater than 1, the layout becomes multi-column. If < 1, the value is discarded
  * @param alignment text alignment of the content on each page

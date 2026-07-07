@@ -116,6 +116,21 @@ allprojects {
             customStyleSheets.from(asset("styles/stylesheet.css"))
         }
     }
+
+    // KSP-generated source files must be included in the Dokka source set.
+    afterEvaluate {
+        if (usesQuarkdoc(this) && pluginManager.hasPlugin("com.google.devtools.ksp")) {
+            dokka {
+                dokkaSourceSets.named("main") {
+                    sourceRoots.from(layout.buildDirectory.dir("generated/ksp/main/kotlin"))
+                    suppressGeneratedFiles.set(false)
+                }
+            }
+            listOf("dokkaGeneratePublicationHtml", "dokkaGenerateModuleHtml").forEach { taskName ->
+                tasks.named(taskName) { dependsOn("kspKotlin") }
+            }
+        }
+    }
 }
 
 // Tasks
