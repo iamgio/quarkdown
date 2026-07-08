@@ -1,6 +1,6 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
@@ -669,7 +669,7 @@ class StandaloneFunctionTest {
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun echoEnum(value: Container.Alignment) = StringValue(value.name)
+    fun echoEnum(value: NodeStyle.Alignment) = StringValue(value.name)
 
     @Test
     fun `KFunction with enum`() {

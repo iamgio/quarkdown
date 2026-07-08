@@ -106,7 +106,7 @@ class TextTest {
     fun `advanced text formatting`() {
         execute("This is a .text {small text} size:{tiny} variant:{smallcaps}") {
             assertEquals(
-                "<p>This is a <span class=\"size-tiny\" style=\"font-variant: small-caps;\">small text</span></p>",
+                "<p>This is a <span style=\"font-size: var(--qd-size-tiny, 1em); font-variant: small-caps;\">small text</span></p>",
                 it,
             )
         }
@@ -121,7 +121,7 @@ class TextTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<span class=\"size-tiny\" style=\"font-variant: small-caps;\">small text</span>",
+                "<span style=\"font-size: var(--qd-size-tiny, 1em); font-variant: small-caps;\">small text</span>",
                 it,
             )
         }

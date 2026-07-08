@@ -1,5 +1,6 @@
 package com.quarkdown.core.rendering.representable
 
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.quarkdown.block.Box
@@ -32,11 +33,11 @@ interface RenderRepresentableVisitor<T> {
 
     fun visit(position: CaptionPosition): T
 
-    fun visit(borderStyle: Container.BorderStyle): T
+    fun visit(borderStyle: NodeStyle.BorderStyle): T
 
-    fun visit(alignment: Container.Alignment): T
+    fun visit(alignment: NodeStyle.Alignment): T
 
-    fun visit(alignment: Container.TextAlignment): T
+    fun visit(alignment: NodeStyle.TextAlignment): T
 
     fun visit(alignment: Container.FloatAlignment): T
 

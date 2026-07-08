@@ -46,3 +46,15 @@ test("preserves the inner container color when nested", async (page) => {
     await expect(innerContainer.locator("h1")).toHaveCSS("color", blue);
     await expect(innerContainer.locator("p")).toHaveCSS("color", blue);
 });
+
+test("preserves default theme colors inside a background-only container", async (page) => {
+    // A container with only background color (no foreground) must not force
+    // its children to inherit `color`: background-color is not a foreground color.
+    const backgroundContainer = page.locator(".container").nth(3);
+
+    const headingColor = await getComputedColor(page, "var(--qd-heading-color)");
+    const mainColor = await getComputedColor(page, "var(--qd-main-color)");
+
+    await expect(backgroundContainer.locator("h1")).toHaveCSS("color", headingColor);
+    await expect(backgroundContainer.locator("p")).toHaveCSS("color", mainColor);
+});

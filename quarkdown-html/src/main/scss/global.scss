@@ -22,9 +22,9 @@
 @use "components/float";
 @use "components/clip";
 @use "components/box";
-@use "components/size";
 @use "components/collapsible";
 @use "components/container";
+@use "components/node-style";
 @use "components/stack";
 @use "components/location";
 @use "components/footnote";
@@ -81,6 +81,15 @@
   --qd-main-custom-font: unset;
   --qd-heading-custom-font: unset;
   --qd-code-custom-font: unset;
+
+  // Font sizes
+  --qd-size-tiny: 0.5em;
+  --qd-size-small: 0.75em;
+  --qd-size-normal: 1em;
+  --qd-size-medium: 1.25em;
+  --qd-size-large: 1.5em;
+  --qd-size-larger: 2em;
+  --qd-size-huge: 3em;
 
   // Margins
   --qd-block-margin: 2em; // Margin of block elements

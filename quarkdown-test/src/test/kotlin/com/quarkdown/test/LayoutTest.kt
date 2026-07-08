@@ -234,7 +234,7 @@ class LayoutTest {
         ) {
             assertEquals(
                 "<p>This <strong>exciting feature</strong>, " +
-                    "<span class=\"size-small\" style=\"font-variant: small-caps;\">" +
+                    "<span style=\"font-size: var(--qd-size-small, 1em); font-variant: small-caps;\">" +
                     "powered by <a href=\"https://github.com/iamgio/quarkdown\">Quarkdown</a>" +
                     "</span>, looks great!</p>",
                 it,

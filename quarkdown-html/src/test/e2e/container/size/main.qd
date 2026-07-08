@@ -1,0 +1,20 @@
+.container fontsize:{tiny}
+    tiny
+
+.container fontsize:{small}
+    small
+
+.container fontsize:{normal}
+    normal
+
+.container fontsize:{medium}
+    medium
+
+.container fontsize:{large}
+    large
+
+.container fontsize:{larger}
+    larger
+
+.container fontsize:{huge}
+    huge

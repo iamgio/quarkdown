@@ -68,7 +68,7 @@ class PaperLibTest {
                 "<p><strong>Theorem 0.1.</strong> This is my theorem.</p>" +
                     "<p><strong>Proof 0.i.</strong> And this is my proof.</p>" +
                     "<div class=\"container fullwidth\" style=\"justify-items: end; text-align: end;\">" +
-                    "<span class=\"size-huge\">∎</span>" +
+                    "<span style=\"font-size: var(--qd-size-huge, 1em);\">∎</span>" +
                     "</div>",
                 it,
             )
@@ -96,7 +96,7 @@ class PaperLibTest {
             assertEquals(
                 "<p><strong>Proof a:</strong> This is my proof.</p>" +
                     "<div class=\"container fullwidth\" style=\"justify-items: end; text-align: end;\">" +
-                    "<span class=\"size-huge\">#</span>" +
+                    "<span style=\"font-size: var(--qd-size-huge, 1em);\">#</span>" +
                     "</div>",
                 it,
             )

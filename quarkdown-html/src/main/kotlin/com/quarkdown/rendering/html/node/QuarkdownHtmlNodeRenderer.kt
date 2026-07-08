@@ -78,8 +78,9 @@ import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlIdentifierProvider.Companion.sanitizeId
 import com.quarkdown.rendering.html.HtmlTagBuilder
-import com.quarkdown.rendering.html.css.CssBuilder
+import com.quarkdown.rendering.html.css.all
 import com.quarkdown.rendering.html.css.asCSS
+import com.quarkdown.rendering.html.css.textTransform
 
 /**
  * A renderer for Quarkdown ([com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor]) nodes that exports their content into valid HTML code.
@@ -204,7 +205,6 @@ class QuarkdownHtmlNodeRenderer(
                 "fullwidth".takeIf { node.fullWidth },
                 "float".takeIf { node.float != null },
                 "full-column-span".takeIf { node.fullColumnSpan },
-                node.textTransform?.size?.asCSS,
                 node.className,
             )
 
@@ -213,30 +213,8 @@ class QuarkdownHtmlNodeRenderer(
             style {
                 "width" value node.width
                 "height" value node.height
-                "color" value node.foregroundColor
-                "background-color" value node.backgroundColor
-                "margin" value node.margin
-                "padding" value node.padding
-                "border-color" value node.borderColor
-                "border-width" value node.borderWidth
-                "border-radius" value node.cornerRadius
-
-                "border-style" value
-                    when {
-                        // If the border style is set, it is used.
-                        node.borderStyle != null -> node.borderStyle
-
-                        // If border properties are set, a normal (solid) border is used.
-                        node.borderColor != null || node.borderWidth != null -> Container.BorderStyle.NORMAL
-
-                        // No border style.
-                        else -> null
-                    }
-
-                "justify-items" value node.alignment
-                "text-align" value node.textAlignment
                 "float" value node.float
-                node.textTransform?.let { textTransform(it) }
+                all(node.style)
             }
         }
 
@@ -510,18 +488,6 @@ class QuarkdownHtmlNodeRenderer(
             +node.children
         }
 
-    /**
-     * Applies the text transformation of [data] into [this] CSS builder.
-     */
-    private fun CssBuilder.textTransform(data: TextTransformData) {
-        "font-weight" value data.weight
-        "font-style" value data.style
-        "font-variant" value data.variant
-        "text-decoration" value data.decoration
-        "text-transform" value data.case
-        "color" value data.color
-    }
-
     override fun visit(node: TextTransform): CharSequence {
         val tagName =
             when (node.data.script) {
@@ -531,10 +497,7 @@ class QuarkdownHtmlNodeRenderer(
             }
 
         return buildTag(tagName) {
-            classNames(
-                node.data.size?.asCSS, // e.g. 'size-small' class
-                node.className,
-            )
+            className(node.className)
             +node.children
             style { textTransform(node.data) }
         }
