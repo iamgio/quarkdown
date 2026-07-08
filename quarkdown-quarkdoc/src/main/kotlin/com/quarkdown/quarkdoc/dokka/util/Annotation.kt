@@ -7,21 +7,22 @@ import org.jetbrains.dokka.model.EnumValue
 import org.jetbrains.dokka.model.properties.WithExtraProperties
 
 /**
- * @returns the first annotation of type [T] found in the documentable
+ * @return every direct annotation attached to this documentable, or an empty list if none apply
  */
-inline fun <reified T> Documentable.extractAnnotation(): Annotations.Annotation? {
-    val annotations =
-        (this as? WithExtraProperties<*>)
-            ?.extra
-            ?.allOfType<Annotations>()
-            ?.flatMap { it.directAnnotations.values.flatten() }
-            ?: emptyList()
-
-    return annotations.find { it.dri.isOfType<T>() }
-}
+fun Documentable.directAnnotations(): List<Annotations.Annotation> =
+    (this as? WithExtraProperties<*>)
+        ?.extra
+        ?.allOfType<Annotations>()
+        ?.flatMap { it.directAnnotations.values.flatten() }
+        ?: emptyList()
 
 /**
- * @returns whether the documentable has an annotation of type [T]
+ * @return the first annotation of type [T] found in the documentable
+ */
+inline fun <reified T> Documentable.extractAnnotation(): Annotations.Annotation? = directAnnotations().find { it.dri.isOfType<T>() }
+
+/**
+ * @return whether the documentable has an annotation of type [T]
  */
 inline fun <reified T> Documentable.hasAnnotation(): Boolean = extractAnnotation<T>() != null
 

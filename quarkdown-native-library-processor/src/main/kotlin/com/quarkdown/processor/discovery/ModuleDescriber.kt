@@ -83,6 +83,7 @@ internal object ModuleDescriber {
             parameters = parameters,
             declaration = function,
             sourceAnnotations = AnnotationExtractor.ForFunction.extract(function, ctx),
+            kdoc = KDocExtractor.extract(function, ctx),
         )
     }
 
@@ -145,6 +146,7 @@ internal object ModuleDescriber {
                     ?: error("@Spread parameter '$outerName' references an unresolvable class type"),
             components = components,
             sourceAnnotations = AnnotationExtractor.ForParameter.extract(parameter, ctx),
+            dataClassKdoc = KDocExtractor.extract(classDeclaration, ctx),
         )
     }
 

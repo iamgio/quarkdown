@@ -37,6 +37,8 @@ data class ModuleDescriptor(
  * @param parameters function parameters in declaration order
  * @param declaration the underlying KSP declaration
  * @param sourceAnnotations verbatim source text of function-level annotations to propagate to the wrapper, or `null` when the function has none
+ * @param kdoc raw KDoc block text of the source function (inner content, no `/** */` markers), or `null` when the function is undocumented;
+ *             copied to the wrapper by the code generator after names have been substituted
  */
 data class FunctionDescriptor(
     val originalName: String,
@@ -46,6 +48,7 @@ data class FunctionDescriptor(
     val parameters: List<ParameterDescriptor>,
     val declaration: KSFunctionDeclaration,
     val sourceAnnotations: String?,
+    val kdoc: String?,
 )
 
 /**
@@ -94,11 +97,14 @@ sealed class ParameterDescriptor {
      * @param components one [Plain] per primary-constructor parameter of the spread class, in declaration order
      * @param sourceAnnotations verbatim source text of the outer parameter's annotations
      *                          (the processor filters `@Spread` out; anything else is retained but currently not emitted since the outer parameter itself is not part of the wrapper signature)
+     * @param dataClassKdoc raw KDoc block text of the spread class (inner content, no `/** */` markers), or `null` when the class is undocumented;
+     *                       the wrapper KDoc absorbs its `@param` tags in place of the outer parameter's own documentation
      */
     data class Spread(
         override val originalName: String,
         val dataClassFqn: String,
         val components: List<Plain>,
         override val sourceAnnotations: String?,
+        val dataClassKdoc: String?,
     ) : ParameterDescriptor()
 }

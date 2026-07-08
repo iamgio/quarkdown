@@ -28,8 +28,10 @@ class QuarkdownSignatureTest :
             mapOf(
                 "TestModule.kt" to
                     """
-                    val TestModule: QuarkdownModule = moduleOf(::$functionName)
-                    $functionCode
+                    object TestModule {
+                        val Module: QuarkdownModule = moduleOf(this::$functionName)
+                        $functionCode
+                    }
                     """.trimIndent(),
             )
 

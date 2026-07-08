@@ -88,10 +88,70 @@ class ModuleCodeGenerator(
         val parameters = signatureEntries.joinToString(", ", transform = ::renderPlain)
         val returnType = KSTypeRenderer.render(function.returnType)
         val delegateArguments = function.parameters.joinToString(", ", transform = ::renderDelegation)
+        composeKDoc(function)?.let { appendKDocBlock(it) }
         function.sourceAnnotations?.let { appendLine("\t$it") }
         appendLine("\tpublic fun ${function.exportedName.backtick()}($parameters): $returnType =")
         appendLine("\t\t${function.qualifiedName.backtickLastSegment()}($delegateArguments)")
     }
+
+    /**
+     * Renders [rawKDoc] as a KDoc block indented under the surrounding `object`.
+     * Each source line becomes a `* <line>` entry, with blank source lines preserved as blank
+     * comment lines so Dokka sees paragraph boundaries. Any literal comment-close sequence in
+     * [rawKDoc] is escaped so it can't terminate the generated block prematurely.
+     */
+    private fun StringBuilder.appendKDocBlock(rawKDoc: String) {
+        appendLine("\t/**")
+        rawKDoc.lines().forEach { line ->
+            val trimmed = line.trimEnd().replace("*/", "*\\/")
+            if (trimmed.isEmpty()) {
+                appendLine("\t *")
+            } else {
+                appendLine("\t * $trimmed")
+            }
+        }
+        appendLine("\t */")
+    }
+
+    /**
+     * Assembles the KDoc that will sit above the wrapper: the source function's KDoc, with every
+     * identifier rewritten to its exported form, followed by the `@param` tags lifted from each
+     * `@Spread` parameter's data class (also rewritten). Returns `null` when neither source has
+     * KDoc to contribute.
+     */
+    private fun composeKDoc(function: FunctionDescriptor): String? {
+        val renames = collectRenames(function)
+        val spreadOuterNames =
+            function.parameters
+                .filterIsInstance<ParameterDescriptor.Spread>()
+                .map { it.originalName }
+                .toSet()
+        val functionKDoc =
+            function.kdoc
+                ?.let { KDocRewriter.stripParamTags(it, spreadOuterNames) }
+                ?.let { KDocRewriter.rewrite(it, renames) }
+        val spreadTags =
+            function.parameters
+                .filterIsInstance<ParameterDescriptor.Spread>()
+                .mapNotNull { spread -> spread.dataClassKdoc?.let { KDocRewriter.extractParamTags(it) } }
+                .flatten()
+                .map { KDocRewriter.rewrite(it, renames) }
+
+        if (functionKDoc.isNullOrBlank() && spreadTags.isEmpty()) return null
+        return listOfNotNull(functionKDoc?.takeIf { it.isNotBlank() })
+            .plus(spreadTags)
+            .joinToString(separator = "\n")
+    }
+
+    /**
+     * Builds the original-name -> exported-name map covering every parameter that appears in the
+     * wrapper's signature - plain parameters and spread components alike - so [KDocRewriter] can
+     * translate references uniformly across both the function KDoc and the spread class KDoc.
+     */
+    private fun collectRenames(function: FunctionDescriptor): Map<String, String> =
+        function.parameters
+            .flatMap { it.signatureContributions() }
+            .associate { it.originalName to it.exportedName }
 
     /**
      * Wrapper parameters this descriptor puts on the generated function's signature:

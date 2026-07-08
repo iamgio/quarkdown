@@ -8,6 +8,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-quarkdoc-reader"))
+    implementation(project(":quarkdown-native-library-processor"))
     implementation(kotlin("reflect"))
 
     val dokkaVersion = "2.2.0"

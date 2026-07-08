@@ -3,7 +3,6 @@ package com.quarkdown.quarkdoc.dokka
 import com.quarkdown.core.log.Log
 import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumStorage
 import com.quarkdown.quarkdoc.dokka.transformers.module.QuarkdownModulesStorage
-import com.quarkdown.quarkdoc.dokka.transformers.name.RenamingsStorage
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
 import org.jetbrains.dokka.testApi.logger.TestLogger
 import org.jetbrains.dokka.utilities.DokkaConsoleLogger
@@ -48,7 +47,6 @@ open class QuarkdocDokkaTest(
 ) : BaseAbstractTest(logger = TestLogger(DokkaConsoleLogger(LoggingLevel.WARN))) {
     @BeforeTest
     fun setUp() {
-        RenamingsStorage.clear()
         EnumStorage.clear()
         QuarkdownModulesStorage.clear()
     }

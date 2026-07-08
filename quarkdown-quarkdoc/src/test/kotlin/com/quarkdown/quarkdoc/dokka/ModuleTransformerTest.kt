@@ -21,13 +21,17 @@ class ModuleTransformerTest :
             mapOf(
                 "M1.kt" to
                     """
-                    val Module1: QuarkdownModule = moduleOf(::aFunction)
-                    fun aFunction() = VoidValue
+                    object Module1 {
+                        val Module: QuarkdownModule = moduleOf(this::aFunction)
+                        fun aFunction() = VoidValue
+                    }
                     """.trimIndent(),
                 "M2.kt" to
                     """
-                    val Module2: QuarkdownModule = moduleOf(::bFunction)
-                    fun bFunction() = VoidValue
+                    object Module2 {
+                        val Module: QuarkdownModule = moduleOf(this::bFunction)
+                        fun bFunction() = VoidValue
+                    }
                     """.trimIndent(),
             )
 
@@ -47,13 +51,17 @@ class ModuleTransformerTest :
             mapOf(
                 "M1.kt" to
                     """
-                    val Module1: QuarkdownModule = moduleOf(::aFunction)
-                    fun aFunction() = VoidValue
+                    object Module1 {
+                        val Module: QuarkdownModule = moduleOf(this::aFunction)
+                        fun aFunction() = VoidValue
+                    }
                     """.trimIndent(),
                 "M2.kt" to
                     """
-                    val Module2: QuarkdownModule = moduleOf(::bFunction)
-                    fun bFunction() = VoidValue
+                    object Module2 {
+                        val Module: QuarkdownModule = moduleOf(this::bFunction)
+                        fun bFunction() = VoidValue
+                    }
                     """.trimIndent(),
                 "leftover.kt" to "object leftover {}",
             )
@@ -73,8 +81,10 @@ class ModuleTransformerTest :
             (1..moduleCount).associate {
                 "M$it.kt" to
                     """
-                    val Module$it: QuarkdownModule = moduleOf(::someFunction$it)
-                    fun someFunction$it() = VoidValue
+                    object Module$it {
+                        val Module: QuarkdownModule = moduleOf(this::someFunction$it)
+                        fun someFunction$it() = VoidValue
+                    }
                     """.trimIndent()
             }
 
@@ -87,7 +97,6 @@ class ModuleTransformerTest :
             assertContains(it, rootPackage)
             for (i in 1..moduleCount) {
                 assertContains(it, "$rootPackage.module.Module$i")
-                assertContains(it, "$rootPackage/-module$i.html")
                 assertContains(it, "$rootPackage.module.Module$i/some-function$i.html")
             }
         }

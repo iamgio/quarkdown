@@ -10,10 +10,8 @@ import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumStorer
 import com.quarkdown.quarkdoc.dokka.transformers.misc.DocumentTypeConstraintsTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.module.ModuleAsPackageTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.module.ModulesStorer
-import com.quarkdown.quarkdoc.dokka.transformers.name.DocumentableNameTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.name.DocumentationNameTransformer
-import com.quarkdown.quarkdoc.dokka.transformers.name.RenamingsStorer
 import com.quarkdown.quarkdoc.dokka.transformers.optional.AdditionalParameterPropertiesTransformer
+import com.quarkdown.quarkdoc.dokka.transformers.suppress.SourceFunctionSuppressor
 import com.quarkdown.quarkdoc.dokka.transformers.suppress.SuppressInjectedTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.type.ValueTypeTransformer
 import org.jetbrains.dokka.CoreExtensions
@@ -47,33 +45,14 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
     }
 
     /**
-     * Stores the old-new function name pairs, to be used in [documentableNameTransformer] and [documentationNameTransformer].
-     * @see com.quarkdown.core.function.reflect.annotation.Name
+     * Suppresses top-level source-side `@QFunction`s so only the KSP-generated wrappers
+     * (which already carry exported names in their signature and rewritten KDoc) reach the docs.
+     * @see com.quarkdown.quarkdoc.dokka.transformers.suppress.SourceFunctionSuppressor
      */
-    val renamingsStorer by extending {
-        plugin<DokkaBase>().preMergeDocumentableTransformer providing ::RenamingsStorer order {
-            before(documentableNameTransformer, documentationNameTransformer)
+    val sourceFunctionSuppressor by extending {
+        base.preMergeDocumentableTransformer providing ::SourceFunctionSuppressor order {
+            before(moduleAsPackageTransformer)
         }
-    }
-
-    /**
-     * Functions and parameters annotated with `@Name` are renamed in the function signature.
-     * @see com.quarkdown.core.function.reflect.annotation.Name
-     */
-    val documentableNameTransformer by extending {
-        base.preMergeDocumentableTransformer providing ::DocumentableNameTransformer
-    }
-
-    /**
-     * Functions and parameters annotated with `@Name` are renamed in the documentation.
-     * This includes:
-     * - Direct links (`[name]`)
-     * - Parameter (`@param name`)
-     * - See references (`@see name`)
-     * @see com.quarkdown.core.function.reflect.annotation.Name
-     */
-    val documentationNameTransformer by extending {
-        base.preMergeDocumentableTransformer providing ::DocumentationNameTransformer
     }
 
     /**
