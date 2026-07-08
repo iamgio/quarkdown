@@ -45,7 +45,6 @@ import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.DynamicValue
@@ -60,6 +59,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.font.FontFamily
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.loadFontFamily

@@ -7,7 +7,6 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.StringValue
@@ -17,6 +16,7 @@ import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.localization.LocalizationEntries
 import com.quarkdown.core.localization.LocalizationTable
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 

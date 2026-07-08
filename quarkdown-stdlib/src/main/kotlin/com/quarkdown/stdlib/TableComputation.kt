@@ -10,7 +10,6 @@ import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.IterableValue
@@ -21,6 +20,7 @@ import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.node.toPlainText
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.AlphanumericComparator

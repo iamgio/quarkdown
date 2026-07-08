@@ -16,7 +16,6 @@ import com.quarkdown.core.function.library.LibraryRegistrant
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
 import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.util.node.toPlainText
 import kotlin.test.BeforeTest
@@ -36,14 +35,13 @@ class AstRewriterTest {
     private lateinit var rewriter: AstRewriter
 
     @Suppress("MemberVisibilityCanBePrivate")
-    @Name("heading")
     fun heading(
         @Body content: InlineMarkdownContent,
         depth: Int,
-        @Name("ref") ref: String? = null,
-        @Name("numbered") numbered: Boolean = true,
-        @Name("indexed") indexed: Boolean = true,
-        @Name("breakpage") breakpage: Boolean = true,
+        ref: String? = null,
+        numbered: Boolean = true,
+        indexed: Boolean = true,
+        breakpage: Boolean = true,
     ): NodeValue =
         NodeValue(
             BlockQuote(

@@ -3,8 +3,8 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 

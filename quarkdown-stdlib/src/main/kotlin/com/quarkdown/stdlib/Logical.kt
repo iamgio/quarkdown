@@ -3,9 +3,9 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
-import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
+import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.asComparablePlainText
