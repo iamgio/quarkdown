@@ -1,7 +1,7 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DynamicValue
@@ -13,33 +13,14 @@ import com.quarkdown.core.function.value.PairValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.asDouble
 
 /**
  * Index of the first element in a collection.
  */
 internal const val INDEX_STARTS_AT = 1
-
-/**
- * `Collection` stdlib module exporter.
- * This module handles iterable collections.
- */
-val Collection: QuarkdownModule =
-    moduleOf(
-        ::collectionGet,
-        ::collectionFirst,
-        ::collectionSecond,
-        ::collectionThird,
-        ::collectionLast,
-        ::collectionSize,
-        ::collectionSumAll,
-        ::collectionAverage,
-        ::collectionDistinct,
-        ::collectionSorted,
-        ::collectionReverse,
-        ::collectionGroup,
-        ::pair,
-    )
 
 /**
  * @param index index of an element in a collection, starting at 0
@@ -65,6 +46,7 @@ private fun nativeCollectionGet(
  * @param fallback value to return if the index is out of bounds. If unset, `false` is returned.
  * @return element at the given index, or [none] if the index is out of bounds
  */
+@QFunction
 @Name("getat")
 @LikelyChained
 fun collectionGet(
@@ -77,6 +59,7 @@ fun collectionGet(
  * @param collection collection to get the first element from
  * @return first element of the collection, or [none] if the collection is empty
  */
+@QFunction
 @Name("first")
 @LikelyChained
 fun collectionFirst(
@@ -87,6 +70,7 @@ fun collectionFirst(
  * @param collection collection to get the second element from
  * @return second element of the collection, or [none] if the collection has less than 2 elements
  */
+@QFunction
 @Name("second")
 @LikelyChained
 fun collectionSecond(
@@ -97,6 +81,7 @@ fun collectionSecond(
  * @param collection collection to get the third element from
  * @return third element of the collection, or [none] if the collection has less than 3 elements
  */
+@QFunction
 @Name("third")
 @LikelyChained
 fun collectionThird(
@@ -107,6 +92,7 @@ fun collectionThird(
  * @param collection collection to get the last element from
  * @return last element of the collection, or [none] if the collection is empty
  */
+@QFunction
 @Name("last")
 @LikelyChained
 fun collectionLast(
@@ -117,6 +103,7 @@ fun collectionLast(
  * @param collection collection to get the size of
  * @return the non-negative size of the collection
  */
+@QFunction
 @Name("size")
 @LikelyChained
 fun collectionSize(
@@ -127,6 +114,7 @@ fun collectionSize(
  * @param collection numeric collection to sum
  * @return the sum of all elements in the collection. If an element is not numeric it is ignored.
  */
+@QFunction
 @Name("sumall")
 @LikelyChained
 fun collectionSumAll(
@@ -140,6 +128,7 @@ fun collectionSumAll(
  * @param collection numeric collection to get the average from
  * @return the average of all elements in the collection. If an element is not numeric it is ignored.
  */
+@QFunction
 @Name("average")
 @LikelyChained
 fun collectionAverage(
@@ -154,6 +143,7 @@ fun collectionAverage(
  * @param collection collection to get the distinct elements from
  * @return a new collection with the same elements as the original, without duplicates
  */
+@QFunction
 @Name("distinct")
 @LikelyChained
 fun collectionDistinct(
@@ -166,6 +156,7 @@ fun collectionDistinct(
  * @return a new collection with the same elements as the original, sorted
  * @throws IllegalArgumentException if the elements, or the properties supplied by [sorting], cannot be compared
  */
+@QFunction
 @Suppress("UNCHECKED_CAST")
 @Name("sorted")
 @LikelyChained
@@ -194,6 +185,7 @@ fun collectionSorted(
  * @param collection collection to reverse
  * @return a new collection with the same elements as the original, in reverse order
  */
+@QFunction
 @Name("reversed")
 @LikelyChained
 fun collectionReverse(
@@ -205,6 +197,7 @@ fun collectionReverse(
  * @param collection collection to group
  * @return a collection of collections, each containing the elements that are equal to each other
  */
+@QFunction
 @Name("groupvalues")
 @LikelyChained
 fun collectionGroup(
@@ -224,6 +217,7 @@ fun collectionGroup(
  * @param second second element of the pair
  * @return a pair of the two elements
  */
+@QFunction
 fun pair(
     first: DynamicValue,
     second: DynamicValue,

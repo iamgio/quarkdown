@@ -1,0 +1,2 @@
+[**/build/generated/**/*.kt]
+ktlint_standard_no-unused-imports = disabled

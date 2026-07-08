@@ -1,18 +1,11 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.value.wrappedAsValue
-
-/**
- * `Icon` stdlib module exporter.
- * This module handles pixel-perfect icons.
- */
-val Icon: QuarkdownModule =
-    moduleOf(
-        ::icon,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Shows a pixel-perfect icon, looked up from the icon library by its name.
@@ -24,4 +17,5 @@ val Icon: QuarkdownModule =
  *
  * @param name the name of the icon
  */
+@QFunction
 fun icon(name: String) = IconImage(name).wrappedAsValue()

@@ -52,7 +52,7 @@ class KFunctionAdapter<T : OutputValue<*>>(
         kParameters.map {
             FunctionParameter(
                 // If @Name is present, a custom name is set.
-                name = it.findAnnotation<Name>()?.name ?: it.name ?: "<unnamed parameter>",
+                name = it.name ?: "<unnamed parameter>",
                 type = it.type.classifier as KClass<out InputValue<T>>,
                 index = it.index,
                 isOptional = it.isOptional,

@@ -1,23 +1,16 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.requirePermission
-
-/**
- * `Process` stdlib module exporter.
- * This module provides access to the host process environment.
- */
-val Process: QuarkdownModule =
-    moduleOf(
-        ::env,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Retrieves the value of an environment variable.
@@ -32,6 +25,7 @@ val Process: QuarkdownModule =
  * @permission [Permission.ProcessAccess] to access environment variables
  * @wiki environment
  */
+@QFunction
 fun env(
     @Injected context: Context,
     name: String,

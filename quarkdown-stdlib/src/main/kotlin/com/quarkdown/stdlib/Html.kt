@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.base.block.Html
@@ -5,8 +7,6 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.options.HtmlOptions
 import com.quarkdown.core.context.options.merge
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -16,19 +16,9 @@ import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.requirePermission
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.applyImportantToCSS
-
-/**
- * `Html` stdlib module exporter.
- * This module handles HTML-specific configuration and native HTML/CSS injection.
- */
-val Html: QuarkdownModule =
-    moduleOf(
-        ::htmlOptions,
-        ::html,
-        ::css,
-        ::cssProperties,
-    )
 
 /**
  * Configures HTML generation options.
@@ -46,6 +36,7 @@ val Html: QuarkdownModule =
  *              If unspecified, the document name (set via `.docname`) is used.
  * @wiki html-options
  */
+@QFunction
 @Name("htmloptions")
 fun htmlOptions(
     @Injected context: MutableContext,
@@ -80,6 +71,7 @@ fun htmlOptions(
  * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @wiki html
  */
+@QFunction
 fun html(
     @Injected context: Context,
     @LikelyBody content: String,
@@ -113,6 +105,7 @@ fun html(
  * @see [cssProperties] for a more structured way to override CSS properties.
  * @wiki css
  */
+@QFunction
 fun css(
     @Injected context: Context,
     @LikelyBody content: String,
@@ -148,6 +141,7 @@ private const val CSS_PROPERTY_PREFIX = "--qd-"
  * @throws com.quarkdown.core.permissions.MissingPermissionException if [Permission.NativeContent] is not granted
  * @wiki css
  */
+@QFunction
 @Name("cssproperties")
 fun cssProperties(
     @Injected context: Context,

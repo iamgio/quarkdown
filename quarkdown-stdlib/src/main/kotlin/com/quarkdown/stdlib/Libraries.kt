@@ -1,26 +1,16 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.UnorderedCollectionValue
 import com.quarkdown.core.function.value.wrappedAsValue
-
-/**
- * `Library` stdlib module exporter.
- * This module handles loaded libraries and their functions.
- */
-val Library: QuarkdownModule =
-    moduleOf(
-        ::libraryExists,
-        ::functionExists,
-        ::libraries,
-        ::libraryFunctions,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * @param context context to search in
@@ -38,6 +28,7 @@ private fun findLibrary(
  * @param name name of the library, case-insensitive
  * @return whether a library with the given name is registered in [context]
  */
+@QFunction
 @Name("libexists")
 fun libraryExists(
     @Injected context: Context,
@@ -50,6 +41,7 @@ fun libraryExists(
  * @param name name of the function, case-insensitive
  * @return whether a function with the given name is registered in [context]
  */
+@QFunction
 @Name("functionexists")
 fun functionExists(
     @Injected context: Context,
@@ -61,6 +53,7 @@ fun functionExists(
  *
  * @return an unordered collection of the loaded libraries' names
  */
+@QFunction
 fun libraries(
     @Injected context: Context,
 ) = UnorderedCollectionValue(
@@ -76,6 +69,7 @@ fun libraries(
  * @param libraryName name of the library, case-insensitive
  * @return unordered set of functions exposed by the library, or an empty one if the library is not found
  */
+@QFunction
 @Name("libfunctions")
 fun libraryFunctions(
     @Injected context: Context,

@@ -1,20 +1,12 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.quarkdown.reference.CrossReference
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.wrappedAsValue
-
-/**
- * `Reference` stdlib module exporter.
- * This module handles cross-references.
- * @see com.quarkdown.core.ast.quarkdown.reference
- */
-val Reference: QuarkdownModule =
-    moduleOf(
-        ::reference,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Creates a reference to a target node with a matching ID.
@@ -66,5 +58,6 @@ val Reference: QuarkdownModule =
  * @return a [CrossReference] to the target node
  * @wiki cross-references
  */
+@QFunction
 @Name("ref")
 fun reference(id: String) = CrossReference(id).wrappedAsValue()

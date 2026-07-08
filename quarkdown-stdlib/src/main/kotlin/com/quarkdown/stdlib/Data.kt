@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
@@ -9,8 +11,6 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.context.file.RootGranularity
 import com.quarkdown.core.context.file.getRootFileSystem
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -26,24 +26,13 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.requireReadPermission
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.Sorting
 import com.quarkdown.stdlib.internal.sortedBy
 import java.io.File
-
-/**
- * `Data` stdlib module exporter.
- * This module handles content fetched from external resources.
- */
-val Data: QuarkdownModule =
-    moduleOf(
-        ::read,
-        ::pathToRoot,
-        ::listFiles,
-        ::fileName,
-        ::csv,
-    )
 
 /**
  * @param path path of the file, relative or absolute (with extension)
@@ -77,6 +66,7 @@ internal fun file(
  * @throws IllegalArgumentException if [lineRange] is out of bounds
  * @wiki file-data
  */
+@QFunction
 fun read(
     @Injected context: Context,
     path: String,
@@ -146,6 +136,7 @@ fun read(
  * @return a string value of the relative path to the root of the file system
  * @throws IllegalStateException if the relative path cannot be determined
  */
+@QFunction
 @Name("pathtoroot")
 fun pathToRoot(
     @Injected context: Context,
@@ -209,6 +200,7 @@ enum class FileSorting(
  * @see fileName to exclude the extension from file names
  * @wiki listing-files
  */
+@QFunction
 @Name("listfiles")
 fun listFiles(
     @Injected context: Context,
@@ -265,6 +257,7 @@ private fun listFiles(
  * @permission [Permission.GlobalRead] to access files located outside the project directory
  * @wiki file-data
  */
+@QFunction
 @Name("filename")
 fun fileName(
     @Injected context: Context,
@@ -301,6 +294,7 @@ enum class CsvParsingMode(
  * @permission [Permission.GlobalRead] to read CSV files located outside the project directory
  * @wiki file-data
  */
+@QFunction
 fun csv(
     @Injected context: Context,
     path: String,

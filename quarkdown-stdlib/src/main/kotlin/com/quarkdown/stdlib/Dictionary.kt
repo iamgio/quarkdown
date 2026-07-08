@@ -1,23 +1,15 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.OutputValue
-
-/**
- * `Dictionary` stdlib module exporter.
- * This module handles map-like dictionaries.
- */
-val Dictionary: QuarkdownModule =
-    moduleOf(
-        ::dictionary,
-        ::dictionaryGet,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Makes the initialization of a dictionary explicit, to avoid ambiguity with collection initialization.
@@ -40,6 +32,7 @@ val Dictionary: QuarkdownModule =
  * @return the dictionary
  * @wiki dictionary
  */
+@QFunction
 fun dictionary(
     @LikelyBody dictionary: Map<String, OutputValue<*>>,
 ): DictionaryValue<*> = DictionaryValue(dictionary.toMutableMap())
@@ -61,6 +54,7 @@ fun dictionary(
  * @param fallback value to return if the key is not present. If unset, defaults to [NOT_FOUND].
  * @return value corresponding to the given key, or [fallback] if the key is not present
  */
+@QFunction
 @Name("get")
 @LikelyChained
 fun dictionaryGet(

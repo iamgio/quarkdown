@@ -1,7 +1,7 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -12,24 +12,14 @@ import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.wrappedAsValue
-
-/**
- * `Optionality` stdlib module exporter.
- * This module handles `None` values to express optional values.
- */
-val Optionality: QuarkdownModule =
-    moduleOf(
-        ::none,
-        ::isNone,
-        ::otherwise,
-        ::ifPresent,
-        ::takeIf,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * @return a value which represents nothing
  * @wiki none
  */
+@QFunction
 fun none() = NoneValue
 
 /**
@@ -51,6 +41,7 @@ internal fun isNone(value: Any?) = value == null || value is None || value is No
  * @see [none]
  * @wiki none
  */
+@QFunction
 @Name("isnone")
 @LikelyChained
 fun isNone(value: DynamicValue): BooleanValue = isNone(value.unwrappedValue).wrappedAsValue()
@@ -68,6 +59,7 @@ fun isNone(value: DynamicValue): BooleanValue = isNone(value.unwrappedValue).wra
  * @see isNone
  * @wiki none
  */
+@QFunction
 @LikelyChained
 fun otherwise(
     value: DynamicValue,
@@ -96,6 +88,7 @@ fun otherwise(
  * @see isNone
  * @wiki none
  */
+@QFunction
 @LikelyChained
 @Name("ifpresent")
 fun ifPresent(
@@ -123,6 +116,7 @@ fun ifPresent(
  * @return [value] if the result of [condition] is true, [none] otherwise
  * @wiki none
  */
+@QFunction
 @LikelyChained
 @Name("takeif")
 fun takeIf(

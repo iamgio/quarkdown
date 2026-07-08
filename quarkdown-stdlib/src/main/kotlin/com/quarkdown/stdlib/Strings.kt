@@ -1,8 +1,8 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.value.StringValue
@@ -11,22 +11,8 @@ import com.quarkdown.core.util.StringCase
 import com.quarkdown.core.util.case
 import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.core.util.trimDelimiters
-
-/**
- * `String` stdlib module exporter.
- * This module handles string manipulation.
- */
-val String: QuarkdownModule =
-    moduleOf(
-        ::string,
-        ::concatenate,
-        ::uppercase,
-        ::lowercase,
-        ::capitalize,
-        ::isEmpty,
-        ::isNotEmpty,
-        ::toPlainText,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Creates a string.
@@ -39,6 +25,7 @@ val String: QuarkdownModule =
  * @param value string to wrap
  * @return a new string value
  */
+@QFunction
 fun string(value: String) =
     when {
         value.firstOrNull() == '\"' && value.lastOrNull() == '\"' -> value.trimDelimiters()
@@ -63,6 +50,7 @@ fun string(value: String) =
  * @param condition if true, concatenates `a` and `b`
  * @return a new string that is the concatenation of `a` and `b` if `condition` is true, `a` otherwise
  */
+@QFunction
 @LikelyChained
 fun concatenate(
     a: String,
@@ -82,6 +70,7 @@ fun concatenate(
  * @param string string to convert
  * @return a new uppercase string
  */
+@QFunction
 @LikelyChained
 fun uppercase(string: String) = string.case(StringCase.Upper).wrappedAsValue()
 
@@ -93,6 +82,7 @@ fun uppercase(string: String) = string.case(StringCase.Upper).wrappedAsValue()
  * @param string string to convert
  * @return a new lowercase string
  */
+@QFunction
 @LikelyChained
 fun lowercase(string: String) = string.case(StringCase.Lower).wrappedAsValue()
 
@@ -104,6 +94,7 @@ fun lowercase(string: String) = string.case(StringCase.Lower).wrappedAsValue()
  * @param string string to capitalize
  * @return a new string with the first character capitalized
  */
+@QFunction
 @LikelyChained
 fun capitalize(string: String) = string.case(StringCase.Capitalize).wrappedAsValue()
 
@@ -113,6 +104,7 @@ fun capitalize(string: String) = string.case(StringCase.Capitalize).wrappedAsVal
  * @param string string to check
  * @return `true` if the string is empty, `false` otherwise
  */
+@QFunction
 @LikelyChained
 @Name("isempty")
 fun isEmpty(string: String) = string.isEmpty().wrappedAsValue()
@@ -124,6 +116,7 @@ fun isEmpty(string: String) = string.isEmpty().wrappedAsValue()
  * @return `true` if the string is not empty, `false` otherwise
  * @see isEmpty
  */
+@QFunction
 @Name("isnotempty")
 @LikelyChained
 fun isNotEmpty(string: String) = string.isNotEmpty().wrappedAsValue()
@@ -136,5 +129,6 @@ fun isNotEmpty(string: String) = string.isNotEmpty().wrappedAsValue()
  * @param content inline content to convert
  * @return a new string that is the plain text of the content
  */
+@QFunction
 @Name("plaintext")
 fun toPlainText(content: InlineMarkdownContent): StringValue = content.children.toPlainText().wrappedAsValue()

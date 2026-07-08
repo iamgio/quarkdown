@@ -1,7 +1,7 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.reflect.annotation.Name
@@ -9,33 +9,10 @@ import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.NumberValue
 import com.quarkdown.core.function.value.ObjectValue
 import com.quarkdown.core.function.value.data.Range
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 import kotlin.math.PI
 import kotlin.math.pow
-
-/**
- * `Math` stdlib module exporter.
- */
-val Math: QuarkdownModule =
-    moduleOf(
-        ::sum,
-        ::subtract,
-        ::multiply,
-        ::divide,
-        ::rem,
-        ::pow,
-        ::abs,
-        ::negate,
-        ::sqrt,
-        ::logn,
-        ::pi,
-        ::sin,
-        ::cos,
-        ::tan,
-        ::truncate,
-        ::round,
-        ::isEven,
-        ::range,
-    )
 
 // Basic operations
 
@@ -44,6 +21,7 @@ val Math: QuarkdownModule =
  * @param b second operand
  * @return arithmetic floating-point sum of [a] and [b]
  */
+@QFunction
 @LikelyChained
 fun sum(
     a: Number,
@@ -55,6 +33,7 @@ fun sum(
  * @param b second operand
  * @return arithmetic floating-point subtraction of [a] and [b]
  */
+@QFunction
 @LikelyChained
 fun subtract(
     a: Number,
@@ -66,6 +45,7 @@ fun subtract(
  * @param b second operand
  * @return arithmetic floating-point multiplication of [a] and [b]
  */
+@QFunction
 @LikelyChained
 fun multiply(
     a: Number,
@@ -77,6 +57,7 @@ fun multiply(
  * @param b second operand
  * @return arithmetic floating-point division of [a] and [b]
  */
+@QFunction
 @LikelyChained
 fun divide(
     a: Number,
@@ -88,6 +69,7 @@ fun divide(
  * @param b second operand
  * @return remainder of the arithmetic floating-point division of [a] and [b]
  */
+@QFunction
 @LikelyChained
 fun rem(
     a: Number,
@@ -99,6 +81,7 @@ fun rem(
  * @param exponent exponent number. If it is a floating-point number, it will be truncated to an integer
  * @return [base] raised to the power of [exponent]
  */
+@QFunction
 @LikelyChained
 fun pow(
     base: Number,
@@ -109,6 +92,7 @@ fun pow(
  * @param x number to get the absolute value of
  * @return the absolute value of [x]
  */
+@QFunction
 @LikelyChained
 fun abs(x: Number) =
     when (x) {
@@ -120,6 +104,7 @@ fun abs(x: Number) =
  * @param x the number to negate (positive to negative and vice versa)
  * @return the negation of [x]
  */
+@QFunction
 @LikelyChained
 fun negate(x: Number) =
     when (x) {
@@ -131,6 +116,7 @@ fun negate(x: Number) =
  * @param x number to get the square root of
  * @return the square root of [x]
  */
+@QFunction
 @LikelyChained
 fun sqrt(x: Number) = kotlin.math.sqrt(x.toFloat()).let(::NumberValue)
 
@@ -138,6 +124,7 @@ fun sqrt(x: Number) = kotlin.math.sqrt(x.toFloat()).let(::NumberValue)
  * @param x number to get the natural logarithm of
  * @return the natural logarithm of [x]
  */
+@QFunction
 @LikelyChained
 fun logn(x: Number) = kotlin.math.ln(x.toFloat()).let(::NumberValue)
 
@@ -146,24 +133,28 @@ fun logn(x: Number) = kotlin.math.ln(x.toFloat()).let(::NumberValue)
 /**
  * @return the value of pi
  */
+@QFunction
 fun pi() = NumberValue(PI)
 
 /**
  * @param x angle in radians
  * @return sine of the angle [x]
  */
+@QFunction
 fun sin(x: Number) = NumberValue(kotlin.math.sin(x.toFloat()))
 
 /**
  * @param x angle in radians
  * @return cosine of the angle [x]
  */
+@QFunction
 fun cos(x: Number) = NumberValue(kotlin.math.cos(x.toFloat()))
 
 /**
  * @param x angle in radians
  * @return tangent of the angle [x]
  */
+@QFunction
 fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
 
 // Decimals
@@ -176,6 +167,7 @@ fun tan(x: Number) = NumberValue(kotlin.math.tan(x.toFloat()))
  * otherwise to a floating-point number
  * @throws IllegalArgumentException if [decimals] is negative
  */
+@QFunction
 @LikelyChained
 fun truncate(
     x: Number,
@@ -196,6 +188,7 @@ fun truncate(
  * @param x number to round
  * @return [x] rounded to the nearest integer
  */
+@QFunction
 @LikelyChained
 fun round(x: Number): NumberValue =
     when (x) {
@@ -209,6 +202,7 @@ fun round(x: Number): NumberValue =
  * @param x number to check
  * @return whether the integer value of [x] is an even number
  */
+@QFunction
 @Name("iseven")
 @LikelyChained
 fun isEven(x: Number) = BooleanValue(x.toInt() % 2 == 0)
@@ -227,6 +221,7 @@ fun isEven(x: Number) = BooleanValue(x.toInt() % 2 == 0)
  * @param start start of the range (inclusive). If unset, the range is infinite on the left end
  * @param end end of the range (inclusive). If unset, the range is infinite on the right end. [end] > [start]
  */
+@QFunction
 fun range(
     @Name("from") start: Number? = null,
     @Name("to") end: Number? = null,

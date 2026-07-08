@@ -1,3 +1,5 @@
+@file:QModule
+
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.MarkdownContent
@@ -6,8 +8,6 @@ import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.invisible.SlidesConfigurationInitializer
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.slides.Transition
-import com.quarkdown.core.function.library.module.QuarkdownModule
-import com.quarkdown.core.function.library.module.moduleOf
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -15,17 +15,8 @@ import com.quarkdown.core.function.reflect.annotation.Name
 import com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
-
-/**
- * `Slides` stdlib module exporter.
- * This module handles slides properties.
- */
-val Slides: QuarkdownModule =
-    moduleOf(
-        ::setSlidesConfiguration,
-        ::fragment,
-        ::speakerNote,
-    )
+import com.quarkdown.processor.annotation.QFunction
+import com.quarkdown.processor.annotation.QModule
 
 /**
  * Sets global properties that affect the behavior of a 'slides' document.
@@ -38,6 +29,7 @@ val Slides: QuarkdownModule =
  * @return a new [SlidesConfigurationInitializer] node
  * @wiki slides-configuration
  */
+@QFunction
 @OnlyForDocumentType(DocumentType.SLIDES)
 @Name("slides")
 fun setSlidesConfiguration(
@@ -65,6 +57,7 @@ fun setSlidesConfiguration(
  * @return a new [SlidesFragment] node
  * @wiki slides-fragment
  */
+@QFunction
 @OnlyForDocumentType(DocumentType.SLIDES)
 fun fragment(
     behavior: SlidesFragment.Behavior = SlidesFragment.Behavior.SHOW,
@@ -81,6 +74,7 @@ fun fragment(
  * @return a new [SlidesSpeakerNote] node
  * @wiki slides-speaker-notes
  */
+@QFunction
 @OnlyForDocumentType(DocumentType.SLIDES)
 @Name("speakernote")
 fun speakerNote(
