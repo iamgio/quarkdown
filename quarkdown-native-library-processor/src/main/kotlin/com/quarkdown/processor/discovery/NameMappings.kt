@@ -50,6 +50,11 @@ internal class NameMappings {
     fun exportedName(function: KSFunctionDeclaration): String? = functionExports[keyOf(function)]
 
     /**
+     * Returns the recorded exported name of [parameter], or `null` when [parameter] was never recorded.
+     */
+    fun exportedName(parameter: KSValueParameter): String? = keyOf(parameter)?.let { parameterExports[it] }
+
+    /**
      * Returns an original-name -> exported-name map for every parameter of [function] whose
      * export renamed it. Parameters that are unchanged (or unrecorded) are omitted so callers
      * can use `Map.get` semantics without post-filtering.

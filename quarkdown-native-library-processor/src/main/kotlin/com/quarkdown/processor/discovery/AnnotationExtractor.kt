@@ -39,5 +39,5 @@ internal object AnnotationExtractor {
     }
 
     /** Simple-name matches skipped from propagation because the processor handles them itself. */
-    private val SKIP_SHORT_NAMES = setOf("Name", "QFunction")
+    private val SKIP_SHORT_NAMES = setOf("Name", "QFunction", "Spread")
 }

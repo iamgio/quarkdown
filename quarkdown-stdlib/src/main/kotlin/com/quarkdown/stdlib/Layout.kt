@@ -38,6 +38,40 @@ import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.node.toPlainText
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
+import com.quarkdown.processor.annotation.Spread
+
+/**
+ * @param foregroundColor text color. Default if unset
+ * @param backgroundColor background color. Transparent if unset
+ * @param borderColor border color. Default if unset and [borderWidth] is set
+ * @param borderWidth border width. Default if unset and [borderColor] is set
+ * @param borderStyle border style. Normal (solid) if unset and [borderColor] or [borderWidth] is set
+ * @param margin whitespace outside the content. None if unset
+ * @param padding whitespace around the content. None if unset
+ * @param cornerRadius corner (and border) radius. None if unset
+ * @param fontSize relative font size of the text. Normal if unset
+ * @param fontWeight font weight of the text. Normal if unset
+ * @param fontStyle font style of the text. Normal if unset
+ * @param fontVariant font variant of the text. Normal if unset
+ * @param textDecoration text decoration of the text. None if unset
+ * @param textCase text case of the text. Normal if unset
+ */
+data class StyleOptions(
+    @Name("foreground") val foregroundColor: Color? = null,
+    @Name("background") val backgroundColor: Color? = null,
+    @Name("border") val borderColor: Color? = null,
+    @Name("borderwidth") val borderWidth: Sizes? = null,
+    @Name("borderstyle") val borderStyle: Container.BorderStyle? = null,
+    @Name("margin") val margin: Sizes? = null,
+    @Name("padding") val padding: Sizes? = null,
+    @Name("radius") val cornerRadius: Sizes? = null,
+    @Name("fontsize") val fontSize: TextTransformData.Size? = null,
+    @Name("fontweight") val fontWeight: TextTransformData.Weight? = null,
+    @Name("fontstyle") val fontStyle: TextTransformData.Style? = null,
+    @Name("fontvariant") val fontVariant: TextTransformData.Variant? = null,
+    @Name("textdecoration") val textDecoration: TextTransformData.Decoration? = null,
+    @Name("textcase") val textCase: TextTransformData.Case? = null,
+)
 
 /**
  * A general-purpose container that groups content.
@@ -47,22 +81,8 @@ import com.quarkdown.processor.annotation.QModule
  * @param width width of the container. No constraint if unset
  * @param height height of the container. No constraint if unset
  * @param fullWidth whether the container should take up the full width of the parent. Overridden by [width]. False if unset
- * @param foregroundColor text color. Default if unset
- * @param backgroundColor background color. Transparent if unset
- * @param borderColor border color. Default if unset and [borderWidth] is set
- * @param borderWidth border width. Default if unset and [borderColor] is set
- * @param borderStyle border style. Normal (solid) if unset and [borderColor] or [borderWidth] is set
- * @param margin whitespace outside the content. None if unset
- * @param padding whitespace around the content. None if unset
- * @param cornerRadius corner (and border) radius. None if unset
  * @param alignment alignment of the content. Default if unset
  * @param textAlignment alignment of the text. [alignment] if unset
- * @param fontSize relative font size of the text. Normal if unset
- * @param fontWeight font weight of the text. Normal if unset
- * @param fontStyle font style of the text. Normal if unset
- * @param fontVariant font variant of the text. Normal if unset
- * @param textDecoration text decoration of the text. None if unset
- * @param textCase text case of the text. Normal if unset
  * @param float floating position of the container within the parent. Not floating if unset
  * @param fullColumnSpan whether the container should span across all columns in a multi-column layout. False if unset
  * @param className CSS class name to apply to the container, if supported by the renderer. None if unset
@@ -74,42 +94,29 @@ import com.quarkdown.processor.annotation.QModule
 fun container(
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
-    @Name("fullwidth") fullWidth: Boolean = false,
-    @Name("foreground") foregroundColor: Color? = null,
-    @Name("background") backgroundColor: Color? = null,
-    @Name("border") borderColor: Color? = null,
-    @Name("borderwidth") borderWidth: Sizes? = null,
-    @Name("borderstyle") borderStyle: Container.BorderStyle? = null,
-    @Name("margin") margin: Sizes? = null,
-    @Name("padding") padding: Sizes? = null,
-    @Name("radius") cornerRadius: Sizes? = null,
     @LikelyNamed alignment: Container.Alignment? = null,
     @Name("textalignment") textAlignment: Container.TextAlignment? = alignment?.let(Container.TextAlignment::fromAlignment),
-    @Name("fontsize") fontSize: TextTransformData.Size? = null,
-    @Name("fontweight") fontWeight: TextTransformData.Weight? = null,
-    @Name("fontstyle") fontStyle: TextTransformData.Style? = null,
-    @Name("fontvariant") fontVariant: TextTransformData.Variant? = null,
-    @Name("textdecoration") textDecoration: TextTransformData.Decoration? = null,
-    @Name("textcase") textCase: TextTransformData.Case? = null,
+    @Name("fullwidth") fullWidth: Boolean = false,
     @LikelyNamed float: Container.FloatAlignment? = null,
     @Name("fullspan") fullColumnSpan: Boolean = false,
     @Name("classname") className: String? = null,
+    @Spread style: StyleOptions = StyleOptions(),
     @Body body: MarkdownContent? = null,
 ) = Container(
     width,
     height,
     fullWidth,
-    foregroundColor,
-    backgroundColor,
-    borderColor,
-    borderWidth,
-    borderStyle,
-    margin,
-    padding,
-    cornerRadius,
+    style.foregroundColor,
+    style.backgroundColor,
+    style.borderColor,
+    style.borderWidth,
+    style.borderStyle,
+    style.margin,
+    style.padding,
+    style.cornerRadius,
     alignment,
     textAlignment,
-    TextTransformData(fontSize, fontWeight, fontStyle, textDecoration, textCase, fontVariant),
+    TextTransformData(style.fontSize, style.fontWeight, style.fontStyle, style.textDecoration, style.textCase, style.fontVariant),
     float,
     fullColumnSpan,
     className,
