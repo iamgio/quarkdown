@@ -26,7 +26,7 @@ class UtilitiesTest {
 
         val contentOutput =
             "<h1 class=\"page-break\">Hello</h1><p>This is <strong>Quarkdown</strong>&hellip; " +
-                "<span class=\"size-huge\">!</span></p><div class=\"container\">" +
+                "<span style=\"font-size: var(--qd-size-huge, 1em);\">!</span></p><div class=\"container\">" +
                 "<p>Nice!</p>" +
                 "</div>"
 

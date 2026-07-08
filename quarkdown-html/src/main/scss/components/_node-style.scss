@@ -1,0 +1,30 @@
+// Styles for `StylableNode`s with a `NodeStyle`.
+
+// Selector that targets direct children of an element whose inline `style` attribute
+// has a standalone declaration of the given CSS property, excluding any child that
+// already carries its own declaration of the same property. The precise matching
+// prevents false positives such as `background-color` triggering an override for `color`.
+@function override-children($property) {
+  $has: ':is([style^="#{$property}:"], [style*="; #{$property}:"])';
+  @return '#{$has} > :not(#{$has})';
+}
+
+.quarkdown {
+  // When the node has an explicit inline margin, the default margins of children that don't carry their own inline margin are suppressed.
+  #{override-children("margin")} {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    &:first-child {
+      margin-top: 0 !important;
+    }
+
+    &:last-child {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  #{override-children("color")} {
+    color: inherit !important;
+  }
+}

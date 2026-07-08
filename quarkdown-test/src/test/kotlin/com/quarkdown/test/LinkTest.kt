@@ -20,11 +20,11 @@ class LinkTest {
     @Test
     fun `text link`() {
         execute(".text {Hello} size:{tiny} url:{https://example.com}") {
-            assertEquals("<a href=\"https://example.com\"><span class=\"size-tiny\">Hello</span></a>", it)
+            assertEquals("<a href=\"https://example.com\"><span style=\"font-size: var(--qd-size-tiny, 1em);\">Hello</span></a>", it)
         }
 
         execute(".text {Hello} size:{tiny} url:{.concatenate {https://example} {\\.com}}") {
-            assertEquals("<a href=\"https://example.com\"><span class=\"size-tiny\">Hello</span></a>", it)
+            assertEquals("<a href=\"https://example.com\"><span style=\"font-size: var(--qd-size-tiny, 1em);\">Hello</span></a>", it)
         }
     }
 

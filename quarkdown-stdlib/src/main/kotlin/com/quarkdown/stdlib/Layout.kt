@@ -5,6 +5,7 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.block.Box
@@ -46,6 +47,8 @@ import com.quarkdown.processor.annotation.Spread
  * @param borderColor border color. Default if unset and [borderWidth] is set
  * @param borderWidth border width. Default if unset and [borderColor] is set
  * @param borderStyle border style. Normal (solid) if unset and [borderColor] or [borderWidth] is set
+ * @param alignment alignment of the content. Default if unset
+ * @param textAlignment alignment of the text. [alignment] if unset
  * @param margin whitespace outside the content. None if unset
  * @param padding whitespace around the content. None if unset
  * @param cornerRadius corner (and border) radius. None if unset
@@ -61,7 +64,9 @@ data class StyleOptions(
     @Name("background") val backgroundColor: Color? = null,
     @Name("border") val borderColor: Color? = null,
     @Name("borderwidth") val borderWidth: Sizes? = null,
-    @Name("borderstyle") val borderStyle: Container.BorderStyle? = null,
+    @Name("borderstyle") val borderStyle: NodeStyle.BorderStyle? = null,
+    @LikelyNamed val alignment: NodeStyle.Alignment? = null,
+    @Name("textalignment") val textAlignment: NodeStyle.TextAlignment? = null,
     @Name("margin") val margin: Sizes? = null,
     @Name("padding") val padding: Sizes? = null,
     @Name("radius") val cornerRadius: Sizes? = null,
@@ -71,7 +76,31 @@ data class StyleOptions(
     @Name("fontvariant") val fontVariant: TextTransformData.Variant? = null,
     @Name("textdecoration") val textDecoration: TextTransformData.Decoration? = null,
     @Name("textcase") val textCase: TextTransformData.Case? = null,
-)
+) {
+    /** @see com.quarkdown.core.ast.attributes.style.StylableNode */
+    fun toNodeStyle(): NodeStyle =
+        NodeStyle(
+            foregroundColor = foregroundColor,
+            backgroundColor = backgroundColor,
+            borderColor = borderColor,
+            borderWidth = borderWidth,
+            borderStyle = borderStyle,
+            margin = margin,
+            padding = padding,
+            cornerRadius = cornerRadius,
+            alignment = alignment,
+            textAlignment = textAlignment ?: alignment?.let(NodeStyle.TextAlignment::fromAlignment),
+            textTransform =
+                TextTransformData(
+                    size = fontSize,
+                    weight = fontWeight,
+                    style = fontStyle,
+                    variant = fontVariant,
+                    decoration = textDecoration,
+                    case = textCase,
+                ),
+        )
+}
 
 /**
  * A general-purpose container that groups content.
@@ -81,8 +110,6 @@ data class StyleOptions(
  * @param width width of the container. No constraint if unset
  * @param height height of the container. No constraint if unset
  * @param fullWidth whether the container should take up the full width of the parent. Overridden by [width]. False if unset
- * @param alignment alignment of the content. Default if unset
- * @param textAlignment alignment of the text. [alignment] if unset
  * @param float floating position of the container within the parent. Not floating if unset
  * @param fullColumnSpan whether the container should span across all columns in a multi-column layout. False if unset
  * @param className CSS class name to apply to the container, if supported by the renderer. None if unset
@@ -94,8 +121,6 @@ data class StyleOptions(
 fun container(
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
-    @LikelyNamed alignment: Container.Alignment? = null,
-    @Name("textalignment") textAlignment: Container.TextAlignment? = alignment?.let(Container.TextAlignment::fromAlignment),
     @Name("fullwidth") fullWidth: Boolean = false,
     @LikelyNamed float: Container.FloatAlignment? = null,
     @Name("fullspan") fullColumnSpan: Boolean = false,
@@ -106,27 +131,10 @@ fun container(
     width,
     height,
     fullWidth,
-    style.foregroundColor,
-    style.backgroundColor,
-    style.borderColor,
-    style.borderWidth,
-    style.borderStyle,
-    style.margin,
-    style.padding,
-    style.cornerRadius,
-    alignment,
-    textAlignment,
-    TextTransformData(
-        style.fontSize,
-        style.fontWeight,
-        style.fontStyle,
-        style.textDecoration,
-        style.textCase,
-        style.fontVariant,
-    ),
     float,
     fullColumnSpan,
     className,
+    style.toNodeStyle(),
     body?.children ?: emptyList(),
 ).wrappedAsValue()
 
@@ -141,12 +149,11 @@ fun container(
  */
 @QFunction
 fun align(
-    alignment: Container.Alignment,
+    alignment: NodeStyle.Alignment,
     @Body body: MarkdownContent,
 ) = container(
     fullWidth = true,
-    alignment = alignment,
-    textAlignment = Container.TextAlignment.fromAlignment(alignment),
+    style = StyleOptions(alignment = alignment),
     body = body,
 )
 
@@ -161,7 +168,7 @@ fun align(
 @QFunction
 fun center(
     @Body body: MarkdownContent,
-) = align(Container.Alignment.CENTER, body)
+) = align(NodeStyle.Alignment.CENTER, body)
 
 /**
  * Turns content into a floating element, allowing subsequent content to wrap around it.

@@ -5,10 +5,10 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.createSectionHeading
 import com.quarkdown.core.ast.base.block.marker
-import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
@@ -720,7 +720,7 @@ fun pageFormat(
     @Name("bordercolor") borderColor: Color? = null,
     @Name("background") backgroundColor: Color? = null,
     @LikelyNamed columns: Int? = null,
-    @LikelyNamed alignment: Container.TextAlignment? = null,
+    @LikelyNamed alignment: NodeStyle.TextAlignment? = null,
 ): VoidValue {
     require(range == null || range.end != null) { "Page range must have a finite end." }
 

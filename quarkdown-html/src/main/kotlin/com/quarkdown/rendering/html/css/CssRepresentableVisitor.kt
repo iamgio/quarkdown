@@ -1,5 +1,6 @@
 package com.quarkdown.rendering.html.css
 
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.quarkdown.block.Box
@@ -37,15 +38,15 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
 
     override fun visit(position: CaptionPosition) = position.kebabCaseName
 
-    override fun visit(borderStyle: Container.BorderStyle) =
+    override fun visit(borderStyle: NodeStyle.BorderStyle) =
         when (borderStyle) {
-            Container.BorderStyle.NORMAL -> "solid"
+            NodeStyle.BorderStyle.NORMAL -> "solid"
             else -> borderStyle.kebabCaseName
         }
 
-    override fun visit(alignment: Container.Alignment) = alignment.kebabCaseName
+    override fun visit(alignment: NodeStyle.Alignment) = alignment.kebabCaseName
 
-    override fun visit(alignment: Container.TextAlignment) = alignment.kebabCaseName
+    override fun visit(alignment: NodeStyle.TextAlignment) = alignment.kebabCaseName
 
     override fun visit(alignment: Container.FloatAlignment) = "inline-${alignment.kebabCaseName}"
 
@@ -96,7 +97,7 @@ class CssRepresentableVisitor : RenderRepresentableVisitor<String> {
             SlidesFragment.Behavior.SHOW_HIDE -> "fade-in-then-out"
         }
 
-    override fun visit(size: TextTransformData.Size) = "size-${size.kebabCaseName}"
+    override fun visit(size: TextTransformData.Size) = "var(--qd-size-${size.kebabCaseName}, 1em)"
 
     override fun visit(weight: TextTransformData.Weight) = weight.kebabCaseName
 

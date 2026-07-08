@@ -3,7 +3,7 @@ package com.quarkdown.test
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.attributes.presence.hasCode
 import com.quarkdown.core.ast.attributes.presence.hasMath
-import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.context.options.HtmlOptions
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentType
@@ -13,8 +13,6 @@ import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.misc.color.NamedColor
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
-import com.quarkdown.stdlib.pageFormat
-import com.quarkdown.stdlib.paragraphStyle
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -109,7 +107,7 @@ class DocumentTest {
             assertEquals(NamedColor.GREEN.color, pageFormat.contentBorderColor)
             assertEquals(NamedColor.RED.color, pageFormat.backgroundColor)
             assertEquals(4, pageFormat.columnCount)
-            assertEquals(Container.TextAlignment.END, pageFormat.alignment)
+            assertEquals(NodeStyle.TextAlignment.END, pageFormat.alignment)
 
             assertEquals(2.0, documentInfo.layout.paragraphStyle.lineHeight)
             assertEquals(1.5, documentInfo.layout.paragraphStyle.spacing)
@@ -165,7 +163,7 @@ class DocumentTest {
         ) {
             assertEquals(
                 "<p>My Quarkdown document " +
-                    "<span class=\"size-tiny\">My Quarkdown document</span>.</p>" +
+                    "<span style=\"font-size: var(--qd-size-tiny, 1em);\">My Quarkdown document</span>.</p>" +
                     "<p>A comprehensive guide to Quarkdown</p>" +
                     "<table>" +
                     "<thead><tr><th>Key</th><th>Value</th></tr></thead>" +

@@ -1,7 +1,7 @@
 package com.quarkdown.core.document.layout.page
 
 import com.quarkdown.amber.annotations.Mergeable
-import com.quarkdown.core.ast.quarkdown.block.Container
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.function.value.data.Range
@@ -35,7 +35,7 @@ data class PageFormatInfo(
     val contentBorderColor: Color? = null,
     val backgroundColor: Color? = null,
     val columnCount: Int? = null,
-    val alignment: Container.TextAlignment? = null,
+    val alignment: NodeStyle.TextAlignment? = null,
 )
 
 /**

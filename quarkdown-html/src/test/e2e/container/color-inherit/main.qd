@@ -18,3 +18,8 @@ Standalone paragraph.
         # Nested heading
 
         Nested paragraph.
+
+.container fullwidth:{yes} background:{#00ff00}
+    # Background-only heading
+
+    Background-only paragraph.

@@ -27,7 +27,10 @@ class HeadingTest {
         }
 
         execute("###### .text {Hello, **world**} size:{tiny}") {
-            assertEquals("<h6><span class=\"size-tiny\">Hello, <strong>world</strong></span></h6>", it)
+            assertEquals(
+                "<h6><span style=\"font-size: var(--qd-size-tiny, 1em);\">Hello, <strong>world</strong></span></h6>",
+                it,
+            )
         }
     }
 

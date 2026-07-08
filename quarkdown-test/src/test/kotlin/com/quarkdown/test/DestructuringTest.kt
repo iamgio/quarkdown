@@ -118,19 +118,23 @@ class DestructuringTest {
                     "class=\"stack stack-grid\">" +
                     "<div class=\"container\">" +
                     "<p><strong>Llion Jones</strong><br />Google Research<br />" +
-                    "<span class=\"size-small\"><a href=\"llion@google.com\">llion@google.com</a></span>" +
+                    "<span style=\"font-size: var(--qd-size-small, 1em);\">" +
+                    "<a href=\"llion@google.com\">llion@google.com</a></span>" +
                     "<br /><span>&nbsp;</span></p>" +
                     "</div><div class=\"container\">" +
                     "<p><strong>Aidan N. Gomez</strong><br />University of Toronto<br />" +
-                    "<span class=\"size-small\"><a href=\"aidan@cs.toronto.edu\">aidan@cs.toronto.edu</a></span>" +
+                    "<span style=\"font-size: var(--qd-size-small, 1em);\">" +
+                    "<a href=\"aidan@cs.toronto.edu\">aidan@cs.toronto.edu</a></span>" +
                     "<br /><span>&nbsp;</span></p>" +
                     "</div><div class=\"container\">" +
                     "<p><strong>Łukasz Kaiser</strong><br />Google Brain<br />" +
-                    "<span class=\"size-small\"><a href=\"lukaszkaiser@google.com\">lukaszkaiser@google.com</a></span>" +
+                    "<span style=\"font-size: var(--qd-size-small, 1em);\">" +
+                    "<a href=\"lukaszkaiser@google.com\">lukaszkaiser@google.com</a></span>" +
                     "<br /><span>&nbsp;</span></p>" +
                     "</div><div class=\"container\">" +
                     "<p><strong>Illia Polosukhin</strong><br />-<br />" +
-                    "<span class=\"size-small\"><a href=\"illia.polosukhin@gmail.com\">illia.polosukhin@gmail.com</a></span>" +
+                    "<span style=\"font-size: var(--qd-size-small, 1em);\">" +
+                    "<a href=\"illia.polosukhin@gmail.com\">illia.polosukhin@gmail.com</a></span>" +
                     "<br /><span>&nbsp;</span></p>" +
                     "</div></div>",
                 it,

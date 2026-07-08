@@ -2,6 +2,7 @@ package com.quarkdown.core
 
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.attributes.error.asNode
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Paragraph
@@ -10,7 +11,6 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.block.Box
-import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentType
@@ -59,7 +59,7 @@ class FunctionNodeExpansionTest {
     fun echoBoolean(value: Boolean) = BooleanValue(value)
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun echoEnum(value: Container.Alignment) = StringValue(value.name)
+    fun echoEnum(value: NodeStyle.Alignment) = StringValue(value.name)
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun resourceContent(path: String) = StringValue(javaClass.getResourceAsStream("/function/$path")!!.reader().readText())
