@@ -37,28 +37,18 @@ The **`.container`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Lay
             ##! Right
             Text on right column.
 
+## Container-specific parameters
+
+| Parameter   | Description                                                        | Accepts                 | Default       |
+|-------------|--------------------------------------------------------------------|-------------------------|---------------|
+| `width`     | Box width constraint.                                              | [`Size`](sizes.qd)      | No constraint |
+| `height`    | Box height constraint.                                             | [`Size`](sizes.qd)      | No constraint |
+| `fullwidth` | Whether to take up the parent's full width. Overridden by `width`. | [`Boolean`](boolean.qd) | False         |
+| `classname` | Custom CSS class name.                                             | String                  | None          |
+
 ## Styling
 
-The following optional parameters are available:
-
-| Parameter | Description | Accepts | Default |
-|-----------|-------------|---------|---------|
-| `width` | Box width constraint. | [`Size`](sizes.qd) | No constraint |
-| `height` | Box height constraint. | [`Size`](sizes.qd) | No constraint |
-| `fullwidth` | Whether to take up the parent's full width. Overridden by `width`. | [`Boolean`](boolean.qd) | False |
-| `foreground` | Text color. | [`Color`](color.qd) | Document's default |
-| `background` | Background color. | [`Color`](color.qd) | None |
-| `border` | Border color. | [`Color`](color.qd) | Browser's default if `borderwidth` is set, none otherwise |
-| `borderwidth` | Border size. | [`Sizes`](sizes.qd) | Browser's default if `border` is set, none otherwise |
-| `borderstyle` | Border type. | `normal`, `dashed`, `dotted`, `double` | `normal` if `border` or `borderwidth` is set, none otherwise |
-| `margin ` | Whitespace outside the content. | [`Sizes`](sizes.qd) | None |
-| `padding ` | Whitespace around the content. | [`Sizes`](sizes.qd) | None |
-| `radius` | Corner or border radius. | [`Sizes`](sizes.qd) | None |
-| `alignment` | Content alignment. | `start`, `center`, `end` | Browser's default |
-| `textalignment` | Text alignment. | `start`, `center`, `end`, `justify` | Browser's default |
-| `fontsize`, `fontweight`, `fontstyle`, `fontvariant`, `textdecoration`, `textcase` | Text transformation. See [Advanced text formatting](text.qd) for details. | | None |
-| `classname` | Custom CSS class name. | String | None |
-
+`.container` accepts every option described on [*Element styling*](element-styling.qd), for customizing colors, spacing, borders, and text appearance.
 
 .examplemirror
     .container fullwidth:{yes} borderstyle:{dashed} padding:{1cm} fontsize:{medium} fontstyle:{italic} fontvariant:{smallcaps}

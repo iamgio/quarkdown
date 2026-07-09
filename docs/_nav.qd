@@ -56,6 +56,7 @@
 ###! Layout
 - [Stacks: rows, columns, grids](stacks.qd)
 - [Container](container.qd)
+- [Element styling](element-styling.qd)
 - [Align](align.qd)
 - [Float](float.qd)
 - [Figure](custom-figure.qd)
