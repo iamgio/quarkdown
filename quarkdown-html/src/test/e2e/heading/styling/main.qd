@@ -1,0 +1,7 @@
+.extend {heading}
+    depth:
+    .super foreground:{#ff0000} background:{#00ff00} \
+           fontweight:{bold} fontstyle:{italic} fontvariant:{smallcaps} \
+           textdecoration:{underline}
+
+## Styled heading

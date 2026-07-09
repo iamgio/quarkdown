@@ -126,6 +126,18 @@ class HeadingTest {
     }
 
     @Test
+    fun `heading primitive with styling`() {
+        execute(".heading {Hello} depth:{2} foreground:{red} background:{blue} fontsize:{small}") {
+            assertEquals(
+                "<h2 style=\"color: rgba(255, 0, 0, 1.0); " +
+                    "background-color: rgba(0, 0, 255, 1.0); " +
+                    "font-size: var(--qd-size-small, 1em);\">Hello</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `duplicate auto identifiers are disambiguated`() {
         execute(
             """

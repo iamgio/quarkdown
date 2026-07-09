@@ -9,6 +9,8 @@ import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
+import com.quarkdown.core.ast.attributes.style.NodeStyle
+import com.quarkdown.core.ast.attributes.style.StylableNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.function.call.FunctionCallArgument
@@ -40,11 +42,13 @@ class Heading(
     val canBreakPage: Boolean = true,
     override val canTrackLocation: Boolean = true,
     val excludeFromTableOfContents: Boolean = false,
+    override val style: NodeStyle = NodeStyle(),
 ) : TextNode,
     Identifiable,
     LocationTrackableNode,
     CrossReferenceableNode,
     LocalizedKind,
+    StylableNode,
     PrimitiveFunctionBackedNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 

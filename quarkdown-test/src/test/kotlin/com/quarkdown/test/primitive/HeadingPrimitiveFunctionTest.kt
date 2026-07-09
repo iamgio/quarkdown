@@ -154,6 +154,29 @@ class HeadingPrimitiveFunctionTest {
     }
 
     @Test
+    fun `styling can be applied via super`() {
+        execute(
+            """
+            .extend {heading}
+                depth:
+                .super foreground:{red} \
+                       background:{.takeif {red} {@lambda .depth::islower than:{3}}} \
+                       fontvariant:{smallcaps}
+
+            ## Hello
+            
+            ### Hello
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h2 style=\"color: rgba(255, 0, 0, 1.0); background-color: rgba(255, 0, 0, 1.0); font-variant: small-caps;\">Hello</h2>" +
+                    "<h3 style=\"color: rgba(255, 0, 0, 1.0); font-variant: small-caps;\">Hello</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `extension reaches headings nested inside a blockquote`() {
         execute(
             """

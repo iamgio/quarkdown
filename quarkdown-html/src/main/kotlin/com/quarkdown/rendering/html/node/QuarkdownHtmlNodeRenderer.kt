@@ -78,7 +78,6 @@ import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.rendering.html.HtmlIdentifierProvider
 import com.quarkdown.rendering.html.HtmlIdentifierProvider.Companion.sanitizeId
 import com.quarkdown.rendering.html.HtmlTagBuilder
-import com.quarkdown.rendering.html.css.all
 import com.quarkdown.rendering.html.css.asCSS
 import com.quarkdown.rendering.html.css.textTransform
 
@@ -210,11 +209,10 @@ class QuarkdownHtmlNodeRenderer(
 
             +node.children
 
-            style {
+            style(node.style) {
                 "width" value node.width
                 "height" value node.height
                 "float" value node.float
-                all(node.style)
             }
         }
 
@@ -639,6 +637,7 @@ class QuarkdownHtmlNodeRenderer(
                     ?.getId(node),
             ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
             .withLocationLabel(node)
+            .style(node.style)
             .build()
     }
 
