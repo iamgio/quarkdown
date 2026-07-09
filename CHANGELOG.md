@@ -6,6 +6,26 @@
 
 &nbsp;
 
+#### Full styling options on `.heading`
+
+`.container`'s styling options, such as `foreground`, `background`, `border`, `padding`, and `fontsize`, are now available on `.heading` as well. This allows for full customization without needing to wrap the heading in a container.
+
+```markdown
+.heading {Introduction} depth:{1} background:{blue} radius:{8px}
+```
+
+This plays particularly well with the new primitive extension system:
+
+```markdown
+.extend {heading}
+    content:
+    .super background:{red} foreground:{white} padding:{10px}
+```
+
+The plan is to eventually extend these options to all element types and primitive functions.
+
+&nbsp;
+
 #### [Regex match](https://quarkdown.com/wiki/regex-match)
 
 The new `.match` function finds every substring of inline content that matches a regular expression and replaces each match with the inline content produced by a lambda.

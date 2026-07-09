@@ -61,4 +61,13 @@ You can assign a custom identifier for [cross-referencing](cross-references.qd):
 .heading {Introduction} depth:{2} ref:{intro}
 ```
 
+## Styling
+
+`.heading` accepts every option described on [Element styling](element-styling.qd), for customizing colors, spacing, borders, and text appearance. 
+
+.examplemirror
+    .heading {Introduction} depth:{2} foreground:{teal} fontvariant:{smallcaps} indexed:{no}
+
+## Decorative headings
+
 See also [Decorative headings](decorative-headings.qd) for headings excluded from numbering and the table of contents.
