@@ -1,10 +1,12 @@
 package com.quarkdown.rendering.html
 
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.rendering.tag.TagBuilder
 import com.quarkdown.core.rendering.tag.tagBuilder
 import com.quarkdown.core.util.indent
 import com.quarkdown.rendering.html.css.CssBuilder
+import com.quarkdown.rendering.html.css.all
 import com.quarkdown.rendering.html.css.css
 import com.quarkdown.rendering.html.node.BaseHtmlNodeRenderer
 
@@ -86,6 +88,22 @@ class HtmlTagBuilder(
      * @see com.quarkdown.rendering.html.css.css
      */
     fun style(init: CssBuilder.() -> Unit) = optionalAttribute("style", css(init).takeUnless { it.isEmpty() })
+
+    /**
+     * Applies a [NodeStyle] via the `style` attribute to this tag.
+     * The attribute is _not_ added if the generated CSS string is empty.
+     * @param style the style to apply
+     * @param init additional CSS builder initialization
+     * @return this for concatenation
+     * @see com.quarkdown.rendering.html.css.css
+     */
+    fun style(
+        style: NodeStyle,
+        init: CssBuilder.() -> Unit = {},
+    ) = style {
+        init()
+        all(style)
+    }
 
     /**
      * Applies a single class name via the `class` attribute to this tag.

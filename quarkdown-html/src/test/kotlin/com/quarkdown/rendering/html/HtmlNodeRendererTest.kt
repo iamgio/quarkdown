@@ -529,6 +529,20 @@ class HtmlNodeRendererTest {
         assertEquals(out.next(), Heading(2, listOf(Text("Foo bar"))).render(autoPageBreak))
         assertEquals(out.next(), Heading(3, listOf(Text("Foo bar"))).render(autoPageBreak))
         assertEquals(out.next(), Heading(4, listOf(Text("Foo bar"))).render(autoPageBreak))
+
+        // Styling.
+        assertEquals(
+            out.next(),
+            Heading(
+                2,
+                listOf(Text("Foo bar")),
+                style =
+                    NodeStyle(
+                        foregroundColor = Color(255, 0, 0),
+                        textTransform = TextTransformData(variant = TextTransformData.Variant.SMALL_CAPS),
+                    ),
+            ).render(),
+        )
     }
 
     private fun listItems() =

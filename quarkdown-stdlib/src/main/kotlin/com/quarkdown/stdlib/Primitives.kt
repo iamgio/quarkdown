@@ -19,6 +19,7 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
+import com.quarkdown.processor.annotation.Spread
 
 /**
  * Creates a heading with fine-grained control over its behavior.
@@ -50,6 +51,7 @@ fun heading(
     @Name("numbered") canTrackLocation: Boolean = true,
     @Name("indexed") includeInTableOfContents: Boolean = true,
     @Name("breakpage") canBreakPage: Boolean = true,
+    @Spread style: StyleOptions = StyleOptions(),
 ): NodeValue {
     require(depth in Heading.MIN_DEPTH..Heading.MAX_DEPTH) {
         "Heading depth must be between ${Heading.MIN_DEPTH} and ${Heading.MAX_DEPTH}, but got $depth."
@@ -62,6 +64,7 @@ fun heading(
         canBreakPage = canBreakPage,
         canTrackLocation = canTrackLocation,
         excludeFromTableOfContents = !includeInTableOfContents,
+        style = style.toNodeStyle(),
     ).let(::NodeValue)
 }
 
