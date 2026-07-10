@@ -70,6 +70,23 @@ class HeadingPrimitiveFunctionTest {
     }
 
     @Test
+    fun `content can be matched against pattern`() {
+        execute(
+            """
+            .extend {heading}
+                content:
+                .super
+                    .content::match {[Qq]uark(down|s)?}
+                        *.1*
+            
+            ## Quarkdown takes its name from quarks
+            """.trimIndent(),
+        ) {
+            assertEquals("<h2><em>Quarkdown</em> takes its name from <em>quarks</em></h2>", it)
+        }
+    }
+
+    @Test
     fun `content can be transformed`() {
         execute(
             """
@@ -171,6 +188,25 @@ class HeadingPrimitiveFunctionTest {
             assertEquals(
                 "<h2 style=\"color: rgba(255, 0, 0, 1.0); background-color: rgba(255, 0, 0, 1.0); font-variant: small-caps;\">Hello</h2>" +
                     "<h3 style=\"color: rgba(255, 0, 0, 1.0); font-variant: small-caps;\">Hello</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `icon can be used as content`() {
+        execute(
+            """
+            .extend {heading}
+                content:
+                .super
+                    .icon {boxes} *.content*!
+            
+            ## Heading
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h2><i class=\"icon-image bi bi-boxes\" aria-hidden=\"true\"></i> <em>Heading</em>!</h2>",
                 it,
             )
         }
