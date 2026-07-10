@@ -42,7 +42,32 @@ class HeadingPrimitiveFunctionTest {
     }
 
     @Test
-    fun `content can be matched and conditionally wrapped`() {
+    fun `content can be matched and conditionally wrapped (where)`() {
+        execute(
+            """
+             .noautopagebreak
+
+            .extend {heading} where:{@lambda content: .content::equals {Hi}}
+                 content:
+                 .container
+                     .super 
+
+             # Hello
+
+             ## Hi
+
+             ### Hey
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1>Hello</h1><div class=\"container\"><h2>Hi</h2></div><h3>Hey</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `content can be matched and conditionally wrapped (if)`() {
         execute(
             """
             .noautopagebreak

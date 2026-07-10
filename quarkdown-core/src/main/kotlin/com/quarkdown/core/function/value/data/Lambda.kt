@@ -165,9 +165,9 @@ open class Lambda(
      * @param V **wrapped** value type (which wraps [T]) to convert the resulting dynamic value to
      * @return the result of the lambda action, as a statically typed value
      */
-    inline fun <reified T, reified V : Value<T>> invoke(vararg values: Value<*>): V {
+    inline fun <reified T, reified V : Value<T>> invoke(values: List<Value<*>>): V {
         // Invoke the lambda action and convert the result to a static type.
-        val result = invokeDynamic(*values)
+        val result = invokeDynamic(values)
 
         return when (result) {
             is V -> result
@@ -177,4 +177,6 @@ open class Lambda(
         } as? V
             ?: throw IllegalArgumentException("Unexpected lambda result: expected ${V::class}, found ${result::class}")
     }
+
+    inline fun <reified T, reified V : Value<T>> invoke(vararg values: Value<*>): V = invoke<T, V>(values.toList())
 }

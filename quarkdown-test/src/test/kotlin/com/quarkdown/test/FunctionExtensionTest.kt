@@ -336,6 +336,44 @@ class FunctionExtensionTest {
     }
 
     @Test
+    fun `conditional extension`() {
+        execute(
+            """
+            .function {mysum}
+                 a b:
+                 .a::sum {.b}
+
+            .extend {mysum} where:{@lambda a b: .a::sum {.b}::islower than:{10}}
+                a:
+                .a
+            
+            .mysum {10} {11} .mysum {4} {8} .mysum {3} {5}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>21 12 3</p>", it)
+        }
+    }
+
+    @Test
+    fun `conditional extension, partial args`() {
+        execute(
+            """
+            .function {mysum}
+                 a b:
+                 .a::sum {.b}
+
+            .extend {mysum} where:{@lambda a: .a::islower than:{10}}
+                a:
+                .a
+            
+            .mysum {10} {11} .mysum {4} {8} .mysum {3} {5}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>21 4 3</p>", it)
+        }
+    }
+
+    @Test
     fun `stdlib extension`() {
         execute(
             """
@@ -353,13 +391,11 @@ class FunctionExtensionTest {
     fun `stdlib extension with injected parameter`() {
         execute(
             """
-            .extend {heading}
+            .extend {heading} where:{@lambda content: .content::equals {Hi}}
                 content:
-                .if {.content::equals {Hi}}
-                    .container
-                        .super
-                .ifnot {.content::equals {Hi}}
+                .container
                     .super
+                        .content::plaintext::uppercase
             
             .heading {Hi} depth:{2}
             
@@ -367,7 +403,7 @@ class FunctionExtensionTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div class=\"container\"><h2>Hi</h2></div><h2>Hello</h2>",
+                "<div class=\"container\"><h2>HI</h2></div><h2>Hello</h2>",
                 it,
             )
         }
