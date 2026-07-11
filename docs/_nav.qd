@@ -20,6 +20,8 @@
 - [Document metadata](document-metadata.qd)
   - [Document types](document-types.qd)
 - [Theme](themes.qd)
+- [Element styling](element-styling.qd)
+  - [Styling properties](element-styling-properties.qd)
 - [Fonts](font-configuration.qd)
 - [Page format](page-format.qd)
   - [Multi-column layout](multi-column-layout.qd)
@@ -56,7 +58,6 @@
 ###! Layout
 - [Stacks: rows, columns, grids](stacks.qd)
 - [Container](container.qd)
-- [Element styling](element-styling.qd)
 - [Align](align.qd)
 - [Float](float.qd)
 - [Figure](custom-figure.qd)
