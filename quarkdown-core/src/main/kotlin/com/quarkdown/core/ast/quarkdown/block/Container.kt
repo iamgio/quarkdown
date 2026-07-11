@@ -26,7 +26,7 @@ class Container(
     val float: FloatAlignment? = null,
     val fullColumnSpan: Boolean = false,
     val className: String? = null,
-    override val style: NodeStyle = NodeStyle(),
+    override val style: NodeStyle = NodeStyle.DEFAULT,
     @Diverge override val children: List<Node>,
 ) : NestableNode,
     StylableNode {

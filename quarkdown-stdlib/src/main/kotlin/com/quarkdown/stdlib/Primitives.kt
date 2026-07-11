@@ -51,7 +51,7 @@ fun heading(
     @Name("numbered") canTrackLocation: Boolean = true,
     @Name("indexed") includeInTableOfContents: Boolean = true,
     @Name("breakpage") canBreakPage: Boolean = true,
-    @Spread style: StyleOptions = StyleOptions(),
+    @Spread style: StyleOptions = StyleOptions.DEFAULT,
 ): NodeValue {
     require(depth in Heading.MIN_DEPTH..Heading.MAX_DEPTH) {
         "Heading depth must be between ${Heading.MIN_DEPTH} and ${Heading.MAX_DEPTH}, but got $depth."

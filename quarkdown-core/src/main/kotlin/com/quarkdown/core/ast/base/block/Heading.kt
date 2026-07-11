@@ -42,7 +42,7 @@ class Heading(
     val canBreakPage: Boolean = true,
     override val canTrackLocation: Boolean = true,
     val excludeFromTableOfContents: Boolean = false,
-    override val style: NodeStyle = NodeStyle(),
+    override val style: NodeStyle = NodeStyle.DEFAULT,
 ) : TextNode,
     Identifiable,
     LocationTrackableNode,

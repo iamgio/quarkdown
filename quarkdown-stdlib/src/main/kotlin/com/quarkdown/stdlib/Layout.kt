@@ -78,8 +78,9 @@ data class StyleOptions(
     @Name("textcase") val textCase: TextTransformData.Case? = null,
 ) {
     /** @see com.quarkdown.core.ast.attributes.style.StylableNode */
-    fun toNodeStyle(): NodeStyle =
-        NodeStyle(
+    fun toNodeStyle(): NodeStyle {
+        if (this == DEFAULT) return NodeStyle.DEFAULT
+        return NodeStyle(
             foregroundColor = foregroundColor,
             backgroundColor = backgroundColor,
             borderColor = borderColor,
@@ -100,6 +101,11 @@ data class StyleOptions(
                     case = textCase,
                 ),
         )
+    }
+
+    companion object {
+        val DEFAULT = StyleOptions()
+    }
 }
 
 /**
@@ -125,7 +131,7 @@ fun container(
     @LikelyNamed float: Container.FloatAlignment? = null,
     @Name("fullspan") fullColumnSpan: Boolean = false,
     @Name("classname") className: String? = null,
-    @Spread style: StyleOptions = StyleOptions(),
+    @Spread style: StyleOptions = StyleOptions.DEFAULT,
     @Body body: MarkdownContent? = null,
 ) = Container(
     width,

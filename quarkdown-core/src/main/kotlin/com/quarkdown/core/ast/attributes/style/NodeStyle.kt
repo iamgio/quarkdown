@@ -33,6 +33,10 @@ data class NodeStyle(
     val textAlignment: TextAlignment? = null,
     val textTransform: TextTransformData? = null,
 ) {
+    companion object {
+        val DEFAULT = NodeStyle()
+    }
+
     /**
      * Possible alignment types.
      */
