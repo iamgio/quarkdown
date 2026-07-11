@@ -43,7 +43,7 @@ The **`.tablefilter`** function keeps or removes rows based on the values of a s
 | `filter`  | Lambda that returns whether each row should be kept, with the value of its cell in the corresponding column as input. | [`Dynamic`](typing.qd) -> [`Boolean`](boolean.qd) [lambda](lambda.qd) |
 
 .examplemirror
-    .tablefilter {2} {@lambda x: .x::isgreater {20}}
+    .tablefilter {2} {x: .x::isgreater {20}}
         | Name | Age | City |
         |------|-----|------|
         | John | 25  | NY   |
@@ -62,7 +62,7 @@ The **`.tablecompute`** function computes the cells in a column and appends the 
 See [*Iterable*](iterable.qd) to learn more about available operations on collections.
 
 .examplemirror
-    .tablecompute {2} {@lambda x: .x::average::round}
+    .tablecompute {2} {x: .x::average::round}
         | Name | Age | City |
         |------|-----|------|
         | John | 25  | NY   |
@@ -74,7 +74,7 @@ See [*Iterable*](iterable.qd) to learn more about available operations on collec
 You can chain multiple table operations. The order of operations goes from inner to outer:
 
 .examplemirror
-    .tablecompute {2} {@lambda x: .x::average::round}
+    .tablecompute {2} {x: .x::average::round}
         .tablesort {2}
             | Name | Age | City |
             |------|-----|------|

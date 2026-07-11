@@ -160,11 +160,10 @@ fun ifNot(
  *
  * > Output: `a`
  *
- * Note that, like any lambda, its content can be inlined by means of the `@lambda` annotation.
- * The previous snippet can be simplified as follows:
+ * Its content can also be inlined. The previous snippet can be simplified as follows:
  *
  * ```
- * .foreach {.collection} {@lambda item: .item::lowercase}::first
+ * .foreach {.collection} {item: .item::lowercase}::first
  * ```
  *
  * @param iterable collection to iterate
@@ -354,7 +353,7 @@ fun function(
  * The following snippets have identical behavior:
  *
  * - ```
- *   .extend {greet} where:{@lambda name: .name::equals {World}}
+ *   .extend {greet} where:{name: .name::equals {World}}
  *       name:
  *       .super::uppercase
  *   ```

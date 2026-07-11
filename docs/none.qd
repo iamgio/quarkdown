@@ -40,17 +40,17 @@ This is particularly useful when a value is stored in a variable that might or m
 
 .example
     ```markdown
-    .num::takeif {@lambda x: .x::equals {5}}
+    .num::takeif {x: .x::equals {5}}
     ```
     .quarkdownoutput
         - If `num` is 5: *5*
         - Otherwise: *None*
 
-    > Confused about `@lambda`? It begins a parametric [inline `Lambda`](lambda.qd#inline-lambda). Check its page for further details.
+    > Curious about the `x:` syntax? It declares a parametric [inline `Lambda`](lambda.qd#inline-lambda). Check its page for further details.
 
 .example
     ```markdown
-    .num::takeif {@lambda x: .x::iseven}::ifpresent {Even}::otherwise {Odd}
+    .num::takeif {x: .x::iseven}::ifpresent {Even}::otherwise {Odd}
     ```
     .quarkdownoutput
         - If `num` is even: *Even*
@@ -58,7 +58,7 @@ This is particularly useful when a value is stored in a variable that might or m
 
 .example
     ```markdown
-    .x::ifpresent {@lambda Yes, .1 is present}::otherwise {Not present}
+    .x::ifpresent {Yes, .1 is present}::otherwise {Not present}
     ```
     .quarkdownoutput
         - If `x` is `something`: *Yes, something is present*

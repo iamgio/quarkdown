@@ -36,7 +36,7 @@ import com.quarkdown.processor.annotation.Spread
  * As a [Heading] primitive, this function can be used in `.extend` to affect all headings in the document:
  *
  * ```markdown
- * .extend {heading} where:{@lambda depth: .depth::equals {1}}
+ * .extend {heading} where:{depth: .depth::equals {1}}
  *     content:
  *     .super foreground:{blue}
  *         *.content*

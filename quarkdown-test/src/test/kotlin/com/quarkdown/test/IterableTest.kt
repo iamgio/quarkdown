@@ -191,7 +191,7 @@ class IterableTest {
                      - b: 1
                      - c: 2
              
-            .foreach {.dict::sorted by:{@lambda name value: .value}}
+            .foreach {.dict::sorted by:{name value: .value}}
                 name value:
                 .name
             """.trimIndent(),

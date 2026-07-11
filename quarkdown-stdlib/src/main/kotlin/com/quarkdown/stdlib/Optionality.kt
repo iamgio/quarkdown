@@ -67,15 +67,13 @@ fun otherwise(
 ): DynamicValue = if (isNone(value.unwrappedValue)) fallback else value
 
 /**
- * Maps [value] to the result of [mapping].
- *
- * Note: this function is usually inlined. When inlining lambda arguments, an explicit `@lambda` annotation is required:
+ * Maps [value] to the result of [mapping]. This function is usually inlined:
  *
  * ```
- * .name::ifpresent {@lambda x: .x::uppercase}::otherwise {unnamed}
+ * .name::ifpresent {x: .x::uppercase}::otherwise {unnamed}
  * ```
  *
- * As with any inlined lambda, `@lambda` can be omitted if the result is constant:
+ * A constant result is also valid:
  *
  * ```
  * .name::ifpresent {I have a name}::otherwise {I'm unnamed}
@@ -99,16 +97,16 @@ fun ifPresent(
 /**
  * Keeps [value] if [condition] is true, otherwise returns [none].
  *
- * Note: this function is usually inlined. When inlining lambda arguments, an explicit `@lambda` annotation is required:
+ * Note: this function is usually inlined:
  *
  * ```
- * .takeif {5} {@lambda x: .x::iseven} <!-- None -->
+ * .takeif {5} {x: .x::iseven} <!-- None -->
  * ```
  *
  * This function is particularly useful when chained, for example:
  *
  * ```
- * .sum {2} {3}::takeif {@lambda x: .iseven {.x}}::otherwise {0} <!-- 0 -->
+ * .sum {2} {3}::takeif {x: .iseven {.x}}::otherwise {0} <!-- 0 -->
  * ```
  *
  * @param value value to check

@@ -165,7 +165,7 @@ fun tableSort(
  *
  * Example:
  * ```
- * .tablefilter {2} {@lambda x: .x::isgreater {20}}
+ * .tablefilter {2} {x: .x::isgreater {20}}
  *     | Name | Age | City |
  *     |------|-----|------|
  *     | John | 25  | NY   |
@@ -211,7 +211,7 @@ fun tableFilter(
  *
  * Example:
  * ```
- * .tablecompute {2} {@lambda x: .x::average::round}
+ * .tablecompute {2} {x: .x::average::round}
  *     | Name | Age | City |
  *     |------|-----|------|
  *     | John | 25  | NY   |

@@ -57,7 +57,7 @@ This plays particularly well with the new primitive extension system:
 `.extend`'s new `where` parameter defines a condition to meet. If not met, the behavior falls back to the original function definition.
 
 ```markdown
-.extend {heading} where:{@lambda depth: .depth::islower than:{3}}
+.extend {heading} where:{depth: .depth::islower than:{3}}
     .super background:{teal}
 ```
 
@@ -91,6 +91,26 @@ This is particularly useful for element styling:
 &nbsp;
 
 ### Changed
+
+&nbsp;
+
+#### [Inline lambdas without `@lambda`](https://quarkdown.com/wiki/lambda#inline-lambda)
+
+Inline lambdas passed as arguments no longer require the `@lambda` prefix. When the target parameter is a `Lambda`, the argument is parsed as a lambda directly.
+
+```markdown
+.num::takeif {x: .x::equals {5}}
+```
+
+```markdown
+.mydictionary::sorted by:{name value: .value}
+
+```markdown
+.extend {heading} where:{depth: .depth::islower than:{3}}
+    .super background:{teal}
+```
+
+The `@lambda` prefix is still accepted for backward compatibility with older documents.
 
 &nbsp;
 

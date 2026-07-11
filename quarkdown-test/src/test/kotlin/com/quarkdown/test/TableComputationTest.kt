@@ -54,7 +54,7 @@ class TableComputationTest {
 
     @Test
     fun `plain filtering`() {
-        execute(".tablefilter {2} {@lambda x: .x::isgreater {20}}\n$table") {
+        execute(".tablefilter {2} {x: .x::isgreater {20}}\n$table") {
             assertEquals(
                 htmlTable(john + barbara + lisa),
                 it,
@@ -64,7 +64,7 @@ class TableComputationTest {
 
     @Test
     fun `plain sum computing`() {
-        execute(".tablecompute {2} {@lambda x: .x::sumall}\n$table") {
+        execute(".tablecompute {2} {x: .x::sumall}\n$table") {
             assertEquals(
                 htmlTable(
                     john + barbara + lisa + mike +
@@ -77,7 +77,7 @@ class TableComputationTest {
 
     @Test
     fun `plain average computing`() {
-        execute(".tablecompute {2} {@lambda .1::average::round}\n$table") {
+        execute(".tablecompute {2} {.1::average::round}\n$table") {
             assertEquals(
                 htmlTable(
                     john + barbara + lisa + mike +
@@ -91,7 +91,7 @@ class TableComputationTest {
     @Test
     fun composition() {
         execute(
-            ".tablecompute {2} {@lambda x: .x::average::round}\n" +
+            ".tablecompute {2} {x: .x::average::round}\n" +
                 "\t.tablesort {2}\n" +
                 table.indent("\t"),
         ) {
@@ -151,7 +151,7 @@ class TableComputationTest {
 
     @Test
     fun `compute on csv`() {
-        execute(".tablecompute {2} {@lambda x: .x::average::round}\n\t.csv {csv/people.csv}") {
+        execute(".tablecompute {2} {x: .x::average::round}\n\t.csv {csv/people.csv}") {
             assertEquals(
                 htmlTable(
                     john + lisa + mike +
@@ -165,7 +165,7 @@ class TableComputationTest {
     @Test
     fun `composition on csv`() {
         execute(
-            ".tablecompute {2} {@lambda x: .x::average::round}\n" +
+            ".tablecompute {2} {x: .x::average::round}\n" +
                 "\t.tablesort {2}\n" +
                 "\t\t.csv {csv/people.csv}",
         ) {

@@ -3,10 +3,9 @@ package com.quarkdown.test
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
 
 /**
- * Tests for `@lambda` expressions: implicit `.1` parameters, explicit named parameters,
+ * Tests for lambda expressions: implicit `.1` parameters, explicit named parameters,
  * and how lambdas combine with higher-order functions such as `.takeif` and `.otherwise`.
  */
 class LambdaTest {
@@ -16,7 +15,7 @@ class LambdaTest {
             """
             .let {hello}
                 .1
-                
+
                 .let {world}
                     .1
             """.trimIndent(),
@@ -26,22 +25,10 @@ class LambdaTest {
     }
 
     @Test
-    fun `bare body without @lambda fails to bind a parameter`() {
-        // `.1` is only defined within an actual lambda block; the bare body cannot resolve it.
-        assertFails {
-            execute(
-                """
-                .takeif {3} { .islower {.1} than:{5} }
-                """.trimIndent(),
-            ) {}
-        }
-    }
-
-    @Test
-    fun `takeif keeps the value when the @lambda predicate is true`() {
+    fun `inline lambda binds implicit parameter`() {
         execute(
             """
-            .takeif {3} { @lambda .islower {.1} than:{5} }
+            .takeif {3} { .islower {.1} than:{5} }
             """.trimIndent(),
         ) {
             assertEquals("<p>3</p>", it)
@@ -49,10 +36,21 @@ class LambdaTest {
     }
 
     @Test
-    fun `takeif drops the value when the @lambda predicate is false`() {
+    fun `inline lambda binds explicit named parameter`() {
         execute(
             """
-            .takeif {3} { @lambda .islower {.1} than:{2} }
+            .takeif {3} { x: .islower {.x} than:{5} }
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>3</p>", it)
+        }
+    }
+
+    @Test
+    fun `inline lambda drops value when predicate is false`() {
+        execute(
+            """
+            .takeif {3} { x: .islower {.x} than:{2} }
             """.trimIndent(),
         ) {
             assertEquals(
@@ -63,21 +61,21 @@ class LambdaTest {
     }
 
     @Test
-    fun `lambda with explicit named parameter`() {
+    fun `inline lambda in chained call`() {
         execute(
             """
-            .takeif {3} { @lambda x: .islower {.x} than:{5} }
+            .takeif {3} {x: .iseven {.x}}::otherwise {0}
             """.trimIndent(),
         ) {
-            assertEquals("<p>3</p>", it)
+            assertEquals("<p>0</p>", it)
         }
     }
 
     @Test
-    fun `takeif combined with otherwise as fallback`() {
+    fun `inline lambda as fallback argument`() {
         execute(
             """
-            .otherwise {.takeif {3} {@lambda x: .iseven {.x}}} {0}
+            .otherwise {.takeif {3} {x: .iseven {.x}}} {0}
             """.trimIndent(),
         ) {
             assertEquals("<p>0</p>", it)
@@ -104,13 +102,13 @@ class LambdaTest {
     }
 
     @Test
-    fun `takeif combined with otherwise via chaining`() {
+    fun `legacy @lambda prefix is still accepted for backward compatibility`() {
         execute(
             """
-            .takeif {3} {@lambda x: .iseven {.x}}::otherwise {0}
+            .takeif {3} {@lambda x: .islower {.x} than:{5} }
             """.trimIndent(),
         ) {
-            assertEquals("<p>0</p>", it)
+            assertEquals("<p>3</p>", it)
         }
     }
 }

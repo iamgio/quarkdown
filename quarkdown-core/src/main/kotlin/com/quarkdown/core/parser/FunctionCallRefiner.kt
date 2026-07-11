@@ -4,8 +4,8 @@ import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.call.FunctionCallArgument
 import com.quarkdown.core.function.call.UncheckedFunctionCall
+import com.quarkdown.core.function.expression.RawInlineExpression
 import com.quarkdown.core.function.value.DynamicValue
-import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
 
 /**
@@ -47,8 +47,7 @@ class FunctionCallRefiner(
                 .asSequence()
                 .map { arg ->
                     val raw = arg.value.trim()
-                    // Convert the raw argument to an expression.
-                    val expression = ValueFactory.safeExpression(raw, context)
+                    val expression = RawInlineExpression(raw, context)
                     FunctionCallArgument(
                         expression,
                         name = arg.name,

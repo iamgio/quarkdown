@@ -169,7 +169,7 @@ class OptionalityTest {
         execute(
             """
             .var {num} {5}
-            .num::takeif {@lambda x: .x::equals {5}}
+            .num::takeif {x: .x::equals {5}}
             """.trimIndent(),
         ) {
             assertEquals(
@@ -182,7 +182,7 @@ class OptionalityTest {
             """
             .function {oddeven}
               num:
-              .num::takeif {@lambda x: .x::iseven}::ifpresent {Even}::otherwise {Odd}
+              .num::takeif {x: .x::iseven}::ifpresent {Even}::otherwise {Odd}
               
             .oddeven {5}
             
@@ -200,7 +200,7 @@ class OptionalityTest {
             """
             .function {present}
               x:
-              .x::ifpresent {@lambda Yes, .1 is present}::otherwise {Not present}
+              .x::ifpresent {Yes, .1 is present}::otherwise {Not present}
             
             .present {5}
             
@@ -225,9 +225,9 @@ class OptionalityTest {
               - b: 2
               - c: 3
               
-            .x::get {b}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            .x::get {b}::ifpresent {.1::sum {3}}::otherwise {No}
 
-            .x::get {d}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            .x::get {d}::ifpresent {.1::sum {3}}::otherwise {No}
             """.trimIndent(),
         ) {
             assertEquals("<p>5</p><p>No</p>", it)
@@ -241,9 +241,9 @@ class OptionalityTest {
               - 20
               - 30
               
-            .x::getat {2}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            .x::getat {2}::ifpresent {.1::sum {3}}::otherwise {No}
             
-            .x::getat {5}::ifpresent {@lambda .1::sum {3}}::otherwise {No}
+            .x::getat {5}::ifpresent {.1::sum {3}}::otherwise {No}
             """.trimIndent(),
         ) {
             assertEquals("<p>23</p><p>No</p>", it)
