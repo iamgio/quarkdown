@@ -5,6 +5,7 @@ import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.call.executeAs
 import com.quarkdown.core.function.signatureAsString
+import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.data.LambdaParameter
 import com.quarkdown.stdlib.extend
@@ -20,6 +21,8 @@ private const val SUPER_NAME = "super"
  *
  * @param context context to register the wrapper in
  * @param targetName name of the existing function to extend
+ * @param condition optional condition to meet. Takes the same parameters as [body].
+ *                  If the condition is not met, the call falls back to the original function definition
  * @param body wrapper content; its explicit parameters, if any, must match the target's parameter names
  * @throws IllegalArgumentException if no function named [targetName] exists,
  *         or if any explicit body parameter does not match an original parameter
@@ -27,6 +30,7 @@ private const val SUPER_NAME = "super"
 internal fun extendFunction(
     context: MutableContext,
     targetName: String,
+    condition: Lambda?,
     body: Lambda,
 ) {
     val targetFunction: Function<*> =
@@ -51,7 +55,8 @@ internal fun extendFunction(
         )
     }
 
-    val lambda = Lambda(context, lambdaParameters, body.action)
+    val bodyLambda = Lambda(context, lambdaParameters, body.action)
+    val conditionLambda = condition?.let { Lambda(context, lambdaParameters, it.action) }
 
     context.markFunctionAsExtended(targetName)
 
@@ -69,6 +74,20 @@ internal fun extendFunction(
                 call.executeAs(targetFunction, arguments = mergedArgs)
             }
 
-        lambda.invokeDynamic(args, callingContext = call.context, additionalFunctions = setOf(superFunction))
+        when {
+            // Fall back to original call (.super) if condition is not met.
+            conditionLambda != null && !conditionLambda.invoke<Boolean, BooleanValue>(args).unwrappedValue -> {
+                call.executeAs(superFunction, arguments = emptyList())
+            }
+
+            // Invoke extension.
+            else -> {
+                bodyLambda.invokeDynamic(
+                    args,
+                    callingContext = call.context,
+                    additionalFunctions = setOf(superFunction),
+                )
+            }
+        }
     }
 }
