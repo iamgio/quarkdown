@@ -518,7 +518,9 @@ object ValueFactory {
     ): LambdaValue {
         if (raw is Lambda) return LambdaValue(raw)
 
-        val (parameters, body) = LambdaParser.parse(raw.toString())
+        // The `@lambda` prefix is no longer required, but is tolerated for backward compatibility.
+        val source = raw.toString().removePrefix(EXPRESSION_FORCE_LAMBDA_PREFIX)
+        val (parameters, body) = LambdaParser.parse(source)
 
         return LambdaValue(
             Lambda(context, explicitParameters = parameters) { _, newContext ->

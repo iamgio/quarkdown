@@ -343,7 +343,7 @@ class FunctionExtensionTest {
                  a b:
                  .a::sum {.b}
 
-            .extend {mysum} where:{@lambda a b: .a::sum {.b}::islower than:{10}}
+            .extend {mysum} where:{a b: .a::sum {.b}::islower than:{10}}
                 a:
                 .a
             
@@ -362,11 +362,11 @@ class FunctionExtensionTest {
                  a b:
                  .a::sum {.b}
 
-            .extend {mysum} where:{@lambda a: .a::islower than:{10}}
+            .extend {mysum} where:{a: .a::islower than:{10}}
                 a:
                 .a
             
-            .extend {mysum} where:{@lambda b: .b::islower than:{10}}
+            .extend {mysum} where:{b: .b::islower than:{10}}
                 b:
                 .b
                 
@@ -385,7 +385,7 @@ class FunctionExtensionTest {
                  a b:
                  .a::sum {.b}
 
-            .extend {mysum} where:{@lambda a: .a::islower than:{10}}
+            .extend {mysum} where:{a: .a::islower than:{10}}
                 a:
                 .a
             
@@ -414,7 +414,7 @@ class FunctionExtensionTest {
     fun `stdlib extension with injected parameter`() {
         execute(
             """
-            .extend {heading} where:{@lambda content: .content::equals {Hi}}
+            .extend {heading} where:{content: .content::equals {Hi}}
                 content:
                 .container
                     .super

@@ -21,11 +21,11 @@ class FunctionCallChainingTest {
 
     @Test
     fun functional() {
-        execute(".sum {2} {4}::subtract {1}::takeif {@lambda x: .iseven {.x}}::otherwise {Odd number!}") {
+        execute(".sum {2} {4}::subtract {1}::takeif {x: .iseven {.x}}::otherwise {Odd number!}") {
             assertEquals("<p>Odd number!</p>", it)
         }
 
-        execute(".sum {2} {4}::subtract {1}::takeif {@lambda x: .iseven {.x}::not}::otherwise {Odd number!}") {
+        execute(".sum {2} {4}::subtract {1}::takeif {x: .iseven {.x}::not}::otherwise {Odd number!}") {
             assertEquals("<p>5</p>", it)
         }
     }

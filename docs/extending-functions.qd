@@ -72,7 +72,7 @@ An optional `where` [inline lambda](lambda.qd) parameter lets you define a condi
         greeting name:
         .greeting, .name!
 
-    .extend {greet} where:{@lambda name: .name::equals {world}}
+    .extend {greet} where:{name: .name::equals {world}}
         greeting:
         .super greeting:{.greeting::uppercase}
 
@@ -88,7 +88,7 @@ An optional `where` [inline lambda](lambda.qd) parameter lets you define a condi
     .heading {H4} depth:{4} indexed:{no}
 } \
                prelude:{Built-in functions, such as [`\.heading`](headings.qd), can be extended. See [*Element styling*](element-styling.qd) for more details.}
-    .extend {heading} where:{@lambda depth: .depth::islower than:{4}}
+    .extend {heading} where:{depth: .depth::islower than:{4}}
         content:
         .super background:{teal}
 

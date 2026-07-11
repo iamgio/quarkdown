@@ -83,7 +83,7 @@ so that you'll feel at home typing code you're comfortable typing.
         .container alignment:{center} fullwidth:{yes}
             .downarrow
 
-        .var {voffset} {.shrinkvertical::ifpresent {@lambda .1::multiply {-1}}::otherwise {0}}
+        .var {voffset} {.shrinkvertical::ifpresent {.1::multiply {-1}}::otherwise {0}}
 
         .container textalignment:{center} margin:{.voffset 0 0 0} fullwidth:{yes}
             .source

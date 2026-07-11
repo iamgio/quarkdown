@@ -9,11 +9,13 @@ import com.quarkdown.core.function.error.MismatchingArgumentTypeException
 import com.quarkdown.core.function.error.ParameterAlreadyBoundException
 import com.quarkdown.core.function.error.UnnamedArgumentAfterNamedException
 import com.quarkdown.core.function.error.UnresolvedParameterException
+import com.quarkdown.core.function.expression.RawInlineExpression
 import com.quarkdown.core.function.reflect.DynamicValueConverter
 import com.quarkdown.core.function.value.AdaptableValue
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.StringValue
+import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.isNone
 import com.quarkdown.core.pipeline.error.PipelineException
@@ -85,6 +87,14 @@ class RegularArgumentsBinder(
         parameter: FunctionParameter<*>,
         argument: FunctionCallArgument,
     ): FunctionCallArgument {
+        // A raw inline argument targeting a Lambda parameter is parsed as a lambda directly,
+        // bypassing the eager expression pipeline. This matches how body arguments are handled.
+        val expression = argument.expression
+
+        if (expression is RawInlineExpression && call.context != null && parameter.type.isSubclassOf(Lambda::class)) {
+            return argument.copy(expression = ValueFactory.lambda(expression.raw, call.context))
+        }
+
         // The value held by the argument.
         // If the argument is dynamic, it is converted to a static type.
         val value = argument.value

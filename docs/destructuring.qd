@@ -33,8 +33,6 @@ In this example, we define a [Dictionary](dictionary.qd) and iterate over its de
 
 In this example, we define a [Dictionary](dictionary.qd) and iterate over its destructured key-value components using `.foreach`, but only after sorting its entries by value using [`.sorted`](iterable.qd#operations), which takes a lambda that defines the ordering criteria.
 
-> Note: Remember that `@lambda` is required when declaring an [inline lambda](lambda.qd#inline-lambda).
-
 .examplemirror
     .var {mydictionary}
         .dictionary
@@ -42,6 +40,6 @@ In this example, we define a [Dictionary](dictionary.qd) and iterate over its de
             - b: 1
             - c: 2
 
-    .foreach {.mydictionary::sorted by:{@lambda name value: .value}}
+    .foreach {.mydictionary::sorted by:{name value: .value}}
         name value:
         .name

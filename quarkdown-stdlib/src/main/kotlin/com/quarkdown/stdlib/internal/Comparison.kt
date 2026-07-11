@@ -15,6 +15,7 @@ import com.quarkdown.core.util.node.toPlainText
 internal fun asComparablePlainText(value: Any?): String? =
     when (value) {
         is String -> value
+        is Number -> value.toString()
         is InlineMarkdownContent -> value.children.toPlainText()
         is MarkdownContent -> value.children.toPlainText()
         else -> null

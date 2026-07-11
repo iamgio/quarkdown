@@ -34,7 +34,7 @@ class ParagraphPrimitiveFunctionTest {
     fun `content can be matched`() {
         execute(
             """
-            .extend {paragraph} where:{@lambda content: .content::equals {Hello}}
+            .extend {paragraph} where:{content: .content::equals {Hello}}
                 .super foreground:{blue} background:{white}
             
             Hello

@@ -26,7 +26,7 @@ The `where` parameter allows you to apply styling conditionally based on the arg
 
     .heading {This is not red} depth:{3} indexed:{no}
 }
-    .extend {heading} where:{@lambda depth: .depth::equals {2}}
+    .extend {heading} where:{depth: .depth::equals {2}}
         .super background:{red}
 
     ## This is red (depth 2)

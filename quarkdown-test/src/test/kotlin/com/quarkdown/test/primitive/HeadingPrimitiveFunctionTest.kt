@@ -47,7 +47,11 @@ class HeadingPrimitiveFunctionTest {
             """
              .noautopagebreak
 
-            .extend {heading} where:{@lambda content: .content::equals {Hi}}
+            .extend {heading} where:{depth: .depth::equals {2}}
+                 content:
+                 .super foreground:{red}
+            
+            .extend {heading} where:{content: .content::equals {Hi}}
                  content:
                  .container
                      .super 
@@ -55,12 +59,20 @@ class HeadingPrimitiveFunctionTest {
              # Hello
 
              ## Hi
+             
+             ## Hello
 
+             ### Hi
+             
              ### Hey
             """.trimIndent(),
         ) {
             assertEquals(
-                "<h1>Hello</h1><div class=\"container\"><h2>Hi</h2></div><h3>Hey</h3>",
+                "<h1>Hello</h1>" +
+                    "<div class=\"container\"><h2 style=\"color: rgba(255, 0, 0, 1.0);\">Hi</h2></div>" +
+                    "<h2 style=\"color: rgba(255, 0, 0, 1.0);\">Hello</h2>" +
+                    "<div class=\"container\"><h3>Hi</h3></div>" +
+                    "<h3>Hey</h3>",
                 it,
             )
         }
@@ -202,7 +214,7 @@ class HeadingPrimitiveFunctionTest {
             .extend {heading}
                 depth:
                 .super foreground:{red} \
-                       background:{.takeif {red} {@lambda .depth::islower than:{3}}} \
+                       background:{.takeif {red} {.depth::islower than:{3}}} \
                        fontvariant:{smallcaps}
 
             ## Hello
@@ -319,7 +331,7 @@ class HeadingPrimitiveFunctionTest {
             
             .extend {heading}
                 content:
-                .container foreground:{.takeif {red} {@lambda .content::plaintext::equals {Hello}}}
+                .container foreground:{.takeif {red} {.content::plaintext::equals {Hello}}}
                     .super
             
             # Hello
