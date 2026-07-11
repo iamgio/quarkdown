@@ -1,4 +1,4 @@
 .extend {paragraph}
     .super foreground:{red} background:{black} padding:{10px} textcase:{uppercase} fontvariant:{smallcaps}
 
-Styled paragraph text.
+Styled paragraph with `code`, *emph*, and **strong** text.

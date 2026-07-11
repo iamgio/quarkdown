@@ -33,6 +33,20 @@ The `where` parameter allows you to apply styling conditionally based on the arg
 
     ### This is not red (depth 3)
 
+Any argument of the intercepted call can be used in the condition, for example [cross-reference identifiers](cross-references.qd) via `ref`:
+
+.exampleoutput {
+    .heading {This is blue} depth:{2} foreground:{blue} indexed:{no}
+
+    .heading {This is not blue} depth:{2} indexed:{no}
+}
+    .extend {heading} where:{ref: .ref::equals {title}}
+        .super foreground:{blue}
+
+    ## This is blue {#title}
+
+    ## This is not blue
+
 ## Content changes
 
 Intercepted parameters can also be modified on the go. A common use case would be transforming the Markdown content of an element. 

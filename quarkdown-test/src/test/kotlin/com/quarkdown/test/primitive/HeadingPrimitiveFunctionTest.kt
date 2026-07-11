@@ -79,6 +79,28 @@ class HeadingPrimitiveFunctionTest {
     }
 
     @Test
+    fun `ref can be matched and conditionally styled (where)`() {
+        execute(
+            """
+            .noautopagebreak
+
+            .extend {heading} where:{ref: .ref::equals {title}}
+                .super foreground:{blue}
+
+            # Test {#title}
+
+            ## Test
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1 id=\"title\" style=\"color: rgba(0, 0, 255, 1.0);\">Test</h1>" +
+                    "<h2>Test</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `content can be matched and conditionally wrapped (if)`() {
         execute(
             """
