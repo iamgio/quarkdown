@@ -17,23 +17,17 @@ Extending a primitive allows you to intercept and alter the call itself through 
 
 > Tip: For a list of styling properties supported by most primitives, see [*Styling properties*](element-styling-properties.qd).
 
-## Adaptive styling
+## Conditional styling
 
-As per function extension rules, parameters can be intercepted as well by declaring them with the same name in the wrapper body.
+The `where` parameter allows you to apply styling conditionally based on the arguments of the original function call.
 
 .exampleoutput {
     .heading {This is red} depth:{2} background:{red} indexed:{no}
 
     .heading {This is not red} depth:{3} indexed:{no}
 }
-    .extend {heading}
-        depth:
-        .let {.depth::equals {2}}
-            .if {.1}
-                .super background:{red}
-            .ifnot {.1}
-                .super
-        
+    .extend {heading} where:{@lambda depth: .depth::equals {2}}
+        .super background:{red}
 
     ## This is red (depth 2)
 
@@ -56,11 +50,11 @@ Intercepted parameters can also be modified on the go. A common use case would b
 
 Quarkdown supports transforming arbitrary content according to RegEx patterns via the **`.match {content} {pattern} {replacement}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Text/match.html} function, which replaces all occurrences of `pattern` within `content` with `replacement`.
 
-.exampleoutput {.heading {*Quarkdown* takes its name from *quarks*} depth:{2} indexed:{no}}
-    .extend {heading}
+.exampleoutput {*Quarkdown* takes its name from *quarks*}
+    .extend {paragraph}
         content:
         .super
             .content::match {[Qq]uark(down|s)?}
                 *.1*
 
-    ## Quarkdown takes its name from quarks
+    Quarkdown takes its name from quarks

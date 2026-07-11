@@ -5,6 +5,7 @@ package com.quarkdown.stdlib
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
+import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.quarkdown.block.Figure
@@ -30,6 +31,15 @@ import com.quarkdown.processor.annotation.Spread
  * Example:
  * ```markdown
  * .heading {My heading} depth:{2} numbered:{no}
+ * ```
+ *
+ * As a [Heading] primitive, this function can be used in `.extend` to affect all headings in the document:
+ *
+ * ```markdown
+ * .extend {heading} where:{@lambda depth: .depth::equals {1}}
+ *     content:
+ *     .super foreground:{blue}
+ *         *.content*
  * ```
  *
  * @param content inline content of the heading
@@ -67,6 +77,25 @@ fun heading(
         style = style.toNodeStyle(),
     ).let(::NodeValue)
 }
+
+/**
+ * Creates a paragraph with fine-grained control over its properties.
+ *
+ * As a [Paragraph] primitive, this function can be used in `.extend` to affect all paragraphs in the document:
+ *
+ * ```markdown
+ * .extend {paragraph}
+ *     .super foreground:{gray}
+ * ```
+ */
+@QFunction
+fun paragraph(
+    @Body content: InlineMarkdownContent,
+    @Spread style: StyleOptions = StyleOptions.DEFAULT,
+) = Paragraph(
+    text = content.children,
+    style = style.toNodeStyle(),
+).wrappedAsValue()
 
 /**
  * Creates an image with fine-grained control over its properties,

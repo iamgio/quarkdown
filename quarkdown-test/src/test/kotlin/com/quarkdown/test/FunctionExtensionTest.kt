@@ -355,6 +355,29 @@ class FunctionExtensionTest {
     }
 
     @Test
+    fun `multiple conditional extensions`() {
+        execute(
+            """
+            .function {mysum}
+                 a b:
+                 .a::sum {.b}
+
+            .extend {mysum} where:{@lambda a: .a::islower than:{10}}
+                a:
+                .a
+            
+            .extend {mysum} where:{@lambda b: .b::islower than:{10}}
+                b:
+                .b
+                
+            .mysum {10} {11} .mysum {4} {12} .mysum {16} {5} .mysum {8} {3}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>21 4 5 3</p>", it)
+        }
+    }
+
+    @Test
     fun `conditional extension, partial args`() {
         execute(
             """

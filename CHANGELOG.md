@@ -28,9 +28,15 @@ This release ships with a handful of primitives as an experimental feature. The 
 
 &nbsp;
 
-#### [Full styling options on `.heading`](https://quarkdown.com/wiki/element-styling-properties)
+#### [New primitive: `.paragraph`]
 
-`.container`'s styling options, such as `foreground`, `background`, `border`, `padding`, and `fontsize`, are now available on `.heading` as well. This allows for full customization without needing to wrap the heading in a container.
+The new `.paragraph` primitive backs Markdown paragraphs, enabling paragraph-level extensions via `.extend {paragraph}`.
+
+&nbsp;
+
+#### [Full styling options on `.heading` and `.paragraph`](https://quarkdown.com/wiki/element-styling-properties)
+
+`.container`'s styling options, such as `foreground`, `background`, `border`, `padding`, and `fontsize`, are now available on `.heading` and `.paragraph` as well. This allows for full customization without needing to wrap the element in a container.
 
 ```markdown
 .heading {Introduction} depth:{1} background:{blue} radius:{8px}
@@ -75,8 +81,9 @@ This is particularly useful for element styling:
 ```markdown
 .extend {heading}
     content:
-    .content::match {[Qq]uark(down|s)?}
-        *.1*
+    .super
+        .content::match {[Qq]uark(down|s)?}
+            *.1*
 
 ## Quarkdown takes its name from quarks
 ```
