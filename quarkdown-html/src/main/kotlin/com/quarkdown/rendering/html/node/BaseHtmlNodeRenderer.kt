@@ -160,7 +160,11 @@ open class BaseHtmlNodeRenderer(
             .void(true)
             .build()
 
-    override fun visit(node: Heading) = buildTag("h${node.depth}", node.text)
+    override fun visit(node: Heading) =
+        buildTag("h${node.depth}") {
+            +node.text
+            style(node.style)
+        }
 
     override fun visit(node: LinkDefinition) = "" // Not rendered
 
@@ -261,7 +265,11 @@ open class BaseHtmlNodeRenderer(
 
     override fun visit(node: Table) = tableBuilder(node).build()
 
-    override fun visit(node: Paragraph) = buildTag("p", node.text)
+    override fun visit(node: Paragraph) =
+        buildTag("p") {
+            +node.text
+            style(node.style)
+        }
 
     override fun visit(node: BlockQuote) = buildTag("blockquote", node.content)
 
