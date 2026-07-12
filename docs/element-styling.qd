@@ -36,16 +36,16 @@ The `where` parameter allows you to apply styling conditionally based on the arg
 Any argument of the intercepted call can be used in the condition, for example [cross-reference identifiers](cross-references.qd) via `ref`:
 
 .exampleoutput {
-    .heading {This is blue} depth:{2} foreground:{blue} indexed:{no}
+    .math {E=mc^2} block:{yes} foreground:{skyblue} fontsize:{larger}
 
-    .heading {This is not blue} depth:{2} indexed:{no}
+    .math {F=ma} block:{yes}
 }
-    .extend {heading} where:{ref: .ref::equals {title}}
-        .super foreground:{blue}
+    .extend {math} where:{ref: .ref::startswith {einstein}}
+        .super foreground:{skyblue} fontsize:{larger}
 
-    ## This is blue {#title}
+    $ E=mc^2 $ {#einstein-relativity}
 
-    ## This is not blue
+    $ F=ma $
 
 ## Content changes
 
