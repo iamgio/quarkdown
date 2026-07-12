@@ -303,6 +303,38 @@ For advanced styling of custom elements, you can use CSS rules. See [CSS](css.qd
 > -    This is my example!
 > ```
 
+## Styling elements
+
+> Reference: [Element styling](element-styling.qd), [Element styling properties](element-styling-properties.qd), [Extending functions](extending-functions.qd)
+
+You can alter the appearance and behavior of built-in Markdown elements, such as headings and paragraphs. Quarkdown provides a mechanism similar to Typst's `#show` rules, based on the `.extend` function, to intercept and customize the primitive functions backing these elements.
+
+For example, to make all level 2 headings appear on a teal background:
+
+```markdown
+.extend {heading} where:{depth: .depth::equals {2}}
+    .super background:{teal} foreground:{white}
+```
+
+Every `## Heading` now renders with the new styling, while other levels remain unchanged. `.super` invokes the original function, optionally overriding any of its arguments.
+
+To italicize the word "Quarkdown" in all paragraphs, you can use the [`.match`](regex-match.qd) function:
+
+```markdown
+.extend {paragraph}
+    content:
+    .super
+        .content::match {Quarkdown}
+            *.1*
+```
+
+In the previous snippet:
+- `content` is the intercepted argument from the `.paragraph` function;
+- `.content::match {Quarkdown}` finds the pattern "Quarkdown" in the paragraph content, and applies the transformation `*.1*` to it, which italicizes the matched text. `.1` is an [implicit lambda parameter](lambda.qd);
+- `.super` is called with the modified content as its body argument.
+
+For more complex styling needs, you can use [CSS](css.qd) rules via `.css` to target specific elements and apply custom styles, and `.cssproperties` to customize global properties.
+
 ## Numbering
 
 > Reference: [Numbering](numbering.qd)
@@ -500,6 +532,9 @@ For our quickstart, we could split setup and content into two separate files:
 - .numbering
 -     - headings: 1.1.1
 -     - figures: 1.1
+-
+- .extend {heading}
+-     ...
 
 + .include {setup.qd}
 + .include {content.qd}
@@ -528,6 +563,9 @@ For our quickstart, we could split setup and content into two separate files:
 .numbering
     - headings: 1.1.1
     - figures: 1.1
+
+.extend {heading}
+    ...
 ```
 
 > content.qd
@@ -596,4 +634,4 @@ Quarkdown copies everything inside `public/` to the root of the output directory
 
 Congratulations! You have completed the Quarkdown quickstart guide and are now familiar with its main features. You are ready to create your first real document.
 
-From here, you can explore more advanced topics in the rest of this wiki and in the [documentation](https://quarkdown.com/docs/).
+From here, you can explore more advanced topics in the rest of this wiki and in the [documentation](https://quarkdown.com/docs/quarkdown-stdlib/index.html).
