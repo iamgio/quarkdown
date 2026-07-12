@@ -36,6 +36,23 @@ class LinkPrimitiveFunctionTest {
     }
 
     @Test
+    fun `extension body with trailing text stays inline`() {
+        execute(
+            """
+            .extend {link}
+                .super (external)
+
+            See the [docs](https://example.com)
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>See the <a href=\"https://example.com\">docs</a> (external)</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `extension can match by url`() {
         execute(
             """
