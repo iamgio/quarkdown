@@ -38,6 +38,59 @@ A block formula can span over multiple lines thanks to a syntax similar to fence
     \end{cases}
     $$$
 
+## The `.math` function
+
+Equations can also be created via the **`.math`** [primitive function](primitives.qd). This is useful when the equation content is computed from other functions, or when you want to apply styling to a specific formula.
+
+.examplemirror
+    .math
+        E = mc^2
+
+    <!-- or, equivalently -->
+
+    .math {E = mc^2}
+
+By default, `.math` produces a block formula when produced by a [block function call](syntax-of-a-function-call.qd#block-vs-inline-function-calls). You can force one or the other via the `block` parameter:
+
+.examplemirror
+    Inline: .math {2 + 2}
+
+The content is evaluated as Quarkdown, so nested function calls are evaluated, contrary to the `$`-based syntax.
+
+.examplemirror
+    .var {n} {5}
+
+    .math
+        f(.n) = .n::multiply {2}
+
+### Styling
+
+Both inline and block equations accept the same [styling properties](element-styling-properties.qd) as containers.
+
+.examplemirror
+    .math fontsize:{larger}
+        \pi \approx 3.14
+
+### Extending
+
+`.math` backs the standard `$ ... $` syntax, so [extending it](element-styling.qd) affects every equation in the document at once.
+
+.exampleoutput {
+    .math fontsize:{larger} foreground:{skyblue}
+        a^2 + b^2 = c^2
+
+    Inline: .math {a^2 + b^2 = c^2} foreground:{skyblue}
+}
+    .extend {math}
+        .super foreground:{skyblue}
+
+    .extend {math} where:{block: .block}
+        .super fontsize:{larger}
+
+    $ a^2 + b^2 = c^2 $
+
+    Inline: $ a^2 + b^2 = c^2 $
+
 ## Macros
 
 Quarkdown supports the creation of TeX macros via the `.texmacro` function. See [*TeX macros*](tex-macros.qd) for more information.

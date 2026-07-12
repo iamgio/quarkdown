@@ -75,6 +75,91 @@ class MathTest {
     }
 
     @Test
+    fun `math primitive in inline context defaults to inline`() {
+        execute("Hello .math {2 + 2}") {
+            assertEquals(
+                "<p>Hello <formula>2 + 2</formula></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `math primitive on its own line defaults to block`() {
+        execute(".math {2 + 2}") {
+            assertEquals(
+                "<formula data-block=\"\">2 + 2</formula>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `math primitive block override forces block in inline context`() {
+        execute("Hello .math {2 + 2} block:{yes}") {
+            assertEquals(
+                "<p>Hello <formula data-block=\"\">2 + 2</formula></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `math primitive block override forces inline on its own line`() {
+        execute(".math {2 + 2} block:{no}") {
+            assertEquals(
+                "<formula>2 + 2</formula>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `math primitive block with reference`() {
+        execute(".math {2 + 2} ref:{eq1}") {
+            assertEquals(
+                "<formula data-block=\"\" id=\"eq1\">2 + 2</formula>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `math primitive inline with styling`() {
+        execute("Hello .math {2 + 2} foreground:{red}") {
+            assertEquals(
+                "<p>Hello <formula style=\"color: rgba(255, 0, 0, 1.0);\">2 + 2</formula></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `math primitive block with styling`() {
+        execute(".math {2 + 2} background:{blue}") {
+            assertEquals(
+                "<formula data-block=\"\" style=\"background-color: rgba(0, 0, 255, 1.0);\">2 + 2</formula>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `math primitive body evaluates nested function calls`() {
+        execute(
+            """
+            .math
+                2 + 2 = .sum {2} {2}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<formula data-block=\"\">2 + 2 = 4</formula>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `custom macro`() {
         execute(
             """

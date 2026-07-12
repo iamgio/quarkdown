@@ -1,61 +1,20 @@
 .docname {Primitive functions}
 .include {docs}
 
-Quarkdown exposes primitive functions that provide fine-grained control over standard Markdown elements. These functions offer parameters that are not accessible through the regular Markdown syntax.
+Primitive functions return elements that back standard Markdown syntax. Each one accepts parameters that plain Markdown may not, and can be intercepted via [`.extend`](extending-functions.qd) to customize their behavior and appearance across the entire document, even if created via standard Markdown syntax.
 
-## Headings
+For example, extending `.heading` affects every `#`, `##`, and so on. Extending `.math` affects every `$ ... $` and `$$$ ... $$$`. See [*Element styling*](element-styling.qd) for the full mechanism.
 
-The `.heading` function creates headings with explicit control over numbering, page breaks, table of contents indexing, and custom identifiers. See the [Headings](headings.qd) page for details.
+## Available primitives
 
-## Images
+- **`.heading`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/heading.html} backs `#`, `##`, ... headings. Exposes explicit control over depth, numbering, page breaks, and cross-reference identifiers. See [Headings](headings.qd).
 
-The **`.image`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/image.html} function creates an image with fine-grained control over its properties, compared to the standard Markdown image syntax (`![alt](url "title")`).
+- **`.paragraph`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/paragraph.html} backs regular paragraphs.
 
-```markdown
-.image {photo.jpg} label:{A photo}
-```
+- **`.image`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/image.html} backs `![alt](url "title")`, with additional control over figure wrapping and [media storage](media-storage.qd).
 
-### Size constraints
+- [**`.figure`**](figure.qd) .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/figure.html} backs the block that wraps an image or other content.
 
-The `width` and `height` parameters accept any [size](sizes.qd) value.
+- [**`.math`**](tex-formulae.qd) .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/math.html} backs `$ ... $` and `$$$ ... $$$` formulas.
 
-```markdown
-.image {photo.jpg} label:{A photo} width:{200px} height:{150px}
-
-.image {banner.svg} label:{Banner} width:{100%}
-```
-
-### Caption
-
-When a `title` is provided, it is used both as the image tooltip and as the figure caption.
-
-.examplemirror
-    .image {assets/icon.svg} label:{Icon} title:{The Quarkdown icon} width:{64px}
-
-### Figure wrapping
-
-By default, the image is wrapped in a figure block, which centers it and enables captioning and [numbering](numbering.qd). To disable this behavior, set `figure:{no}`, which produces a raw inline image instead.
-
-```markdown
-Hello .image {icon.svg} label:{Icon} figure:{no} width:{16px} height:{16px} world!
-```
-
-### Cross-referencing
-
-The `ref` parameter assigns an ID that can be used with [cross-references](cross-references.qd).
-
-```markdown
-.image {diagram.png} label:{Architecture diagram} title:{System overview} ref:{arch-diagram} width:{400px}
-
-See .ref {arch-diagram} for more details.
-```
-
-### Media storage opt-out
-
-By default, local images are copied to the output's media directory when [media storage](media-storage.qd) is enabled. To prevent this and reference the image at its original path instead, set `mediastorage:{no}`.
-
-```markdown
-.image {../banner.svg} label:{Banner} mediastorage:{no}
-```
-
-This is useful for images that should reference a fixed relative path, such as assets shared across multiple builds or maintained outside the project directory.
+- [**`.pagebreak`**](page-break.qd) .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/pagebreak.html} backs `<<<`. Can be extended to decorate every forced page break in the document.

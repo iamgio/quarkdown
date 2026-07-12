@@ -195,6 +195,7 @@ class QuarkdownHtmlNodeRenderer(
             attribute("data-block", "")
             optionalAttribute("id", node.linkableReferenceId?.let(::sanitizeId))
             optionalAttribute("data-location", node.getLocationLabel(context))
+            style(node.style)
         }
 
     override fun visit(node: Container) =
@@ -413,7 +414,11 @@ class QuarkdownHtmlNodeRenderer(
 
     // Inline
 
-    override fun visit(node: MathSpan) = buildTag("formula", node.expression)
+    override fun visit(node: MathSpan) =
+        buildTag("formula") {
+            +node.expression
+            style(node.style)
+        }
 
     override fun visit(node: CrossReference): CharSequence {
         val definition: CrossReferenceableNode = node.getDefinition(context) ?: return Text("[???]").accept(this)

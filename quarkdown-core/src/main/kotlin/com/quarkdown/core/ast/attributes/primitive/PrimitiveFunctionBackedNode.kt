@@ -23,6 +23,14 @@ interface PrimitiveFunctionBackedNode : Node {
     val backingFunctionName: String
 
     /**
+     * Whether the synthesized backing call should be treated as a block call.
+     * Defaults to `true`; inline primitive nodes should override to `false`
+     * so the inline output mapper is used during expansion.
+     */
+    val isBackingCallBlock: Boolean
+        get() = true
+
+    /**
      * Materializes this node's properties into the arguments of the backing function call.
      * Argument names must match the parameter names of the function identified by [backingFunctionName].
      */
