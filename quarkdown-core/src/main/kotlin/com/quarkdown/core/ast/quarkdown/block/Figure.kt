@@ -2,14 +2,21 @@ package com.quarkdown.core.ast.quarkdown.block
 
 import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.ast.InlineMarkdownContent
+import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.SingleChildNestableNode
 import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
+import com.quarkdown.core.function.call.FunctionCallArgument
+import com.quarkdown.core.function.value.NoneValue
+import com.quarkdown.core.function.value.StringValue
+import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.node.group
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -29,7 +36,8 @@ open class Figure<T : Node>(
     LocationTrackableNode,
     CrossReferenceableNode,
     CaptionableNode,
-    LocalizedKind {
+    LocalizedKind,
+    PrimitiveFunctionBackedNode {
     override val children: List<Node>
         get() = listOf(child, caption.group())
 
@@ -41,6 +49,25 @@ open class Figure<T : Node>(
      */
     override val canTrackLocation: Boolean
         get() = caption != null || referenceId != null
+
+    override val backingFunctionName: String
+        get() = "figure"
+
+    override fun toFunctionCallArguments() =
+        listOf(
+            FunctionCallArgument(
+                name = "caption",
+                expression = caption?.let { InlineMarkdownContent(it).wrappedAsValue() } ?: NoneValue,
+            ),
+            FunctionCallArgument(
+                name = "ref",
+                expression = referenceId?.let(::StringValue) ?: NoneValue,
+            ),
+            FunctionCallArgument(
+                name = "body",
+                expression = MarkdownContent(listOf(child)).wrappedAsValue(),
+            ),
+        )
 
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
 }

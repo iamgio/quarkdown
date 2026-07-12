@@ -177,6 +177,15 @@ fun pageBreak() = PageBreak().wrappedAsValue()
  *
  * If either [caption] or [referenceId] is set, the figure will be numbered according to the `figures` [numbering] rule.
  *
+ * As a [Figure] primitive, this function can be used in `.extend` to affect all figures in the document,
+ * including standalone Markdown images (`![alt](url)`) that are automatically wrapped in a figure:
+ *
+ * ```markdown
+ * .extend {figure} where:{ref: .ref::equals {logo}}
+ *     .container border:{1px solid gray}
+ *         .super
+ * ```
+ *
  * @param caption optional inline caption of the figure
  * @param referenceId optional ID for cross-referencing via [reference]
  * @param body content of the figure
