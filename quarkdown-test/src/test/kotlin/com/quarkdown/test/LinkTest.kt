@@ -29,6 +29,36 @@ class LinkTest {
     }
 
     @Test
+    fun `link primitive basic`() {
+        execute("Go .link {here} url:{https://example.com}") {
+            assertEquals(
+                "<p>Go <a href=\"https://example.com\">here</a></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `link primitive with title`() {
+        execute("Go .link {here} url:{https://example.com} title:{Tooltip}") {
+            assertEquals(
+                "<p>Go <a href=\"https://example.com\" title=\"Tooltip\">here</a></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `link primitive with styling`() {
+        execute("Go .link {here} url:{https://example.com} foreground:{red}") {
+            assertEquals(
+                "<p>Go <a href=\"https://example.com\" style=\"color: rgba(255, 0, 0, 1.0);\">here</a></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `reference link`() {
         execute(
             """

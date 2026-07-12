@@ -105,8 +105,10 @@ Defining a new node involves:
 ### Primitive functions
 
 A *primitive function* is a stdlib function that backs a Markdown syntax element (`.heading` backs `#`, `.paragraph` backs paragraphs,
-`.figure` backs standalone images, `.pagebreak` backs `<<<`, `.math` backs `$ ... $`, and so on).
+`.link` backs `[label](url "title")` with an optional title, `.figure` backs standalone images, `.pagebreak` backs `<<<`, `.math` backs `$ ... $`, and so on).
 Because Markdown syntax and the primitive call produce the same AST node, extending the primitive via `.extend {name}` also applies to the corresponding Markdown syntax.
+
+The full list of primitives is documented for end users at [`docs/primitives.qd`](docs/primitives.qd); keep it in sync whenever you add a new one.
 
 The wiring lives in `TreeRewriteStage` / `AstRewriter`: after function call expansion, the rewriter walks the AST and, whenever it finds a
 `PrimitiveFunctionBackedNode` whose `backingFunctionName` has been extended, it wraps the node in a synthesized `FunctionCallNode`.
@@ -118,13 +120,14 @@ Adding a new primitive-backed node involves two sides:
   Make the node implement `PrimitiveFunctionBackedNode`:
   - Set `backingFunctionName` to the primitive's Quarkdown name (matching the `@Name` on the stdlib function, if any).
   - Implement `toFunctionCallArguments()` to materialize the node's properties as `FunctionCallArgument`s whose *names* must match the primitive's parameter names.
-  - For inline nodes (e.g. `MathSpan`), override `isBackingCallBlock` to `false` so the inline output mapper is used during expansion.
+  - For inline nodes (e.g. `MathSpan`, `Link`), override `isBackingCallBlock` to `false` so the inline output mapper is used during expansion.
     Block nodes get the default `true` for free.
   - If the node should be user-styleable, make it also implement `StylableNode` with a `style: NodeStyle` property.
+    Remember to carry it through any custom `copy(...)` helpers on the node.
 
 - **stdlib primitive** (in [`quarkdown-stdlib/.../Primitives.kt`](quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib/Primitives.kt)).
   Declare a `@QFunction` returning the AST node wrapped as a value. Parameter names must match those emitted by `toFunctionCallArguments()`.
-  Include a KDoc example that uses `.extend {name}`, following the pattern already used by `.heading`, `.paragraph`, `.figure`, `.pagebreak`, and `.math`.
+  Include a KDoc example that uses `.extend {name}`, following the pattern already used by `.heading`, `.paragraph`, `.figure`, `.pagebreak`, `.math`, and `.link`.
   If the node is styleable, accept `@Spread style: StyleOptions = StyleOptions.DEFAULT` and pass `style.toNodeStyle()` into the node.
 
 - **Renderer** (for each rendering backend, e.g. [`quarkdown-html/.../QuarkdownHtmlNodeRenderer.kt`](quarkdown-html/src/main/kotlin/com/quarkdown/rendering/html/node/QuarkdownHtmlNodeRenderer.kt)).
@@ -140,8 +143,8 @@ Adding a new primitive-backed node involves two sides:
 
   Without this, the `style: NodeStyle` on the AST node is inert and `foreground:`, `background:`, `padding:`, etc. from `StyleOptions` will not reach the output.
 
-Tests should cover both the primitive function itself (in an appropriate module test, e.g. `MathTest`) and the extension mechanism
-(in `quarkdown-test/.../primitive/<Name>PrimitiveFunctionTest.kt`, mirroring the existing files there).
+Tests should cover both the primitive function itself (in an appropriate module test, e.g. `MathTest`), the extension mechanism
+(in `quarkdown-test/.../primitive/<Name>PrimitiveFunctionTest.kt`, mirroring the existing files there), and an e2e test that exercises the primitive in a real document if there are styling options involved (in `quarkdown-html/src/test/e2e/<category>/styling/`, see `paragraph/styling/` for an example).
 
 ### Function calls and scripting
 

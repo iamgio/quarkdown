@@ -30,11 +30,7 @@ class SubdocumentLink(
 
     override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 
-    override fun copy(url: String) =
-        SubdocumentLink(
-            link = link.copy(url = url),
-            anchor = anchor,
-        )
+    override fun copy(url: String) = diverge(link = link.copy(url = url))
 }
 
 /**

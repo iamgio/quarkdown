@@ -290,6 +290,7 @@ open class BaseHtmlNodeRenderer(
         tagBuilder("a", node.label)
             .attribute("href", node.url)
             .optionalAttribute("title", node.title?.toPlainText(renderer = this))
+            .style(node.style)
 
     override fun visitTransformed(node: Link) = buildLinkTag(node).build()
 

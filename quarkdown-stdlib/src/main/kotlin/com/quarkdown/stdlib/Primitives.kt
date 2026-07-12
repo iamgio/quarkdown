@@ -102,6 +102,37 @@ fun paragraph(
 ).wrappedAsValue()
 
 /**
+ * Creates a link.
+ *
+ * As a [Link] primitive, this function can be used in `.extend` to affect all links in the document,
+ * including those introduced by the standard `[text](url)` Markdown syntax:
+ *
+ * ```markdown
+ * .extend {link} where:{url: .url::startswith {https://}}
+ *     .super foreground:{blue}
+ * ```
+ *
+ * @param content inline label of the link
+ * @param url URL the link points to
+ * @param title optional inline title used as the tooltip
+ * @return a wrapped [Link] node
+ */
+@QFunction
+fun link(
+    @Injected context: Context,
+    @Body content: InlineMarkdownContent,
+    url: String,
+    @LikelyNamed title: InlineMarkdownContent? = null,
+    @Spread style: StyleOptions = StyleOptions.DEFAULT,
+) = Link(
+    label = content.children,
+    url = url,
+    title = title?.children,
+    fileSystem = context.fileSystem,
+    style = style.toNodeStyle(),
+).wrappedAsValue()
+
+/**
  * Creates an image with fine-grained control over its properties,
  * compared to the standard Markdown image syntax (`![alt text](url "title")`).
  *

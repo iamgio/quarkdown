@@ -18,17 +18,17 @@ import com.quarkdown.core.function.call.FunctionCallArgument
  */
 interface PrimitiveFunctionBackedNode : Node {
     /**
-     * The name of the function that backs this node, from a loaded library.
-     */
-    val backingFunctionName: String
-
-    /**
      * Whether the synthesized backing call should be treated as a block call.
      * Defaults to `true`; inline primitive nodes should override to `false`
      * so the inline output mapper is used during expansion.
      */
     val isBackingCallBlock: Boolean
         get() = true
+
+    /**
+     * The name of the function that backs this node, from a loaded library.
+     */
+    val backingFunctionName: String
 
     /**
      * Materializes this node's properties into the arguments of the backing function call.

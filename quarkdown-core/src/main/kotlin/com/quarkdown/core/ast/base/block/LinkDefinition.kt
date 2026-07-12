@@ -17,7 +17,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  */
 class LinkDefinition(
     @Diverge override val label: InlineContent,
-    override val url: String,
+    @Diverge override val url: String,
     override val title: InlineContent?,
     override val fileSystem: FileSystem? = null,
 ) : LinkNode,
@@ -32,11 +32,5 @@ class LinkDefinition(
     override val text: InlineContent
         get() = label
 
-    override fun copy(url: String) =
-        LinkDefinition(
-            label = label,
-            url = url,
-            title = title,
-            fileSystem = fileSystem,
-        )
+    override fun copy(url: String) = diverge(url = url)
 }

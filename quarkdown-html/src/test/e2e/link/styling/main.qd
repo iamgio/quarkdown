@@ -1,0 +1,4 @@
+.extend {link}
+    .super foreground:{red} background:{black} padding:{4px}
+
+Visit [Quarkdown](https://quarkdown.com) for more.

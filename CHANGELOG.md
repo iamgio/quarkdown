@@ -24,19 +24,19 @@ This is one of the biggest milestones for Quarkdown, on par with Typst's `#show`
 ## A heading <!-- Renders blue and italic -->
 ```
 
-This release ships with a handful of primitives as an experimental feature: headings, paragraphs, figures, images, math, page breaks. The plan is to eventually have every Markdown element type backed by a primitive function.
+This release ships with a handful of primitives as an experimental feature: headings, paragraphs, links, figures, images, math, page breaks. The plan is to eventually have every Markdown element type backed by a primitive function.
 
 &nbsp;
 
-#### [New primitives: `.paragraph` and `.math`](https://quarkdown.com/wiki/primitives)
+#### [New primitives: `.paragraph`, `.math`, `.link`](https://quarkdown.com/wiki/primitives)
 
-The new `.paragraph` primitive backs Markdown paragraphs, and `.math` backs `$`-delimited math blocks, enabling extensions via `.extend`.
+The new `.paragraph` primitive backs Markdown paragraphs, `.math` backs `$`-delimited math blocks, and `.link` backs Markdown links, enabling extensions via `.extend`.
 
 &nbsp;
 
-#### [Full styling options on `.heading`, `.paragraph` and `.math`](https://quarkdown.com/wiki/element-styling-properties)
+#### [Full styling options on `.heading`, `.paragraph`, `.math` and `.link`](https://quarkdown.com/wiki/element-styling-properties)
 
-`.container`'s styling options, such as `foreground`, `background`, `border`, `padding`, and `fontsize`, are now available on `.heading`, `.paragraph` and `.math` as well. This allows for full customization without needing to wrap the element in a container.
+`.container`'s styling options, such as `foreground`, `background`, `border`, `padding`, and `fontsize`, are now available on `.heading`, `.paragraph`, `.math` and `.link` as well. This allows for full customization without needing to wrap the element in a container.
 
 ```markdown
 .heading {Introduction} depth:{1} background:{blue} radius:{8px}
@@ -59,6 +59,11 @@ This plays particularly well with the new primitive extension system:
 ```markdown
 .extend {heading} where:{depth: .depth::islower than:{3}}
     .super background:{teal}
+```
+
+```markdown
+.extend {link} where:{url: .url::startswith {https://}}
+    .super foreground:{blue} textdecoration:{underline}
 ```
 
 &nbsp;
