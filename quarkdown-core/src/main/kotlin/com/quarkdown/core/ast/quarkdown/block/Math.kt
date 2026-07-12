@@ -5,12 +5,7 @@ import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.attributes.style.StylableNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
-import com.quarkdown.core.function.call.FunctionCallArgument
-import com.quarkdown.core.function.value.BooleanValue
-import com.quarkdown.core.function.value.NoneValue
-import com.quarkdown.core.function.value.ObjectValue
-import com.quarkdown.core.function.value.StringValue
-import com.quarkdown.core.function.value.data.EvaluableString
+import com.quarkdown.core.function.dsl.functionCallArguments
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -39,11 +34,11 @@ class Math(
         get() = "math"
 
     override fun toFunctionCallArguments() =
-        listOf(
-            FunctionCallArgument(name = "content", expression = ObjectValue(EvaluableString(expression))),
-            FunctionCallArgument(name = "block", expression = BooleanValue(true)),
-            FunctionCallArgument(name = "ref", expression = referenceId?.let(::StringValue) ?: NoneValue),
-        )
+        functionCallArguments {
+            arg("content", evaluable(expression))
+            arg("block", boolean(true))
+            arg("ref", string(referenceId))
+        }
 
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

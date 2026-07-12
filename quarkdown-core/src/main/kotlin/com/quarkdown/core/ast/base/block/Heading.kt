@@ -2,7 +2,6 @@ package com.quarkdown.core.ast.base.block
 
 import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
-import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.IdentifierProvider
 import com.quarkdown.core.ast.attributes.localization.LocalizedKind
@@ -13,12 +12,7 @@ import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.attributes.style.StylableNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
-import com.quarkdown.core.function.call.FunctionCallArgument
-import com.quarkdown.core.function.value.BooleanValue
-import com.quarkdown.core.function.value.NoneValue
-import com.quarkdown.core.function.value.NumberValue
-import com.quarkdown.core.function.value.StringValue
-import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.function.dsl.functionCallArguments
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -73,14 +67,14 @@ class Heading(
         get() = "heading"
 
     override fun toFunctionCallArguments() =
-        listOf(
-            FunctionCallArgument(name = "content", expression = InlineMarkdownContent(text).wrappedAsValue()),
-            FunctionCallArgument(name = "depth", expression = NumberValue(depth)),
-            FunctionCallArgument(name = "ref", expression = referenceId?.let(::StringValue) ?: NoneValue),
-            FunctionCallArgument(name = "numbered", expression = BooleanValue(canTrackLocation)),
-            FunctionCallArgument(name = "indexed", expression = BooleanValue(!excludeFromTableOfContents)),
-            FunctionCallArgument(name = "breakpage", expression = BooleanValue(canBreakPage)),
-        )
+        functionCallArguments {
+            arg("content", inline(text))
+            arg("depth", number(depth))
+            arg("ref", string(referenceId))
+            arg("numbered", boolean(canTrackLocation))
+            arg("indexed", boolean(!excludeFromTableOfContents))
+            arg("breakpage", boolean(canBreakPage))
+        }
 
     companion object {
         /**
