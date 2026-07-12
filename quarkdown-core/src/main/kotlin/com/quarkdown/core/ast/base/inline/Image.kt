@@ -54,8 +54,6 @@ class Image(
             FunctionCallArgument(name = "height", expression = height?.let(::ObjectValue) ?: NoneValue),
             FunctionCallArgument(name = "ref", expression = referenceId?.wrappedAsValue() ?: NoneValue),
             FunctionCallArgument(name = "mediastorage", expression = usesMediaStorage.wrappedAsValue()),
-            // Suppress the default Figure wrap — the parser already wraps the Image in an
-            // ImageFigure when relevant, so .super must return a bare Image to avoid double-figuring.
             FunctionCallArgument(name = "figure", expression = BooleanValue(false)),
         )
 }
