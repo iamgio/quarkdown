@@ -4,10 +4,7 @@ import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.attributes.style.StylableNode
-import com.quarkdown.core.function.call.FunctionCallArgument
-import com.quarkdown.core.function.value.BooleanValue
-import com.quarkdown.core.function.value.ObjectValue
-import com.quarkdown.core.function.value.data.EvaluableString
+import com.quarkdown.core.function.dsl.functionCallArguments
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -28,10 +25,10 @@ class MathSpan(
         get() = "math"
 
     override fun toFunctionCallArguments() =
-        listOf(
-            FunctionCallArgument(name = "content", expression = ObjectValue(EvaluableString(expression))),
-            FunctionCallArgument(name = "block", expression = BooleanValue(false)),
-        )
+        functionCallArguments {
+            arg("content", evaluable(expression))
+            arg("block", boolean(false))
+        }
 
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

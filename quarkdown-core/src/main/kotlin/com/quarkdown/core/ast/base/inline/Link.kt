@@ -2,7 +2,6 @@ package com.quarkdown.core.ast.base.inline
 
 import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
-import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.ast.attributes.reference.ReferenceNode
@@ -12,10 +11,7 @@ import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.context.file.FileSystem
-import com.quarkdown.core.function.call.FunctionCallArgument
-import com.quarkdown.core.function.value.NoneValue
-import com.quarkdown.core.function.value.StringValue
-import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.function.dsl.functionCallArguments
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.util.stripAnchor
 import com.quarkdown.core.visitor.node.NodeVisitor
@@ -50,14 +46,11 @@ class Link(
         get() = "link"
 
     override fun toFunctionCallArguments() =
-        listOf(
-            FunctionCallArgument(name = "content", expression = InlineMarkdownContent(label).wrappedAsValue()),
-            FunctionCallArgument(name = "url", expression = StringValue(url)),
-            FunctionCallArgument(
-                name = "title",
-                expression = title?.let { InlineMarkdownContent(it).wrappedAsValue() } ?: NoneValue,
-            ),
-        )
+        functionCallArguments {
+            arg("content", inline(label))
+            arg("url", string(url))
+            arg("title", inline(title))
+        }
 
     override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 
