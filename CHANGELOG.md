@@ -56,14 +56,20 @@ This plays particularly well with the new primitive extension system:
 
 `.extend`'s new `where` parameter defines a condition to meet. If not met, the behavior falls back to the original function definition.
 
+The following snippet applies a teal background to all headings of depth 1 and 2, while leaving deeper headings unchanged:
+
 ```markdown
 .extend {heading} where:{depth: .depth::islower than:{3}}
     .super background:{teal}
 ```
 
+The following snippet adds an icon to all external links:
+
 ```markdown
-.extend {link} where:{url: .url::startswith {https://}}
-    .super foreground:{blue} textdecoration:{underline}
+.extend {link} where:{url: .url::startswith {https://quarkdown.com}::not}
+    content:
+    .super
+        .content .icon {box-arrow-up-right}
 ```
 
 &nbsp;
@@ -84,13 +90,13 @@ Output:
 This is particularly useful for element styling:
 
 ```markdown
-.extend {heading}
+.extend {paragraph}
     content:
     .super
         .content::match {[Qq]uark(down|s)?}
-            *.1*
+            **.1**
 
-## Quarkdown takes its name from quarks
+Quarkdown takes its name from quarks
 ```
 
 &nbsp;

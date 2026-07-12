@@ -318,6 +318,15 @@ For example, to make all level 2 headings appear on a teal background:
 
 Every `## Heading` now renders with the new styling, while other levels remain unchanged. `.super` invokes the original function, optionally overriding any of its arguments.
 
+To add an icon to all external links, you can intercept the `.link` primitive function and add an [icon](icons.qd) to its content:
+
+```markdown
+.extend {link} where:{url: .url::startswith {https://quarkdown.com}::not}
+    content:
+    .super
+        .content .icon {box-arrow-up-right}
+```
+
 To italicize the word "Quarkdown" in all paragraphs, you can use the [`.match`](regex-match.qd) function:
 
 ```markdown
