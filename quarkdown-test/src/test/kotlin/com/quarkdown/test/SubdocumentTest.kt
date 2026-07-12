@@ -42,6 +42,9 @@ class SubdocumentTest {
     private val thirdPartySubdoc = subdoc("subdoc4", content = ".mermaid\n\tgraph TD\n\t\tA-->B")
     private val echoDocumentNameSubdoc = subdoc("subdoc5", content = ".docname")
     private val modifyAndEchoDocumentNameSubdoc = subdoc("subdoc6", content = ".docname {Changed name}\n\n.docname")
+    private val lowercaseCallSubdoc = subdoc("subdoc7", content = ".lowercase {sub}")
+    private val extendingSubdoc =
+        subdoc("subdoc8", content = ".extend {lowercase}\n\t.super::uppercase\n\n.lowercase {sub}")
 
     @Test
     fun `root to subdocument`() {
@@ -129,6 +132,41 @@ class SubdocumentTest {
             outputResourceHook = {
                 assertEquals(DocumentType.PAGED, documentInfo.type)
                 assertNull(getFunctionByName(NON_EXISTENT_FUNCTION))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `function extension should be shared from parent to subdocument`() {
+        execute(
+            """
+            .extend {lowercase}
+                .super::uppercase
+
+            .lowercase {parent}
+            """.trimIndent(),
+            subdocumentGraph = { it.addVertex(lowercaseCallSubdoc).addEdge(Subdocument.Root, lowercaseCallSubdoc) },
+            outputResourceHook = { group ->
+                val rootResource = getSubdocumentResource(group, Subdocument.Root, this)
+                val subdocResource = getSubdocumentResource(group, lowercaseCallSubdoc, this)
+                assertContains(rootResource.content, "<p>PARENT</p>")
+                assertContains(subdocResource.content, "<p>SUB</p>")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `function extension should not be shared from subdocument to parent`() {
+        execute(
+            """
+            .lowercase {PARENT}
+            """.trimIndent(),
+            subdocumentGraph = { it.addVertex(extendingSubdoc).addEdge(Subdocument.Root, extendingSubdoc) },
+            outputResourceHook = { group ->
+                val rootResource = getSubdocumentResource(group, Subdocument.Root, this)
+                val subdocResource = getSubdocumentResource(group, extendingSubdoc, this)
+                assertContains(rootResource.content, "<p>parent</p>")
+                assertContains(subdocResource.content, "<p>SUB</p>")
             },
         ) {}
     }

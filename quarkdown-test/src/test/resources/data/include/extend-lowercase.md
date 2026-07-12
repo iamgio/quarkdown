@@ -1,0 +1,2 @@
+.extend {lowercase}
+    .super::uppercase

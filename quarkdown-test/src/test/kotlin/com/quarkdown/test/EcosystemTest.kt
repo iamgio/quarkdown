@@ -103,6 +103,23 @@ class EcosystemTest {
     }
 
     @Test
+    fun `include source with function extension`() {
+        forSandboxes(ContextSandbox.SHARE) { sandbox ->
+            execute(
+                """
+                .include {include/extend-lowercase.md} sandbox:{$sandbox}
+                .lowercase {hello}
+                """.trimIndent(),
+            ) {
+                assertEquals(
+                    "<p>HELLO</p>",
+                    it,
+                )
+            }
+        }
+    }
+
+    @Test
     fun `include uncalled function plus content from source`() {
         forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
             execute(
