@@ -1,0 +1,6 @@
+.extend {math}
+    .super foreground:{red} background:{black} padding:{10px}
+
+$ f(x) = \frac{1}{x} $
+
+Inline: $ y = x + 1 $

@@ -9,13 +9,17 @@ import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.inline.Image
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.quarkdown.block.Figure
+import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
+import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.size.Size
+import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.value.NodeValue
+import com.quarkdown.core.function.value.data.EvaluableString
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
@@ -181,6 +185,56 @@ fun image(
 @QFunction
 @Name("pagebreak")
 fun pageBreak() = PageBreak().wrappedAsValue()
+
+/**
+ * Creates a math (TeX) node, either inline or as a block.
+ *
+ * Example:
+ * ```markdown
+ * .math {2 + 2}
+ *
+ * .math {E = mc^2} block:{yes} ref:{einstein}
+ * ```
+ *
+ * As a primitive backing both [Math] blocks and [MathSpan] inlines, this function can be used
+ * in `.extend` to affect all math nodes in the document:
+ *
+ * ```markdown
+ * .extend {math} where:{block: .block::not}
+ *     .super foreground:{gray}
+ * ```
+ *
+ * @param content TeX expression content
+ * @param block whether the node is rendered as a block instead of inline. If unset, it's inferred from whether the source function call is block or inline
+ * @param referenceId optional ID for cross-referencing via [reference], only applied to block math
+ * @return the new [Math] block node or [MathSpan] inline node, depending on [block]
+ */
+@QFunction
+fun math(
+    @Injected call: FunctionCall<*>,
+    @Body content: EvaluableString,
+    @LikelyNamed block: Boolean? = null,
+    @Name("ref") referenceId: String? = null,
+    @Spread style: StyleOptions = StyleOptions.DEFAULT,
+): NodeValue {
+    val isBlock = block ?: call.sourceNode?.isBlock ?: false
+    return when {
+        isBlock -> {
+            Math(
+                expression = content.content,
+                referenceId = referenceId,
+                style = style.toNodeStyle(),
+            ).wrappedAsValue()
+        }
+
+        else -> {
+            MathSpan(
+                expression = content.content,
+                style = style.toNodeStyle(),
+            ).wrappedAsValue()
+        }
+    }
+}
 
 /**
  * Inserts content in a figure block, with an optional caption.

@@ -107,6 +107,6 @@ class AstRewriter(
             context = context,
             name = node.backingFunctionName,
             arguments = node.toFunctionCallArguments(),
-            isBlock = true,
+            isBlock = node.isBackingCallBlock,
         ).also(context::register)
 }
