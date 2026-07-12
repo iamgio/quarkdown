@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+Quarkdown 2.4 is one of the most impactful releases in the history of the project, introducing a new system for extending Markdown elements behavior and styling.
+You can read in detail about this powerful feature in its [blog post](https://quarkdown.com/blog/quarkdown-2-4).
+
 ### Added
 
 &nbsp;
