@@ -7,9 +7,11 @@ For example, extending `.heading` affects every `#`, `##`, and so on. Extending 
 
 ## Available primitives
 
-- **`.heading`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/heading.html} backs `#`, `##`, ... headings. Exposes explicit control over depth, numbering, page breaks, and cross-reference identifiers. See [Headings](headings.qd).
+- [**`.heading`**](headings.qd) .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/heading.html} backs `#`, `##`, ... headings. Exposes explicit control over depth, numbering, page breaks, and cross-reference identifiers.
 
 - **`.paragraph`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/paragraph.html} backs regular paragraphs.
+
+- **`.link`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/link.html} backs `[label](url "title")`.
 
 - **`.image`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/image.html} backs `![alt](url "title")`, with additional control over figure wrapping and [media storage](media-storage.qd).
 

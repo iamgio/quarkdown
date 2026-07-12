@@ -122,6 +122,23 @@ fun isEmpty(string: String) = string.isEmpty().wrappedAsValue()
 fun isNotEmpty(string: String) = string.isNotEmpty().wrappedAsValue()
 
 /**
+ * Checks if a string starts with a given prefix.
+ *
+ * @param string string to check
+ * @param prefix prefix to check for
+ * @param ignoreCase whether to ignore case when checking
+ * @return `true` if the string starts with the prefix, `false` otherwise
+ */
+@QFunction
+@Name("startswith")
+@LikelyChained
+fun startsWith(
+    string: String,
+    prefix: String,
+    ignoreCase: Boolean = false,
+) = string.startsWith(prefix, ignoreCase).wrappedAsValue()
+
+/**
  * Converts Markdown content to plain text.
  *
  * Example: `Hello, **world**!` -> `Hello, world!`

@@ -21,11 +21,11 @@ class MathSpan(
 ) : Node,
     StylableNode,
     PrimitiveFunctionBackedNode {
-    override val backingFunctionName: String
-        get() = "math"
-
     override val isBackingCallBlock: Boolean
         get() = false
+
+    override val backingFunctionName: String
+        get() = "math"
 
     override fun toFunctionCallArguments() =
         listOf(

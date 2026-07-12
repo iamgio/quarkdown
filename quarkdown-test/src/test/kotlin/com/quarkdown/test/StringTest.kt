@@ -64,4 +64,15 @@ class StringTest {
             assertEquals("<p>hello</p>", it)
         }
     }
+
+    @Test
+    fun `starts with`() {
+        execute(".startswith {hello world} {hello}") {
+            assertEquals("<p><input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>", it)
+        }
+
+        execute(".sum {3} {8}::startswith {1}") {
+            assertEquals("<p><input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>", it)
+        }
+    }
 }

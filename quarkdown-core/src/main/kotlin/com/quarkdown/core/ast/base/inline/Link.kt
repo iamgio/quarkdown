@@ -2,12 +2,20 @@ package com.quarkdown.core.ast.base.inline
 
 import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.ast.attributes.reference.ReferenceNode
+import com.quarkdown.core.ast.attributes.style.NodeStyle
+import com.quarkdown.core.ast.attributes.style.StylableNode
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
 import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.function.call.FunctionCallArgument
+import com.quarkdown.core.function.value.NoneValue
+import com.quarkdown.core.function.value.StringValue
+import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.util.stripAnchor
 import com.quarkdown.core.visitor.node.NodeVisitor
@@ -18,28 +26,42 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param url URL this link points to
  * @param title optional inline title
  * @param fileSystem optional file system where this link is defined, used for resolving relative paths
+ * @param style styling applied to the link
  */
 class Link(
     @Diverge override val label: InlineContent,
-    override val url: String,
+    @Diverge override val url: String,
     override val title: InlineContent?,
     override val fileSystem: FileSystem? = null,
+    override val style: NodeStyle = NodeStyle.DEFAULT,
 ) : LinkNode,
-    TextNode {
+    TextNode,
+    StylableNode,
+    PrimitiveFunctionBackedNode {
     override val text: InlineContent
         get() = label
 
     override var error: Pair<Throwable, PipelineErrorHandler>? = null
 
+    override val isBackingCallBlock: Boolean
+        get() = false
+
+    override val backingFunctionName: String
+        get() = "link"
+
+    override fun toFunctionCallArguments() =
+        listOf(
+            FunctionCallArgument(name = "content", expression = InlineMarkdownContent(label).wrappedAsValue()),
+            FunctionCallArgument(name = "url", expression = StringValue(url)),
+            FunctionCallArgument(
+                name = "title",
+                expression = title?.let { InlineMarkdownContent(it).wrappedAsValue() } ?: NoneValue,
+            ),
+        )
+
     override fun <T> acceptOnSuccess(visitor: NodeVisitor<T>) = visitor.visit(this)
 
-    override fun copy(url: String) =
-        Link(
-            label = label,
-            url = url,
-            title = title,
-            fileSystem = fileSystem,
-        )
+    override fun copy(url: String) = diverge(url = url)
 
     /**
      * Strips the anchor (fragment) from the URL.
