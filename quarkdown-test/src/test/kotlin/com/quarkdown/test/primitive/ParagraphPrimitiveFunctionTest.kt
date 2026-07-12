@@ -51,6 +51,26 @@ class ParagraphPrimitiveFunctionTest {
     }
 
     @Test
+    fun `extension body returning inline content stays wrapped in paragraph`() {
+        execute(
+            """
+            .extend {paragraph}
+                content:
+                .content::match {C}
+                    *.1*
+
+            A
+
+            B
+
+            C
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>A</p><p>B</p><p><em>C</em></p>", it)
+        }
+    }
+
+    @Test
     fun `content can be matched against pattern`() {
         execute(
             """

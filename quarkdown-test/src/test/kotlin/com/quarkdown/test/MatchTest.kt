@@ -18,8 +18,8 @@ class MatchTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "This is a <em>TEST</em> document for <em>TESTING</em>" +
-                    " some <em>TEXT</em> matching features",
+                "<p>This is a <em>TEST</em> document for <em>TESTING</em>" +
+                    " some <em>TEXT</em> matching features</p>",
                 it,
             )
         }
@@ -38,7 +38,7 @@ class MatchTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "This is a <em>TEST</em> for <em>TESTING</em> some <em>TEXT</em> features",
+                "<p>This is a <em>TEST</em> for <em>TESTING</em> some <em>TEXT</em> features</p>",
                 it,
             )
         }
