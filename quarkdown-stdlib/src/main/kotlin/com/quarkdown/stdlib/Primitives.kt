@@ -166,6 +166,16 @@ fun image(
  * .pagebreak
  * ```
  *
+ * As a [PageBreak] primitive, this function can be used in `.extend` to affect all page breaks in the document,
+ * including those introduced by the `<<<` syntax:
+ *
+ * ```markdown
+ * .extend {pagebreak}
+ *     .container border:{1px dashed gray}
+ *
+ *     .super
+ * ```
+ *
  * @return a [PageBreak] node
  */
 @QFunction
