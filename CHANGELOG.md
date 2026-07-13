@@ -2,19 +2,21 @@
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-07-13
+
 Quarkdown 2.4 is one of the most impactful releases in the history of the project, introducing a new system for extending Markdown elements behavior and styling.
 You can read in detail about this powerful feature in its [blog post](https://quarkdown.com/blog/quarkdown-2-4).
 
 ### Added
 
-&nbsp;
+ 
 
 #### [Element styling](https://quarkdown.com/wiki/element-styling) (show-rules)
 
 > [!NOTE]
 > This feature is experimental.
 
-When `.extend` is applied to a function of the [*Primitives* module](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/index.html), its new behavior is reflected on its Markdown counterpart. For example, extending the `.heading` function affects the `# Heading` Markdown element.
+When `.extend` is applied to a function of the [_Primitives_ module](https://quarkdown.com/docs/quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/index.html), its new behavior is reflected on its Markdown counterpart. For example, extending the `.heading` function affects the `# Heading` Markdown element.
 
 This is one of the biggest milestones for Quarkdown, on par with Typst's `#show` rules.
 
@@ -29,13 +31,13 @@ This is one of the biggest milestones for Quarkdown, on par with Typst's `#show`
 
 This release ships with a handful of primitives as an experimental feature: headings, paragraphs, links, figures, images, math, page breaks. The plan is to eventually have every Markdown element type backed by a primitive function.
 
-&nbsp;
+ 
 
 #### [New primitives: `.paragraph`, `.math`, `.link`](https://quarkdown.com/wiki/primitives)
 
 The new `.paragraph` primitive backs Markdown paragraphs, `.math` backs `$`-delimited math blocks, and `.link` backs Markdown links, enabling extensions via `.extend`.
 
-&nbsp;
+ 
 
 #### [Full styling options on `.heading`, `.paragraph`, `.math` and `.link`](https://quarkdown.com/wiki/element-styling-properties)
 
@@ -53,7 +55,7 @@ This plays particularly well with the new primitive extension system:
     .super background:{red} foreground:{white} padding:{10px}
 ```
 
-&nbsp;
+ 
 
 #### [Conditional `.extend`](https://quarkdown.com/wiki/extending-functions)
 
@@ -75,7 +77,7 @@ The following snippet adds an icon to all external links:
         .content .icon {box-arrow-up-right}
 ```
 
-&nbsp;
+ 
 
 #### [Regex match](https://quarkdown.com/wiki/regex-match)
 
@@ -102,11 +104,11 @@ This is particularly useful for element styling:
 Quarkdown takes its name from quarks
 ```
 
-&nbsp;
+ 
 
 ### Changed
 
-&nbsp;
+ 
 
 #### [Inline lambdas without `@lambda`](https://quarkdown.com/wiki/lambda#inline-lambda)
 
@@ -116,17 +118,17 @@ Inline lambdas passed as arguments no longer require the `@lambda` prefix. When 
 .num::takeif {x: .x::equals {5}}
 ```
 
-```markdown
+````markdown
 .mydictionary::sorted by:{name value: .value}
 
 ```markdown
 .extend {heading} where:{depth: .depth::islower than:{3}}
     .super background:{teal}
-```
+````
 
 The `@lambda` prefix is still accepted for backward compatibility with older documents.
 
-&nbsp;
+ 
 
 #### [Body argument binding](https://quarkdown.com/wiki/syntax-of-a-function-call#block-vs-inline-function-calls)
 
@@ -151,7 +153,7 @@ Inline binding keeps working as before, so the following is still valid:
 
 Parameter lookup now performs a single pass over the arguments, improving performance.
 
-&nbsp;
+ 
 
 #### Body arguments for inline function calls
 
@@ -175,25 +177,17 @@ Whereas previously, this was the only valid form:
 
 ### Added
 
- 
-
 #### GHCR image
 
 An image for Quarkdown is now available on GitHub Container Registry.
 
 Thanks @dddanielliu!
 
- 
-
 ### Fixed
-
- 
 
 #### Safer `--clean`
 
 The `--clean` flag now refuses to clean the output directory in case it contains source files or git repos, or if it's the filesystem root or home directory. It also stops if the directory would (recursively) contain the source file passed to the command.
-
- 
 
 ## [2.3.0] - 2026-06-18
 
@@ -1157,7 +1151,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.3.1...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.4.0...HEAD
+
+[2.4.0]: https://github.com/iamgio/quarkdown/compare/v2.3.1...v2.4.0
 
 [2.3.1]: https://github.com/iamgio/quarkdown/compare/v2.3.0...v2.3.1
 
