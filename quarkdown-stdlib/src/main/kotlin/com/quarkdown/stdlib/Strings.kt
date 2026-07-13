@@ -135,7 +135,7 @@ fun isNotEmpty(string: String) = string.isNotEmpty().wrappedAsValue()
 fun startsWith(
     string: String,
     prefix: String,
-    ignoreCase: Boolean = false,
+    @Name("ignorecase") ignoreCase: Boolean = false,
 ) = string.startsWith(prefix, ignoreCase).wrappedAsValue()
 
 /**
