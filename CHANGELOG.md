@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Fixed
+
+&nbsp;
+
+#### Inline replacement lambdas accept nested function calls
+
+Node-returning function calls, such as `.text`, can now be used in `.match` and other body lambdas as expected.
+
+```markdown
+.match {Quarkdown takes its name from quarks} pattern:{[Qq]uark(down|s)?}
+    .text {.1} color:{mediumpurple} decoration:{underline}
+```
+
 ## [2.4.0] - 2026-07-13
 
 Quarkdown 2.4 is one of the most impactful releases in the history of the project, introducing a new system for extending Markdown elements behavior and styling.

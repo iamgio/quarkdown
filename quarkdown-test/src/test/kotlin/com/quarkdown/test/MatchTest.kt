@@ -45,6 +45,50 @@ class MatchTest {
     }
 
     @Test
+    fun `match lambda body returning inline NodeValue via text call`() {
+        execute(
+            """
+            .match {Quarkdown takes its name from quarks} pattern:{[Qq]uark(down|s)?}
+                .text {.1} decoration:{underline}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><span style=\"text-decoration: underline;\">Quarkdown</span> takes its name from " +
+                    "<span style=\"text-decoration: underline;\">quarks</span></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `match lambda body returning inline NodeValue via chained text call`() {
+        execute(
+            """
+            .match {Quarkdown is a tool} {Quarkdown}
+                .1::text
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><span>Quarkdown</span> is a tool</p>", it)
+        }
+    }
+
+    @Test
+    fun `match in paragraph extension with chained inline call`() {
+        execute(
+            """
+            .extend {paragraph}
+                content:
+                .content::match {Quarkdown}
+                    .1::text
+
+            Quarkdown is a tool.
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><span>Quarkdown</span> is a tool.</p>", it)
+        }
+    }
+
+    @Test
     fun `match inside heading extension`() {
         execute(
             """
