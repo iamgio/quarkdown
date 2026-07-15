@@ -167,14 +167,19 @@ open class Lambda(
      */
     inline fun <reified T, reified V : Value<T>> invoke(values: List<Value<*>>): V {
         // Invoke the lambda action and convert the result to a static type.
-        val result = invokeDynamic(values)
+        var result: Value<*> =
+            when (val raw = invokeDynamic(values)) {
+                is DynamicValue -> DynamicValueConverter(raw).convertTo(T::class, parentContext) ?: raw
+                else -> raw
+            }
 
-        return when (result) {
-            is V -> result
-            is DynamicValue -> DynamicValueConverter(result).convertTo(T::class, parentContext)
-            is AdaptableValue<*> -> result.adapt()
-            else -> result
-        } as? V
+        // Follow the adaptation chain (e.g. NodeValue -> MarkdownContentValue -> InlineMarkdownContentValue)
+        // until V is reached or no further adaptation is possible.
+        while (result !is V && result is AdaptableValue<*>) {
+            result = result.adapt()
+        }
+
+        return result as? V
             ?: throw IllegalArgumentException("Unexpected lambda result: expected ${V::class}, found ${result::class}")
     }
 
