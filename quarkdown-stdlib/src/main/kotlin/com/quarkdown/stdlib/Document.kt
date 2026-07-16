@@ -826,7 +826,15 @@ fun currentPage() = PageCounter(PageCounter.Target.CURRENT).wrappedAsValue()
  */
 @QFunction
 @Name("totalpages")
-fun totalPages() = PageCounter(PageCounter.Target.TOTAL).wrappedAsValue()
+fun totalPages(
+    @Name("scope") scope: String = "document",
+) = PageCounter(
+    PageCounter.Target.TOTAL,
+    when (scope.lowercase()) {
+        "section" -> PageCounter.Scope.SECTION
+        else -> PageCounter.Scope.DOCUMENT
+    }
+).wrappedAsValue()
 
 /**
  * Sets a new page number format from the page where this function appears.
