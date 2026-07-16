@@ -44,27 +44,40 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
      * Updates all total page number elements with the total count of pages.
      */
     private updateTotalPageNumbers(pages: QuarkdownPage[]) {
+    const sectionTotals = new Map<QuarkdownPage, number>();
 
-        const sectionTotals = new Map<QuarkdownPage, number>();
+    let currentSection: QuarkdownPage[] = [];
+    let sectionStart = 1;
 
-        let currentSection: QuarkdownPage[] = [];
+    const flush = () => {
+        if (currentSection.length === 0) {
+            return;
+        }
 
-        const flush = () => {
-            const total = currentSection.length;
+        const total = sectionStart + currentSection.length - 1;
 
-            currentSection.forEach(page =>
-                sectionTotals.set(page, total)
-            );
-        };
+        currentSection.forEach(page => {
+            sectionTotals.set(page, total);
+        });
+    };
 
     pages.forEach(page => {
+        const resetMarkers = this.getPageNumberResetMarkers(page);
 
-        if (
-            this.getPageNumberResetMarkers(page).length &&
-            currentSection.length
-        ) {
+        if (resetMarkers.length && currentSection.length) {
             flush();
             currentSection = [];
+        }
+
+        if (resetMarkers.length) {
+            const lastReset = resetMarkers[resetMarkers.length - 1];
+            const requested = parseInt(lastReset.dataset.start ?? "1", 10);
+
+            if (Number.isFinite(requested) && requested > 0) {
+                sectionStart = requested;
+            } else {
+                sectionStart = 1;
+            }
         }
 
         currentSection.push(page);
@@ -73,18 +86,19 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
     flush();
 
     this.getTotalPageNumberElements().forEach(element => {
+        const page = this.quarkdownDocument.getPage(element);
 
-            const page = this.quarkdownDocument.getPage(element);
+        if (!page) {
+            return;
+        }
 
-            if (!page) return;
+        const total =
+            element.dataset.scope === "section"
+                ? sectionTotals.get(page) ?? pages.length
+                : pages.length;
 
-            const total =
-                element.dataset.scope === "section"
-                    ? sectionTotals.get(page) ?? pages.length
-                    : pages.length;
-
-            element.innerText = total.toString();
-        });
+        element.innerText = total.toString();
+    });
     }
 
     /**
