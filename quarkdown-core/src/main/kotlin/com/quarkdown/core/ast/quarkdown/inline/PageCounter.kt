@@ -11,6 +11,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  */
 class PageCounter(
     val target: Target,
+    val scope: Scope = Scope.DOCUMENT,
 ) : Node {
     enum class Target {
         /**
@@ -22,6 +23,11 @@ class PageCounter(
          * The total amount of pages.
          */
         TOTAL,
+    }
+
+    enum class Scope {
+        DOCUMENT,
+        SECTION,
     }
 
     override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(this)
