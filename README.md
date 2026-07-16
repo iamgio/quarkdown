@@ -114,7 +114,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 - **Customizable:** full control over document layout, aesthetics, and properties
 - **Secure by default:** a restrictive permission system limits access to system resources
 - **Versatile:** a single source compiles to multiple targets
-- **Reactive:** low-latency live previews for rapid iteration. The official wiki (100+ pages) compiles in ~2 seconds
+- **Reactive:** low-latency live previews for rapid iteration. The official wiki (100+ subdocuments) compiles in ~2 seconds
 - **Reusable:** repeated content can be turned into one-line function calls
 - **Easily deployable:** set a CD workflow up in under 3 minutes ([example](https://github.com/iamgio/iamgio.github.io/blob/main/.github/workflows/build.yml))
 
