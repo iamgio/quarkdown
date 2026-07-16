@@ -44,9 +44,46 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
      * Updates all total page number elements with the total count of pages.
      */
     private updateTotalPageNumbers(pages: QuarkdownPage[]) {
-        const amount = pages.length;
-        this.getTotalPageNumberElements().forEach(total => {
-            total.innerText = amount.toString();
+
+        const sectionTotals = new Map<QuarkdownPage, number>();
+
+        let currentSection: QuarkdownPage[] = [];
+
+        const flush = () => {
+            const total = currentSection.length;
+
+            currentSection.forEach(page =>
+                sectionTotals.set(page, total)
+            );
+        };
+
+    pages.forEach(page => {
+
+        if (
+            this.getPageNumberResetMarkers(page).length &&
+            currentSection.length
+        ) {
+            flush();
+            currentSection = [];
+        }
+
+        currentSection.push(page);
+    });
+
+    flush();
+
+    this.getTotalPageNumberElements().forEach(element => {
+
+            const page = this.quarkdownDocument.getPage(element);
+
+            if (!page) return;
+
+            const total =
+                element.dataset.scope === "section"
+                    ? sectionTotals.get(page) ?? pages.length
+                    : pages.length;
+
+            element.innerText = total.toString();
         });
     }
 
