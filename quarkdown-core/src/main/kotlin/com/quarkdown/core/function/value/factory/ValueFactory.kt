@@ -185,7 +185,8 @@ object ValueFactory {
     /**
      * @param raw raw value to convert to a size value.
      *            The format is `Xunit`, where `X` is a number (integer or floating point)
-     *            and `unit` is one of the following: `px`, `pt`, `cm`, `mm`, `in`. If not specified, `px` is assumed.
+     *            and `unit` is one of the following: `px`, `pt`, `cm`, `mm`, `in`, `em`, `%`.
+     *            If not specified, `px` is assumed.
      * @return a new size value that wraps the parsed content of [raw].
      * @throws IllegalRawValueException if the value is an invalid size
      */
@@ -196,7 +197,7 @@ object ValueFactory {
         // All possible unit symbols.
         val symbolsRegex = Size.Unit.entries.joinToString("|") { it.symbol }
         // Matches value and unit, e.g. 10px, 12.5cm, -3in.
-        val regex = "^(-?\\d+(?:\\.\\d+)?)($symbolsRegex)?$".toRegex()
+        val regex = "^(-?(?:\\d*\\.\\d+|\\d+))($symbolsRegex)?$".toRegex()
         val groups =
             regex
                 .find(raw.toString())

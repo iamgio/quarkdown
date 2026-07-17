@@ -25,6 +25,7 @@ data class Size(
         CENTIMETERS("cm"),
         MILLIMETERS("mm"),
         INCHES("in"),
+        EMS("em"),
         PERCENTAGE("%"),
     }
 

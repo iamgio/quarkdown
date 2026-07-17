@@ -25,7 +25,8 @@ class FunctionCallPatterns {
             regex =
                 RegexBuilder("(?:(?<=before)(?=call))|(?:(?=wrapcall))")
                     .withReference("before", FUNCTION_CALL_PATTERN_BEFORE)
-                    .withReference("call", "begin(name)")
+                    // Require an identifier boundary so decimal values such as `.7em` remain text.
+                    .withReference("call", "begin(?:name)(?![a-zA-Z0-9])")
                     .withReference("wrap", Regex.escape(FunctionCallGrammar.ARGUMENT_BEGIN.toString()))
                     .withReference("begin", Regex.escape(FunctionCallGrammar.BEGIN.toString()))
                     .withReference("name", FunctionCallGrammar.IDENTIFIER_PATTERN)
