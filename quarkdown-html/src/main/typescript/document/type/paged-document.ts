@@ -64,6 +64,11 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
 
     /** Initializes paged.js rendering. */
     initializeRendering(): void {
+        // Hidden style setup must not become paged content before an initial page break.
+        document
+            .querySelectorAll<HTMLStyleElement>('.paged-content-wrapper > style[data-hidden]')
+            .forEach(style => document.head.appendChild(style));
+
         (window as any).PagedPolyfill?.preview().then();
     }
 
