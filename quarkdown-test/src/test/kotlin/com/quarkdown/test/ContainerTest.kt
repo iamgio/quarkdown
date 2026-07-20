@@ -46,6 +46,22 @@ class ContainerTest {
     }
 
     @Test
+    fun `sizes in em units`() {
+        execute(
+            """
+            .container width:{0.7em} height:{1em} borderwidth:{0.15em}
+                Sized
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div class=\"container\" style=\"width: 0.7em; height: 1.0em; " +
+                    "border-width: 0.15em 0.15em 0.15em 0.15em; border-style: solid;\"><p>Sized</p></div>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun fullwidth() {
         execute(
             """

@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+&nbsp;
+
+### Added
+
+&nbsp;
+
+#### [`em` size units](https://quarkdown.com/wiki/sizes)
+
+Size values now support the font-relative `em` unit, including decimal values such as `0.7em` and `0.15em`.
+
 ### Fixed
 
 &nbsp;
