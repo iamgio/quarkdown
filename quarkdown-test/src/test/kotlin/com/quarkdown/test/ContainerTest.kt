@@ -49,7 +49,7 @@ class ContainerTest {
     fun `sizes in em units`() {
         execute(
             """
-            .container width:{.7em} height:{1em} borderwidth:{.15em}
+            .container width:{0.7em} height:{1em} borderwidth:{0.15em}
                 Sized
             """.trimIndent(),
         ) {

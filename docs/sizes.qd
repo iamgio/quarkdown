@@ -16,7 +16,7 @@ Supported units:
 - `em` font-relative units
 - `%` percentage (relative to parent)
 
-Examples of accepted values are: `12px`, `2cm`, `5.3in`, `.7em`, `30%`.
+Examples of accepted values are: `12px`, `2cm`, `5.3in`, `0.7em`, `30%`.
 
 You can omit the unit, in which case `px` is used by default.
 
