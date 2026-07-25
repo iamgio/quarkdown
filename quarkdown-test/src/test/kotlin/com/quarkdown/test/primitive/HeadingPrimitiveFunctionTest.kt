@@ -253,6 +253,52 @@ class HeadingPrimitiveFunctionTest {
     }
 
     @Test
+    fun `chained extensions apply last-declared styling`() {
+        execute(
+            """
+            .extend {heading}
+                .super foreground:{blue}
+
+            .extend {heading}
+                .super foreground:{green}
+
+            .extend {heading}
+                .super foreground:{red}
+
+            ## Heading
+            """.trimIndent(),
+        ) {
+            assertEquals("<h2 style=\"color: rgba(255, 0, 0, 1.0);\">Heading</h2>", it)
+        }
+    }
+
+    @Test
+    fun `chained extensions with conditional inner extension`() {
+        execute(
+            """
+            .extend {heading}
+                .super foreground:{green}
+
+            .extend {heading}
+                .super foreground:{blue}
+
+            .extend {heading} where:{depth: .depth::equals {2}}
+                .super foreground:{red}
+
+            ## H2
+
+            ### H3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h2 style=\"color: rgba(255, 0, 0, 1.0);\">H2</h2>" +
+                    "<h3 style=\"color: rgba(0, 0, 255, 1.0);\">H3</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `icon can be used as content`() {
         execute(
             """

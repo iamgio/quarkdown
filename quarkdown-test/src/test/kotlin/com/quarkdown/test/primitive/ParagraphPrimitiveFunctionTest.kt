@@ -71,6 +71,26 @@ class ParagraphPrimitiveFunctionTest {
     }
 
     @Test
+    fun `extension body match with nested text call`() {
+        execute(
+            """
+            .extend {paragraph}
+                content:
+                .content::match {[Qq]uark(down|s)?}
+                    .text {.1} decoration:{underline}
+
+            Quarkdown takes its name from quarks
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><span style=\"text-decoration: underline;\">Quarkdown</span> takes its name from " +
+                    "<span style=\"text-decoration: underline;\">quarks</span></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `content can be matched against pattern`() {
         execute(
             """
