@@ -1,10 +1,15 @@
-import {suite} from "../../quarkdown";
+import {DocumentType, suite} from "../../quarkdown";
 
-const {test, testMatrix, expect} = suite(__dirname);
+const {testMatrix, expect} = suite(__dirname);
+const documentTypes: DocumentType[] = ["plain", "paged", "slides", "docs"];
 
-test("applies raw CSS styles", async (page) => {
+testMatrix("moves raw CSS out of document content and applies it", documentTypes, async (page, documentType) => {
     const link = page.getByRole("link", {name: "Link"});
 
+    if (documentType !== "paged") {
+        await expect(page.locator("head > style[data-hidden]")).toHaveCount(1);
+    }
+    await expect(page.locator("body style[data-hidden]")).toHaveCount(0);
     await expect(link).toBeAttached();
     await expect(link).toHaveCSS("color", "rgb(255, 0, 0)");
 });
