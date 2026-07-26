@@ -97,3 +97,27 @@ An optional `where` [inline lambda](lambda.qd) parameter lets you define a condi
     ## H3
 
     ## H4
+
+## Chaining multiple extensions
+
+You can call `.extend` more than once on the same function, with each new extension added on top of the previous chain.
+
+.exampleoutput {
+    .heading {H2} depth:{2} indexed:{no} foreground:{red}
+
+    .heading {H3} depth:{3} indexed:{no} foreground:{green}
+}
+    .extend {heading}
+        .super foreground:{blue}
+
+    .extend {heading}
+        .super foreground:{green}
+
+    .extend {heading} where:{depth: .depth::equals {2}}
+        .super foreground:{red}
+
+    ## H2
+
+    ### H3
+
+When extensions carry `where` conditions, the outer (first-declared) condition is checked first, so declaration order matters if two conditions can both apply to the same call.

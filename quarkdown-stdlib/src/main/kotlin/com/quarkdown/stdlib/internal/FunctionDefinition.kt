@@ -1,6 +1,7 @@
 package com.quarkdown.stdlib.internal
 
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.FunctionParameter
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.call.FunctionCall
@@ -49,7 +50,22 @@ internal fun declareFunction(
 
             invoke(call, args, bindings)
         }
-    context.loadLibrary(Library(CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + name, setOf(function)))
+    declareFunction(context, function)
+}
+
+/**
+ * Registers a pre-constructed [function] in [context], under the same custom-function library
+ * naming convention used by the other overloads.
+ *
+ * Useful when the caller needs the callable to be a specific [Function] subtype rather than the
+ * standard [SimpleFunction] built by the other overloads (e.g. an extension wrapper that carries
+ * its own mutable state).
+ */
+internal fun declareFunction(
+    context: MutableContext,
+    function: Function<*>,
+) {
+    context.loadLibrary(Library(CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX + function.name, setOf(function)))
 }
 
 /**

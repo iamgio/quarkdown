@@ -365,15 +365,15 @@ class FunctionExtensionTest {
             .extend {mysum} where:{a: .a::islower than:{10}}
                 a:
                 .a
-            
+
             .extend {mysum} where:{b: .b::islower than:{10}}
                 b:
                 .b
-                
+
             .mysum {10} {11} .mysum {4} {12} .mysum {16} {5} .mysum {8} {3}
             """.trimIndent(),
         ) {
-            assertEquals("<p>21 4 5 3</p>", it)
+            assertEquals("<p>21 4 5 8</p>", it)
         }
     }
 
@@ -393,6 +393,30 @@ class FunctionExtensionTest {
             """.trimIndent(),
         ) {
             assertEquals("<p>21 4 3</p>", it)
+        }
+    }
+
+    @Test
+    fun `chained extensions with same override, last declared wins`() {
+        execute(
+            """
+            .function {test}
+                x:
+                .x
+
+            .extend {test}
+                .super x:{blue}
+
+            .extend {test}
+                .super x:{green}
+
+            .extend {test}
+                .super x:{red}
+
+            .test {user}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>red</p>", it)
         }
     }
 

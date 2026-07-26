@@ -2,8 +2,6 @@
 
 ## [Unreleased]
 
-&nbsp;
-
 ### Added
 
 &nbsp;
@@ -11,6 +9,10 @@
 #### [`em` size units](https://quarkdown.com/wiki/sizes)
 
 Size values now support the font-relative `em` unit, including decimal values such as `0.7em` and `0.15em`.
+
+Thanks @arpitagarwal1301!
+
+&nbsp;
 
 ### Fixed
 
@@ -22,7 +24,26 @@ Node-returning function calls, such as `.text`, can now be used in `.match` and 
 
 ```markdown
 .match {Quarkdown takes its name from quarks} pattern:{[Qq]uark(down|s)?}
-    .text {.1} color:{mediumpurple} decoration:{underline}
+    .1::text color:{purple} decoration:{underline}
+```
+
+&nbsp;
+
+#### Chained `.extend` composes in declaration order
+
+Multiple extensions on the same function now stack in the correct LIFO declaration order. The following snippet now correctly renders the heading in red, rather than blue:
+
+```markdown
+.extend {heading}
+    .super foreground:{blue}
+
+.extend {heading}
+    .super foreground:{green}
+
+.extend {heading}
+    .super foreground:{red}
+
+## Heading
 ```
 
 ## [2.4.0] - 2026-07-13
