@@ -66,6 +66,8 @@ Fixed the ability to chain multiple `.match` calls onto the same content:
             .1::text color:{red}
 ```
 
+&nbsp;
+
 #### Fixed empty pages on CSS declarations
 
 Fixed an issue that caused `.css` and `.cssproperties` to produce empty pages in `paged` documents when the declaration was before an H1.
