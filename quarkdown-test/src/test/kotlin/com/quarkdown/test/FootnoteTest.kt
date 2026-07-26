@@ -318,6 +318,57 @@ class FootnoteTest {
     }
 
     @Test
+    fun `all-in-one definition with inline math`() {
+        execute("text[^x: see $ \\infty $ here]") {
+            assertEquals(
+                "<p>text" +
+                    referenceHtml("x", "1") +
+                    definitionHtml(
+                        label = "x",
+                        index = 0,
+                        content = "see <formula>\\infty</formula> here",
+                    ) +
+                    "</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `all-in-one definition with math primitive call`() {
+        execute("text[^x: see .math {\\infty} here]") {
+            assertEquals(
+                "<p>text" +
+                    referenceHtml("x", "1") +
+                    definitionHtml(
+                        label = "x",
+                        index = 0,
+                        content = "see <formula>\\infty</formula> here",
+                    ) +
+                    "</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `all-in-one definition with escaped brackets`() {
+        execute("text[^x: see \\[not a bracket\\] here]") {
+            assertEquals(
+                "<p>text" +
+                    referenceHtml("x", "1") +
+                    definitionHtml(
+                        label = "x",
+                        index = 0,
+                        content = "see [not a bracket] here",
+                    ) +
+                    "</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun numbered() {
         execute(
             """
