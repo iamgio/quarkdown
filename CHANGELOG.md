@@ -66,6 +66,12 @@ Fixed the ability to chain multiple `.match` calls onto the same content:
             .1::text color:{red}
 ```
 
+#### Fixed empty pages on CSS declarations
+
+Fixed an issue that caused `.css` and `.cssproperties` to produce empty pages in `paged` documents when the declaration was before an H1.
+
+Thanks @arpitagarwal1301!
+
 ## [2.4.0] - 2026-07-13
 
 Quarkdown 2.4 is one of the most impactful releases in the history of the project, introducing a new system for extending Markdown elements behavior and styling.
