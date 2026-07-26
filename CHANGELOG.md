@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.4.1] - 2026-07-26
+
 ### Added
 
 #### [`em` size units](https://quarkdown.com/wiki/sizes)
@@ -1197,7 +1199,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.4.1...HEAD
+
+[2.4.1]: https://github.com/iamgio/quarkdown/compare/v2.4.0...v2.4.1
 
 [2.4.0]: https://github.com/iamgio/quarkdown/compare/v2.3.1...v2.4.0
 
