@@ -273,6 +273,34 @@ class HeadingPrimitiveFunctionTest {
     }
 
     @Test
+    fun `chained extensions can reset styling via none`() {
+        execute(
+            """
+            .noautopagebreak
+
+            .extend {heading}
+                .super foreground:{red} background:{blue}
+
+            .extend {heading} where:{depth: .depth::equals {2}}
+                .super foreground:{.none} background:{.none}
+
+            # A
+
+            ## B
+
+            ### C
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<h1 style=\"color: rgba(255, 0, 0, 1.0); background-color: rgba(0, 0, 255, 1.0);\">A</h1>" +
+                    "<h2>B</h2>" +
+                    "<h3 style=\"color: rgba(255, 0, 0, 1.0); background-color: rgba(0, 0, 255, 1.0);\">C</h3>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `chained extensions with conditional inner extension`() {
         execute(
             """

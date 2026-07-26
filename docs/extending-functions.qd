@@ -121,3 +121,26 @@ You can call `.extend` more than once on the same function, with each new extens
     ### H3
 
 When extensions carry `where` conditions, the outer (first-declared) condition is checked first, so declaration order matters if two conditions can both apply to the same call.
+
+### Resetting values in a chain
+
+Passing [None](none.qd) as an argument to a nullable parameter restores it to its default.
+
+.exampleoutput {
+    .heading {H2} depth:{2} indexed:{no} background:{teal}
+
+    .heading {H3} depth:{3} indexed:{no}
+
+    .heading {H4} depth:{4} indexed:{no} background:{teal}
+} prelude:{Here, the outer extension colors every heading, and the inner one resets the styling on depth-3 headings only.}
+    .extend {heading}
+        .super background:{teal}
+
+    .extend {heading} where:{depth: .depth::equals {3}}
+        .super background:{.none}
+
+    ## H2
+
+    ### H3
+
+    #### H4
