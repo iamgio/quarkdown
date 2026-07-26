@@ -99,11 +99,61 @@ class ParagraphPrimitiveFunctionTest {
                 .super
                     .content::match {[Qq]uark(down|s)?}
                         **.1**
-            
+
             Quarkdown takes its name from quarks
             """.trimIndent(),
         ) {
             assertEquals("<p><strong>Quarkdown</strong> takes its name from <strong>quarks</strong></p>", it)
+        }
+    }
+
+    @Test
+    fun `chained extensions match complementary patterns on the same content`() {
+        execute(
+            """
+            .extend {paragraph}
+                content:
+                .super
+                    .content::match {A}
+                        .1::text color:{blue}
+
+            .extend {paragraph}
+                content:
+                .super
+                    .content::match {B}
+                        .1::text color:{red}
+
+            A B C
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><span style=\"color: rgba(0, 0, 255, 1.0);\">A</span> " +
+                    "<span style=\"color: rgba(255, 0, 0, 1.0);\">B</span> C</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `chained extensions preserve semantic inline wrappers around a re-matched substring`() {
+        execute(
+            """
+            .extend {paragraph}
+                content:
+                .super
+                    .content::match {A}
+                        *.1*
+
+            .extend {paragraph}
+                content:
+                .super
+                    .content::match {A}
+                        **.1**
+
+            A B C
+            """.trimIndent(),
+        ) {
+            assertEquals("<p><em><strong>A</strong></em> B C</p>", it)
         }
     }
 }
