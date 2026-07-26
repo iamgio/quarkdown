@@ -1,4 +1,8 @@
 .cssproperties
     - link-color: red
 
+.tableofcontents
+
+# Heading
+
 [Link](https://example.com)
