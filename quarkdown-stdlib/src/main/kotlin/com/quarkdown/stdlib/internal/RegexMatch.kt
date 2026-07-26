@@ -1,6 +1,7 @@
 package com.quarkdown.stdlib.internal
 
 import com.quarkdown.core.ast.InlineContent
+import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.inline.Text
@@ -11,7 +12,10 @@ import com.quarkdown.core.ast.rewriter.withChildren
  * found within plain [Text] leaves is replaced by the output of [replacement].
  *
  * Non-text children are returned unchanged. [TextNode]s are descended into, preserving their structure
- * around the transformed inner content.
+ * around the transformed inner content. Other nestable nodes are transparent wrappers whose semantic
+ * content lives entirely in their children (e.g. an expanded function call), and are flattened so that
+ * matches inside them are reachable; this is what lets chained function extensions apply text
+ * transformations to content already produced by an outer extension.
  *
  * @param regex pattern to match in plain text leaves
  * @param replacement maps each matched substring to the inline content that should replace it
@@ -24,6 +28,7 @@ internal fun Node.replaceMatches(
     when (this) {
         is Text -> this.text.replaceMatches(regex, replacement)
         is TextNode -> listOf(this.withChildren(this.text.flatMap { it.replaceMatches(regex, replacement) }))
+        is NestableNode -> children.flatMap { it.replaceMatches(regex, replacement) }
         else -> listOf(this)
     }
 

@@ -46,6 +46,26 @@ Multiple extensions on the same function now stack in the correct LIFO declarati
 ## Heading
 ```
 
+&nbsp;
+
+#### `.match` in chained extensions sees content correctly
+
+Fixed the ability to chain multiple `.match` calls onto the same content:
+
+```markdown
+.extend {paragraph}
+    content:
+    .super
+        .content::match {A}
+            .1::text color:{blue}
+
+.extend {paragraph}
+    content:
+    .super
+        .content::match {B}
+            .1::text color:{red}
+```
+
 ## [2.4.0] - 2026-07-13
 
 Quarkdown 2.4 is one of the most impactful releases in the history of the project, introducing a new system for extending Markdown elements behavior and styling.
