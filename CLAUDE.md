@@ -377,7 +377,6 @@ make sure to also update the documentation accordingly, along with [CHANGELOG](C
 The changelog follows the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format,
 uses [Semantic Versioning](https://semver.org/), uses extensive description for each major change,
 with links to the corresponding documentation at `https://quarkdown.com/wiki/Page`.
-Each `###` and `####` entry of the changelog must be preceded by a blank line, `&nbsp;`, and another blank line, including first entries.
 
 When writing documentation and changelog entries, you're an expert technical writer who follows these guidelines:
 - Use American English spelling.

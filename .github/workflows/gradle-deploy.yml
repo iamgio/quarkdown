@@ -29,42 +29,17 @@ jobs:
         full-checkout: true
         checkout-token: ${{ secrets.COMMITTER_TOKEN }}
 
-    # Writes the new version (tag name without the leading 'v') to version.txt
-    - name: Bump version
+    # Bumps version.txt and updates CHANGELOG.md so the following build embeds
+    # the release version, then commits both files back to main. The rest of the
+    # release publishing happens after the build in the second simple-release step below.
+    - name: Prepare release
       if: github.ref_type == 'tag'
-      run: printf "%s" "${GITHUB_REF_NAME#v}" > version.txt
-
-    - name: Update changelog
-      uses: thomaseizinger/keep-a-changelog-new-release@v2
-      if: github.ref_type == 'tag'
+      uses: iamgio/simple-release@v1
       with:
-        tag: ${{ github.ref_name }}
-
-    - name: Extract release notes
-      id: release-notes
-      if: github.ref_type == 'tag'
-      uses: ffurrer2/extract-release-notes@v3
-
-    # Reads SPONSORS.md into a step output, to be appended to the release notes.
-    - name: Read sponsors
-      id: sponsors
-      if: github.ref_type == 'tag' && hashFiles('SPONSORS.md') != ''
-      run: |
-        {
-          echo 'content<<SPONSORS_EOF'
-          cat SPONSORS.md
-          echo SPONSORS_EOF
-        } >> "$GITHUB_OUTPUT"
-
-    - name: Commit release updates
-      uses: stefanzweifel/git-auto-commit-action@v7
-      if: github.ref_type == 'tag'
-      with:
-        commit_message: "chore: release ${{ github.ref_name }}"
-        commit_user_name: "github-actions"
-        commit_user_email: "github-actions[bot]@users.noreply.github.com"
-        file_pattern: version.txt CHANGELOG.md
-        branch: main
+        version-file: version.txt
+        changelog-file: CHANGELOG.md
+        commit: 'true'
+        release: 'false'
 
     - name: Build per-platform distributions
       uses: burrunan/gradle-cache-action@v3
@@ -94,32 +69,18 @@ jobs:
         name: quarkdown
         path: build/distributions/quarkdown-*.zip
 
-    - name: Move devbuild tag to latest commit
-      run: |
-        git tag -d latest || true
-        git tag -f latest
-        git push origin +latest
-
-    - name: Create devbuild release
-      uses: softprops/action-gh-release@v2.2.2
+    # Moves the rolling `latest` tag, publishes a devbuild prerelease,
+    # and on tag publishes the tagged release.
+    - name: Publish devbuild and release
+      uses: iamgio/simple-release@v1
       with:
-        token: "${{ secrets.GITHUB_TOKEN }}"
-        tag_name: "latest"
-        prerelease: true
-        generate_release_notes: true
-        name: Development build
-        files: build/distributions/quarkdown-*.zip
-
-    - name: Create release
-      uses: softprops/action-gh-release@v2
-      if: github.ref_type == 'tag'
-      with:
-        token: "${{ secrets.GITHUB_TOKEN }}"
-        body: |
-          ${{ steps.release-notes.outputs.release_notes }}
-
-          ${{ steps.sponsors.outputs.content }}
-        files: build/distributions/quarkdown-*.zip
+        changelog-file: CHANGELOG.md
+        update-changelog: 'false'
+        body-append-file: SPONSORS.md
+        insert-changelog-spacers: 'true'
+        devbuild-tag: latest
+        devbuild-files: build/distributions/quarkdown-*.zip
+        release-files: build/distributions/quarkdown-*.zip
 
     - name: Generate docs
       uses: burrunan/gradle-cache-action@v3
@@ -174,9 +135,12 @@ jobs:
       with:
         persist-credentials: false
 
-    # Writes the new version (tag name without the leading 'v') to version.txt
     - name: Bump version
-      run: printf "%s" "${GITHUB_REF_NAME#v}" > version.txt
+      uses: iamgio/simple-release@v1
+      with:
+        version-file: version.txt
+        commit: 'false'
+        release: 'false'
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v4
