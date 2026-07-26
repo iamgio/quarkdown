@@ -15,6 +15,7 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.size.cm
@@ -222,6 +223,26 @@ class InlineParserTest {
                     .length,
             )
             assertEquals("anonymous with code", definition.toPlainText())
+        }
+        with(nodes.next()) {
+            assertEquals("math", label)
+            val math = definition.filterIsInstance<MathSpan>().single()
+            assertEquals("\\infty", math.expression)
+        }
+        with(nodes.next()) {
+            assertEquals(
+                label.length,
+                UUID
+                    .randomUUID()
+                    .toString()
+                    .length,
+            )
+            val call = definition.filterIsInstance<FunctionCallNode>().single()
+            assertEquals("math", call.name)
+        }
+        with(nodes.next()) {
+            assertEquals("esc", label)
+            assertEquals("[not a bracket]", definition.toPlainText())
         }
     }
 

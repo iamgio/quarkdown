@@ -62,6 +62,10 @@ Fixed an issue that caused `.css` and `.cssproperties` to produce empty pages in
 
 Thanks @arpitagarwal1301!
 
+#### Backslashes allowed in [all-in-one footnotes](https://quarkdown.com/wiki/footnotes)
+
+Escape sequences and any content containing a backslash, such as math expressions, are now recognized inside the `[^label: ...]` form of footnote definitions.
+
 ## [2.4.0] - 2026-07-13
 
 Quarkdown 2.4 is one of the most impactful releases in the history of the project, introducing a new system for extending Markdown elements behavior and styling.
