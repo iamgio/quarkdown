@@ -2,6 +2,9 @@ package com.quarkdown.core.function.library.module
 
 import com.quarkdown.core.function.library.loader.ExportableFunction
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
+import com.quarkdown.core.function.reflect.KFunctionAdapter
+import com.quarkdown.core.function.value.OutputValue
+import kotlin.reflect.KFunction
 
 /**
  * A subsection of Quarkdown functions that can be exported via a [MultiFunctionLibraryLoader].
@@ -27,7 +30,14 @@ class QuarkdownModule(
 }
 
 /**
- * Creates a [QuarkdownModule] from a set of Kotlin functions.
+ * Creates a [QuarkdownModule] from a set of pre-built exportable functions.
  * @param functions the functions to export in the module
  */
 fun moduleOf(vararg functions: ExportableFunction): QuarkdownModule = setOf(*functions).let(::QuarkdownModule)
+
+/**
+ * Creates a [QuarkdownModule] by adapting Kotlin [KFunction] references via [KFunctionAdapter].
+ * @param functions the Kotlin function references to adapt and export
+ */
+fun moduleOf(vararg functions: KFunction<OutputValue<*>>): QuarkdownModule =
+    functions.map { KFunctionAdapter(it) }.toSet().let(::QuarkdownModule)

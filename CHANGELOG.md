@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### Function call speedup
+
+Function calls are now ~5% faster thanks to reflectionless invocation of native functions.
+
 ## [2.4.1] - 2026-07-26
 
 ### Added

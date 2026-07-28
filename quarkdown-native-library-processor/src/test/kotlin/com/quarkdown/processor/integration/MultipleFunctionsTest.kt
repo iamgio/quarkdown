@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-/** Modules containing more than one `@QFunction`. */
+/**
+ * Modules containing more than one `@QFunction`.
+ */
 class MultipleFunctionsTest {
     @Test
     fun `every @QFunction in the file is exported`() {
@@ -21,8 +23,9 @@ class MultipleFunctionsTest {
         assertContains(source, "public fun `bravo`(`text`: kotlin.String)")
         assertContains(source, "public fun `charlie`(`a`: kotlin.Int, `b`: kotlin.Int)")
 
-        assertContains(source, "this::`alpha`,")
-        assertContains(source, "this::`bravo`,")
-        assertContains(source, "this::`charlie`,")
+        // Module references the pre-built Function value per function, no reflection at load time.
+        assertContains(source, "`alpha__function`,")
+        assertContains(source, "`bravo__function`,")
+        assertContains(source, "`charlie__function`,")
     }
 }

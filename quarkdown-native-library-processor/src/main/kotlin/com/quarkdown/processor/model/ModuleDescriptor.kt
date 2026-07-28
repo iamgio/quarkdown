@@ -49,6 +49,18 @@ data class FunctionDescriptor(
     val declaration: KSFunctionDeclaration,
     val sourceAnnotations: String?,
     val kdoc: String?,
+    val documentTypeConstraint: DocumentTypeConstraint? = null,
+)
+
+/**
+ * Compile-time-known constraint on which document types a `@QFunction` may be called from,
+ * derived from [com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType] / [com.quarkdown.core.function.reflect.annotation.NotForDocumentType] annotations at KSP time.
+ *
+ * @param allowedTypes fully-qualified names of the `DocumentType` enum entries this function
+ *                     accepts (e.g. `["com.quarkdown.core.document.DocumentType.PAGED"]`)
+ */
+data class DocumentTypeConstraint(
+    val allowedTypes: List<String>,
 )
 
 /**
@@ -78,6 +90,9 @@ sealed class ParameterDescriptor {
      * @param type the resolved parameter type
      * @param defaultExpression verbatim source text of the parameter's default value, or `null` when the parameter has no default
      * @param sourceAnnotations verbatim source text of parameter-level annotations to propagate to the wrapper
+     * @param isInjected whether the parameter carries an `@Injected` annotation (its value is supplied by the runtime, not the caller)
+     * @param isExplicitlyBody whether the parameter carries a `@Body` annotation (reserves it as the body-argument recipient)
+     * @param isNullable whether the resolved [type] is nullable (`T?`)
      */
     data class Plain(
         override val originalName: String,
@@ -85,7 +100,14 @@ sealed class ParameterDescriptor {
         val type: KSType,
         val defaultExpression: String?,
         override val sourceAnnotations: String?,
-    ) : ParameterDescriptor()
+        val isInjected: Boolean = false,
+        val isExplicitlyBody: Boolean = false,
+        val isNullable: Boolean = false,
+    ) : ParameterDescriptor() {
+        /** True when this parameter has a default expression, so the caller may omit the argument. */
+        val isOptional: Boolean
+            get() = defaultExpression != null
+    }
 
     /**
      * A spread parameter: the source function declared one parameter of a class type marked with

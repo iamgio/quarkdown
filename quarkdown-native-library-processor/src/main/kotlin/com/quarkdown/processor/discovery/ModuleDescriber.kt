@@ -6,10 +6,13 @@ import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSValueParameter
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.Spread
+import com.quarkdown.processor.generation.Fqns
+import com.quarkdown.processor.model.DocumentTypeConstraint
 import com.quarkdown.processor.model.FunctionDescriptor
 import com.quarkdown.processor.model.ModuleDescriptor
 import com.quarkdown.processor.model.ParameterDescriptor
 import com.quarkdown.processor.util.ModuleNaming
+import com.quarkdown.processor.util.getAnnotation
 import com.quarkdown.processor.util.hasAnnotation
 import com.quarkdown.processor.util.quarkdownName
 
@@ -84,7 +87,41 @@ internal object ModuleDescriber {
             declaration = function,
             sourceAnnotations = AnnotationExtractor.ForFunction.extract(function, ctx),
             kdoc = KDocExtractor.extract(function, ctx),
+            documentTypeConstraint = extractDocumentTypeConstraint(function),
         )
+    }
+
+    /**
+     * Resolves a compile-time [DocumentTypeConstraint] from the source function's
+     * `@OnlyForDocumentType` / `@NotForDocumentType` annotations, returning `null` when neither
+     * annotation is present.
+     */
+    private fun extractDocumentTypeConstraint(function: KSFunctionDeclaration): DocumentTypeConstraint? {
+        val only = function.getAnnotation(Fqns.onlyForDocumentTypeAnnotation)?.let { extractDocumentTypeArguments(it) }
+        val not = function.getAnnotation(Fqns.notForDocumentTypeAnnotation)?.let { extractDocumentTypeArguments(it) }
+        return when {
+            !only.isNullOrEmpty() -> DocumentTypeConstraint(only)
+            !not.isNullOrEmpty() -> DocumentTypeConstraint(Fqns.allDocumentTypeNames - not.toSet())
+            else -> null
+        }
+    }
+
+    /**
+     * Pulls the `vararg types: DocumentType` argument list off an
+     * `@OnlyForDocumentType(...)` / `@NotForDocumentType(...)` annotation as a plain list of
+     * enum-entry simple names (e.g. `["PAGED", "SLIDES"]`).
+     *
+     */
+    private fun extractDocumentTypeArguments(annotation: com.google.devtools.ksp.symbol.KSAnnotation): List<String> {
+        val arg = annotation.arguments.firstOrNull { it.name?.asString() == "types" } ?: return emptyList()
+        val values = (arg.value as? List<*>).orEmpty()
+        return values.mapNotNull { entry ->
+            when (entry) {
+                is com.google.devtools.ksp.symbol.KSClassDeclaration -> entry.simpleName.asString()
+                is com.google.devtools.ksp.symbol.KSType -> entry.declaration.simpleName.asString()
+                else -> null
+            }
+        }
     }
 
     private fun describe(
@@ -99,12 +136,16 @@ internal object ModuleDescriber {
         if (parameter.hasAnnotation<Spread>()) {
             return describeSpread(originalName, parameter, ctx)
         }
+        val type = parameter.type.resolve()
         return ParameterDescriptor.Plain(
             originalName = originalName,
             exportedName = ctx.mappings.exportedName(parameter) ?: originalName,
-            type = parameter.type.resolve(),
+            type = type,
             defaultExpression = DefaultValueExtractor.extract(parameter, ctx),
             sourceAnnotations = AnnotationExtractor.ForParameter.extract(parameter, ctx),
+            isInjected = parameter.getAnnotation(Fqns.injectedAnnotation) != null,
+            isExplicitlyBody = parameter.getAnnotation(Fqns.bodyAnnotation) != null,
+            isNullable = type.isMarkedNullable,
         )
     }
 
@@ -160,12 +201,14 @@ internal object ModuleDescriber {
         ctx: DiscoveryContext,
     ): ParameterDescriptor.Plain {
         val original = component.name?.asString() ?: error("Unnamed @Spread component parameter is not supported")
+        val type = component.type.resolve()
         return ParameterDescriptor.Plain(
             originalName = original,
             exportedName = ctx.mappings.exportedName(component) ?: original,
-            type = component.type.resolve(),
+            type = type,
             defaultExpression = DefaultValueExtractor.extract(component, ctx),
             sourceAnnotations = AnnotationExtractor.ForParameter.extract(component, ctx),
+            isNullable = type.isMarkedNullable,
         )
     }
 }

@@ -9,8 +9,8 @@ plugins {
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
-    testImplementation(project(":quarkdown-core"))
     kspTest(project(":quarkdown-native-library-processor"))
+    implementation(project(":quarkdown-core"))
     implementation("com.google.devtools.ksp:symbol-processing-api:2.3.9")
 }
 

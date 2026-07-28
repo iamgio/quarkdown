@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-/** Baseline wrapper shape when no `@Name` rewrites are involved. */
+/**
+ * Baseline wrapper shape when no `@Name` rewrites are involved.
+ */
 class WrapperGenerationTest {
     @Test
     fun `module exports the source function under its original name`() {
@@ -14,10 +16,12 @@ class WrapperGenerationTest {
     }
 
     @Test
-    fun `moduleOf references the wrapper via this-qualification`() {
+    fun `moduleOf references the pre-built function value`() {
         val source = GeneratedFiles.sourceOf("SimpleLogger")
         assertContains(source, "moduleOf(")
-        assertContains(source, "this::`logSimple`,")
+        // Pre-built Function values replace the `this::name` KFunction references so dispatch
+        // no longer needs KFunctionAdapter at load time.
+        assertContains(source, "`logSimple__function`,")
     }
 
     @Test

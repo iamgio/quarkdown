@@ -100,15 +100,15 @@ class RegularArgumentsBinder(
         val value = argument.value
 
         return when {
+            // NoneValue is accepted for nullable parameters, representing Quarkdown's equivalent of null.
+            parameter.isNullable && value.isNone() -> {
+                argument.copy(expression = NoneValue)
+            }
+
             // If the expected type is dynamic, the argument is wrapped into a dynamic value.
             // For instance, custom functions defined from a Quarkdown function have dynamic-type parameters.
             parameter.type == DynamicValue::class -> {
                 argument.copy(expression = DynamicValue(value.unwrappedValue))
-            }
-
-            // NoneValue is accepted for nullable parameters, representing Quarkdown's equivalent of null.
-            parameter.isNullable && value.isNone() -> {
-                argument.copy(expression = NoneValue)
             }
 
             // The value is dynamic and must be converted to a static type.
