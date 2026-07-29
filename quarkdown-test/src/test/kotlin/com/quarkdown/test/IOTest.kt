@@ -33,4 +33,38 @@ class IOTest {
             assertTrue(it.endsWith("</ol>"))
         }
     }
+
+    @Test
+    fun `json object lookup`() {
+        execute(".json {json/config.json}::get {database}::get {host}") {
+            assertEquals("<p>localhost</p>", it)
+        }
+    }
+
+    @Test
+    fun `json object scoping`() {
+        execute(
+            """
+            .json {json/config.json}::get {database}::let
+                .1::get {host}:.1::get {port}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>localhost:5432</p>", it)
+        }
+    }
+
+    @Test
+    fun `json array iteration`() {
+        execute(
+            """
+            .json {json/people.json}::foreach
+                .1::get {name} is from .1::get {address}::get {country}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Alice is from USA</p><p>Bob is from Italy</p>",
+                it,
+            )
+        }
+    }
 }

@@ -1,0 +1,8 @@
+{
+  "name": "Quarkdown",
+  "version": 2.4,
+  "database": {
+    "host": "localhost",
+    "port": 5432
+  }
+}

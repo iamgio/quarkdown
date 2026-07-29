@@ -1,0 +1,5 @@
+[
+  {"name": "Alice", "age": 30, "address": {"country": "USA"}},
+  {"name": "Bob", "age": 25, "address": {"country": "Italy"}},
+  {"name": "Carol", "age": 42, "address": {"country": "Japan"}}
+]

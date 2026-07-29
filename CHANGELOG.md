@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [Load data from JSON files](https://quarkdown.com/wiki/file-data#data-from-json)
+
+The new `.json {path}` function loads a JSON file and returns its content in a shape you can query and iterate.
+
+```markdown
+.json {config.json}::get {database}::get {host}
+```
+
+```markdown
+.foreach {.json {people.json}}
+    .1::get {name} is from .1::get {address}::get {country}
+```
+
 ## [2.4.1] - 2026-07-26
 
 ### Added

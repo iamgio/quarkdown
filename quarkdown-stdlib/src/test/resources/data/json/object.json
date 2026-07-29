@@ -1,0 +1,15 @@
+{
+  "name": "Quarkdown",
+  "version": 2.4,
+  "stable": true,
+  "downloads": 1000,
+  "notes": null,
+  "authors": ["Alice", "Bob"],
+  "config": {
+    "database": {
+      "host": "localhost",
+      "port": 5432
+    },
+    "features": ["math", "diagrams"]
+  }
+}
