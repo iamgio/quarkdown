@@ -73,6 +73,24 @@ Quarkdown [loops](loops.qd) return an iterable containing the result of each ite
         .repeat {100}
             .1::logn::multiply {10}
 
+### From JSON
+
+[`.json`](file-data.qd#data-from-json) loads a JSON file as an iterable when its top-level value is an array, making it a natural input for `.xychart`.
+
+.examplemirror {The following `sales.json` is an array of yearly sales entries, each with a `year`, an `a`, and a `b` field:}
+    .var {sales} {.json {assets/sales.json}}
+
+    .var {years}
+        .sales::foreach
+            .1::get {year}
+
+    .xychart xtags:{.years} x:{Years} y:{Sales}
+        .sales::foreach
+            .1::get {a}
+
+        .sales::foreach
+            .1::get {b}
+
 ### From CSV/table
 
 [Table manipulation](table-manipulation.qd) functions such as [`.tablecolumn`](table-manipulation.qd#retrieve-columns) can extract values from the columns of a table as iterables.

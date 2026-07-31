@@ -8,6 +8,12 @@ import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.SharedContext
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
+import com.quarkdown.core.function.value.BooleanValue
+import com.quarkdown.core.function.value.DictionaryValue
+import com.quarkdown.core.function.value.GeneralCollectionValue
+import com.quarkdown.core.function.value.NoneValue
+import com.quarkdown.core.function.value.NumberValue
+import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.util.node.toPlainText
@@ -383,5 +389,112 @@ class DataTest {
     @Test
     fun `get file name non-existent file`() {
         assertFails { fileName(context, "listfiles/nonexistent.txt") }
+    }
+
+    @Test
+    fun `json object loaded as dictionary`() {
+        val value = json(context, "json/object.json")
+        assertIs<DictionaryValue<*>>(value)
+
+        val map = value.unwrappedValue
+        assertEquals(StringValue("Quarkdown"), map["name"])
+        assertEquals(BooleanValue(true), map["stable"])
+        assertEquals(NumberValue(1000), map["downloads"])
+        assertEquals(NoneValue, map["notes"])
+
+        val version = map["version"]
+        assertIs<NumberValue>(version)
+        assertEquals(2.4, version.unwrappedValue)
+    }
+
+    @Test
+    fun `json object exposes nested arrays`() {
+        val value = json(context, "json/object.json")
+        assertIs<DictionaryValue<*>>(value)
+
+        val authors = value.unwrappedValue["authors"]
+        assertIs<GeneralCollectionValue<*>>(authors)
+        assertEquals(
+            listOf(StringValue("Alice"), StringValue("Bob")),
+            authors.unwrappedValue.toList(),
+        )
+    }
+
+    @Test
+    fun `json object exposes nested objects`() {
+        val value = json(context, "json/object.json")
+        assertIs<DictionaryValue<*>>(value)
+
+        val config = value.unwrappedValue["config"]
+        assertIs<DictionaryValue<*>>(config)
+
+        val database = config.unwrappedValue["database"]
+        assertIs<DictionaryValue<*>>(database)
+        assertEquals(StringValue("localhost"), database.unwrappedValue["host"])
+        assertEquals(NumberValue(5432), database.unwrappedValue["port"])
+
+        val features = config.unwrappedValue["features"]
+        assertIs<GeneralCollectionValue<*>>(features)
+        assertEquals(
+            listOf(StringValue("math"), StringValue("diagrams")),
+            features.unwrappedValue.toList(),
+        )
+    }
+
+    @Test
+    fun `json top-level array loaded as collection`() {
+        val value = json(context, "json/array.json")
+        assertIs<GeneralCollectionValue<*>>(value)
+
+        val entries = value.unwrappedValue.toList()
+        assertEquals(3, entries.size)
+
+        val alice = entries[0]
+        assertIs<DictionaryValue<*>>(alice)
+        assertEquals(StringValue("Alice"), alice.unwrappedValue["name"])
+        assertEquals(NumberValue(30), alice.unwrappedValue["age"])
+
+        val aliceAddress = alice.unwrappedValue["address"]
+        assertIs<DictionaryValue<*>>(aliceAddress)
+        assertEquals(StringValue("USA"), aliceAddress.unwrappedValue["country"])
+    }
+
+    @Test
+    fun `json array of mixed primitives`() {
+        val value = json(context, "json/mixed-array.json")
+        assertIs<GeneralCollectionValue<*>>(value)
+
+        val items = value.unwrappedValue.toList()
+        assertEquals(6, items.size)
+        assertEquals(StringValue("text"), items[0])
+        assertEquals(NumberValue(42), items[1])
+        assertIs<NumberValue>(items[2])
+        assertEquals(3.14, (items[2] as NumberValue).unwrappedValue)
+        assertEquals(BooleanValue(true), items[3])
+        assertEquals(BooleanValue(false), items[4])
+        assertEquals(NoneValue, items[5])
+    }
+
+    @Test
+    fun `json empty object`() {
+        val value = json(context, "json/empty-object.json")
+        assertEquals(DictionaryValue(mutableMapOf()), value)
+    }
+
+    @Test
+    fun `json empty array`() {
+        val value = json(context, "json/empty-array.json")
+        assertIs<GeneralCollectionValue<*>>(value)
+        assertTrue(value.unwrappedValue.toList().isEmpty())
+    }
+
+    @Test
+    fun `json non-existent file fails`() {
+        assertFails { json(context, "json/nonexistent.json") }
+    }
+
+    @Test
+    fun `json invalid content fails`() {
+        assertFails { json(context, "json/invalid.json") }
     }
 }
