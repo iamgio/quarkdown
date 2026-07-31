@@ -4,6 +4,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
+import com.quarkdown.core.ast.base.block.Code
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.inline.Image
@@ -17,9 +18,11 @@ import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
+import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.data.EvaluableString
+import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
@@ -216,6 +219,52 @@ fun image(
 @QFunction
 @Name("pagebreak")
 fun pageBreak() = PageBreak().wrappedAsValue()
+
+/**
+ * Creates a code block. Contrary to its standard Markdown implementation with backtick/tilde fences,
+ * this function accepts function calls within its [code] argument,
+ * hence it can be used - for example - in combination with [read] to load code from file.
+ *
+ * Example of a code block loaded from file via [read]:
+ *
+ * ```markdown
+ * .code lang:{kotlin} focus:{2..5}
+ *     .read {snippet.kt}
+ * ```
+ *
+ * As a [Code] primitive, this function can be used in `.extend` to affect every code block in the document,
+ * including those introduced by the standard triple-backtick and triple-tilde fences:
+ *
+ * ```markdown
+ * .extend {code} where:{lang: .lang::equals {javascript}}
+ *     .super linenumbers:{no}
+ * ```
+ *
+ * @param language optional language of the code
+ * @param caption optional caption
+ * @param showLineNumbers whether to show line numbers
+ * @param focusedLines range of lines to focus on. No lines are focused if unset. Supports open ranges.
+ * Note: HTML rendering requires [showLineNumbers] to be enabled.
+ * @param referenceId optional identifier for cross-referencing this code block elsewhere via [reference]
+ * @param code code content
+ */
+@QFunction
+fun code(
+    @Name("lang") language: String? = null,
+    @LikelyNamed caption: InlineMarkdownContent? = null,
+    @Name("linenumbers") showLineNumbers: Boolean = true,
+    @Name("focus") focusedLines: Range? = null,
+    @Name("ref") referenceId: String? = null,
+    @LikelyBody code: EvaluableString,
+): NodeValue =
+    Code(
+        content = code.content,
+        language = language,
+        showLineNumbers = showLineNumbers,
+        focusedLines = focusedLines,
+        caption = caption?.children,
+        referenceId = referenceId,
+    ).wrappedAsValue()
 
 /**
  * Creates a math (TeX) node, either inline or as a block.
