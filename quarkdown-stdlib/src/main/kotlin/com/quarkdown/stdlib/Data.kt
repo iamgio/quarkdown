@@ -67,7 +67,7 @@ internal fun file(
  * @permission [Permission.ProjectRead] to read files located in the project directory
  * @permission [Permission.GlobalRead] to read files located outside the project directory
  * @throws IllegalArgumentException if [lineRange] is out of bounds
- * @wiki file-data
+ * @wiki file-text-content
  */
 @QFunction
 fun read(
@@ -258,7 +258,7 @@ private fun listFiles(
  * @throws IllegalArgumentException if the file does not exist
  * @permission [Permission.ProjectRead] to access files located in the project directory
  * @permission [Permission.GlobalRead] to access files located outside the project directory
- * @wiki file-data
+ * @wiki file-name
  */
 @QFunction
 @Name("filename")
@@ -315,7 +315,7 @@ enum class CsvParsingMode(
  * @throws IllegalArgumentException if the file does not exist or is not a valid JSON file
  * @permission [Permission.ProjectRead] to read JSON files located in the project directory
  * @permission [Permission.GlobalRead] to read JSON files located outside the project directory
- * @wiki file-data
+ * @wiki data-from-json
  */
 @QFunction
 fun json(
@@ -336,7 +336,7 @@ fun json(
  * @return a table whose content is loaded from the file located in [path]
  * @permission [Permission.ProjectRead] to read CSV files located in the project directory
  * @permission [Permission.GlobalRead] to read CSV files located outside the project directory
- * @wiki file-data
+ * @wiki table-from-csv
  */
 @QFunction
 fun csv(

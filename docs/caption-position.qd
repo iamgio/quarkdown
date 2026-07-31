@@ -10,7 +10,7 @@ This applies to:
   - [Mermaid diagrams](mermaid-diagrams.qd) and derivatives such as [XY charts](xy-chart.qd)
 - Tables
   - [Table caption Markdown extension](table-caption.qd)
-  - [Tables from CSV](file-data.qd#table-from-csv)
+  - [Tables from CSV](table-from-csv.qd)
 - Code blocks
   - [Code caption Markdown extension](code-caption.qd)
   - [`.code`](code.qd)

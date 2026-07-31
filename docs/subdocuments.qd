@@ -31,7 +31,7 @@ Equivalently, you can use the **`.subdocument {path} {label?}`** .docslink {quar
 .subdocument {file.qd} label:{My subdocument}
 ```
 
-Unlike the link syntax, the function accepts dynamic paths, making it suitable for more complex use cases. For instance, you can use it in combination with [`.listfiles`](file-data.qd#listing-files-in-a-directory) to automatically link all documents in a directory through a [for-each loop](loops.qd):
+Unlike the link syntax, the function accepts dynamic paths, making it suitable for more complex use cases. For instance, you can use it in combination with [`.listfiles`](listing-files.qd) to automatically link all documents in a directory through a [for-each loop](loops.qd):
 
 ```markdown
 .foreach {.listfiles {pages} sortby:{date} order:{descending}}

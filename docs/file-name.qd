@@ -1,0 +1,12 @@
+.docname {File name}
+.include {docs}
+
+The **`.filename {path} {extension?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/filename.html} function returns the file name from a given file path. The optional `extension` boolean parameter controls whether the file extension is included in the result.
+
+> [!NOTE]
+> The `path` parameter can be either a path relative to the main source file's location or an absolute path. Use a slash (`/`) as the path separator, regardless of the operating system.
+
+.examplemirror
+    .filename {assets/point.ts} extension:{no}
+
+This can be particularly useful when combined with [`.listfiles`](listing-files.qd).

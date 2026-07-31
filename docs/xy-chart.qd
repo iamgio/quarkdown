@@ -75,7 +75,7 @@ Quarkdown [loops](loops.qd) return an iterable containing the result of each ite
 
 ### From JSON
 
-[`.json`](file-data.qd#data-from-json) loads a JSON file as an iterable when its top-level value is an array, making it a natural input for `.xychart`.
+[`.json`](data-from-json.qd) loads a JSON file as an iterable when its top-level value is an array, making it a natural input for `.xychart`.
 
 .examplemirror {The following `sales.json` is an array of yearly sales entries, each with a `year`, an `a`, and a `b` field:}
     .var {sales} {.json {assets/sales.json}}

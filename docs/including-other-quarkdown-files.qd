@@ -41,7 +41,7 @@ The following snippet is from [Mock](https://github.com/iamgio/quarkdown/blob/ma
 .code lang:{markdown}
     .read {../mock/main.qd} lines:{6..}
 
-You can also combine the function with [`.listfiles`](file-data.qd) to automatically include all files in a directory:
+You can also combine the function with [`.listfiles`](listing-files.qd) to automatically include all files in a directory:
 
 ```markdown
 .includeall {.listfiles {somedirectory} sortby:{name}}

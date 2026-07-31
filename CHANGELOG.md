@@ -4,7 +4,7 @@
 
 ### Added
 
-#### [Load data from JSON files](https://quarkdown.com/wiki/file-data#data-from-json)
+#### [Load data from JSON files](https://quarkdown.com/wiki/data-from-json)
 
 The new `.json {path}` function loads a JSON file and returns its content in a shape you can query and iterate.
 

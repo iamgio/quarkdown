@@ -19,7 +19,7 @@ The **`.css`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Html/css.
     }
 ```
 
-You can also load CSS styles from a file using the [`.read`](file-data.qd) function:
+You can also load CSS styles from a file using the [`.read`](file-text-content.qd) function:
 
 ```markdown
 .css {.read {styles.css}}
