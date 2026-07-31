@@ -19,4 +19,6 @@ For example, extending `.heading` affects every `#`, `##`, and so on. Extending 
 
 - [**`.math`**](tex-formulae.qd) .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/math.html} backs `$ ... $` and `$$$ ... $$$` formulas.
 
+- [**`.code`**](code.qd) .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/code.html} backs fenced and indented code blocks.
+
 - [**`.pagebreak`**](page-break.qd) .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/pagebreak.html} backs `<<<`. Can be extended to decorate every forced page break in the document.

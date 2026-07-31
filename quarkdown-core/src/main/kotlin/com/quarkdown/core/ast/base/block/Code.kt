@@ -4,8 +4,10 @@ import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.attributes.localization.LocalizedKind
 import com.quarkdown.core.ast.attributes.localization.LocalizedKindKeys
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
+import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
+import com.quarkdown.core.function.dsl.functionCallArguments
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.visitor.node.NodeVisitor
 
@@ -30,9 +32,23 @@ class Code(
 ) : LocationTrackableNode,
     CrossReferenceableNode,
     CaptionableNode,
-    LocalizedKind {
+    LocalizedKind,
+    PrimitiveFunctionBackedNode {
     override val kindLocalizationKey: String
         get() = LocalizedKindKeys.CODE_BLOCK
+
+    override val backingFunctionName: String
+        get() = "code"
+
+    override fun toFunctionCallArguments() =
+        functionCallArguments {
+            arg("lang", string(language))
+            arg("caption", inline(caption))
+            arg("linenumbers", boolean(showLineNumbers))
+            arg("focus", obj(focusedLines))
+            arg("ref", string(referenceId))
+            arg("code", evaluable(content))
+        }
 
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 }

@@ -4,6 +4,17 @@
 
 ### Added
 
+#### [Code block primitive](https://quarkdown.com/wiki/primitives)
+
+`.code` is now a [primitive](https://quarkdown.com/wiki/primitives), so it can be intercepted via `.extend {code}` to customize the appearance of every code block in the document.
+
+The following snippet hides line numbers on every JavaScript code block:
+
+```markdown
+.extend {code} where:{lang: .lang::equals {javascript}}
+    .super linenumbers:{no}
+```
+
 #### [Load data from JSON files](https://quarkdown.com/wiki/data-from-json)
 
 The new `.json {path}` function loads a JSON file and returns its content in a shape you can query and iterate.

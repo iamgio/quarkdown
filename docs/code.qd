@@ -10,7 +10,7 @@ You can create code blocks using the standard Markdown specification: either wit
     }
     ```
 
-Quarkdown also provides a more powerful **`.code`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Text/code.html} block function.
+Quarkdown also provides a more powerful **`.code`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Primitives/code.html} block function.
 
 .examplemirror
     .code lang:{javascript}
@@ -53,6 +53,22 @@ The `.code` function allows you to focus on a [`Range`](range.qd) of lines, star
 .examplemirror
     .code focus:{5..8}
         .read {assets/point.ts}
+
+### Extending
+
+`.code` is a [primitive](primitives.qd), so [extending it](element-styling.qd) affects every code block in the document at once, including fenced and indented blocks.
+
+.example
+    ~~~markdown
+    .extend {code} where:{lang: .lang::equals {javascript}}
+        .super linenumbers:{no}
+
+    ```javascript
+    function greet(name) {
+        return `Hello, ${name}!`;
+    }
+    ```
+    ~~~
 
 ## Inline code
 
