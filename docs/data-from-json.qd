@@ -1,0 +1,25 @@
+.docname {Data from JSON}
+.include {docs}
+
+The **`.json {path}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/json.html} function loads a JSON file and returns its content ready to use in your document.
+
+> [!NOTE]
+> The `path` parameter can be either a path relative to the main source file's location or an absolute path. Use a slash (`/`) as the path separator, regardless of the operating system.
+
+The shape of the returned value depends on the top-level JSON value:
+
+- A JSON *object* is loaded as a [dictionary](dictionary.qd), which you can query with [`.get`](dictionary.qd).
+- A JSON *array* is loaded as an [iterable](iterable.qd), which you can iterate with [`.foreach`](loops.qd) or manipulate with any iterable operation.
+
+.examplemirror
+    .code {json}
+        .read {assets/config.json}
+
+    .json {assets/config.json}::get {database}::get {host}
+
+.examplemirror
+    .code {json}
+        .read {assets/people.json}
+
+    .json {assets/people.json}::foreach
+        **.1::get {name}** is from .1::get {address}::get {country}

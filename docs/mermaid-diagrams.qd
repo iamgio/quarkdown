@@ -28,7 +28,7 @@ The Mermaid code accepts Quarkdown function calls.
 
 ## Diagram from file
 
-Since function calls can be used inside the block argument, you can leverage use the [**`.read`**](file-data.qd) function to load text from a file.
+Since function calls can be used inside the block argument, you can leverage the [**`.read`**](file-text-content.qd) function to load text from a file.
 
 ```markdown
 .mermaid

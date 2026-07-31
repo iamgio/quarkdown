@@ -1,0 +1,23 @@
+.docname {File text content}
+.include {docs}
+
+The **`.read {path}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/read.html} function returns the string content of the specified file.
+
+> [!NOTE]
+> The `path` parameter can be either a path relative to the main source file's location or an absolute path. Use a slash (`/`) as the path separator, regardless of the operating system.
+
+An optional `lines` parameter of type [`Range`](range.qd) selects a specific range of lines (inclusive, starting from 1). An invalid or out-of-bounds range causes an error. If you do not provide a range, Quarkdown reads the entire file.
+
+```markdown
+.read {myfile.txt} lines:{3..8}
+```
+
+Open ranges work as follows:
+
+- If the range is open on the left end (`..N`), Quarkdown reads from the beginning of the file to line `N`.
+- If the range is open on the right end (`N..`), Quarkdown reads from line `N` to the end of the file.
+- If the range is open on both ends (`..`), Quarkdown reads the entire file.
+
+.examplemirror {`\.read` is particularly useful in combination with functions such as [`\.code`](code.qd), [`\.mermaid`](mermaid-diagrams.qd) and [`\.css`](css.qd) to load code snippets from external files.}
+    .code
+        .read {assets/point.ts}

@@ -35,7 +35,7 @@ By default, each entry is returned as its absolute path:
 .examplemirror
     .listfiles {assets/folder}
 
-This can be used in combination with [file data](file-data.qd) functions to read file content:
+This can be used in combination with [`.read`](file-text-content.qd) to load file content:
 
 .examplemirror
     .foreach {.listfiles {assets/folder} directories:{no}}

@@ -22,7 +22,7 @@ Quarkdown also provides a more powerful **`.code`** .docslink {quarkdown-stdlib/
 
 ### Content processing
 
-Standard code blocks render their content as-is without any processing. The `.code` function, on the other hand, accepts any Quarkdown string as its body parameter, which means you can **evaluate functions** before displaying their output as code. This is particularly useful when combining `.code` with [`.read`](file-data.qd) to load a code snippet from a file:
+Standard code blocks render their content as-is without any processing. The `.code` function, on the other hand, accepts any Quarkdown string as its body parameter, which means you can **evaluate functions** before displaying their output as code. This is particularly useful when combining `.code` with [`.read`](file-text-content.qd) to load a code snippet from a file:
 
 .examplemirror
     .code

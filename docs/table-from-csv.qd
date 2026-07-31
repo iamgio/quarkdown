@@ -1,0 +1,28 @@
+.docname {Table from CSV}
+.include {docs}
+
+The **`.csv {path} {mode?} {caption?}`** .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Data/csv.html} function loads a table from a CSV file. The first row of the CSV file always serves as the header row.
+
+> [!NOTE]
+> The `path` parameter can be either a path relative to the main source file's location or an absolute path. Use a slash (`/`) as the path separator, regardless of the operating system.
+
+Tables loaded from CSV can also be manipulated. See [*Table manipulation*](table-manipulation.qd) for more information.
+
+.examplemirror
+    .csv {assets/people.csv}
+
+You can also provide a caption.
+
+.examplemirror
+    .csv {assets/people.csv} caption:{People data.}
+
+The `mode` parameter controls how the CSV file is parsed. It defaults to `plain`, which treats all cell content as plain text. If set to `markdown`, Quarkdown parses cell content as inline Quarkdown source code, allowing formatting, rich content, and inline function calls within the CSV.
+
+```markdown
+Name,  Favorite drink, Age *(as of 2026)*
+Alice, Coffee,         .subtract {2026} {1995}
+Bob,   *Pepsi*,        .subtract {2026} {2001}
+```
+
+.examplemirror
+    .csv {assets/people2.csv} mode:{markdown}

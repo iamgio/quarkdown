@@ -86,9 +86,11 @@
 ###! Data & tables
 - [Table manipulation](table-manipulation.qd)
 - [Table generation](table-generation.qd)
-- [Text content from file](file-data.qd#file-text-content)
-- [Data from JSON](file-data.qd#data-from-json)
-- [Table from CSV data](file-data.qd#table-from-csv)
+- File data
+  - [File text content](file-text-content.qd)
+  - [File name](file-name.qd)
+  - [Data from JSON](data-from-json.qd)
+  - [Table from CSV](table-from-csv.qd)
 - [Listing files](listing-files.qd)
 
 ###! Charts & diagrams

@@ -1,7 +1,7 @@
 .docname {Table manipulation}
 .include {docs}
 
-This page describes table manipulation functions .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation} that allow you to sort, filter, and compute values from any kind of table, including plain Markdown ones and those [loaded from CSV](file-data.qd#table-from-csv).
+This page describes table manipulation functions .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.TableComputation} that allow you to sort, filter, and compute values from any kind of table, including plain Markdown ones and those [loaded from CSV](table-from-csv.qd).
 
 .examplemirror
     .tablesort {2} order:{descending}
