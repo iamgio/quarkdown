@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.rendering.plaintext.extension.plainText
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
@@ -15,6 +16,13 @@ class CrossReferenceTest {
     fun `invalid reference`() {
         execute("See .ref {x}") {
             assertEquals("<p>See [???]</p>", it)
+        }
+    }
+
+    @Test
+    fun `invalid reference (gfm)`() {
+        execute("See .ref {x}", renderer = { factory, ctx -> factory.gfm(ctx) }) {
+            assertEquals("See \\[???]\n\n", it)
         }
     }
 
@@ -158,11 +166,11 @@ class CrossReferenceTest {
             .doclang {en}
             .numbering
                 - headings: 1.1
-            
+
             See .ref {first-ref} and .ref {second-ref}.
-            
+
             # Title {#first-ref}
-            
+
             ## Subtitle {#second-ref}
             """.trimIndent(),
             DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
@@ -172,6 +180,56 @@ class CrossReferenceTest {
                 "See Section 1 and Section 1.1.\n\n" +
                     "Title\n\n" +
                     "Subtitle\n\n",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `localized numbered references (heading, gfm)`() {
+        execute(
+            """
+            .doclang {en}
+            .numbering
+                - headings: 1.1
+
+            See .ref {first-ref} and .ref {second-ref}.
+
+            # Title {#first-ref}
+
+            ## Subtitle {#second-ref}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "See Section 1 and Section 1.1.\n\n" +
+                    "<h1 id=\"first-ref\">Title</h1>\n\n" +
+                    "<h2 id=\"second-ref\">Subtitle</h2>\n\n",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `numbered references (figure, gfm)`() {
+        execute(
+            """
+            .noautopagebreak
+            .doclang {en}
+            .numbering
+                - figures: a
+
+            See .ref {my-fig}.
+
+            ![My Image](img.png "The caption") {#my-fig}
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableLocationAwareness = true),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "See Figure a.\n\n" +
+                    "![My Image](img.png \"The caption\")\nThe caption\n\n",
                 it,
             )
         }

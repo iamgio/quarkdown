@@ -167,6 +167,9 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 - **PDF**
   - [X] All document types and features supported by HTML are also supported when exporting to PDF.
 
+- **Markdown**
+  - [X] GFM export.
+
 - **Plain text**
 
 The desired document type can be set by calling the [`.doctype` function](https://quarkdown.com/wiki/document-types) within the source itself:
@@ -187,7 +190,7 @@ The desired document type can be set by calling the [`.doctype` function](https:
 | Static site export    | :white_check_mark: |        :x:         |    Experimental    | :white_check_mark: | :white_check_mark: |
 | Docs/wiki export      | :white_check_mark: |        :x:         |        :x:         | :white_check_mark: | :white_check_mark: |
 | Learning curve        |   :green_circle:   |    :red_circle:    |  :orange_circle:   |   :green_circle:   |   :green_circle:   |
-| Targets               |   HTML, PDF, TXT   |  PDF, PostScript   |     HTML, PDF      |  HTML, PDF, ePub   |        HTML        |
+| Targets               | HTML, PDF, MD, TXT |  PDF, PostScript   |     HTML, PDF      |  HTML, PDF, ePub   |        HTML        |
 
 [^control]: The ability to customize the properties of the document and of its output artifact through the language itself.
 

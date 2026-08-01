@@ -1,6 +1,7 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.function.error.InvalidArgumentCountException
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -38,6 +39,22 @@ class FunctionDefinitionTest {
             """.trimIndent(),
         ) {
             assertEquals("<p><strong>Hello</strong> world!</p>", it)
+        }
+    }
+
+    @Test
+    fun `function with a single parameter (gfm)`() {
+        execute(
+            """
+            .function {greet}
+                name:
+                **Hello, .name**
+
+            .greet {World}
+            """.trimIndent(),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals("**Hello, World**\n\n", it)
         }
     }
 

@@ -47,6 +47,7 @@ Running **`quarkdown c file.qd`** compiles the given file and saves the output t
 - `-r <renderer>` or `--render <renderer>`: sets the target renderer. Defaults to `html`. Accepted values:
   - `html`
   - `html-pdf` (equivalent to `-r html --pdf`)
+  - `markdown` / `gfm`
   - `text` (plain text)
 
 ### Permissions

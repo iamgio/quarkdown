@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,6 +14,23 @@ class MathTest {
         execute("Hello $ \\frac {x} {2} $") {
             assertEquals(
                 "<p>Hello <formula>\\frac {x} {2}</formula></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `inline and block math (gfm)`() {
+        execute(
+            """
+            Inline $ x^2 $ here.
+
+            $ y = mx + b $
+            """.trimIndent(),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                $$$"Inline $x^2$ here.\n\n$$y = mx + b$$\n\n",
                 it,
             )
         }

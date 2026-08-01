@@ -1,6 +1,7 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.ast.attributes.presence.hasCode
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -67,6 +68,24 @@ class CodeTest {
         execute("```kotlin\nprintln(\"Hello, world!\")\n```") {
             assertEquals("<pre><code class=\"language-kotlin\">println(&quot;Hello, world!&quot;)</code></pre>", it)
             assertTrue(attributes.hasCode)
+        }
+    }
+
+    @Test
+    fun `block with language and caption (gfm)`() {
+        execute(
+            """
+            .code {kotlin} caption:{A snippet}
+                fun main() = println("hi")
+            """.trimIndent(),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "```kotlin\n" +
+                    "fun main() = println(\"hi\")\n```\n" +
+                    "A snippet\n\n",
+                it,
+            )
         }
     }
 

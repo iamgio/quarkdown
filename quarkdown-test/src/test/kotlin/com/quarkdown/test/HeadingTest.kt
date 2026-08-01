@@ -1,6 +1,7 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.function.error.FunctionCallRuntimeException
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
@@ -55,6 +56,27 @@ class HeadingTest {
     fun `custom id`() {
         execute("## Title {#custom-id}") {
             assertEquals("<h2 id=\"custom-id\">Title</h2>", it)
+        }
+    }
+
+    @Test
+    fun `custom id (gfm)`() {
+        execute(
+            "## Title {#custom-id}",
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals("<h2 id=\"custom-id\">Title</h2>\n\n", it)
+        }
+    }
+
+    @Test
+    fun `automatic id is not emitted (gfm)`() {
+        execute(
+            "## Getting Started",
+            options = DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals("## Getting Started\n\n", it)
         }
     }
 

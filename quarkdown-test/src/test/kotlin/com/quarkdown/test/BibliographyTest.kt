@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.rendering.plaintext.extension.plainText
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
@@ -95,6 +96,34 @@ class BibliographyTest {
                 "<p>abc [1] def [2] ghi [3]</p>" +
                     ieeeBibliographyOutput() +
                     "<p>abc [1] def [2] ghi [3]</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `citation (gfm)`() {
+        execute(
+            """
+            .doclang {en}
+            
+            See .cite {einstein}.
+
+            $BIBLIOGRAPHY_CALL
+            """.trimIndent(),
+            renderer = { rendererFactory, ctx -> rendererFactory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "See [1].\n\n" +
+                    "# References\n\n" +
+                    "[1] A. Einstein, “Zur Elektrodynamik bewegter Körper. (German) " +
+                    "\\[On the electrodynamics of moving bodies],” *Annalen der Physik*, " +
+                    "vol. 322, Art. no. 10, 1905, doi: " +
+                    "[http://dx.doi.org/10.1002/andp.19053221004](http://dx.doi.org/10.1002/andp.19053221004).\n" +
+                    "[2] M. Goossens, F. Mittelbach, and A. Samarin, *The LaTeX Companion*. " +
+                    "Reading, Massachusetts: Addison-Wesley, 1993.\n" +
+                    "[3] D. Knuth, “Knuth: Computers and Typesetting.” \\[Online]. Available at: " +
+                    "[http://www-cs-faculty.stanford.edu/uno/abcde.html](http://www-cs-faculty.stanford.edu/uno/abcde.html)\n\n",
                 it,
             )
         }
