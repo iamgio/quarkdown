@@ -48,6 +48,16 @@ data class SimpleFunction<T : OutputValue<*>>(
     override val invoke: (ArgumentBindings, FunctionCall<T>) -> T,
 ) : Function<T>
 
+/**
+ * Renders this function's signature as a human-readable string.
+ * Injected parameters ([FunctionParameter.isInjected]) are omitted — they aren't part of the
+ * surface that callers see and shouldn't clutter the rendered signature.
+ * @param includeName whether the function name should precede the parameter list. Callers that
+ *                    embed the signature in a sentence typically pass `false` so the sentence
+ *                    provides its own subject.
+ * @return the rendered signature, e.g. `foo(String name, optional Int count)`, or
+ *         `(String name)` when [includeName] is `false`.
+ */
 fun Function<*>.signatureAsString(includeName: Boolean = true) =
     buildString {
         if (includeName) {
@@ -55,13 +65,15 @@ fun Function<*>.signatureAsString(includeName: Boolean = true) =
         }
         append("(")
         append(
-            parameters.joinToString { parameter ->
-                buildString {
-                    if (parameter.isOptional) append("optional ")
-                    parameter.type.simpleName?.let { append(it).append(" ") }
-                    append(parameter.name)
-                }
-            },
+            parameters
+                .filterNot { it.isInjected }
+                .joinToString { parameter ->
+                    buildString {
+                        if (parameter.isOptional) append("optional ")
+                        parameter.type.simpleName?.let { append(it).append(" ") }
+                        append(parameter.name)
+                    }
+                },
         )
         append(")")
     }
