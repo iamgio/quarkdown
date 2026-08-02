@@ -17,6 +17,15 @@ See [SEO & AEO optimization](https://quarkdown.com/wiki/seo-aeo-optimization) fo
 
 The new `.markdown` function lets you include raw Markdown content when exporting to Markdown.
 
+#### [Built-in llms.txt support](https://quarkdown.com/wiki/seo-aeo-optimization)
+
+`llms.txt` is a Markdown file at the root of a site that curates the most useful entry points for AI agents and LLM-based crawlers, giving them a reliable map of the documentation.
+The new `.llmstxt` function emits a discoverability directive on every page, pointing AI agents at your site's `llms.txt` and, optionally, at the Markdown counterpart of the current page.
+
+```markdown
+.llmstxt path:{/llms.txt} markdownavailable:{yes}
+```
+
 #### [Code block primitive](https://quarkdown.com/wiki/primitives)
 
 `.code` is now a [primitive](https://quarkdown.com/wiki/primitives), so it can be intercepted via `.extend {code}` to customize the appearance of every code block in the document.
