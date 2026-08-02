@@ -115,7 +115,7 @@ class GfmNodeRenderer(
             append(formatTitle(node.title))
         }.blockNode
 
-    override fun visit(node: FootnoteDefinition) = ("[^${node.label}]: " + node.text.visitAll()).blockNode
+    override fun renderFootnoteDefinition(node: FootnoteDefinition) = ("[^${node.label}]: " + node.text.visitAll()).blockNode
 
     override fun visit(node: OrderedList) =
         buildString {

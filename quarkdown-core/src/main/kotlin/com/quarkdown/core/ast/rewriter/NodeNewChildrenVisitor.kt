@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.rewriter
 
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
@@ -105,6 +106,8 @@ private class NodeNewChildrenVisitor(
     private val newChildren: List<Node>,
 ) : NodeVisitor<Node> {
     override fun visit(node: AstRoot) = node.diverge(newChildren)
+
+    override fun visit(node: AstGroup) = node.diverge(newChildren)
 
     override fun visit(node: Newline) = node
 

@@ -1,5 +1,6 @@
 package com.quarkdown.rendering.html.node
 
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.attributes.id.getId
 import com.quarkdown.core.ast.attributes.reference.getDefinition
@@ -122,9 +123,14 @@ open class BaseHtmlNodeRenderer(
 
     override fun createMediaPassthroughPrefixReplacement(): String = getPathToRoot()
 
-    // Root
+    // Group
 
     override fun visit(node: AstRoot) =
+        buildMultiTag {
+            +node.children
+        }
+
+    override fun visit(node: AstGroup) =
         buildMultiTag {
             +node.children
         }

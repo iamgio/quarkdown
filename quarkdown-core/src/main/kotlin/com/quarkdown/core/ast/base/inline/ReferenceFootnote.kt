@@ -1,6 +1,6 @@
 package com.quarkdown.core.ast.base.inline
 
-import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
@@ -43,5 +43,5 @@ class ReferenceDefinitionFootnote(
             ),
         )
 
-    override fun <T> accept(visitor: NodeVisitor<T>): T = AstRoot(children).accept(visitor)
+    override fun <T> accept(visitor: NodeVisitor<T>): T = AstGroup(children).accept(visitor)
 }

@@ -1,6 +1,6 @@
 package com.quarkdown.core.util.node
 
-import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
@@ -12,10 +12,10 @@ import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
- * Groups nodes into an [AstRoot] container.
- * @return an empty [AstRoot] if `null`
+ * Groups nodes into a sub-root [NestableNode] container.
+ * @return an empty grouping if `null`
  */
-fun List<Node>?.group(): AstRoot = AstRoot(this.orEmpty())
+fun List<Node>?.group(): NestableNode = AstGroup(this.orEmpty())
 
 /**
  * Returns a sequence of all nodes in the tree, where [this] is the root node.
@@ -79,7 +79,7 @@ fun InlineContent.toPlainText(renderer: NodeVisitor<CharSequence>? = null): Stri
     val builder = StringBuilder()
 
     // Visits the tree and appends the text content of each node.
-    AstRoot(this).flattenedChildren().forEach {
+    AstGroup(this).flattenedChildren().forEach {
         when (it) {
             is CriticalContent if renderer != null -> builder.append(renderer.visit(it))
             is TextSymbol if renderer != null -> builder.append(renderer.visit(it))

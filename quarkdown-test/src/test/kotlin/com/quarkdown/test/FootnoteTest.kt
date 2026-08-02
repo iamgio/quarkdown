@@ -54,12 +54,14 @@ class FootnoteTest {
     @Test
     fun `all-in-one anonymous footnote (gfm)`() {
         execute(
-            "See[^: A footnote].",
+            "See[^: A footnote] and [^: Another footnote].",
             options = DEFAULT_OPTIONS.copy(uuidSupplier = { "42" }),
             renderer = { factory, ctx -> factory.gfm(ctx) },
         ) {
             assertEquals(
-                "See[^42][^42]: A footnote\n\n.\n\n",
+                "See[^42] and [^42].\n\n" +
+                    "[^42]: A footnote\n\n" +
+                    "[^42]: Another footnote\n\n",
                 it,
             )
         }

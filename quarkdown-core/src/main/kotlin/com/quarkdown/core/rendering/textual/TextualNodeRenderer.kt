@@ -1,5 +1,6 @@
 package com.quarkdown.core.rendering.textual
 
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.NestableNode
@@ -10,6 +11,7 @@ import com.quarkdown.core.ast.attributes.reference.getCitationLabel
 import com.quarkdown.core.ast.attributes.reference.getDefinition
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlankNode
+import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Newline
 import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.inline.CheckBox
@@ -56,6 +58,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.rendering.NodeRenderer
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Base class for node renderers that produce plain-textual output,
@@ -64,6 +67,9 @@ import com.quarkdown.core.rendering.NodeRenderer
 abstract class TextualNodeRenderer(
     context: Context,
 ) : NodeRenderer(context) {
+    // Footnote definitions are queued and rendered as blocks at the end of every AstRoot.
+    private val queuedFootnoteDefinitions = ConcurrentLinkedQueue<FootnoteDefinition>()
+
     /**
      * Renders all children of this [NestableNode] and joins the results.
      */
@@ -88,7 +94,26 @@ abstract class TextualNodeRenderer(
 
     override fun createMediaPassthroughPrefixReplacement(): String = "."
 
-    override fun visit(node: AstRoot) = node.visitChildren()
+    override fun visit(node: FootnoteDefinition): CharSequence {
+        queuedFootnoteDefinitions += node
+        return ""
+    }
+
+    override fun visit(node: AstRoot): CharSequence {
+        queuedFootnoteDefinitions.clear()
+        val body = node.visitChildren()
+        val defs =
+            generateSequence { queuedFootnoteDefinitions.poll() }
+                .joinToString(separator = "") { renderFootnoteDefinition(it) }
+        return body.toString() + defs
+    }
+
+    override fun visit(node: AstGroup) = node.visitChildren()
+
+    /**
+     * Renders a queued [FootnoteDefinition] as its final block-level output.
+     */
+    protected open fun renderFootnoteDefinition(node: FootnoteDefinition): CharSequence = ""
 
     override fun visit(node: Newline) = ""
 
@@ -175,8 +200,7 @@ abstract class TextualNodeRenderer(
     }
 
     /**
-     * URL a table-of-contents entry links to. Defaults to empty (suitable for plaintext);
-     * subclasses that support anchors (e.g. GFM) override to point at the target heading.
+     * URL a table-of-contents entry links to.
      */
     protected open fun tableOfContentsItemUrl(item: TableOfContents.Item): String = ""
 

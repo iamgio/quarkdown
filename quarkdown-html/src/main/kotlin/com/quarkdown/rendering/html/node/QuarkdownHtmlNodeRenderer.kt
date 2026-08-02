@@ -1,6 +1,6 @@
 package com.quarkdown.rendering.html.node
 
-import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.id.Identifiable
 import com.quarkdown.core.ast.attributes.id.getId
@@ -172,7 +172,7 @@ class QuarkdownHtmlNodeRenderer(
     // Quarkdown node rendering
 
     // The function was already expanded by previous stages: its output nodes are stored in its children.
-    override fun visit(node: FunctionCallNode): CharSequence = visit(AstRoot(node.children))
+    override fun visit(node: FunctionCallNode): CharSequence = visit(AstGroup(node.children))
 
     // Block
 

@@ -11,7 +11,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
 class MarkdownContent(
     override val children: List<Node>,
 ) : NestableNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(AstRoot(children))
+    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(AstGroup(children))
 }
 
 /**
@@ -21,5 +21,5 @@ class MarkdownContent(
 class InlineMarkdownContent(
     override val children: InlineContent,
 ) : NestableNode {
-    override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(AstRoot(children))
+    override fun <T> accept(visitor: NodeVisitor<T>): T = visitor.visit(AstGroup(children))
 }
