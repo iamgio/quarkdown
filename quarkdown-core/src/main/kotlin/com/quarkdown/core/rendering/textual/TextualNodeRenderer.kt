@@ -17,7 +17,6 @@ import com.quarkdown.core.ast.base.block.Paragraph
 import com.quarkdown.core.ast.base.inline.CheckBox
 import com.quarkdown.core.ast.base.inline.Comment
 import com.quarkdown.core.ast.base.inline.CriticalContent
-import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.parallelAcceptAll
@@ -133,8 +132,6 @@ abstract class TextualNodeRenderer(
     override fun visit(node: TextSymbol) = node.text
 
     override fun visit(node: CheckBox) = if (node.isChecked) "[x] " else "[ ] "
-
-    override fun visit(node: SubdocumentLink) = visit(node.link)
 
     override fun visit(node: Container) = node.visitChildren().toString().blockNode
 

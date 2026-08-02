@@ -18,7 +18,9 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.ast.base.inline.setSubdocument
 import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
@@ -34,6 +36,7 @@ import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.toc.TableOfContents
+import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.rendering.markdown.node.GfmNodeRenderer
 import kotlin.test.Test
@@ -635,5 +638,69 @@ class GfmNodeRendererTest {
                 }
             }.first().render(),
         )
+    }
+
+    @Test
+    fun `subdocument link points at md counterpart`() {
+        val context = MutableContext(QuarkdownFlavor)
+        val target = Subdocument.Resource(name = "quickstart", path = "quickstart.qd", content = "")
+        val link =
+            SubdocumentLink(
+                Link(
+                    label = buildInline { text("Quickstart") },
+                    url = "quickstart.qd",
+                    title = null,
+                ),
+            )
+        link.setSubdocument(context, target)
+
+        assertEquals("[Quickstart](quickstart.md)", link.render(context))
+    }
+
+    @Test
+    fun `subdocument link to root points at index_md`() {
+        val context = MutableContext(QuarkdownFlavor)
+        val link =
+            SubdocumentLink(
+                Link(
+                    label = buildInline { text("Home") },
+                    url = "main.qd",
+                    title = null,
+                ),
+            )
+        link.setSubdocument(context, Subdocument.Root)
+
+        assertEquals("[Home](index.md)", link.render(context))
+    }
+
+    @Test
+    fun `subdocument link preserves anchor`() {
+        val context = MutableContext(QuarkdownFlavor)
+        val target = Subdocument.Resource(name = "headings-1", path = "headings-1.qd", content = "")
+        val link =
+            SubdocumentLink(
+                Link(
+                    label = buildInline { text("Section A") },
+                    url = "headings-1.qd",
+                    title = null,
+                ),
+                anchor = "a",
+            )
+        link.setSubdocument(context, target)
+
+        assertEquals("[Section A](headings-1.md#a)", link.render(context))
+    }
+
+    @Test
+    fun `subdocument link with no attached subdocument renders unresolved marker`() {
+        val link =
+            SubdocumentLink(
+                Link(
+                    label = buildInline { text("Missing") },
+                    url = "missing.qd",
+                    title = null,
+                ),
+            )
+        assertEquals("[???]", link.render())
     }
 }
