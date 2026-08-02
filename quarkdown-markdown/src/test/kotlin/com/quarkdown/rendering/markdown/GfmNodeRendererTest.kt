@@ -241,7 +241,7 @@ class GfmNodeRendererTest {
     @Test
     fun html() {
         assertEquals(
-            "<div>Hello</div>\n\n",
+            "",
             Html("<div>Hello</div>").render(),
         )
     }

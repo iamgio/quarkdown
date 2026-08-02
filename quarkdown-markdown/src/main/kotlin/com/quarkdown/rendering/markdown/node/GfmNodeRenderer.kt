@@ -159,7 +159,7 @@ class GfmNodeRenderer(
 
     override fun visit(node: ListItem) = node.visitChildren().toString().trimEnd()
 
-    override fun visit(node: Html) = node.content.blockNode
+    override fun visit(node: Html) = ""
 
     override fun visit(node: Table) =
         buildString {

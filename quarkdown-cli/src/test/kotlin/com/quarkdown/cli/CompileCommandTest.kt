@@ -607,4 +607,26 @@ class CompileCommandTest : TempDirectory() {
         val subdoc3OutputContent = subdoc3OutputFile.readText()
         assertTrue(subdoc3OutputContent.contains("This is yet another subdocument."))
     }
+
+    @Test
+    fun `html then markdown, multiple subdocuments`() {
+        setupSubdocuments()
+
+        test("--render", "html")
+        test("--render", "markdown")
+
+        val outputDir = outputDirectory.resolve(DEFAULT_OUTPUT_DIRECTORY_NAME)
+        assertTrue(outputDir.exists())
+        assertTrue(outputDir.isDirectory)
+
+        assertTrue(outputDir.resolve("index.html").exists())
+        assertTrue(outputDir.resolve("subdoc1").resolve("index.html").exists())
+        assertTrue(outputDir.resolve("subdoc2").resolve("index.html").exists())
+        assertTrue(outputDir.resolve("subdoc3").resolve("index.html").exists())
+
+        assertTrue(outputDir.resolve("index.md").exists())
+        assertTrue(outputDir.resolve("subdoc1.md").exists())
+        assertTrue(outputDir.resolve("subdoc2.md").exists())
+        assertTrue(outputDir.resolve("subdoc3.md").exists())
+    }
 }
