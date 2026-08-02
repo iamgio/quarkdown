@@ -49,7 +49,7 @@ By default, every page in a multi-subdocument project shows its own name in sear
 .example
     The HTML title will be *My document*:
     
-    ```
+    ```markdown
     .docname {My document}
     ```
 
@@ -58,7 +58,7 @@ The recommended pattern combines the subdocument's own name with the site name, 
 .example
     The HTML title will be *Subdocument name | My site* for non-root pages:
     
-    ```
+    ```markdown
     .ifnot {.docname::equals {My site}}
         .htmloptions title:{.docname | My site}
     ```
@@ -106,3 +106,23 @@ The second run writes `.md` files alongside the HTML output, so the result is a 
 
 .example
     This very page is readable in Markdown at [/wiki/seo-aeo-optimization.md](/wiki/seo-aeo-optimization.md?).
+
+## Pointing agents at `llms.txt`
+
+The [llms.txt convention](https://llmstxt.org) proposes a single Markdown file at the root of a site (`/llms.txt`) that curates the most useful entry points for LLM-based crawlers. Ship it as a [static asset](html-static-assets.qd) in `public/`, alongside `robots.txt`.
+
+Agents that fetch a rendered page, however, have no built-in way to discover that an index exists. To bridge this, add a short discoverability directive on every page using the **`.llmstxt`** function. This emits two variants of the same pointer:
+
+- A visually hidden HTML paragraph that stays out of the visual layout but remains in the DOM, so agents that fetch the HTML still see it.
+- A Markdown blockquote, emitted only when the target is Markdown, carrying the same pointer for agents that consume the `.md` version.
+
+Place the call in a shared setup file, so it appears on every subdocument:
+
+.example
+    > `_setup.qd`
+
+    ```markdown
+    .llmstxt path:{/llms.txt} markdownavailable:{yes}
+    ```
+
+Set `markdownavailable` to `yes` when the site also ships `.md` files (see [Shipping a Markdown copy](#shipping-a-markdown-copy)). In that case, the directive also tells agents how to fetch the raw Markdown of the current page.

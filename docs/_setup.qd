@@ -9,6 +9,8 @@
 .numbering
     - example: 1
 
+.llmstxt {/wiki/llms.txt} markdownavailable:{yes}
+
 .html {.read {assets/analytics.html}}
 .css {.read {assets/style.css}}
 

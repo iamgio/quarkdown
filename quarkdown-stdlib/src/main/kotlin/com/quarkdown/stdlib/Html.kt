@@ -2,11 +2,15 @@
 
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.base.block.Html
+import com.quarkdown.core.ast.quarkdown.block.Markdown
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.options.HtmlOptions
 import com.quarkdown.core.context.options.merge
+import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.value.NodeValue
@@ -15,6 +19,7 @@ import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.requirePermission
+import com.quarkdown.core.util.Escape
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
@@ -157,3 +162,56 @@ fun cssProperties(
         append("}")
     },
 )
+
+/**
+ * Emits a discoverability directive that points AI agents and LLM-based crawlers to the site's `llms.txt`.
+ *
+ * - A visually hidden HTML paragraph (`<p class="sr-only">`) that lets agents find it.
+ * - A Markdown blockquote, emitted only when the target is Markdown, carrying the same pointer for agents that consume the raw `.md` version of the page.
+ *
+ * Placing this call in a shared setup file (such as `_setup.qd` in `docs` projects) makes the directive appear on every page.
+ *
+ * @param path absolute URL of the `llms.txt` file, relative to the site root. Defaults to `/llms.txt`.
+ * @param isMarkdownAvailable whether the site also serves a Markdown counterpart for each page.
+ *                            When `true`, the HTML directive also links to this page's raw Markdown counterpart,
+ *                            computed automatically from the current subdocument.
+ * @return a compound node containing both the HTML directive and the Markdown directive
+ * @wiki seo-aeo-optimization
+ */
+@QFunction
+@Name("llmstxt")
+fun llmsTxt(
+    @Injected context: Context,
+    path: String = "/llms.txt",
+    @Name("markdownavailable") isMarkdownAvailable: Boolean,
+): NodeValue {
+    val markdownUrl = if (isMarkdownAvailable) getCurrentPageMarkdownUrl(context) else null
+    return AstGroup(
+        listOf(
+            Markdown("> For the complete documentation index, see [llms.txt]($path)."),
+            Html(
+                buildString {
+                    append("<p class=\"sr-only\" data-hidden=\"\">")
+                    append("For the complete documentation index, see <a href=\"$path\">llms.txt</a>.")
+                    if (markdownUrl != null) {
+                        append(" This page is also available as <a href=\"$markdownUrl\">Markdown</a>.")
+                    }
+                    append("</p>")
+                },
+            ),
+        ),
+    ).wrappedAsValue()
+}
+
+/**
+ * Page-relative URL of the current subdocument's Markdown counterpart.
+ * - Root: `index.md` sits next to `index.html`.
+ * - Subdocument: `<name>.md` sits one directory above `<name>/index.html`.
+ */
+private fun getCurrentPageMarkdownUrl(context: Context): String {
+    val name = context.subdocument.getOutputFileName(context).let(Escape.Url::escape)
+    return when (context.subdocument) {
+        Subdocument.Root -> "index.md"
+        else -> "../$name.md"
+    }
+}
