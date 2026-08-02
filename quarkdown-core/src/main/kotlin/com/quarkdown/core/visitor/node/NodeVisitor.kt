@@ -43,6 +43,7 @@ import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.FileTree
 import com.quarkdown.core.ast.quarkdown.block.Landscape
+import com.quarkdown.core.ast.quarkdown.block.Markdown
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
@@ -184,6 +185,8 @@ interface NodeVisitor<T> {
     fun visit(node: FileTree): T
 
     fun visit(node: SubdocumentGraph): T
+
+    fun visit(node: Markdown): T
 
     // Quarkdown inline
 

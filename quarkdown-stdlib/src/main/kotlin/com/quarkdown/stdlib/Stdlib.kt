@@ -43,6 +43,7 @@ object Stdlib : LibraryExporter {
                     Slides.Module,
                     Ecosystem.Module,
                     Html.Module,
+                    Markdown.Module,
                     Mermaid.Module,
                     Reference.Module,
                     Bibliography.Module,

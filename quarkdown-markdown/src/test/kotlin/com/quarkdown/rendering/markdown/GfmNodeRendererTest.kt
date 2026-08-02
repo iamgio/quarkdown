@@ -25,6 +25,7 @@ import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.FileTree
 import com.quarkdown.core.ast.quarkdown.block.FileTreeEntry
+import com.quarkdown.core.ast.quarkdown.block.Markdown
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
@@ -243,6 +244,14 @@ class GfmNodeRendererTest {
         assertEquals(
             "",
             Html("<div>Hello</div>").render(),
+        )
+    }
+
+    @Test
+    fun markdown() {
+        assertEquals(
+            "> A blockquote only visible in Markdown output.\n\n",
+            Markdown("> A blockquote only visible in Markdown output.").render(),
         )
     }
 
@@ -572,7 +581,7 @@ class GfmNodeRendererTest {
         assertEquals("\\[note", Text("[note").render())
         assertEquals("\\<div>", Text("<div>").render())
         assertEquals("path\\\\to", Text("path\\to").render())
-        assertEquals("\\\$5", Text("\$5").render())
+        assertEquals("\\$5", Text("$5").render())
     }
 
     @Test
