@@ -32,6 +32,7 @@ import com.quarkdown.core.ast.quarkdown.block.Figure
 import com.quarkdown.core.ast.quarkdown.block.FileTree
 import com.quarkdown.core.ast.quarkdown.block.FileTreeEntry
 import com.quarkdown.core.ast.quarkdown.block.Landscape
+import com.quarkdown.core.ast.quarkdown.block.Markdown
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
 import com.quarkdown.core.ast.quarkdown.block.Numbered
 import com.quarkdown.core.ast.quarkdown.block.PageBreak
@@ -168,6 +169,8 @@ abstract class TextualNodeRenderer(
     override fun visit(node: SlidesFragment) = node.visitChildren()
 
     override fun visit(node: SubdocumentGraph) = ""
+
+    override fun visit(node: Markdown) = ""
 
     override fun visit(node: PageMarginContentInitializer) = ""
 

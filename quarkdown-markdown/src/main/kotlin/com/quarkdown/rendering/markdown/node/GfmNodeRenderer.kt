@@ -28,6 +28,7 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.block.Box
+import com.quarkdown.core.ast.quarkdown.block.Markdown
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
 import com.quarkdown.core.ast.quarkdown.inline.Keybinding
@@ -160,6 +161,8 @@ class GfmNodeRenderer(
     override fun visit(node: ListItem) = node.visitChildren().toString().trimEnd()
 
     override fun visit(node: Html) = ""
+
+    override fun visit(node: Markdown) = node.content.blockNode
 
     override fun visit(node: Table) =
         buildString {

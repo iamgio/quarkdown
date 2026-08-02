@@ -134,6 +134,24 @@ class PermissionTest {
         }
     }
 
+    @Test
+    fun `markdown with NativeContent succeeds`() {
+        execute(
+            ".markdown {> hello}",
+            permissions = setOf(NativeContent),
+        ) {}
+    }
+
+    @Test
+    fun `markdown without NativeContent fails`() {
+        assertFailsWith<MissingPermissionException> {
+            execute(
+                ".markdown {> hello}",
+                permissions = emptySet(),
+            ) {}
+        }
+    }
+
     // Subdocument read permissions
 
     @Test
