@@ -1,0 +1,86 @@
+.docname {SEO & AEO optimization}
+.include {docs}
+
+When publishing a Quarkdown document as a website, especially [`plain`](document-types.qd#plain-plain) and [`docs`](document-types.qd#docs-docs) projects with multiple [subdocuments](subdocuments.qd), a few setup steps make the site easier to find and index. This page collects the recommended settings for both search engines (SEO) and AI agents (AEO).
+
+Most of these are already taken care of by Quarkdown's [project creator](cli-project-creator.qd) when picking the `docs` document type.
+
+## Base URL
+
+Set the site's canonical base URL through [`.htmloptions`](html-options.qd):
+
+```markdown
+.htmloptions baseurl:{https://example.com}
+```
+
+This has two effects:
+
+1. Every generated page gets a `<link rel="canonical">` pointing to its final URL, which helps search engines pick the preferred address for each page.
+2. When the project contains at least one subdocument, Quarkdown emits a `sitemap.xml`, listing every page for crawlers to discover.
+
+> Tip: The base URL should not include a trailing slash and should point to the directory where `index.html` is served from.
+
+## Per-subdocument page titles
+
+By default, every page in a multi-subdocument project shows its own name in search engines and browser tabs, defined by its [`.docname`](document-metadata.qd).
+
+.example
+    The HTML title will be *My document*:
+    
+    ```
+    .docname {My document}
+    ```
+
+The recommended pattern combines the subdocument's own name with the site name, and lives in a common setup file (such as `_setup.qd` in `docs` documents).
+
+.example
+    The HTML title will be *Subdocument name | My site* for non-root pages:
+    
+    ```
+    .ifnot {.docname::equals {My site}}
+        .htmloptions title:{.docname | My site}
+    ```
+
+> Note: `.htmloptions title:` overrides the browser tab and search result title independently of `.docname`, which is still used for on-page headings and file names.
+
+## Document metadata
+
+Filling in the metadata fields on populate the corresponding HTML `<meta>` tags, consumed both by search engines and by AI agents.
+
+```markdown
+.docname {My site}
+.doclang {English}
+.docauthor {Jane Doe}
+.docdescription {A short summary of what this site is about, ideally under 160 characters.}
+.dockeywords
+    - typesetting
+    - markdown
+    - documentation
+```
+
+See [Document metadata](document-metadata.qd) for the full reference, including per-subdocument overrides.
+
+## Shipping a Markdown copy
+
+Modern AI agents and LLM-based crawlers prefer plain Markdown over HTML because it strips away layout noise and preserves the document structure. Quarkdown can produce both artifacts from the same source in two runs of the compiler:
+
+```bash
+quarkdown c main.qd -r html --clean
+quarkdown c main.qd -r markdown
+```
+
+The second run writes `.md` files alongside the HTML output, so the result is a single directory containing both formats:
+
+.filetree
+    - My site
+      - index.html
+      - index.md
+      - page-1
+        - index.html
+      - page-1.md
+      - page-2
+        - index.html
+      - page-2.md
+
+.example
+    This very page is readable in Markdown at [/wiki/seo-aeo-optimization.md](/wiki/seo-aeo-optimization.md?).
