@@ -20,6 +20,28 @@ This has two effects:
 
 > Tip: The base URL should not include a trailing slash and should point to the directory where `index.html` is served from.
 
+## Robots.txt
+
+Search engines and AI crawlers check for a `robots.txt` file at the root of your site to learn which pages they may access, and where to find the sitemap generated from the base URL.
+
+Ship it as a [static asset](html-static-assets.qd) by placing it in the project's `public/` directory:
+
+.filetree
+    - main.qd
+    - public
+      - robots.txt
+
+A minimal file that welcomes all crawlers and points them to the sitemap:
+
+```
+User-agent: *
+Allow: /
+
+Sitemap: https://example.com/sitemap.xml
+```
+
+The `Sitemap` line should use the same URL passed to `.htmloptions baseurl:{...}`, so crawlers pick up every subdocument.
+
 ## Per-subdocument page titles
 
 By default, every page in a multi-subdocument project shows its own name in search engines and browser tabs, defined by its [`.docname`](document-metadata.qd).
