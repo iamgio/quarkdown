@@ -26,7 +26,9 @@ import com.quarkdown.core.ast.base.inline.SoftBreak
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.ast.base.inline.getSubdocument
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Markdown
 import com.quarkdown.core.ast.quarkdown.block.Math
@@ -35,6 +37,8 @@ import com.quarkdown.core.ast.quarkdown.inline.Keybinding
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.toc.TableOfContents
+import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.rendering.tag.buildTag
 import com.quarkdown.core.rendering.textual.TextualNodeRenderer
 import com.quarkdown.core.util.node.toPlainText
@@ -238,6 +242,22 @@ class GfmNodeRenderer(
             append(formatTitle(node.title))
             append(")")
         }
+
+    override fun visit(node: SubdocumentLink): CharSequence {
+        val subdocument = node.getSubdocument(context) ?: return "[???]"
+        val filename =
+            when (subdocument) {
+                Subdocument.Root -> "index"
+                else -> subdocument.getOutputFileName(context)
+            }
+        val url =
+            buildString {
+                append(filename)
+                append(".md")
+                node.anchor?.let { append("#").append(it) }
+            }
+        return visitTransformed(node.link.copy(url = url))
+    }
 
     override fun visit(node: ReferenceFootnote) = "[^${node.label}]"
 

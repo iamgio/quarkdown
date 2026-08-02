@@ -21,6 +21,7 @@ import com.quarkdown.core.ast.base.inline.SoftBreak
 import com.quarkdown.core.ast.base.inline.Strikethrough
 import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
+import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Math
 import com.quarkdown.core.ast.quarkdown.block.MermaidDiagram
@@ -100,6 +101,8 @@ class PlainTextNodeRenderer(
     override fun visit(node: SoftBreak) = if (isCJK) "" else " "
 
     override fun visitTransformed(node: Link) = node.visitChildren()
+
+    override fun visit(node: SubdocumentLink) = visit(node.link)
 
     override fun visit(node: ReferenceFootnote) = "" // Footnotes are currently unsupported
 
