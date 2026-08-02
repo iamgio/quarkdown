@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,6 +26,24 @@ class ContainerTest {
         ) {
             assertEquals(
                 "<div class=\"container\"><p>Hello, <strong>world</strong>!</p></div>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `body only (gfm)`() {
+        execute(
+            """
+            .container
+                # Inside
+
+                Body
+            """.trimIndent(),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "# Inside\n\nBody\n\n",
                 it,
             )
         }

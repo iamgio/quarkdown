@@ -8,10 +8,13 @@ import com.quarkdown.rendering.html.HtmlExportOptions
 import com.quarkdown.rendering.html.extension.html
 import com.quarkdown.rendering.html.extension.htmlPdf
 import com.quarkdown.rendering.html.pdf.HtmlPdfExportOptions
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.rendering.plaintext.extension.plainText
 
 private const val HTML = "html"
 private const val HTML_PDF = "html-pdf"
+private const val GFM = "gfm"
+private const val MARKDOWN = "markdown"
 private const val PLAIN_TEXT = "text"
 
 /**
@@ -35,6 +38,7 @@ class RendererRetriever(
             when {
                 isHtmlPdf() -> factory.htmlPdf(context, createHtmlPdfExportOptions(), createHtmlExportOptions())
                 isHtml() -> factory.html(context, createHtmlExportOptions())
+                isGfm() -> factory.gfm(context)
                 isPlainText() -> factory.plainText(context)
                 else -> throw IllegalArgumentException("Unsupported renderer: '${options.rendererName}'")
             }
@@ -43,6 +47,8 @@ class RendererRetriever(
     private fun isHtml() = name == HTML
 
     private fun isHtmlPdf() = name == HTML_PDF || (name == HTML && options.exportPdf)
+
+    private fun isGfm() = name == GFM || name == MARKDOWN
 
     private fun isPlainText() = name == PLAIN_TEXT
 

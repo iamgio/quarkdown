@@ -4,6 +4,14 @@
 
 ### Added
 
+#### [Markdown export](https://quarkdown.com/wiki/cli-options)
+
+Quarkdown documents can now be exported to GitHub Flavored Markdown via the new `--render markdown` or `--render gfm` option, producing `.md` files.
+
+```bash
+quarkdown c document.qd -r markdown
+```
+
 #### [Code block primitive](https://quarkdown.com/wiki/primitives)
 
 `.code` is now a [primitive](https://quarkdown.com/wiki/primitives), so it can be intercepted via `.extend {code}` to customize the appearance of every code block in the document.

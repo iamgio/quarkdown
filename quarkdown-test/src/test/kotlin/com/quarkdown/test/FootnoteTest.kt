@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
@@ -34,6 +35,33 @@ class FootnoteTest {
             """.trimIndent(),
         ) {
             assertEquals("<p>Hello[^1]</p>", it)
+        }
+    }
+
+    @Test
+    fun `reference and definition (gfm)`() {
+        execute(
+            "See[^1].\n\n[^1]: A footnote.",
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "See[^1].\n\n[^1]: A footnote.\n\n",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `all-in-one anonymous footnote (gfm)`() {
+        execute(
+            "See[^: A footnote].",
+            options = DEFAULT_OPTIONS.copy(uuidSupplier = { "42" }),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "See[^42][^42]: A footnote\n\n.\n\n",
+                it,
+            )
         }
     }
 

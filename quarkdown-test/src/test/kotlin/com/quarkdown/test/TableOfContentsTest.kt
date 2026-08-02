@@ -1,5 +1,6 @@
 package com.quarkdown.test
 
+import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
@@ -492,6 +493,57 @@ class TableOfContentsTest {
                     "<h2 id=\"examples\">Examples</h2>" +
                     "<h1 id=\"chapter-2\">Chapter 2</h1>" +
                     "<h2 id=\"examples-2\">Examples</h2>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `table of contents (gfm)`() {
+        execute(
+            """
+            .tableofcontents
+
+            # ABC
+
+            Hi
+
+            # DEF
+
+            Hello
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "1. [ABC](#abc)\n2. [DEF](#def)\n\n" +
+                    "# ABC\n\nHi\n\n" +
+                    "# DEF\n\nHello\n\n",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `nested table of contents (gfm)`() {
+        execute(
+            """
+            .tableofcontents
+
+            # ABC
+
+            ## A/1
+
+            # DEF
+            """.trimIndent(),
+            DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
+            renderer = { factory, ctx -> factory.gfm(ctx) },
+        ) {
+            assertEquals(
+                "1. [ABC](#abc)\n\n   1. [A/1](#a1)\n2. [DEF](#def)\n\n" +
+                    "# ABC\n\n" +
+                    "## A/1\n\n" +
+                    "# DEF\n\n",
                 it,
             )
         }

@@ -8,6 +8,7 @@ enum class ArtifactType {
     CSS,
     JAVASCRIPT,
     JSON,
+    MARKDOWN,
     PLAIN_TEXT,
 
     /**
