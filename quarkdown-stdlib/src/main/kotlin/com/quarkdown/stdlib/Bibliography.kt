@@ -2,7 +2,7 @@
 
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.createSectionHeading
@@ -53,7 +53,7 @@ internal const val DEFAULT_CSL_STYLE = "ieee"
  *                             Implicitly enabled when [indexHeading] is enabled.
  * @param indexHeading whether the heading preceding the bibliography should itself be indexed
  *                     in the document's table of contents.
- * @return an [AstRoot] containing an optional heading and a [BibliographyView]
+ * @return an [AstGroup] containing an optional heading and a [BibliographyView]
  * @see cite to cite bibliography entries
  * @throws java.io.IOException if the bibliography file cannot be read or parsed
  * @throws IllegalArgumentException if the specified style does not exist or is invalid
@@ -86,7 +86,7 @@ fun bibliography(
             includeInTableOfContents = indexHeading,
         )
 
-    return AstRoot(
+    return AstGroup(
         listOfNotNull(
             heading,
             BibliographyView(

@@ -2,7 +2,7 @@
 
 package com.quarkdown.stdlib
 
-import com.quarkdown.core.ast.AstRoot
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.attributes.style.NodeStyle
@@ -1023,7 +1023,7 @@ fun navigationContainer(
  * @param focusedItem if set, adds focus to the item of the table of contents with the same text content as this argument.
  *                    Inline style (strong, emphasis, etc.) is ignored when comparing the text content.
  *                    When at least one item is focused, non-focused items are visually de-emphasized.
- * @return an [AstRoot] containing an optional heading and a [TableOfContentsView]
+ * @return an [AstGroup] containing an optional heading and a [TableOfContentsView]
  * @wiki table-of-contents
  */
 @QFunction
@@ -1040,7 +1040,7 @@ fun tableOfContents(
 ): NodeValue {
     val isDocs = context.documentInfo.type == DocumentType.DOCS
 
-    return AstRoot(
+    return AstGroup(
         listOfNotNull(
             Heading.createSectionHeading(
                 title?.children,

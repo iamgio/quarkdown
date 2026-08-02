@@ -49,7 +49,7 @@ class TreeTraversalTest {
                     "BlockQuote",
                     "Paragraph",
                     "Text",
-                    "AstRoot", // Empty attribution group
+                    "AstGroup", // Empty attribution group
                     "Paragraph",
                     "Strong",
                     "Text",
@@ -57,7 +57,7 @@ class TreeTraversalTest {
                     "Emphasis",
                     "Text",
                     "Code",
-                    "AstRoot", // Empty caption group
+                    "AstGroup", // Empty caption group
                 ),
                 this,
             )
@@ -105,7 +105,7 @@ class TreeTraversalTest {
                 listOf(
                     "Paragraph",
                     "Text",
-                    "AstRoot", // Caption group
+                    "AstGroup", // Caption group
                     "Text",
                     "Strong",
                     "Text",
@@ -133,7 +133,7 @@ class TreeTraversalTest {
                 listOf(
                     "Text", // Cell
                     "Text", // Header
-                    "AstRoot", // Caption group
+                    "AstGroup", // Caption group
                     "Text",
                     "Strong",
                     "Text",
@@ -148,7 +148,7 @@ class TreeTraversalTest {
         with(code.flattenedChildren().map { it::class.simpleName }.toList()) {
             assertEquals(
                 listOf(
-                    "AstRoot", // Caption group
+                    "AstGroup", // Caption group
                     "Text",
                     "Strong",
                     "Text",

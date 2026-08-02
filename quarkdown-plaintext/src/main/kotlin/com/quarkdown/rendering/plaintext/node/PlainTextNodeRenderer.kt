@@ -2,7 +2,6 @@ package com.quarkdown.rendering.plaintext.node
 
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Code
-import com.quarkdown.core.ast.base.block.FootnoteDefinition
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.block.HorizontalRule
 import com.quarkdown.core.ast.base.block.Html
@@ -53,8 +52,6 @@ class PlainTextNodeRenderer(
     override fun visit(node: Heading) = node.visitChildren().toString().blockNode
 
     override fun visit(node: LinkDefinition) = ""
-
-    override fun visit(node: FootnoteDefinition) = ""
 
     override fun visit(node: OrderedList) =
         buildString {

@@ -1,5 +1,6 @@
 package com.quarkdown.core.visitor.node
 
+import com.quarkdown.core.ast.AstGroup
 import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.base.block.BlankNode
 import com.quarkdown.core.ast.base.block.BlockQuote
@@ -73,6 +74,8 @@ import com.quarkdown.core.ast.quarkdown.reference.CrossReference
  */
 interface NodeVisitor<T> {
     fun visit(node: AstRoot): T
+
+    fun visit(node: AstGroup): T
 
     // Base block
 
