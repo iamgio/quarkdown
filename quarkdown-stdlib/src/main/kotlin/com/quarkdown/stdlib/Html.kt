@@ -11,6 +11,7 @@ import com.quarkdown.core.context.options.HtmlOptions
 import com.quarkdown.core.context.options.merge
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.getOutputFileName
+import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.value.NodeValue
@@ -164,28 +165,51 @@ fun cssProperties(
 )
 
 /**
- * Emits a discoverability directive that points AI agents and LLM-based crawlers to the site's `llms.txt`.
+ * Generates an [llms.txt](https://llmstxt.org) index for the site.
  *
- * - A visually hidden HTML paragraph (`<p class="sr-only">`) that lets agents find it.
- * - A Markdown blockquote, emitted only when the target is Markdown, carrying the same pointer for agents that consume the raw `.md` version of the page.
+ * On every page, two directives are emitted:
+ * - A visually hidden HTML paragraph (`<p class="sr-only">`) so agents crawling the HTML can find `llms.txt`.
+ * - A Markdown blockquote, emitted only when the target is Markdown, carrying the same pointer.
  *
- * Placing this call in a shared setup file (such as `_setup.qd` in `docs` projects) makes the directive appear on every page.
+ * Placing this call in a shared setup file (such as `_setup.qd` in `docs` projects) makes both the
+ * index generation and the per-page directive appear across the whole site.
  *
- * @param path absolute URL of the `llms.txt` file, relative to the site root. Defaults to `/llms.txt`.
- * @param isMarkdownAvailable whether the site also serves a Markdown counterpart for each page.
+ * Requires [HtmlOptions.baseUrl] to be set via `.htmloptions`, since `llms.txt` must use absolute URLs.
+ *
+ * ```markdown
+ * .llmstxt markdownavailable:{yes}
+ *     My site's short description, used as the summary in llms.txt.
+ * ```
+ *
+ * @param content short summary of the site, used as the blockquote at the top of `llms.txt`
+ * @param isMarkdownMirrorAvailable whether the site also serves a Markdown counterpart for each page.
  *                            When `true`, the HTML directive also links to this page's raw Markdown counterpart,
  *                            computed automatically from the current subdocument.
  * @return a compound node containing both the HTML directive and the Markdown directive
+ * @throws IllegalStateException if [HtmlOptions.baseUrl] is not set via `.htmloptions`
  * @wiki seo-aeo-optimization
  */
 @QFunction
 @Name("llmstxt")
 fun llmsTxt(
-    @Injected context: Context,
-    path: String = "/llms.txt",
-    @Name("markdownavailable") isMarkdownAvailable: Boolean,
+    @Injected context: MutableContext,
+    @Body content: String,
+    @Name("markdownavailable") isMarkdownMirrorAvailable: Boolean,
 ): NodeValue {
-    val markdownUrl = if (isMarkdownAvailable) getCurrentPageMarkdownUrl(context) else null
+    val baseUrl =
+        checkNotNull(context.options.html.baseUrl) {
+            "Cannot emit llms.txt directive: base URL is not set via .htmloptions baseurl:{...}"
+        }
+
+    val path = "$baseUrl/llms.txt"
+    val markdownUrl = if (isMarkdownMirrorAvailable) getCurrentPageMarkdownUrl(context) else null
+
+    context.options.html =
+        context.options.html.copy(
+            llmsTxtContent = content.trim(),
+            isMarkdownMirrorAvailable = isMarkdownMirrorAvailable,
+        )
+
     return AstGroup(
         listOf(
             Markdown("> For the complete documentation index, see [llms.txt]($path)."),

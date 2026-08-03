@@ -8,6 +8,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.rendering.PostRenderer
 import com.quarkdown.installlayout.InstallLayout
+import com.quarkdown.rendering.html.post.resources.LlmsTxtPostRendererResource
 import com.quarkdown.rendering.html.post.resources.MediaPostRendererResource
 import com.quarkdown.rendering.html.post.resources.PostRendererResource
 import com.quarkdown.rendering.html.post.resources.ProxiedPostRendererResource
@@ -68,6 +69,7 @@ class HtmlPostRenderer(
                 context.fileSystem.workingDirectory
                     ?.let(::StaticAssetsPostRendererResource),
                 SitemapPostRendererResource(context),
+                LlmsTxtPostRendererResource(context),
                 SearchIndexGenerator
                     .takeIf { context.documentInfo.type == DocumentType.DOCS }
                     ?.generate(context.sharedSubdocumentsData)
