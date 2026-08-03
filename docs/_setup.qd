@@ -9,7 +9,9 @@
 .numbering
     - example: 1
 
-.llmstxt {/wiki/llms.txt} markdownavailable:{yes}
+.llmstxt markdownavailable:{yes}
+    Official documentation for Quarkdown, a modern, open-source typesetting system that extends Markdown with powerful features inspired by LaTeX.
+    It compiles Markdown-based documents into PDF, HTML, MD, TXT.
 
 .html {.read {assets/analytics.html}}
 .css {.read {assets/style.css}}

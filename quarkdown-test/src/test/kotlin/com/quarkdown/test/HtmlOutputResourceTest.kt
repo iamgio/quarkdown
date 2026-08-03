@@ -198,6 +198,187 @@ class HtmlOutputResourceTest {
         ) {}
     }
 
+    // llms.txt
+
+    private fun findLlmsTxt(group: OutputResource?): TextOutputArtifact? =
+        getSubResources(group)
+            .filterIsInstance<TextOutputArtifact>()
+            .firstOrNull { it.name == "llms.txt" && it.type == ArtifactType.AUTO }
+
+    @Test
+    fun `no llms_txt when llmstxt not called`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+
+            [1](subdoc/simple-1.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                assertNull(findLlmsTxt(group))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `no llms_txt when there are no subdocuments`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+
+            .llmstxt markdownavailable:{no}
+                A test site.
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                assertNull(findLlmsTxt(group))
+            },
+        ) {}
+    }
+
+    @Test
+    fun `llms_txt lists root and subdocuments as html links when markdown mirror not available`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+            .docname {My site}
+
+            .llmstxt markdownavailable:{no}
+                A short summary.
+
+            [1](subdoc/simple-1.qd)
+            [2](subdoc/simple-2.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                val llmsTxt = findLlmsTxt(group)
+                assertNotNull(llmsTxt)
+                val content = llmsTxt.content.toString()
+                assertContains(content, "# My site")
+                assertContains(content, "> A short summary.")
+                assertContains(content, "## Docs")
+                // HTML root is served at the bare base URL, not at `<baseUrl>/index`.
+                assertContains(content, "[My site](https://example.com)")
+                assertFalse("[My site](https://example.com/index)" in content)
+                assertContains(content, "(https://example.com/simple-1)")
+                assertContains(content, "(https://example.com/simple-2)")
+                // No .md suffix since markdownavailable=false.
+                assertFalse(".md)" in content)
+            },
+        ) {}
+    }
+
+    @Test
+    fun `llms_txt links point at markdown files when markdown mirror available`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+            .docname {My site}
+
+            .llmstxt markdownavailable:{yes}
+                A short summary.
+
+            [1](subdoc/simple-1.qd)
+            [2](subdoc/simple-2.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                val llmsTxt = findLlmsTxt(group)
+                assertNotNull(llmsTxt)
+                val content = llmsTxt.content.toString()
+                assertContains(content, "[My site](https://example.com/index.md)")
+                assertContains(content, "(https://example.com/simple-1.md)")
+                assertContains(content, "(https://example.com/simple-2.md)")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `llms_txt still emits root entry when docname is absent`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+
+            .llmstxt markdownavailable:{no}
+                A short summary.
+
+            [1](subdoc/simple-1.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                val llmsTxt = findLlmsTxt(group)
+                assertNotNull(llmsTxt)
+                val content = llmsTxt.content.toString()
+                // No .docname was set: the root falls back to Subdocument.Root.name ("index").
+                assertContains(content, "[index](https://example.com)")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `llms_txt uses subdocument docname as link label`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+            .docname {My site}
+
+            .llmstxt markdownavailable:{yes}
+                A short summary.
+
+            [meta](subdoc/metadata.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                val llmsTxt = findLlmsTxt(group)
+                assertNotNull(llmsTxt)
+                val content = llmsTxt.content.toString()
+                // metadata.qd sets `.docname {Subdocument name}`.
+                assertContains(content, "[Subdocument name](https://example.com/metadata.md)")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `llms_txt preserves multi-line summary as blockquote`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+
+            .llmstxt markdownavailable:{yes}
+                First line.
+                Second line.
+
+            [1](subdoc/simple-1.qd)
+            """.trimIndent(),
+            outputResourceHook = { group ->
+                val llmsTxt = findLlmsTxt(group)
+                assertNotNull(llmsTxt)
+                val content = llmsTxt.content.toString()
+                assertContains(content, "> First line.")
+                assertContains(content, "> Second line.")
+            },
+        ) {}
+    }
+
+    @Test
+    fun `preview mode excludes llms_txt`() {
+        execute(
+            """
+            .htmloptions baseurl:{https://example.com}
+            .doctype {docs}
+
+            .llmstxt markdownavailable:{yes}
+                A short summary.
+
+            [1](subdoc/simple-1.qd)
+            """.trimIndent(),
+            previewMode = true,
+            outputResourceHook = { group ->
+                assertNull(findLlmsTxt(group))
+            },
+        ) {}
+    }
+
     // Search index
 
     private fun getSearchIndexOutputResource(group: OutputResource?): TextOutputArtifact {

@@ -2,11 +2,6 @@ package com.quarkdown.rendering.html.post.resources
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.sub.Subdocument
-import com.quarkdown.core.document.sub.getOutputFileName
-import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.pipeline.output.TextOutputArtifact
-import com.quarkdown.core.util.Escape
 import java.io.StringWriter
 import javax.xml.stream.XMLOutputFactory
 import javax.xml.stream.XMLStreamWriter
@@ -27,33 +22,14 @@ private const val SITEMAP_NAMESPACE = "http://www.sitemaps.org/schemas/sitemap/0
  *        subdocument graph, and output naming strategy
  */
 class SitemapPostRendererResource(
-    private val context: Context,
-) : PostRendererResource {
-    private val subdocuments: Map<Subdocument, Context>
-        get() = context.sharedSubdocumentsData.withContexts
-
+    context: Context,
+) : SubdocumentMapperPostRendererResource(context) {
     override val runsInPreviewMode: Boolean = false
 
-    override fun includeTo(
-        resources: MutableSet<OutputResource>,
-        rendered: CharSequence,
-    ) {
-        if (context.options.html.baseUrl == null) return
-        if (subdocuments.keys.none { it !== Subdocument.Root }) return
+    override val resourceName: String
+        get() = SITEMAP_FILE_NAME
 
-        resources +=
-            TextOutputArtifact(
-                name = SITEMAP_FILE_NAME,
-                content = buildSitemap(),
-                type = ArtifactType.AUTO,
-            )
-    }
-
-    private fun buildSitemap(): String {
-        val baseUrl =
-            context.options.html.baseUrl!!
-                .trimEnd('/')
-
+    override fun buildResourceContent(subdocuments: Sequence<Pair<Subdocument, Context>>): String {
         val writer = StringWriter()
         val xml = XMLOutputFactory.newInstance().createXMLStreamWriter(writer)
 
@@ -65,13 +41,10 @@ class SitemapPostRendererResource(
         writeUrl(xml, baseUrl)
 
         // Subdocuments.
-        subdocuments
-            .asSequence()
-            .filter { (subdocument, _) -> subdocument !== Subdocument.Root }
-            .forEach { (subdocument, subdocumentContext) ->
-                val directoryName = subdocument.getOutputFileName(subdocumentContext).let(Escape.Url::escape)
-                writeUrl(xml, "$baseUrl/$directoryName")
-            }
+        subdocuments.forEach { (subdocument, subdocumentContext) ->
+            val url = super.getSubdocumentUrl(subdocument, subdocumentContext, extension = null)
+            writeUrl(xml, url)
+        }
 
         xml.writeEndElement()
         xml.writeEndDocument()
