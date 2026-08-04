@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-08-04
+
 This release focuses on enhanced built-in LLM friendliness of sites produced by Quarkdown.  
 Quarkdown's Wiki, written in Quarkdown, now [scores 94/100 on afdocs](https://buildwithfern.com/agent-score/company/quarkdown-com-wiki) (previously 72/100), granting excellent agent readability with minimal setup.
 
@@ -1247,7 +1249,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.4.1...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.5.0...HEAD
+
+[2.5.0]: https://github.com/iamgio/quarkdown/compare/v2.4.1...v2.5.0
 
 [2.4.1]: https://github.com/iamgio/quarkdown/compare/v2.4.0...v2.4.1
 
