@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+This release focuses on enhanced built-in LLM friendliness of sites produced by Quarkdown.  
+Quarkdown's Wiki, written in Quarkdown, now [scores 94/100 on afdocs](https://buildwithfern.com/agent-score/company/quarkdown-com-wiki) (previously 72/100), granting excellent agent readability with minimal setup.
+
 ### Added
 
 #### [Markdown export](https://quarkdown.com/wiki/cli-options)
