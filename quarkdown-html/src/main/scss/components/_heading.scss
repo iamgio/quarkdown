@@ -11,6 +11,8 @@
     color: var(--qd-heading-color);
     margin: var(--qd-heading-margin);
     text-transform: none !important;
+    display: flex;
+    align-items: flex-start;
     @include font.global-font-family-with-main-fallback($kind: "heading");
   }
 
