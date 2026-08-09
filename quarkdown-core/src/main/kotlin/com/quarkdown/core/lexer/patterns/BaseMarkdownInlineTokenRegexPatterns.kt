@@ -103,7 +103,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
             regex =
                 RegexBuilder("\\[(label)\\]\\(\\s*(href)(?:\\s+(title))?\\s*\\)")
                     .withReference("label", LABEL_HELPER)
-                    .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|[^\\s\\x00-\\x1f]*")
+                    .withReference("href", "<(?:\\\\.|[^\\n<>\\\\])+>|$PLAIN_HREF_HELPER")
                     .withReference("title", PatternHelpers.DELIMITED_TITLE)
                     .build(),
         )
@@ -327,6 +327,14 @@ private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"
 private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*`|[^\\[\\]\\\\`])*?"
 
 private const val BLOCK_LABEL_HELPER = "(?!\\s*\\])(?:\\\\.|[^\\[\\]\\\\])+"
+
+// A single character allowed inside a plain (non-angle-bracket) link destination:
+// any non-whitespace, non-control, non-paren, non-backslash character, or an escaped character.
+private const val PLAIN_HREF_CHAR = "(?:[^\\s\\x00-\\x1f()\\\\]|\\\\.)"
+
+// CommonMark 6.4 requires parentheses in a plain link destination to be either backslash-escaped or balanced.
+private const val PLAIN_HREF_HELPER =
+    "(?:$PLAIN_HREF_CHAR|\\((?:$PLAIN_HREF_CHAR|\\((?:$PLAIN_HREF_CHAR)*\\))*\\))*"
 
 // Width and height separator in images.
 private const val IMAGE_SIZE_DIVIDER_HELPER = "(?:[* \\t]|(?<![a-zA-Z])x)" // 1*1, 1cm*1cm, 1 1, 1cm 1cm, 1x1 but not 1cmx1cm

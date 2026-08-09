@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+#### Unbalanced parentheses in links
+
+An inline link `[text](url)` followed immediately by a closing parenthesis no longer swallows the trailing `)`. Plain link destinations now require parentheses to be either backslash-escaped or balanced, matching the CommonMark spec.
+
 ## [2.5.0] - 2026-08-04
 
 This release focuses on enhanced built-in LLM friendliness of sites produced by Quarkdown.  

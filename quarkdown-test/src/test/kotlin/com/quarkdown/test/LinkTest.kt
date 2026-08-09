@@ -59,6 +59,13 @@ class LinkTest {
     }
 
     @Test
+    fun `link in parenthetical does not swallow trailing paren`() {
+        execute("text ([link](https://example.com)).") {
+            assertEquals("<p>text (<a href=\"https://example.com\">link</a>).</p>", it)
+        }
+    }
+
+    @Test
     fun `reference link`() {
         execute(
             """
