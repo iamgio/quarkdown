@@ -129,6 +129,36 @@ class InlineParserTest {
         }
 
         assertFalse(nodes.hasNext())
+
+        // Destination stops at an unbalanced closing paren, and the trailing `)` becomes text.
+        val unbalanced = inlineIterator<Node>("text ([link](https://example.com)).", assertType = false)
+        assertEquals("text (", (unbalanced.next() as Text).text)
+        with(unbalanced.next()) {
+            assertIs<Link>(this)
+            assertEquals("https://example.com", url)
+        }
+        assertEquals(").", (unbalanced.next() as Text).text)
+        assertFalse(unbalanced.hasNext())
+
+        // Whitespace before a trailing `)` doesn't rescue the destination either.
+        val trailingSpace = inlineIterator<Node>("([link](https://example.com) )", assertType = false)
+        assertEquals("(", (trailingSpace.next() as Text).text)
+        with(trailingSpace.next()) {
+            assertIs<Link>(this)
+            assertEquals("https://example.com", url)
+        }
+        assertEquals(" )", (trailingSpace.next() as Text).text)
+        assertFalse(trailingSpace.hasNext())
+
+        // Balanced parens (single and nested) are preserved inside the destination.
+        assertEquals(
+            "https://en.wikipedia.org/wiki/Markdown_(software)",
+            inlineIterator<Link>("[link](https://en.wikipedia.org/wiki/Markdown_(software))").next().url,
+        )
+        assertEquals(
+            "foo(and(bar))",
+            inlineIterator<Link>("[link](foo(and(bar)))").next().url,
+        )
     }
 
     @Test
