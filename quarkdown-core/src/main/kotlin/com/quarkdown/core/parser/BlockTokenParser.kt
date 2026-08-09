@@ -303,7 +303,7 @@ class BlockTokenParser(
         val lines = content.lineSequence()
 
         // Trims the content, removing common indentation.
-        val trimmedContent = trimMinIndent(lines, minIndent = marker.trim().length).trimEnd()
+        val trimmedContent = trimMinIndent(lines, minIndent = marker.length).trimEnd()
 
         // Additional features of this list item.
         val variants =
