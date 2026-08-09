@@ -67,5 +67,16 @@ class NodesTest {
                 it,
             )
         }
+
+        // Three-level nesting with 4-space indentation at every level.
+        execute("- Human\n    - Male\n        - John\n    - Female\n        - Karen") {
+            assertEquals(
+                "<ul><li>Human<ul>" +
+                    "<li>Male<ul><li>John</li></ul></li>" +
+                    "<li>Female<ul><li>Karen</li></ul></li>" +
+                    "</ul></li></ul>",
+                it,
+            )
+        }
     }
 }

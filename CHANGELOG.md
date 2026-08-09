@@ -8,6 +8,10 @@
 
 An inline link `[text](url)` followed immediately by a closing parenthesis no longer swallows the trailing `)`. Plain link destinations now require parentheses to be either backslash-escaped or balanced, matching the CommonMark spec.
 
+#### Deeply nested lists with 4-space indentation
+
+Nested lists that use 4 spaces of indentation at every level now render correctly at three or more levels.
+
 ## [2.5.0] - 2026-08-04
 
 This release focuses on enhanced built-in LLM friendliness of sites produced by Quarkdown.  
