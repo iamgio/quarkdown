@@ -18,11 +18,13 @@ import com.quarkdown.cli.util.runWithTimeout
 import com.quarkdown.cli.watcher.DirectoryWatcher
 import com.quarkdown.core.TIMEOUT_EXIT_CODE
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
+import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
+import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.installlayout.InstallLayout
@@ -323,14 +325,20 @@ abstract class ExecuteCommand(
         this.preExecute(cliOptions, pipelineOptions)
 
         val outcome: ExecutionOutcome =
-            runWithTimeout(
-                timeoutSeconds,
-                onTimeout = { e ->
-                    Log.error("Execution timed out (--timeout ${e.timeoutSeconds}).")
-                    throw ProgramResult(TIMEOUT_EXIT_CODE)
-                },
-            ) {
-                runQuarkdown(strategy, cliOptions, pipelineOptions)
+            try {
+                runWithTimeout(
+                    timeoutSeconds,
+                    onTimeout = { e ->
+                        Log.error("Execution timed out (--timeout ${e.timeoutSeconds}).")
+                        throw ProgramResult(TIMEOUT_EXIT_CODE)
+                    },
+                ) {
+                    runQuarkdown(strategy, cliOptions, pipelineOptions)
+                }
+            } catch (e: PipelineException) {
+                val targetException = (e as? FunctionCallRuntimeException)?.cause ?: e
+                targetException.printStackTrace()
+                throw ProgramResult(e.code)
             }
 
         this.postExecute(outcome, cliOptions, pipelineOptions)
