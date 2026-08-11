@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### [dev] Embedding-friendly pipeline error handling
+
+The programmatic pipeline entry point `runQuarkdown` no longer terminates the host JVM on pipeline errors, in favor of propagation to the caller.
+
 ### Fixed
 
 #### Unbalanced parentheses in links

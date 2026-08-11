@@ -5,6 +5,7 @@ import com.github.ajalt.clikt.testing.CliktCommandTestResult
 import com.github.ajalt.clikt.testing.test
 import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.core.TIMEOUT_EXIT_CODE
+import com.quarkdown.core.UNRESOLVED_REFERENCE_EXIT_CODE
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
@@ -132,6 +133,26 @@ class CompileCommandTest : TempDirectory() {
         val (_, pipelineOptions) = test("--strict")
         assertHtmlContentPresent()
         assertIs<StrictPipelineErrorHandler>(pipelineOptions.errorHandler)
+    }
+
+    @Test
+    fun `strict-mode pipeline error surfaces the exit code without killing the JVM`() {
+        main.writeText(
+            """
+            .docname {Failing document}
+            .doctype {plain}
+
+            .thisFunctionDoesNotExist
+            """.trimIndent(),
+        )
+        val result =
+            CompileCommand().test(
+                main.absolutePath,
+                "-o",
+                outputDirectory.absolutePath,
+                "--strict",
+            )
+        assertEquals(UNRESOLVED_REFERENCE_EXIT_CODE, result.statusCode)
     }
 
     @Test
