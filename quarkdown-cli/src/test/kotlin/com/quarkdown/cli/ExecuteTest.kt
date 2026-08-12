@@ -1,11 +1,15 @@
 package com.quarkdown.cli
 
+import com.quarkdown.cli.exec.ExecutionTimeoutException
 import com.quarkdown.cli.exec.runQuarkdown
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
+import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.core.UNRESOLVED_REFERENCE_EXIT_CODE
+import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
+import com.quarkdown.core.pipeline.output.OutputResource
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -82,5 +86,34 @@ class ExecuteTest : TempDirectory() {
             }
 
         assertEquals(UNRESOLVED_REFERENCE_EXIT_CODE, exception.code)
+    }
+
+    @Test
+    fun `runQuarkdown enforces timeoutSeconds from CliOptions`() {
+        val blockingStrategy =
+            object : PipelineExecutionStrategy {
+                override fun execute(pipeline: Pipeline): OutputResource? {
+                    Thread.sleep(60_000)
+                    return null
+                }
+            }
+
+        val cli = cliOptions().copy(timeoutSeconds = 1)
+
+        val exception =
+            assertFailsWith<ExecutionTimeoutException> {
+                runQuarkdown(blockingStrategy, cli, pipelineOptions(strict = false))
+            }
+
+        assertEquals(1, exception.timeoutSeconds)
+    }
+
+    @Test
+    fun `null timeoutSeconds runs inline without wrapping`() {
+        source.writeText("Trivial body.")
+        val cli = cliOptions().copy(timeoutSeconds = null)
+        // Should complete without a timeout firing.
+        val outcome = runQuarkdown(FileExecutionStrategy(source), cli, pipelineOptions(strict = false))
+        assertNotNull(outcome.resource)
     }
 }
