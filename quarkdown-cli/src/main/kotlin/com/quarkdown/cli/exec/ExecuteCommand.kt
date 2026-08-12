@@ -14,7 +14,6 @@ import com.quarkdown.cli.CliOptions
 import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.cli.server.DEFAULT_SERVER_PORT
 import com.quarkdown.cli.util.checkCleanSafety
-import com.quarkdown.cli.util.runWithTimeout
 import com.quarkdown.cli.watcher.DirectoryWatcher
 import com.quarkdown.core.TIMEOUT_EXIT_CODE
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
@@ -221,6 +220,7 @@ abstract class ExecuteCommand(
             pipe = false,
             nodePath,
             npmPath,
+            timeoutSeconds = timeoutSeconds,
         ).let(::finalizeCliOptions)
 
     /**
@@ -314,7 +314,8 @@ abstract class ExecuteCommand(
     /**
      * Executes the Quarkdown pipeline: compiles and generates output files.
      * [preExecute] and [postExecute] are called before and after the execution respectively.
-     * If [timeoutSeconds] is set, the execution is bounded by the specified duration.
+     * The optional timeout carried in [CliOptions.timeoutSeconds] is applied inside [runQuarkdown];
+     * this boundary only translates the resulting exceptions into CLI exit codes.
      */
     private fun execute(
         cliOptions: CliOptions,
@@ -326,15 +327,10 @@ abstract class ExecuteCommand(
 
         val outcome: ExecutionOutcome =
             try {
-                runWithTimeout(
-                    timeoutSeconds,
-                    onTimeout = { e ->
-                        Log.error("Execution timed out (--timeout ${e.timeoutSeconds}).")
-                        throw ProgramResult(TIMEOUT_EXIT_CODE)
-                    },
-                ) {
-                    runQuarkdown(strategy, cliOptions, pipelineOptions)
-                }
+                runQuarkdown(strategy, cliOptions, pipelineOptions)
+            } catch (e: ExecutionTimeoutException) {
+                Log.error("Execution timed out (--timeout ${e.timeoutSeconds}).")
+                throw ProgramResult(TIMEOUT_EXIT_CODE)
             } catch (e: PipelineException) {
                 val targetException = (e as? FunctionCallRuntimeException)?.cause ?: e
                 targetException.printStackTrace()

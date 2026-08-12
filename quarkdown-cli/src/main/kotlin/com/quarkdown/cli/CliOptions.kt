@@ -16,6 +16,8 @@ import java.io.File
  * @param npmPath path to the npm executable
  * @param exportPdf whether to generate a PDF file
  * @param noPdfSandbox whether to disable the Chrome sandbox for PDF export
+ * @param timeoutSeconds maximum time, in seconds, allowed for the pipeline execution to complete.
+ * `null` (default) or non-positive disables the timeout and runs the pipeline inline on the current thread.
  */
 data class CliOptions(
     val source: File?,
@@ -28,6 +30,7 @@ data class CliOptions(
     val npmPath: String,
     val exportPdf: Boolean = false,
     val noPdfSandbox: Boolean = false,
+    val timeoutSeconds: Int? = null,
 ) {
     /**
      * The rendering target to generate the output for.

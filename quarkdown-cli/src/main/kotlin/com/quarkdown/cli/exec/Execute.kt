@@ -5,6 +5,7 @@ import com.quarkdown.cli.PipelineInitialization
 import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.cli.lib.QdLibraries
 import com.quarkdown.cli.util.cleanDirectory
+import com.quarkdown.cli.util.runWithTimeout
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.library.LibraryExporter
@@ -19,12 +20,14 @@ import com.quarkdown.core.pipeline.output.visitor.saveTo
  *
  * This is the entry point used by both the CLI and any in-process embedder.
  * On any [PipelineException] the exception propagates to the caller, for embedders to catch and handle.
+ * If [CliOptions.timeoutSeconds] is set and expires, an [ExecutionTimeoutException] is raised instead.
  *
  * @param executionStrategy launch strategy of the pipeline, e.g. from file or REPL
- * @param cliOptions options that define the behavior of the CLI, especially I/O
+ * @param cliOptions options that define the behavior of the CLI, especially I/O and the execution timeout
  * @param pipelineOptions options that define the behavior of the pipeline
  * @return the outcome of the executed pipeline, carrying the produced resource and directory (if any)
  * @throws PipelineException if the pipeline fails and its error handler rethrows the error
+ * @throws ExecutionTimeoutException if [CliOptions.timeoutSeconds] is set and the execution exceeds it
  */
 fun runQuarkdown(
     executionStrategy: PipelineExecutionStrategy,
@@ -62,10 +65,10 @@ fun runQuarkdown(
         outputDirectory?.cleanDirectory()
     }
 
-    // Pipeline execution and output resource retrieving.
-    val resource = executionStrategy.execute(pipeline)
-    // Exports the generated resources to file if enabled in options.
-    val childDirectory = outputDirectory?.let { resource?.saveTo(it) }
-
-    return ExecutionOutcome(resource, childDirectory, pipeline)
+    // Pipeline execution.
+    return runWithTimeout(cliOptions.timeoutSeconds) {
+        val resource = executionStrategy.execute(pipeline)
+        val childDirectory = outputDirectory?.let { resource?.saveTo(it) }
+        ExecutionOutcome(resource, childDirectory, pipeline)
+    }
 }
