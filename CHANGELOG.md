@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.5.1] - 2026-08-12
+
 ### Changed
 
 #### [dev] Embedding-friendly pipeline error handling
@@ -1273,7 +1275,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.5.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.5.1...HEAD
+
+[2.5.1]: https://github.com/iamgio/quarkdown/compare/v2.5.0...v2.5.1
 
 [2.5.0]: https://github.com/iamgio/quarkdown/compare/v2.4.1...v2.5.0
 
