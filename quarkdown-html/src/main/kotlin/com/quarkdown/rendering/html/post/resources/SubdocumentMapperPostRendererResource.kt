@@ -72,7 +72,7 @@ abstract class SubdocumentMapperPostRendererResource(
     /**
      * Absolute URL of a subdocument identified by its output name.
      * @param subdocumentOutputName the subdocument's output file name, before URL escaping
-     * @param extension optional file extension to append after the escaped name (e.g. `.md`), or `null` for none
+     * @param extension optional file extension to append after the escaped name (e.g. `.md`), or `null` for the HTML directory form
      * @return the absolute URL
      */
     protected fun getSubdocumentUrl(
@@ -83,7 +83,10 @@ abstract class SubdocumentMapperPostRendererResource(
             append(baseUrl)
             if (!baseUrl.endsWith('/')) append('/')
             append(Escape.Url.escape(subdocumentOutputName))
-            if (extension != null) append(extension)
+            when {
+                extension != null -> append(extension)
+                else -> append('/')
+            }
         }
 
     /**

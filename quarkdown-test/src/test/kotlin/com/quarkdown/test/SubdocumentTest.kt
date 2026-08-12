@@ -237,7 +237,7 @@ class SubdocumentTest {
                 assertContains(rootHtml, "href=\"https://example.com\" rel=\"canonical\"")
 
                 val subdocHtml = getSubdocumentResource(group, simpleSubdoc, this).content
-                assertContains(subdocHtml, "href=\"https://example.com/${simpleSubdoc.name}\" rel=\"canonical\"")
+                assertContains(subdocHtml, "href=\"https://example.com/${simpleSubdoc.name}/\" rel=\"canonical\"")
             },
         ) {}
     }
@@ -273,7 +273,7 @@ class SubdocumentTest {
                 },
             ) {
                 if (subdocument == Subdocument.Root) {
-                    assertEquals("<p>The link is: <a href=\"./simple-1\">1</a></p>", it)
+                    assertEquals("<p>The link is: <a href=\"./simple-1/\">1</a></p>", it)
                 }
             }
         }
@@ -293,7 +293,7 @@ class SubdocumentTest {
                 },
             ) {
                 if (subdocument == Subdocument.Root) {
-                    assertEquals("<p>The link is: <a href=\"./headings-1#a\">1</a></p>", it)
+                    assertEquals("<p>The link is: <a href=\"./headings-1/#a\">1</a></p>", it)
                 }
             }
         }
@@ -313,7 +313,7 @@ class SubdocumentTest {
                 },
             ) {
                 if (subdocument == Subdocument.Root) {
-                    assertEquals("<p>The link is: <a href=\"./simple-1\"></a></p>", it)
+                    assertEquals("<p>The link is: <a href=\"./simple-1/\"></a></p>", it)
                 }
             }
         }
@@ -460,9 +460,9 @@ class SubdocumentTest {
             ) {
                 if (subdocument.name == "nav-includer") {
                     assertEquals(
-                        "<ul><li><a href=\"../simple-1\">1</a></li>" +
-                            "<li><a href=\"../simple-2\">2</a></li>" +
-                            "<li><a href=\"../nav-includer\" aria-current=\"page\">3</a></li></ul>",
+                        "<ul><li><a href=\"../simple-1/\">1</a></li>" +
+                            "<li><a href=\"../simple-2/\">2</a></li>" +
+                            "<li><a href=\"../nav-includer/\" aria-current=\"page\">3</a></li></ul>",
                         it,
                     )
                 }
@@ -506,7 +506,7 @@ class SubdocumentTest {
         ) {
             if (subdocument == Subdocument.Root) {
                 assertEquals(
-                    "<p>..</p><p>..</p><p><a href=\"./subdoc\">1</a></p>",
+                    "<p>..</p><p>..</p><p><a href=\"./subdoc/\">1</a></p>",
                     it,
                 )
             } else {
@@ -526,7 +526,7 @@ class SubdocumentTest {
             useDummyLibraryDirectory = true,
         ) {
             if (subdocument == Subdocument.Root) {
-                assertEquals("<p><a href=\"./include-lib-1\">1</a></p>", it)
+                assertEquals("<p><a href=\"./include-lib-1/\">1</a></p>", it)
             } else {
                 assertEquals("<h2>Title</h2><p>Content</p>", it)
             }
@@ -541,7 +541,7 @@ class SubdocumentTest {
             useDummyLibraryDirectory = true,
         ) {
             if (subdocument == Subdocument.Root) {
-                assertEquals("<p><a href=\"./include-lib-2\">1</a></p>", it)
+                assertEquals("<p><a href=\"./include-lib-2/\">1</a></p>", it)
                 assertNull(getFunctionByName("hellofromlib"))
             } else {
                 assertEquals("", it)
@@ -558,7 +558,7 @@ class SubdocumentTest {
             useDummyLibraryDirectory = true,
         ) {
             if (subdocument == Subdocument.Root) {
-                assertEquals("<h2>Title</h2><p>Content</p><p><a href=\"./simple-1\">1</a></p>", it)
+                assertEquals("<h2>Title</h2><p>Content</p><p><a href=\"./simple-1/\">1</a></p>", it)
             } else {
                 assertEquals("<p>Hello 1</p>", it)
             }
@@ -573,7 +573,7 @@ class SubdocumentTest {
             useDummyLibraryDirectory = true,
         ) {
             if (subdocument == Subdocument.Root) {
-                assertEquals("<p>Hello, <em>X</em>!</p><p><a href=\"./simple-1\">1</a></p>", it)
+                assertEquals("<p>Hello, <em>X</em>!</p><p><a href=\"./simple-1/\">1</a></p>", it)
             } else {
                 assertEquals("<p>Hello 1</p>", it)
             }
@@ -589,7 +589,7 @@ class SubdocumentTest {
             useDummyLibraryDirectory = true,
         ) {
             if (subdocument == Subdocument.Root) {
-                assertEquals("<p><a href=\"./include-lib-2\">1</a></p><p><a href=\"./simple-1\">2</a></p>", it)
+                assertEquals("<p><a href=\"./include-lib-2/\">1</a></p><p><a href=\"./simple-1/\">2</a></p>", it)
                 assertNull(getFunctionByName("hellofromlib"))
             } else if (subdocument.name == "include-lib-2") {
                 assertEquals("", it)
@@ -609,7 +609,7 @@ class SubdocumentTest {
             useDummyLibraryDirectory = true,
         ) {
             if (subdocument == Subdocument.Root) {
-                assertEquals("<h2>Title</h2><p>Content</p><p><a href=\"./include-lib-1\">1</a></p>", it)
+                assertEquals("<h2>Title</h2><p>Content</p><p><a href=\"./include-lib-1/\">1</a></p>", it)
             } else {
                 assertEquals("<h2>Title</h2><p>Content</p>", it)
             }
