@@ -314,7 +314,10 @@ open class BaseHtmlNodeRenderer(
             buildString {
                 append(getPathToRoot())
                 append("/")
-                append(subdocument.getOutputFileName(context))
+                if (subdocument !is Subdocument.Root) {
+                    append(subdocument.getOutputFileName(context))
+                    append("/")
+                }
                 node.anchor?.let { anchor ->
                     append("#")
                     append(anchor)

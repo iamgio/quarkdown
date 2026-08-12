@@ -114,7 +114,7 @@ class SearchIndexGeneratorTest {
                             headings = emptyList(),
                         ),
                         SearchEntry(
-                            url = "/child",
+                            url = "/child/",
                             title = "Child Document",
                             description = "A child document",
                             keywords = listOf("child", "document"),

@@ -30,7 +30,7 @@ object SearchIndexGenerator {
                     val context = graph.withContexts[subdocument] ?: return@mapNotNull null
 
                     SearchEntry(
-                        url = "/" + if (subdocument is Subdocument.Root) "" else subdocument.getOutputFileName(context),
+                        url = "/" + if (subdocument is Subdocument.Root) "" else "${subdocument.getOutputFileName(context)}/",
                         title = context.documentInfo.name,
                         description = context.documentInfo.description,
                         keywords = context.documentInfo.keywords,

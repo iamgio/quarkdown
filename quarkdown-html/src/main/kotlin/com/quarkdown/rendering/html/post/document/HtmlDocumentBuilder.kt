@@ -117,7 +117,7 @@ class HtmlDocumentBuilder(
         val canonicalUrl =
             when (context.subdocument) {
                 Subdocument.Root -> baseUrl
-                else -> "$baseUrl/${context.subdocument.getOutputFileName(context).let(Escape.Url::escape)}"
+                else -> "$baseUrl/${context.subdocument.getOutputFileName(context).let(Escape.Url::escape)}/"
             }
 
         link(rel = "canonical", href = canonicalUrl)

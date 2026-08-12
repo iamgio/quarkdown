@@ -18,6 +18,10 @@ An inline link `[text](url)` followed immediately by a closing parenthesis no lo
 
 Nested lists that use 4 spaces of indentation at every level now render correctly at three or more levels.
 
+#### Subdocument links missing a trailing slash
+
+Links to subdocuments in HTML output now end with a trailing slash, to minimize 404s on hosts that do not redirect to the trailing-slash form. The `<link rel="canonical">` tag, `sitemap.xml`, and the client-side search index now use the same form too.
+
 ## [2.5.0] - 2026-08-04
 
 This release focuses on enhanced built-in LLM friendliness of sites produced by Quarkdown.  

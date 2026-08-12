@@ -171,8 +171,8 @@ class HtmlOutputResourceTest {
                 assertNotNull(sitemap)
                 val content = sitemap.content.toString()
                 assertContains(content, "<loc>https://example.com</loc>")
-                assertContains(content, "<loc>https://example.com/simple-1</loc>")
-                assertContains(content, "<loc>https://example.com/simple-2</loc>")
+                assertContains(content, "<loc>https://example.com/simple-1/</loc>")
+                assertContains(content, "<loc>https://example.com/simple-2/</loc>")
             },
         ) {}
     }
@@ -259,8 +259,9 @@ class HtmlOutputResourceTest {
                 // HTML root is served at the bare base URL, not at `<baseUrl>/index`.
                 assertContains(content, "[My site](https://example.com)")
                 assertFalse("[My site](https://example.com/index)" in content)
-                assertContains(content, "(https://example.com/simple-1)")
-                assertContains(content, "(https://example.com/simple-2)")
+                // Subdocuments are HTML directories, so URLs end with a trailing slash.
+                assertContains(content, "(https://example.com/simple-1/)")
+                assertContains(content, "(https://example.com/simple-2/)")
                 // No .md suffix since markdownavailable=false.
                 assertFalse(".md)" in content)
             },
