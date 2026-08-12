@@ -22,6 +22,10 @@ Nested lists that use 4 spaces of indentation at every level now render correctl
 
 Links to subdocuments in HTML output now end with a trailing slash, to minimize 404s on hosts that do not redirect to the trailing-slash form. The `<link rel="canonical">` tag, `sitemap.xml`, and the client-side search index now use the same form too.
 
+#### [lsp] Completion crash on out-of-bounds cursor position
+
+The language server no longer crashes when a completion request arrives with a cursor position outside the document bounds.
+
 ## [2.5.0] - 2026-08-04
 
 This release focuses on enhanced built-in LLM friendliness of sites produced by Quarkdown.  

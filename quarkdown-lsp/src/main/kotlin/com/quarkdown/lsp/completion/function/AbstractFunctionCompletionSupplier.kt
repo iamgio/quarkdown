@@ -15,8 +15,8 @@ import java.io.File
 /**
  * Provides completion items for function calls by scanning documentation files.
  * @param docsDirectory the directory containing the documentation files to extract function data from
- * @see com.quarkdown.lsp.completion.function.impl.parameter
- * @see com.quarkdown.lsp.completion.function.impl.name
+ * @see com.quarkdown.lsp.completion.function.parameter
+ * @see com.quarkdown.lsp.completion.function.name
  */
 abstract class AbstractFunctionCompletionSupplier(
     protected val docsDirectory: File,
@@ -54,7 +54,7 @@ abstract class AbstractFunctionCompletionSupplier(
         val text = document.text
 
         // The index of the cursor in the source text.
-        val index = params.position.toOffset(text)
+        val index = params.position.toOffset(text).takeIf { it >= 0 } ?: return emptyList()
         val transformedIndex = transformIndex(index, text).takeIf { it >= 0 } ?: return emptyList()
 
         val call: FunctionCall =

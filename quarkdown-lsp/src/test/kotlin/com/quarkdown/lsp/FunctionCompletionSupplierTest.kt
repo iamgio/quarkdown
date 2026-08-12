@@ -60,6 +60,13 @@ class FunctionCompletionSupplierTest {
     }
 
     @Test
+    fun `no completions at out-of-bounds position`() {
+        val text = "hello .$ALIGN_FUNCTION"
+        val completions = getCompletions(text, Position(5, 0))
+        assertTrue(completions.isEmpty())
+    }
+
+    @Test
     fun `no completions in invalid function call position`() {
         val text = "hello."
         val position = Position(0, text.length)
