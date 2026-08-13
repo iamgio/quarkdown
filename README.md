@@ -32,18 +32,19 @@
 
 1. [About](#about)
 2. [Demo](#as-simple-as-you-expect)
-3. [Targets](#targets)
-4. [Comparison](#comparison)
-5. [Getting started](#getting-started)
+3. [Editor extensions](#editor-extensions)
+4. [Targets](#targets)
+5. [Comparison](#comparison)
+6. [Getting started](#getting-started)
     1. [Installation](#installation)
-    2. [Quickstart](#quickstart-)
+    2. [Quickstart](#quickstart)
     3. [Creating a project](#creating-a-project)
     4. [Compiling](#compiling)
-6. [Mock document](#mock-document)
-7. [Contributing](#contributing)
-8. [Sponsors](#sponsors)
-9. [Concept](#concept)
-10. [License](#license)
+7. [Mock document](#mock-document)
+8. [Contributing](#contributing)
+9. [Sponsors](#sponsors)
+10. [Concept](#concept)
+11. [License](#license)
 
 &nbsp;
 
@@ -95,7 +96,7 @@ You can even create awesome libraries for everyone to use.
 This out-of-the-box scripting support opens doors to complex and dynamic content that would be otherwise impossible
 to achieve with vanilla Markdown.
 
-Combined with live preview, :zap: fast compilation speed and a powerful [VS Code extension](https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode), Quarkdown simply gets the work done,
+Combined with live preview, :zap: fast compilation speed and great editor support, Quarkdown simply gets the work done,
 whether it's an academic paper, book, knowledge base or interactive presentation.
 
 &nbsp;
@@ -149,6 +150,13 @@ whether it's an academic paper, book, knowledge base or interactive presentation
   <img src="https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/code-chart.png" alt="Chart code demo">
 </p>
 
+# Editor extensions
+
+- [VS Code](https://quarkdown.com/vs-code)
+- [IntelliJ IDEA](https://plugins.jetbrains.com/plugin/33459-quarkdown) (unofficial by [@CarmJos](https://github.com/CarmJos))
+
+&nbsp;
+
 # Targets
 
 - **HTML**
@@ -177,6 +185,8 @@ The desired document type can be set by calling the [`.doctype` function](https:
 - `.doctype {paged}`
 - `.doctype {slides}`
 - `.doctype {docs}`
+
+&nbsp;
 
 # Comparison
 
