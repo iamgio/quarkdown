@@ -4,7 +4,7 @@
 
 ### Fixed
 
-#### Scoped function extensions
+#### [Scoped function extensions](https://quarkdown.com/wiki/extending-functions)
 
 Function extensions declared in a nested scope now compose with inherited extensions only within that scope, without leaking into parent or sibling scopes.
 
