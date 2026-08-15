@@ -18,6 +18,26 @@ You can extend any previously-declared function using the **`.extend`** .docslin
 
     .greet {world}
 
+## Scoping extensions
+
+Extensions follow the usual [scope](lambda.qd) rules. A nested scope inherits extensions from its parent, while extensions declared inside it only apply there and do not leak back out.
+
+.examplemirror
+    .function {greet}
+        name:
+        Hello, .name!
+
+    .extend {greet}
+        outer[.super]
+
+    .if {yes}
+        .extend {greet}
+            inner[.super]
+
+        .greet {inside}
+
+    .greet {outside}
+
 ## Accessing the original
 
 Within the wrapper body, the original function is exposed as **`.super`**. Calling it invokes the original with the same arguments.

@@ -279,6 +279,38 @@ class FunctionExtensionTest {
     }
 
     @Test
+    fun `scoped extension composes with inherited extension without leaking`() {
+        execute(
+            """
+            .function {test}
+                base
+
+            .extend {test}
+                outer[.super]
+
+            .if {yes}
+                .extend {test}
+                    first[.super]
+
+                .test
+
+            .if {yes}
+                .extend {test}
+                    second[.super]
+
+                .test
+
+            .test
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>outer[first[base]]</p><p>outer[second[base]]</p><p>outer[base]</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `super argument override, single param`() {
         execute(
             """

@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+#### Scoped function extensions
+
+Function extensions declared in a nested scope now compose with inherited extensions only within that scope, without leaking into parent or sibling scopes.
+
 ## [2.5.1] - 2026-08-12
 
 ### Changed
