@@ -32,7 +32,7 @@ private const val SUPER_NAME = "super"
  * @param body extension body invoked when the target is called
  * @param condition optional predicate; when it returns `false`, the call transparently
  *                  delegates to [superTarget] instead of running [body]
- * @param initialSuperTarget target of `.${SUPER_NAME}` at construction time (usually the original function)
+ * @param superTarget target of `.${SUPER_NAME}` at invocation time (possibly a chain of extensions)
  */
 private class ExtensionFunction(
     override val name: String,
@@ -45,10 +45,7 @@ private class ExtensionFunction(
 
     /**
      * Returns a copy of this chain with [extension] inserted immediately before the original function.
-     *
-     * Rebuilding rather than mutating the chain keeps extensions local when the visible chain is
-     * inherited from a parent context. Existing lambdas are retained so each wrapper preserves the
-     * lexical context in which it was declared.
+     * Existing lambdas are retained so each wrapper preserves the lexical context in which it was declared.
      */
     fun withInnermostExtension(extension: ExtensionFunction): ExtensionFunction =
         ExtensionFunction(
@@ -174,8 +171,7 @@ internal fun extendFunction(
 
     context.markFunctionAsExtended(targetName)
 
-    // Always register a new root in the current context. If the visible chain belongs to a parent
-    // scope, the rebuilt chain shadows it locally without modifying the parent's function objects.
+    // Register a new root in the current context. If the visible chain belongs to a parent scope, the rebuilt chain shadows it locally.
     val newRoot =
         when (existing) {
             is ExtensionFunction -> existing.withInnermostExtension(newExtension)
