@@ -25,29 +25,40 @@ private const val SUPER_NAME = "super"
 
 /**
  * Function produced by an [extend] call. It exposes its body as the callable target and
- * a rewireable [superTarget] as the function invoked by `.${SUPER_NAME}` within the body.
+ * [superTarget] as the function invoked by `.${SUPER_NAME}` within the body.
  *
  * @param name name of the function being extended
  * @param parameters parameters of the function being extended, all marked optional
  * @param body extension body invoked when the target is called
  * @param condition optional predicate; when it returns `false`, the call transparently
  *                  delegates to [superTarget] instead of running [body]
- * @param initialSuperTarget target of `.${SUPER_NAME}` at construction time (usually the original function)
+ * @param superTarget target of `.${SUPER_NAME}` at invocation time (possibly a chain of extensions)
  */
 private class ExtensionFunction(
     override val name: String,
     override val parameters: List<FunctionParameter<*>>,
     private val body: Lambda,
     private val condition: Lambda?,
-    initialSuperTarget: Function<*>,
+    val superTarget: Function<*>,
 ) : Function<OutputValue<*>> {
     override val validators: List<FunctionCallValidator<OutputValue<*>>> = emptyList()
 
     /**
-     * Function that `.${SUPER_NAME}` inside [body] delegates to. Mutated when a new extension
-     * is chained after this one, so `.super` transparently walks down toward the original.
+     * Returns a copy of this chain with [extension] inserted immediately before the original function.
+     * Existing lambdas are retained so each wrapper preserves the lexical context in which it was declared.
      */
-    var superTarget: Function<*> = initialSuperTarget
+    fun withInnermostExtension(extension: ExtensionFunction): ExtensionFunction =
+        ExtensionFunction(
+            name = name,
+            parameters = parameters,
+            body = body,
+            condition = condition,
+            superTarget =
+                when (val target = superTarget) {
+                    is ExtensionFunction -> target.withInnermostExtension(extension)
+                    else -> extension
+                },
+        )
 
     override val invoke: (ArgumentBindings, FunctionCall<OutputValue<*>>) -> OutputValue<*> = { outerBindings, call ->
         val args: List<Value<*>> = parameters.map { outerBindings[it]?.value ?: NoneValue }
@@ -75,19 +86,9 @@ private class ExtensionFunction(
 }
 
 /**
- * Follows any [ExtensionFunction] chain rooted at this function until it reaches a
- * non-extension function.
- *
- * @return the innermost [ExtensionFunction] (whose `superTarget` is the original), paired
- *         with that original function; or `null to this` if this function is not extended.
+ * Follows any [ExtensionFunction] chain rooted at this function to its original target.
  */
-private fun Function<*>.followExtensionChain(): Pair<ExtensionFunction?, Function<*>> {
-    val innermost =
-        generateSequence(this as? ExtensionFunction) { it.superTarget as? ExtensionFunction }
-            .lastOrNull()
-            ?: return null to this
-    return innermost to innermost.superTarget
-}
+private fun Function<*>.originalFunction(): Function<*> = generateSequence(this) { (it as? ExtensionFunction)?.superTarget }.last()
 
 /**
  * Merges [outerBindings] with [overrides] into a list of named arguments, with [overrides]
@@ -137,7 +138,7 @@ internal fun extendFunction(
         context.getFunctionByName(targetName)
             ?: throw IllegalArgumentException("Cannot extend function $targetName because it does not exist.")
 
-    val (innermost, originalFunction) = existing.followExtensionChain()
+    val originalFunction = existing.originalFunction()
 
     // The wrapper mirrors the original's non-injected parameters, all marked optional.
     val wrapperParameters =
@@ -165,17 +166,16 @@ internal fun extendFunction(
             parameters = wrapperParameters,
             body = bodyLambda,
             condition = conditionLambda,
-            initialSuperTarget = originalFunction,
+            superTarget = originalFunction,
         )
 
     context.markFunctionAsExtended(targetName)
 
-    if (innermost == null) {
-        // First extension for this name: register the wrapper as the callable target.
-        declareFunction(context, newExtension)
-    } else {
-        // Splice the new extension between the previous innermost wrapper and the original,
-        // so its `.super` overrides land on the original last.
-        innermost.superTarget = newExtension
-    }
+    // Register a new root in the current context. If the visible chain belongs to a parent scope, the rebuilt chain shadows it locally.
+    val newRoot =
+        when (existing) {
+            is ExtensionFunction -> existing.withInnermostExtension(newExtension)
+            else -> newExtension
+        }
+    declareFunction(context, newRoot)
 }

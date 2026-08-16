@@ -144,3 +144,19 @@ Passing [None](none.qd) as an argument to a nullable parameter restores it to it
     ### H3
 
     #### H4
+
+## Scoping extensions
+
+Extensions declared inside a [lambda](lambda.qd) only apply within that scope, and do not leak back out.
+
+.examplemirror
+    .function {greet}
+        Hello
+
+    .if {yes}
+        .extend {greet}
+            Hi
+
+        .greet
+
+    .greet
