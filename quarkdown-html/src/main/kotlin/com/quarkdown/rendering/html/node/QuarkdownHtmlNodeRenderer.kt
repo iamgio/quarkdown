@@ -577,6 +577,12 @@ class QuarkdownHtmlNodeRenderer(
                     PageCounter.Target.TOTAL -> "total-page-number"
                 },
             )
+            if (node.target == PageCounter.Target.TOTAL) {
+                attribute(
+                    "data-scope",
+                    node.scope.name.lowercase(),
+                )
+            }
         }
 
     override fun visit(node: LastHeading) =
