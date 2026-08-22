@@ -18,7 +18,7 @@ interface Function<T : OutputValue<*>> {
     /**
      * Declared parameters.
      */
-    val parameters: List<FunctionParameter<*>>
+    val parameters: List<FunctionParameter>
 
     /**
      * Validators that check the validity of a function call towards this function.
@@ -43,7 +43,7 @@ interface Function<T : OutputValue<*>> {
  */
 data class SimpleFunction<T : OutputValue<*>>(
     override val name: String,
-    override val parameters: List<FunctionParameter<*>>,
+    override val parameters: List<FunctionParameter>,
     override val validators: List<FunctionCallValidator<T>> = emptyList(),
     override val invoke: (ArgumentBindings, FunctionCall<T>) -> T,
 ) : Function<T>
@@ -70,7 +70,7 @@ fun Function<*>.signatureAsString(includeName: Boolean = true) =
                 .joinToString { parameter ->
                     buildString {
                         if (parameter.isOptional) append("optional ")
-                        parameter.type.simpleName?.let { append(it).append(" ") }
+                        append(parameter.type.displayName).append(" ")
                         append(parameter.name)
                     }
                 },

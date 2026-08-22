@@ -1,30 +1,21 @@
 package com.quarkdown.core.function.call.binding
 
 import com.quarkdown.core.function.FunctionParameter
+import com.quarkdown.core.function.ParameterType
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.FunctionCallArgument
 import com.quarkdown.core.function.error.InvalidArgumentCountException
-import com.quarkdown.core.function.error.InvalidFunctionCallException
-import com.quarkdown.core.function.error.MismatchingArgumentTypeException
 import com.quarkdown.core.function.error.ParameterAlreadyBoundException
 import com.quarkdown.core.function.error.UnnamedArgumentAfterNamedException
 import com.quarkdown.core.function.error.UnresolvedParameterException
+import com.quarkdown.core.function.expression.Expression
 import com.quarkdown.core.function.expression.RawInlineExpression
-import com.quarkdown.core.function.reflect.DynamicValueConverter
-import com.quarkdown.core.function.value.AdaptableValue
 import com.quarkdown.core.function.value.DynamicValue
-import com.quarkdown.core.function.value.NoneValue
-import com.quarkdown.core.function.value.StringValue
-import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.factory.ValueFactory
-import com.quarkdown.core.function.value.isNone
-import com.quarkdown.core.pipeline.error.PipelineException
-import kotlin.reflect.full.isSubclassOf
 
 /**
  * Builder of bindings for the regular (not injected) argument subset of a function call.
  * @param call function call to bind arguments for
- * @see InjectedArgumentsBinder for the injected argument subset
  */
 class RegularArgumentsBinder(
     private val call: FunctionCall<*>,
@@ -47,10 +38,10 @@ class RegularArgumentsBinder(
     private fun findParameter(
         argument: FunctionCallArgument,
         argumentIndex: Int,
-        bindable: List<FunctionParameter<*>>,
-        byName: Map<String, FunctionParameter<*>>,
-        bodyParameter: FunctionParameter<*>?,
-    ): FunctionParameter<*> =
+        bindable: List<FunctionParameter>,
+        byName: Map<String, FunctionParameter>,
+        bodyParameter: FunctionParameter?,
+    ): FunctionParameter =
         when {
             // A body argument binds to its reserved parameter, or falls back to the last one in the signature.
             argument.isBody -> {
@@ -76,105 +67,41 @@ class RegularArgumentsBinder(
         } ?: throw InvalidArgumentCountException(call) // Error if args count > params count.
 
     /**
-     * Converts an argument to the expected type of its corresponding parameter.
-     * If it's a dynamic value, it is converted to a static type via a [ValueFactory].
+     * Prepares an argument for its parameter: the two adjustments that depend on how the argument
+     * was written, then conversion to the parameter's static type.
+     *
      * @param parameter parameter bound to the argument
-     * @param argument argument to convert, which can be dynamic or static
-     * @return a new argument, which holds [argument]'s value converted to the expected type
-     * @throws MismatchingArgumentTypeException if the value cannot be converted to the expected type
+     * @param argument argument to prepare
+     * @return the argument, converted and adjusted for the parameter
      */
-    private fun getStaticallyTypedArgument(
-        parameter: FunctionParameter<*>,
+    private fun prepare(
+        parameter: FunctionParameter,
         argument: FunctionCallArgument,
     ): FunctionCallArgument {
-        // A raw inline argument targeting a Lambda parameter is parsed as a lambda directly,
-        // bypassing the eager expression pipeline. This matches how body arguments are handled.
         val expression = argument.expression
 
-        if (expression is RawInlineExpression && call.context != null && parameter.type.isSubclassOf(Lambda::class)) {
+        // A raw inline argument targeting a lambda parameter is parsed as a lambda directly,
+        // bypassing the eager expression pipeline. This matches how body arguments are handled.
+        if (expression is RawInlineExpression && call.context != null && parameter.type == ParameterType.LambdaBlock) {
             return argument.copy(expression = ValueFactory.lambda(expression.raw, call.context))
         }
 
-        // The value held by the argument.
-        // If the argument is dynamic, it is converted to a static type.
-        val value = argument.value
+        // A dynamic parameter takes the value as-is, wrapped so that its rawness stays explicit.
+        if (parameter.type == ParameterType.Dynamic) {
+            return argument.copy(expression = DynamicValue(argument.value.unwrappedValue))
+        }
 
-        return when {
-            // If the expected type is dynamic, the argument is wrapped into a dynamic value.
-            // For instance, custom functions defined from a Quarkdown function have dynamic-type parameters.
-            parameter.type == DynamicValue::class -> {
-                argument.copy(expression = DynamicValue(value.unwrappedValue))
-            }
-
-            // NoneValue is accepted for nullable parameters, representing Quarkdown's equivalent of null.
-            parameter.isNullable && value.isNone() -> {
-                argument.copy(expression = NoneValue)
-            }
-
-            // The value is dynamic and must be converted to a static type.
-            value is DynamicValue -> {
-                // The dynamic value is converted into the expected parameter type.
-                // Throws error if the conversion could not happen.
-                val staticValue =
-                    try {
-                        DynamicValueConverter(value).convertTo(parameter.type, call.context)
-                    } catch (e: PipelineException) {
-                        // In case the conversion fails, the error is wrapped so that it can refer to this function call as a source.
-                        throw InvalidFunctionCallException(call, e.message)
-                    }
-                        // convertTo returns null if the called ValueFactory method returns null.
-                        // This means the supplied value cannot be converted to the expected type.
-                        ?: throw MismatchingArgumentTypeException(call, parameter, argument)
-
-                argument.copy(expression = staticValue)
-            }
-
-            // If the expected type is a string but the argument isn't,
-            // it is automatically converted to a string.
-            value !is StringValue && parameter.type == String::class -> {
-                argument.copy(expression = ValueFactory.string(value.unwrappedValue.toString()))
-            }
-
-            // If the argument does not directly match the parameter type, but is adaptable,
-            // it is adapted (or at least attempted) to the expected type.
-            value is AdaptableValue<*> && !value::class.isSubclassOf(parameter.type) -> {
-                val adapted = value.adapt()
-                when {
-                    adapted::class.isSubclassOf(parameter.type) -> argument.copy(expression = adapted)
-                    adapted.unwrappedValue!!::class.isSubclassOf(parameter.type) -> argument.copy(expression = adapted)
-                    else -> argument
-                }
-            }
-
-            else -> {
-                argument
-            }
+        // Native parameters carry the conversion the processor chose for them at build time.
+        val converted = parameter.convert?.invoke(argument.value, parameter, call) ?: return argument
+        return when (converted) {
+            is Expression -> argument.copy(expression = converted)
+            else -> argument
         }
     }
 
-    /**
-     * Ensures the type of the argument matches the expected type of the parameter.
-     * @param parameter parameter bound to the argument
-     * @param argument statically typed argument to check
-     * @throws MismatchingArgumentTypeException if the argument type does not match the parameter type
-     */
-    private fun checkTypeMatch(
-        parameter: FunctionParameter<*>,
-        argument: FunctionCallArgument,
-    ) {
-        if (argument.value is NoneValue && parameter.isNullable) return
-        if (argument.value.unwrappedValue!!::class.isSubclassOf(parameter.type)) return
-        if (argument.value::class.isSubclassOf(parameter.type)) return
-
-        throw MismatchingArgumentTypeException(call, parameter, argument)
-    }
-
-    override fun createBindings(parameters: List<FunctionParameter<*>>): ArgumentBindings {
-        // A parameter is reserved for the body argument when it is explicitly marked as such
-        // (see FunctionParameter.isExplicitlyBody) and the call provides a body argument.
-        // The reservation excludes the parameter from positional and named bindings,
-        // so the body argument is its only possible binding source.
-        val bodyParameter: FunctionParameter<*>? =
+    override fun createBindings(parameters: List<FunctionParameter>): ArgumentBindings {
+        // A parameter is reserved for the body argument when it is explicitly marked as such  and the call provides a body argument.
+        val bodyParameter: FunctionParameter? =
             when {
                 call.arguments.any { it.isBody } -> parameters.firstOrNull { it.isExplicitlyBody }
                 else -> null
@@ -187,7 +114,7 @@ class RegularArgumentsBinder(
         val byName = bindable.associateBy { it.name }
 
         // Parameters that have been already bound to arguments.
-        val boundParameters = mutableSetOf<FunctionParameter<*>>()
+        val boundParameters = mutableSetOf<FunctionParameter>()
 
         return call.arguments
             .withIndex()
@@ -201,14 +128,11 @@ class RegularArgumentsBinder(
                     else -> boundParameters += parameter
                 }
 
-                // The type of dynamic arguments is determined.
-                val staticArgument = getStaticallyTypedArgument(parameter, argument)
-
-                // Type match check.
-                checkTypeMatch(parameter, staticArgument)
+                // Arguments are prepared here, then converted by the called function itself.
+                val preparedArgument = prepare(parameter, argument)
 
                 // Push binding.
-                parameter to staticArgument
+                parameter to preparedArgument
             }
     }
 }

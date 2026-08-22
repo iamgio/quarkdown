@@ -13,7 +13,7 @@ import com.quarkdown.core.function.call.asString
  */
 class ParameterAlreadyBoundException(
     call: FunctionCall<*>,
-    parameter: FunctionParameter<*>,
+    parameter: FunctionParameter,
     overridingArgument: FunctionCallArgument,
 ) : InvalidFunctionCallException(
         call,

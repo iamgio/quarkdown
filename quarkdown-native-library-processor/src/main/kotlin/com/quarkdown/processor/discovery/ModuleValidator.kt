@@ -40,6 +40,7 @@ internal class ModuleValidator(
                 NoTypeParametersRule,
                 ExplicitReturnTypeRule,
                 NamedParametersRule,
+                NoDoubleUnderscoreNameRule,
             )
     }
 }

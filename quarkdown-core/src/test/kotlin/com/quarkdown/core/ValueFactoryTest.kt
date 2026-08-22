@@ -163,14 +163,14 @@ class ValueFactoryTest {
         assertEquals(Size.Unit.PIXELS, ValueFactory.enum("pixels", values)!!.unwrappedValue)
         assertEquals(Size.Unit.CENTIMETERS, ValueFactory.enum("centimeters", values)!!.unwrappedValue)
         assertEquals(Size.Unit.MILLIMETERS, ValueFactory.enum("milliMeTers", values)!!.unwrappedValue)
-        assertNull(ValueFactory.enum("abc", values))
+        assertNull(ValueFactory.tryOrNull { enum("abc", values) })
     }
 
     @Test
     fun `no arguments lambda`() {
         with(ValueFactory.lambda("hello", newContext())) {
             assertIs<LambdaValue>(this)
-            assertEquals("hello", unwrappedValue.invoke<String, StringValue>().unwrappedValue)
+            assertEquals("hello", unwrappedValue.invoke<String, StringValue> { ValueFactory.string(it) }.unwrappedValue)
         }
     }
 
@@ -184,7 +184,8 @@ class ValueFactoryTest {
                 .invoke<String, StringValue>(
                     StringValue("world"),
                     StringValue("iamgio"),
-                ).unwrappedValue,
+                ) { ValueFactory.string(it) }
+                .unwrappedValue,
         )
     }
 
@@ -200,7 +201,8 @@ class ValueFactoryTest {
                 .invoke<String, StringValue>(
                     StringValue("world"),
                     StringValue("iamgio"),
-                ).unwrappedValue,
+                ) { ValueFactory.string(it) }
+                .unwrappedValue,
         )
     }
 
@@ -215,7 +217,8 @@ class ValueFactoryTest {
                 ).unwrappedValue
                 .invoke<String, StringValue>(
                     StringValue("world"),
-                ).unwrappedValue,
+                ) { ValueFactory.string(it) }
+                .unwrappedValue,
         )
     }
 
@@ -228,7 +231,7 @@ class ValueFactoryTest {
                     "to?: hello .to from iamgio",
                     newContext(),
                 ).unwrappedValue
-                .invoke<String, StringValue>()
+                .invoke<String, StringValue> { ValueFactory.string(it) }
                 .unwrappedValue,
         )
     }
@@ -244,7 +247,8 @@ class ValueFactoryTest {
                 ).unwrappedValue
                 .invoke<String, StringValue>(
                     StringValue("world"),
-                ).unwrappedValue,
+                ) { ValueFactory.string(it) }
+                .unwrappedValue,
         )
     }
 
@@ -257,7 +261,8 @@ class ValueFactoryTest {
                 .invoke<String, StringValue>(
                     StringValue("world"),
                     StringValue("iamgio"),
-                ).unwrappedValue
+                ) { ValueFactory.string(it) }
+                .unwrappedValue
         }
     }
 

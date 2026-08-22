@@ -487,8 +487,9 @@ fun numbered(
             referenceId = referenceId,
         ) { number ->
             body
-                .invoke<MarkdownContent, MarkdownContentValue>(number.wrappedAsValue())
-                .unwrappedValue
+                .invoke<MarkdownContent, MarkdownContentValue>(number.wrappedAsValue()) {
+                    ValueFactory.blockMarkdown(it, body.parentContext)
+                }.unwrappedValue
                 .children
         }
     return node.wrappedAsValue()

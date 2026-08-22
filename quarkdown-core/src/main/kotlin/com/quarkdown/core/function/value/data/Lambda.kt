@@ -5,15 +5,12 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.error.InvalidLambdaArgumentCountException
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.function.reflect.DynamicValueConverter
-import com.quarkdown.core.function.reflect.FromDynamicType
 import com.quarkdown.core.function.value.AdaptableValue
 import com.quarkdown.core.function.value.Destructurable
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.Value
-import com.quarkdown.core.function.value.factory.ValueFactory
 
 private const val LAMBDA_LIBRARY_NAME = "__lambda-parameters__"
 
@@ -158,18 +155,23 @@ open class Lambda(
     fun invokeDynamic(vararg arguments: Value<*>): OutputValue<*> = invokeDynamic(arguments.toList())
 
     /**
-     * Invokes the lambda action with given arguments and converts it to a static type.
+     * Invokes the lambda action with given arguments and converts the result to a static type.
+     *
      * @param values arguments of the lambda action
-     * @param T **unwrapped** type to convert the resulting dynamic value to.
-     * This type must appear in a [FromDynamicType] annotation on a [ValueFactory] method
+     * @param factory conversion applied when the action returns a dynamically typed result,
+     *                mirroring what a native function parameter of the same type would use.
+     *                Defaults to no conversion, which suits actions whose result is already typed.
+     * @param T **unwrapped** type to convert the resulting dynamic value to
      * @param V **wrapped** value type (which wraps [T]) to convert the resulting dynamic value to
      * @return the result of the lambda action, as a statically typed value
      */
-    inline fun <reified T, reified V : Value<T>> invoke(values: List<Value<*>>): V {
-        // Invoke the lambda action and convert the result to a static type.
+    inline fun <reified T, reified V : Value<T>> invoke(
+        values: List<Value<*>>,
+        noinline factory: (Any) -> Value<*>? = { null },
+    ): V {
         var result: Value<*> =
             when (val raw = invokeDynamic(values)) {
-                is DynamicValue -> DynamicValueConverter(raw).convertTo(T::class, parentContext) ?: raw
+                is DynamicValue -> raw.unwrappedValue?.let(factory) ?: raw
                 else -> raw
             }
 
@@ -183,5 +185,11 @@ open class Lambda(
             ?: throw IllegalArgumentException("Unexpected lambda result: expected ${V::class}, found ${result::class}")
     }
 
-    inline fun <reified T, reified V : Value<T>> invoke(vararg values: Value<*>): V = invoke<T, V>(values.toList())
+    /**
+     * @see invoke
+     */
+    inline fun <reified T, reified V : Value<T>> invoke(
+        vararg values: Value<*>,
+        noinline factory: (Any) -> Value<*>? = { null },
+    ): V = invoke<T, V>(values.toList(), factory)
 }

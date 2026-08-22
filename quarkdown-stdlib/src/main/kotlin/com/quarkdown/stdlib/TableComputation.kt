@@ -200,7 +200,7 @@ fun tableFilter(
     val filteredRowIndexes =
         values
             .withIndex()
-            .filter { item -> filter.invoke<Boolean, BooleanValue>(DynamicValue(item.value)).unwrappedValue }
+            .filter { item -> filter.invoke<Boolean, BooleanValue>(DynamicValue(item.value)) { ValueFactory.boolean(it) }.unwrappedValue }
             .map { it.index }
 
     return reconstructTable(table, filteredRowIndexes).wrappedAsValue()

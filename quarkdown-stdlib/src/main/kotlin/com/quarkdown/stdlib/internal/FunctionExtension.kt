@@ -16,6 +16,7 @@ import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.data.LambdaParameter
+import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.stdlib.extend
 
 /**
@@ -36,7 +37,7 @@ private const val SUPER_NAME = "super"
  */
 private class ExtensionFunction(
     override val name: String,
-    override val parameters: List<FunctionParameter<*>>,
+    override val parameters: List<FunctionParameter>,
     private val body: Lambda,
     private val condition: Lambda?,
     val superTarget: Function<*>,
@@ -70,7 +71,7 @@ private class ExtensionFunction(
 
         when {
             // Condition not met: transparently fall through to the current `.super`.
-            condition != null && !condition.invoke<Boolean, BooleanValue>(args).unwrappedValue -> {
+            condition != null && !condition.invoke<Boolean, BooleanValue>(args) { ValueFactory.boolean(it) }.unwrappedValue -> {
                 call.executeAs(superFunction, arguments = emptyList())
             }
 

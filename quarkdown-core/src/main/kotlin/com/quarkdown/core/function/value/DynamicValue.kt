@@ -2,7 +2,6 @@ package com.quarkdown.core.function.value
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.expression.visitor.ExpressionVisitor
-import com.quarkdown.core.function.reflect.annotation.NoAutoArgumentUnwrapping
 import com.quarkdown.core.function.value.output.OutputValueVisitor
 
 /**
@@ -17,9 +16,8 @@ import com.quarkdown.core.function.value.output.OutputValueVisitor
  *                          When set (e.g. by a lambda parameter function), the output visitor uses this context
  *                          instead of its own to parse raw string content, ensuring that deferred variable references
  *                          resolve in the correct scope.
- * @see com.quarkdown.core.function.reflect.DynamicValueConverter
+ * @see com.quarkdown.core.function.ParameterType.Dynamic
  */
-@NoAutoArgumentUnwrapping
 data class DynamicValue(
     override val unwrappedValue: Any?,
     val evaluationContext: Context? = null,

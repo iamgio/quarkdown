@@ -3,6 +3,7 @@ package com.quarkdown.processor.discovery
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.symbol.KSFile
+import com.quarkdown.processor.coercion.FactoryCandidate
 
 /**
  * Round-scoped state carried through the discovery pipeline.
@@ -23,6 +24,8 @@ import com.google.devtools.ksp.symbol.KSFile
  *   are described and read downstream by extractors that need name-translation
  * @param moduleFiles files identified as `@file:QModule`, populated by the scanning stage and read
  *   by validators (to detect orphaned `@QFunction`s) and describers (to build descriptors)
+ * @param factories `ValueFactory` conversions available on the compile classpath, read once per round
+ *   and consulted by the describer to plan each parameter's coercion
  */
 internal class DiscoveryContext(
     val resolver: Resolver,
@@ -30,4 +33,5 @@ internal class DiscoveryContext(
     val kspPsi: KspPsi,
     val mappings: NameMappings = NameMappings(),
     val moduleFiles: MutableSet<KSFile> = mutableSetOf(),
+    val factories: List<FactoryCandidate> = emptyList(),
 )

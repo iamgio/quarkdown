@@ -3,6 +3,7 @@ package com.quarkdown.processor.model
 import com.google.devtools.ksp.symbol.KSFile
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSType
+import com.quarkdown.processor.coercion.CoercionPlan
 
 /**
  * A native Quarkdown module discovered by the KSP processor.
@@ -39,6 +40,8 @@ data class ModuleDescriptor(
  * @param sourceAnnotations verbatim source text of function-level annotations to propagate to the wrapper, or `null` when the function has none
  * @param kdoc raw KDoc block text of the source function (inner content, no `/** */` markers), or `null` when the function is undocumented;
  *             copied to the wrapper by the code generator after names have been substituted
+ * @param validatorExpressions Kotlin source of the call validators derived from the function's document-type annotations,
+ *                             emitted into the generated function object so no annotation is read at runtime
  */
 data class FunctionDescriptor(
     val originalName: String,
@@ -49,6 +52,7 @@ data class FunctionDescriptor(
     val declaration: KSFunctionDeclaration,
     val sourceAnnotations: String?,
     val kdoc: String?,
+    val validatorExpressions: List<String>,
 )
 
 /**
@@ -78,6 +82,11 @@ sealed class ParameterDescriptor {
      * @param type the resolved parameter type
      * @param defaultExpression verbatim source text of the parameter's default value, or `null` when the parameter has no default
      * @param sourceAnnotations verbatim source text of parameter-level annotations to propagate to the wrapper
+     * @param index position of the parameter in the flattened parameter list, matching its runtime index
+     * @param isBody whether the parameter is explicitly reserved for the body argument
+     * @param isInjected whether the parameter is supplied from the function call rather than the call site
+     * @param isNullable whether the declared type is marked nullable
+     * @param plan how the generated body fills this parameter
      */
     data class Plain(
         override val originalName: String,
@@ -85,6 +94,11 @@ sealed class ParameterDescriptor {
         val type: KSType,
         val defaultExpression: String?,
         override val sourceAnnotations: String?,
+        val index: Int,
+        val isBody: Boolean,
+        val isInjected: Boolean,
+        val isNullable: Boolean,
+        val plan: CoercionPlan,
     ) : ParameterDescriptor()
 
     /**

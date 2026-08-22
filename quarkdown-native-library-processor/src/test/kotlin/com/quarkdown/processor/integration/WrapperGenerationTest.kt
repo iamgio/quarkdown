@@ -14,10 +14,10 @@ class WrapperGenerationTest {
     }
 
     @Test
-    fun `moduleOf references the wrapper via this-qualification`() {
+    fun `moduleOf references the generated function object`() {
         val source = GeneratedFiles.sourceOf("SimpleLogger")
         assertContains(source, "moduleOf(")
-        assertContains(source, "this::`logSimple`,")
+        assertContains(source, "`F_logSimple`,")
     }
 
     @Test

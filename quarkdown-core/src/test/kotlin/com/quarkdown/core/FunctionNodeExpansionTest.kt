@@ -1,8 +1,6 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.attributes.error.asNode
-import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Paragraph
@@ -14,19 +12,13 @@ import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.fixtures.Expansion
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.call.FunctionCallArgument
 import com.quarkdown.core.function.call.FunctionCallNodeExpander
 import com.quarkdown.core.function.library.LibraryRegistrant
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
-import com.quarkdown.core.function.library.module.moduleOf
-import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
-import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
-import com.quarkdown.core.function.value.NodeValue
-import com.quarkdown.core.function.value.NumberValue
-import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.util.node.toPlainText
 import kotlin.test.BeforeTest
@@ -46,39 +38,6 @@ class FunctionNodeExpansionTest {
     private lateinit var context: MutableContext
     private lateinit var expander: FunctionCallNodeExpander
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun sum(
-        a: Number,
-        b: Number,
-    ) = NumberValue(a.toFloat() + b.toFloat())
-
-    @NotForDocumentType(DocumentType.SLIDES)
-    fun myFunction(x: String) = StringValue(x)
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun echoBoolean(value: Boolean) = BooleanValue(value)
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun echoEnum(value: NodeStyle.Alignment) = StringValue(value.name)
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun resourceContent(path: String) = StringValue(javaClass.getResourceAsStream("/function/$path")!!.reader().readText())
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun setAndEchoDocumentName(
-        @Injected context: MutableContext,
-        name: String,
-    ): StringValue {
-        context.documentInfo = context.documentInfo.copy(name = name)
-        return StringValue(context.documentInfo.name!!)
-    }
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun makeQuote(body: MarkdownContent) =
-        NodeValue(
-            BlockQuote(content = body.children),
-        )
-
     @BeforeTest
     fun setup() {
         context = MutableContext(QuarkdownFlavor)
@@ -87,18 +46,7 @@ class FunctionNodeExpansionTest {
         // This is used to parse Markdown content in arguments.
         context.attachMockPipeline()
 
-        val library =
-            MultiFunctionLibraryLoader("lib").load(
-                moduleOf(
-                    ::sum,
-                    ::myFunction,
-                    ::echoBoolean,
-                    ::echoEnum,
-                    ::resourceContent,
-                    ::setAndEchoDocumentName,
-                    ::makeQuote,
-                ),
-            )
+        val library = MultiFunctionLibraryLoader("lib").load(Expansion.Module)
 
         LibraryRegistrant(context).registerAll(listOf(library))
         expander = FunctionCallNodeExpander(context, BasePipelineErrorHandler())
@@ -109,7 +57,7 @@ class FunctionNodeExpansionTest {
         val node =
             FunctionCallNode(
                 context,
-                "sum",
+                "expansionSum",
                 listOf(
                     FunctionCallArgument(DynamicValue("2")),
                     FunctionCallArgument(DynamicValue("3")),
@@ -132,7 +80,7 @@ class FunctionNodeExpansionTest {
         val node =
             FunctionCallNode(
                 context,
-                "sum",
+                "expansionSum",
                 listOf(
                     FunctionCallArgument(DynamicValue("2")),
                     FunctionCallArgument(DynamicValue("a")),
@@ -148,12 +96,12 @@ class FunctionNodeExpansionTest {
 
         assertEquals(0, node.children.size)
         assertNotNull(node.error)
-        assertContains(node.error!!.first.message!!, "sum(")
+        assertContains(node.error!!.first.message!!, "expansionSum(")
 
         with(node.error!!.first.asNode(node.error!!.second)) {
             assertIs<Box>(this) // Error box
             assertEquals(Box.Type.ERROR, this.type)
-            assertTrue("sum(" in (this.children.first() as TextNode).text.toPlainText()) // Error message
+            assertTrue("expansionSum(" in (this.children.first() as TextNode).text.toPlainText()) // Error message
         }
     }
 
@@ -251,7 +199,7 @@ class FunctionNodeExpansionTest {
         val node =
             FunctionCallNode(
                 context,
-                "echoEnum",
+                "expansionEchoEnum",
                 listOf(
                     FunctionCallArgument(DynamicValue("non-existent-value")),
                 ),

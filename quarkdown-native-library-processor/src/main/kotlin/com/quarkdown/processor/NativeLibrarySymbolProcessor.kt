@@ -5,6 +5,7 @@ import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
+import com.quarkdown.processor.coercion.ValueFactoryCatalog
 import com.quarkdown.processor.discovery.DiscoveryContext
 import com.quarkdown.processor.discovery.KspPsi
 import com.quarkdown.processor.discovery.ModuleDiscovery
@@ -34,6 +35,7 @@ internal class NativeLibrarySymbolProcessor(
                 resolver = resolver,
                 logger = logger,
                 kspPsi = KspPsi(psiDiagnostics),
+                factories = ValueFactoryCatalog.read(resolver, logger),
             )
         val modules = ModuleDiscovery(ctx).discover()
 

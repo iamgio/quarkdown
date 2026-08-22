@@ -12,7 +12,8 @@ dependencies {
         testImplementation(it)
     }
     testImplementation(testFixtures(project))
-    implementation(kotlin("reflect"))
+    testCompileOnly(project(":quarkdown-native-library-processor"))
+    kspTest(project(":quarkdown-native-library-processor"))
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.4")
     implementation("org.apache.logging.log4j:log4j-core:2.25.3")
     implementation("org.apache.commons:commons-text:1.15.0")

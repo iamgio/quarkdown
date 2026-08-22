@@ -1,6 +1,7 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.function.FunctionParameter
+import com.quarkdown.core.function.ParameterType
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.FunctionCallArgument
@@ -23,12 +24,12 @@ class RegularArgumentsBinderTest {
         name: String,
         index: Int,
         isExplicitlyBody: Boolean = false,
-    ) = FunctionParameter(name, StringValue::class, index, isExplicitlyBody = isExplicitlyBody)
+    ) = FunctionParameter(name, ParameterType.Static("String"), index, isExplicitlyBody = isExplicitlyBody)
 
     private fun bind(
-        parameters: List<FunctionParameter<*>>,
+        parameters: List<FunctionParameter>,
         arguments: List<FunctionCallArgument>,
-    ): Map<FunctionParameter<*>, FunctionCallArgument> {
+    ): Map<FunctionParameter, FunctionCallArgument> {
         val function =
             SimpleFunction(
                 name = "test",
@@ -37,7 +38,7 @@ class RegularArgumentsBinderTest {
         return RegularArgumentsBinder(FunctionCall(function, arguments)).createBindings(parameters)
     }
 
-    private fun Map<FunctionParameter<*>, FunctionCallArgument>.unwrap(parameter: FunctionParameter<*>): Any? =
+    private fun Map<FunctionParameter, FunctionCallArgument>.unwrap(parameter: FunctionParameter): Any? =
         this[parameter]?.value?.unwrappedValue
 
     @Test

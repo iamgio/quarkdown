@@ -27,7 +27,7 @@ class QuarkdownModule(
 }
 
 /**
- * Creates a [QuarkdownModule] from a set of Kotlin functions.
+ * Creates a [QuarkdownModule] from a set of functions.
  * @param functions the functions to export in the module
  */
 fun moduleOf(vararg functions: ExportableFunction): QuarkdownModule = setOf(*functions).let(::QuarkdownModule)

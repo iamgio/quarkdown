@@ -5,3 +5,6 @@ with support for:
 
 - `@QModule`/`@QFunction` registration
 - `@Name` mapping
+- Compile-time argument conversion via `ValueFactory`
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the pipeline and the data flow through a function call.

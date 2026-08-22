@@ -2,6 +2,7 @@ package com.quarkdown.core
 
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.FunctionParameter
+import com.quarkdown.core.function.ParameterType
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.signatureAsString
 import com.quarkdown.core.function.value.VoidValue
@@ -15,7 +16,7 @@ import kotlin.test.assertEquals
 class FunctionSignatureAsStringTest {
     private fun function(
         name: String,
-        vararg parameters: FunctionParameter<*>,
+        vararg parameters: FunctionParameter,
     ): Function<VoidValue> =
         SimpleFunction(
             name = name,
@@ -27,10 +28,10 @@ class FunctionSignatureAsStringTest {
         type: KClass<*>,
         isOptional: Boolean = false,
         isInjected: Boolean = false,
-    ): FunctionParameter<*> =
+    ): FunctionParameter =
         FunctionParameter(
             name = name,
-            type = type,
+            type = ParameterType.Static(type.simpleName!!),
             index = 0,
             isOptional = isOptional,
             isInjected = isInjected,
