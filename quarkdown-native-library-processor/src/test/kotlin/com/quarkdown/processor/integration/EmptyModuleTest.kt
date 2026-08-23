@@ -19,7 +19,7 @@ class EmptyModuleTest {
 
         assertContains(source, "object EmptyModule {")
         assertContains(source, "moduleOf(")
-        assertTrue("this::" !in source, "empty module still references some function")
+        assertTrue("`F_" !in source, "empty module still references some function")
         assertTrue("public fun" !in source, "empty module still emits a wrapper")
     }
 }

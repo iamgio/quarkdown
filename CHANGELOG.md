@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### Reflectionless function calls
+
+Calling a native function no longer involves JVM reflection, improving performance (the official wiki now compiles 10% faster) on function-heavy documents and opening the door to future optimizations.
+
 ### Fixed
 
 #### [Scoped function extensions](https://quarkdown.com/wiki/extending-functions)

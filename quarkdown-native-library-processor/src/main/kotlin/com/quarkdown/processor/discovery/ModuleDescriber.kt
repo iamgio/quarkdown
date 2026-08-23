@@ -1,15 +1,21 @@
 package com.quarkdown.processor.discovery
 
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSFile
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSValueParameter
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.Spread
+import com.quarkdown.processor.coercion.CoercionPlan
+import com.quarkdown.processor.coercion.CoercionPlanner
+import com.quarkdown.processor.coercion.toTypeShape
 import com.quarkdown.processor.model.FunctionDescriptor
 import com.quarkdown.processor.model.ModuleDescriptor
 import com.quarkdown.processor.model.ParameterDescriptor
 import com.quarkdown.processor.util.ModuleNaming
+import com.quarkdown.processor.util.getAnnotation
 import com.quarkdown.processor.util.hasAnnotation
 import com.quarkdown.processor.util.quarkdownName
 
@@ -73,7 +79,8 @@ internal object ModuleDescriber {
             val paramOriginal = param.name?.asString() ?: return@forEach
             ctx.mappings.record(param, param.quarkdownName() ?: paramOriginal)
         }
-        val parameters = function.parameters.map { describe(it, ctx) ?: return null }
+        val counter = IndexCounter()
+        val parameters = function.parameters.map { describe(it, ctx, counter) ?: return null }
 
         return FunctionDescriptor(
             originalName = originalName,
@@ -84,12 +91,14 @@ internal object ModuleDescriber {
             declaration = function,
             sourceAnnotations = AnnotationExtractor.ForFunction.extract(function, ctx),
             kdoc = KDocExtractor.extract(function, ctx),
+            validatorExpressions = validatorExpressionsOf(function),
         )
     }
 
     private fun describe(
         parameter: KSValueParameter,
         ctx: DiscoveryContext,
+        counter: IndexCounter,
     ): ParameterDescriptor? {
         val originalName =
             parameter.name?.asString() ?: run {
@@ -97,14 +106,48 @@ internal object ModuleDescriber {
                 return null
             }
         if (parameter.hasAnnotation<Spread>()) {
-            return describeSpread(originalName, parameter, ctx)
+            return describeSpread(originalName, parameter, ctx, counter)
         }
+        return describePlain(
+            parameter = parameter,
+            originalName = originalName,
+            ctx = ctx,
+            counter = counter,
+        )
+    }
+
+    /**
+     * Describes a single parameter, planning how the generated body will fill it.
+     *
+     * Returns `null` after reporting an error when no plan exists, which fails the KSP round
+     * rather than letting the failure surface while a document is being rendered.
+     */
+    private fun describePlain(
+        parameter: KSValueParameter,
+        originalName: String,
+        ctx: DiscoveryContext,
+        counter: IndexCounter,
+    ): ParameterDescriptor.Plain? {
+        val type = parameter.type.resolve()
+        val shape = type.toTypeShape()
+        val isInjected = parameter.getAnnotation(INJECTED_FQN) != null
+        val plan = CoercionPlanner.plan(shape, isInjected, ctx.factories)
+        if (plan is CoercionPlan.Unsupported) {
+            ctx.logger.error("Parameter '$originalName': ${plan.reason}.", parameter)
+            return null
+        }
+
         return ParameterDescriptor.Plain(
             originalName = originalName,
             exportedName = ctx.mappings.exportedName(parameter) ?: originalName,
-            type = parameter.type.resolve(),
+            type = type,
             defaultExpression = DefaultValueExtractor.extract(parameter, ctx),
             sourceAnnotations = AnnotationExtractor.ForParameter.extract(parameter, ctx),
+            index = counter.next++,
+            isBody = parameter.getAnnotation(BODY_FQN) != null,
+            isInjected = isInjected,
+            isNullable = shape.isNullable,
+            plan = plan,
         )
     }
 
@@ -121,7 +164,8 @@ internal object ModuleDescriber {
         outerName: String,
         parameter: KSValueParameter,
         ctx: DiscoveryContext,
-    ): ParameterDescriptor.Spread {
+        counter: IndexCounter,
+    ): ParameterDescriptor.Spread? {
         val classDeclaration =
             parameter.type.resolve().declaration as? KSClassDeclaration
                 ?: error("@Spread parameter '$outerName' must reference a class type")
@@ -137,7 +181,7 @@ internal object ModuleDescriber {
             val componentOriginal = component.name?.asString() ?: return@forEach
             ctx.mappings.record(component, component.quarkdownName() ?: componentOriginal)
         }
-        val components = primary.parameters.map { describePlainComponent(it, ctx) }
+        val components = primary.parameters.map { describePlainComponent(it, ctx, counter) ?: return null }
 
         return ParameterDescriptor.Spread(
             originalName = outerName,
@@ -158,14 +202,62 @@ internal object ModuleDescriber {
     private fun describePlainComponent(
         component: KSValueParameter,
         ctx: DiscoveryContext,
-    ): ParameterDescriptor.Plain {
+        counter: IndexCounter,
+    ): ParameterDescriptor.Plain? {
         val original = component.name?.asString() ?: error("Unnamed @Spread component parameter is not supported")
-        return ParameterDescriptor.Plain(
-            originalName = original,
-            exportedName = ctx.mappings.exportedName(component) ?: original,
-            type = component.type.resolve(),
-            defaultExpression = DefaultValueExtractor.extract(component, ctx),
-            sourceAnnotations = AnnotationExtractor.ForParameter.extract(component, ctx),
-        )
+        return describePlain(parameter = component, originalName = original, ctx = ctx, counter = counter)
     }
+
+    /**
+     * Renders the document-type restrictions of [function] as constructor calls, so the generated
+     * module builds its validators without reading annotations at runtime.
+     */
+    private fun validatorExpressionsOf(function: KSFunctionDeclaration): List<String> =
+        buildList {
+            entriesOf(function, ONLY_FOR_DOCUMENT_TYPE_FQN)?.let { types ->
+                add("$VALIDATOR_FQN(setOf(${types.joinToString()}))")
+            }
+            entriesOf(function, NOT_FOR_DOCUMENT_TYPE_FQN)?.let { types ->
+                add("$VALIDATOR_FQN($DOCUMENT_TYPE_FQN.entries - setOf(${types.joinToString()}))")
+            }
+        }
+
+    /**
+     * Fully qualified names of the enum entries passed to the `types` vararg of the annotation
+     * named [annotationFqn], or `null` when the annotation is absent.
+     */
+    private fun entriesOf(
+        function: KSFunctionDeclaration,
+        annotationFqn: String,
+    ): List<String>? {
+        val annotation = function.getAnnotation(annotationFqn) ?: return null
+        val raw = annotation.arguments.firstOrNull()?.value ?: return null
+        val values = raw as? List<*> ?: listOf(raw)
+        return values.mapNotNull(::enumEntryName).takeIf { it.isNotEmpty() }
+    }
+
+    /**
+     * Fully qualified name of a single enum entry used as an annotation argument.
+     *
+     * KSP models such an argument either as a [KSType] or, on the analysis-API backend, as the
+     * entry's own declaration, so both shapes are accepted.
+     */
+    private fun enumEntryName(entry: Any?): String? =
+        when (entry) {
+            is KSType -> entry.declaration.qualifiedName?.asString()
+            is KSDeclaration -> entry.qualifiedName?.asString()
+            else -> null
+        }
+
+    /** Running position within a function's flattened parameter list. */
+    private class IndexCounter {
+        var next: Int = 0
+    }
+
+    private const val BODY_FQN = "com.quarkdown.core.function.reflect.annotation.Body"
+    private const val INJECTED_FQN = "com.quarkdown.core.function.reflect.annotation.Injected"
+    private const val ONLY_FOR_DOCUMENT_TYPE_FQN = "com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType"
+    private const val NOT_FOR_DOCUMENT_TYPE_FQN = "com.quarkdown.core.function.reflect.annotation.NotForDocumentType"
+    private const val DOCUMENT_TYPE_FQN = "com.quarkdown.core.document.DocumentType"
+    private const val VALIDATOR_FQN = "com.quarkdown.core.function.call.validate.DocumentTypeFunctionCallValidator"
 }

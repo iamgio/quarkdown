@@ -1,11 +1,12 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.ast.attributes.style.NodeStyle
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.fixtures.Greetings
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.FunctionParameter
+import com.quarkdown.core.function.ParameterType
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.FunctionCallArgument
@@ -19,20 +20,12 @@ import com.quarkdown.core.function.error.UnnamedArgumentAfterNamedException
 import com.quarkdown.core.function.error.UnresolvedParameterException
 import com.quarkdown.core.function.expression.ComposedExpression
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
-import com.quarkdown.core.function.library.module.moduleOf
-import com.quarkdown.core.function.reflect.KFunctionAdapter
-import com.quarkdown.core.function.reflect.annotation.Body
-import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.reflect.annotation.NotForDocumentType
-import com.quarkdown.core.function.reflect.annotation.OnlyForDocumentType
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.NumberValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.StringValue
-import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.pipeline.error.PipelineException
-import kotlin.reflect.KFunction
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -44,6 +37,16 @@ import kotlin.test.assertNull
  * For tests of function calls from Quarkdown sources see [FunctionNodeExpansionTest].
  */
 class StandaloneFunctionTest {
+    /**
+     * @param name Quarkdown name of a function exported by the [Greetings] fixture module
+     * @return the exported function, resolved the way the pipeline resolves it
+     */
+    private fun fixture(name: String): Function<*> =
+        MultiFunctionLibraryLoader("fixtures")
+            .load(Greetings.Module)
+            .functions
+            .first { it.name == name }
+
     /**
      * @param name name of the parameter to get the corresponding argument value for
      * @param T type of the value
@@ -79,8 +82,8 @@ class StandaloneFunctionTest {
                 name = "greet",
                 parameters =
                     listOf(
-                        FunctionParameter("to", StringValue::class, index = 0),
-                        FunctionParameter("from", StringValue::class, index = 1),
+                        FunctionParameter("to", ParameterType.Static("String"), index = 0),
+                        FunctionParameter("from", ParameterType.Static("String"), index = 1),
                     ),
             ) { bindings, _ ->
                 val to = bindings.arg<String>("to")
@@ -116,8 +119,8 @@ class StandaloneFunctionTest {
                 name = "greet",
                 parameters =
                     listOf(
-                        FunctionParameter("to", StringValue::class, index = 0),
-                        FunctionParameter("from", StringValue::class, index = 1),
+                        FunctionParameter("to", ParameterType.Static("String"), index = 0),
+                        FunctionParameter("from", ParameterType.Static("String"), index = 1),
                     ),
             ) { bindings, _ ->
                 val to = bindings.arg<String>("to")
@@ -159,8 +162,8 @@ class StandaloneFunctionTest {
                 name = "greet",
                 parameters =
                     listOf(
-                        FunctionParameter("to", StringValue::class, index = 0),
-                        FunctionParameter("from", StringValue::class, index = 1),
+                        FunctionParameter("to", ParameterType.Static("String"), index = 0),
+                        FunctionParameter("from", ParameterType.Static("String"), index = 1),
                     ),
             ) { bindings, _ ->
                 val to = bindings.arg<String>("to")
@@ -234,26 +237,17 @@ class StandaloneFunctionTest {
         assert(exception.message!!.contains("Maximum function call depth"))
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun greetNoArgs(): StringValue = StringValue("Hello")
-
     @Test
     fun `KFunction without arguments`() {
-        val function = KFunctionAdapter(::greetNoArgs)
+        val function = fixture("greetNoArgs")
         val call = FunctionCall(function, arguments = emptyList())
 
         assertEquals("Hello", call.execute().unwrappedValue)
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun greetWithArgs(
-        to: String,
-        from: String,
-    ): StringValue = StringValue("Hello $to from $from")
-
     @Test
     fun `KFunction with arguments`() {
-        val function = KFunctionAdapter(::greetWithArgs)
+        val function = fixture("greetWithArgs")
 
         val call =
             FunctionCall(
@@ -270,7 +264,7 @@ class StandaloneFunctionTest {
 
     @Test
     fun `KFunction with named arguments`() {
-        val function = KFunctionAdapter(::greetWithArgs)
+        val function = fixture("greetWithArgs")
 
         val call1 =
             FunctionCall(
@@ -339,15 +333,9 @@ class StandaloneFunctionTest {
         }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun greetWithOptionalArgs(
-        to: String = "you",
-        from: String = "me",
-    ): StringValue = StringValue("Hello $to from $from")
-
     @Test
     fun `KFunction with optional arguments`() {
-        val function = KFunctionAdapter(::greetWithOptionalArgs)
+        val function = fixture("greetWithOptionalArgs")
 
         val call =
             FunctionCall(
@@ -372,16 +360,9 @@ class StandaloneFunctionTest {
         assertEquals("Hello you from A", callNamed.execute().unwrappedValue)
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun greetWithOptionalArgsInTheMiddle(
-        to: String = "you",
-        from: String = "me",
-        content: String,
-    ): StringValue = StringValue("Hello $to from $from: $content")
-
     @Test
     fun `KFunction with optional arguments in the middle`() {
-        val function = KFunctionAdapter(::greetWithOptionalArgsInTheMiddle)
+        val function = fixture("greetWithOptionalArgsInTheMiddle")
 
         val call =
             FunctionCall(
@@ -411,16 +392,9 @@ class StandaloneFunctionTest {
         }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun greetWithExplicitBody(
-        @Body content: String,
-        to: String = "you",
-        from: String = "me",
-    ): StringValue = StringValue("Hello $to from $from: $content")
-
     @Test
     fun `KFunction with explicit @Body parameter`() {
-        val function = KFunctionAdapter(::greetWithExplicitBody)
+        val function = fixture("greetWithExplicitBody")
 
         // The body parameter sits first in the signature but a body argument binds to it directly,
         // while positional arguments fill the remaining parameters in order.
@@ -455,15 +429,9 @@ class StandaloneFunctionTest {
         }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun sum(
-        a: Int,
-        b: Int,
-    ): NumberValue = NumberValue(a + b)
-
     @Test
     fun `KFunction with auto arguments`() {
-        val function = KFunctionAdapter(::sum)
+        val function = fixture("sum")
 
         val call =
             FunctionCall(
@@ -480,7 +448,7 @@ class StandaloneFunctionTest {
 
     @Test
     fun `KFunction wrong argument count`() {
-        val function = KFunctionAdapter(::sum)
+        val function = fixture("sum")
 
         val call1 =
             FunctionCall(
@@ -525,7 +493,7 @@ class StandaloneFunctionTest {
 
     @Test
     fun `KFunction parameter bound twice`() {
-        val function = KFunctionAdapter(::sum)
+        val function = fixture("sum")
 
         val call1 =
             FunctionCall(
@@ -544,7 +512,7 @@ class StandaloneFunctionTest {
 
     @Test
     fun `KFunction wrong argument types`() {
-        val function = KFunctionAdapter(::sum)
+        val function = fixture("sum")
 
         val call1 =
             FunctionCall(
@@ -590,13 +558,10 @@ class StandaloneFunctionTest {
         }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun identity(x: Int) = NumberValue(x)
-
     @Test
     fun `KFunction with nested call arguments`() {
-        val functionSum = KFunctionAdapter(::sum)
-        val functionIdentity = KFunctionAdapter(::identity)
+        val functionSum = fixture("sum")
+        val functionIdentity = fixture("identity")
 
         val callIdentity =
             FunctionCall(
@@ -622,8 +587,8 @@ class StandaloneFunctionTest {
 
     @Test
     fun `KFunction with composed arguments`() {
-        val functionGreetWithArgs = KFunctionAdapter(::greetWithArgs)
-        val functionGreetWithoutArgs = KFunctionAdapter(::greetNoArgs)
+        val functionGreetWithArgs = fixture("greetWithArgs")
+        val functionGreetWithoutArgs = fixture("greetNoArgs")
 
         val callWithoutArgs =
             FunctionCall(
@@ -646,8 +611,8 @@ class StandaloneFunctionTest {
 
     @Test
     fun `KFunction with dynamic composed arguments`() {
-        val functionGreetWithArgs = KFunctionAdapter(::greetWithArgs)
-        val functionGreetWithoutArgs = KFunctionAdapter(::greetNoArgs)
+        val functionGreetWithArgs = fixture("greetWithArgs")
+        val functionGreetWithoutArgs = fixture("greetNoArgs")
 
         val callWithoutArgs =
             FunctionCall(
@@ -668,12 +633,9 @@ class StandaloneFunctionTest {
         assertEquals("Hello Hello dear from B", callWithArgs.execute().unwrappedValue)
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun echoEnum(value: NodeStyle.Alignment) = StringValue(value.name)
-
     @Test
     fun `KFunction with enum`() {
-        val function = KFunctionAdapter(::echoEnum)
+        val function = fixture("echoEnum")
 
         val call =
             FunctionCall(
@@ -689,7 +651,7 @@ class StandaloneFunctionTest {
 
     @Test
     fun `KFunction with invalid enum`() {
-        val function = KFunctionAdapter(::echoEnum)
+        val function = fixture("echoEnum")
 
         val call =
             FunctionCall(
@@ -705,18 +667,9 @@ class StandaloneFunctionTest {
         }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun setDocumentName(
-        @Injected context: MutableContext,
-        name: String,
-    ): VoidValue {
-        context.documentInfo = context.documentInfo.copy(name = name)
-        return VoidValue
-    }
-
     @Test
     fun `KFunction with injected context`() {
-        val function = KFunctionAdapter(::setDocumentName)
+        val function = fixture("setDocumentName")
 
         val context = MutableContext(QuarkdownFlavor)
 
@@ -737,80 +690,46 @@ class StandaloneFunctionTest {
         assertEquals("New name", context.documentInfo.name)
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun invalidInjection(
-        @Injected x: String,
-    ) = StringValue(x)
-
-    @Test
-    fun `KFunction with invalid injection`() {
-        val function = KFunctionAdapter(::invalidInjection)
-
-        val context = MutableContext(QuarkdownFlavor)
-
-        val call =
-            FunctionCall(
-                function,
-                arguments = emptyList(),
-                context,
-            )
-
-        assertNull(context.documentInfo.name)
-
-        // String isn't an injectable type.
-        assertFailsWith<IllegalArgumentException> {
-            call.execute()
-        }
-    }
-
-    private fun <T : OutputValue<*>> createCallForDocumentType(
-        function: KFunction<T>,
+    @Suppress("UNCHECKED_CAST")
+    private fun createCallForDocumentType(
+        name: String,
         documentType: DocumentType,
-    ): FunctionCall<T> {
+    ): FunctionCall<OutputValue<*>> {
         val context = MutableContext(QuarkdownFlavor)
         context.documentInfo = context.documentInfo.copy(type = documentType)
-        val adapter = KFunctionAdapter(function)
-        return FunctionCall(adapter, emptyList(), context)
+        return FunctionCall(fixture(name) as Function<OutputValue<*>>, emptyList(), context)
     }
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    @OnlyForDocumentType(DocumentType.SLIDES)
-    fun slidesOnlyGreet(): StringValue = StringValue("Hello")
 
     @Test
     fun `KFunction with whitelisted document type`() {
-        val call = createCallForDocumentType(::slidesOnlyGreet, DocumentType.SLIDES)
+        val call = createCallForDocumentType("slidesOnlyGreet", DocumentType.SLIDES)
         assertEquals("Hello", call.execute().unwrappedValue)
     }
 
     @Test
     fun `KFunction with non-whitelisted document type`() {
-        val call = createCallForDocumentType(::slidesOnlyGreet, DocumentType.PLAIN)
+        val call = createCallForDocumentType("slidesOnlyGreet", DocumentType.PLAIN)
         assertFailsWith<InvalidFunctionCallException> { call.execute() }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    @NotForDocumentType(DocumentType.SLIDES)
-    fun allButSlidesGreet(): StringValue = StringValue("Hello")
-
     @Test
     fun `KFunction with non-blacklisted document type`() {
-        val call = createCallForDocumentType(::allButSlidesGreet, DocumentType.PAGED)
+        val call = createCallForDocumentType("allButSlidesGreet", DocumentType.PAGED)
         assertEquals("Hello", call.execute().unwrappedValue)
     }
 
     @Test
     fun `KFunction with blacklisted document type`() {
-        val call = createCallForDocumentType(::allButSlidesGreet, DocumentType.SLIDES)
+        val call = createCallForDocumentType("allButSlidesGreet", DocumentType.SLIDES)
         assertFailsWith<InvalidFunctionCallException> { call.execute() }
     }
 
     @Test
     fun `library loader`() {
-        val library = MultiFunctionLibraryLoader("MyLib").load(moduleOf(::greetWithArgs, ::greetNoArgs, ::sum))
+        val library = MultiFunctionLibraryLoader("MyLib").load(Greetings.Module)
 
         assertEquals("MyLib", library.name)
-        assertEquals(3, library.functions.size)
+        assertEquals(Greetings.Module.size, library.functions.size)
 
         val function = library.functions.first { it.name == "sum" }
 

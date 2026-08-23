@@ -19,13 +19,6 @@ const val UNRESOLVED_REFERENCE_EXIT_CODE = 67
 const val ILLEGAL_TYPE_CONVERSION_EXIT_CODE = 68
 
 /**
- * Exit code when an element (e.g. an enum value from a Quarkdown function argument)
- * does not exist in a look-up table.
- * @see com.quarkdown.core.function.error.NoSuchElementException
- */
-const val NO_SUCH_ELEMENT_EXIT_CODE = 69
-
-/**
  * Exit code when a I/O error occurs.
  * @see com.quarkdown.core.pipeline.error.IOPipelineException
  */

@@ -7,7 +7,7 @@ import com.quarkdown.core.function.error.InvalidFunctionCallException
 /**
  * Parameter-argument pairs of a function call.
  */
-typealias ArgumentBindings = Map<FunctionParameter<*>, FunctionCallArgument>
+typealias ArgumentBindings = Map<FunctionParameter, FunctionCallArgument>
 
 /**
  * Builder of parameter-argument pairs of a function call.
@@ -23,5 +23,5 @@ sealed interface ArgumentsBinder {
      * @return the parameter-argument pairs
      * @throws InvalidFunctionCallException or subclass if there is arguments and parameters cannot be paired
      */
-    fun createBindings(parameters: List<FunctionParameter<*>>): ArgumentBindings
+    fun createBindings(parameters: List<FunctionParameter>): ArgumentBindings
 }

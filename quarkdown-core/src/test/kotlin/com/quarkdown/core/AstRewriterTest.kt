@@ -1,7 +1,6 @@
 package com.quarkdown.core
 
 import com.quarkdown.core.ast.AstRoot
-import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.block.BlockQuote
 import com.quarkdown.core.ast.base.block.Heading
@@ -11,12 +10,10 @@ import com.quarkdown.core.ast.iterator.AstRewriter
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.fixtures.Primitives
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.library.LibraryRegistrant
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
-import com.quarkdown.core.function.library.module.moduleOf
-import com.quarkdown.core.function.reflect.annotation.Body
-import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.util.node.toPlainText
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -34,38 +31,13 @@ class AstRewriterTest {
     private lateinit var context: MutableContext
     private lateinit var rewriter: AstRewriter
 
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun heading(
-        @Body content: InlineMarkdownContent,
-        depth: Int,
-        ref: String? = null,
-        numbered: Boolean = true,
-        indexed: Boolean = true,
-        breakpage: Boolean = true,
-    ): NodeValue =
-        NodeValue(
-            BlockQuote(
-                content =
-                    listOf(
-                        Heading(
-                            depth = depth,
-                            text = content.children,
-                            customId = ref,
-                            canBreakPage = breakpage,
-                            canTrackLocation = numbered,
-                            excludeFromTableOfContents = !indexed,
-                        ),
-                    ),
-            ),
-        )
-
     @BeforeTest
     fun setup() {
         context = MutableContext(QuarkdownFlavor)
         // Required by FunctionCallNodeExpander.errorHandler!! within AstRewriter.
         context.attachMockPipeline()
 
-        val library = MultiFunctionLibraryLoader("lib").load(moduleOf(::heading))
+        val library = MultiFunctionLibraryLoader("lib").load(Primitives.Module)
         LibraryRegistrant(context).registerAll(listOf(library))
 
         rewriter = AstRewriter(context)

@@ -21,8 +21,8 @@ class MultipleFunctionsTest {
         assertContains(source, "public fun `bravo`(`text`: kotlin.String)")
         assertContains(source, "public fun `charlie`(`a`: kotlin.Int, `b`: kotlin.Int)")
 
-        assertContains(source, "this::`alpha`,")
-        assertContains(source, "this::`bravo`,")
-        assertContains(source, "this::`charlie`,")
+        assertContains(source, "`F_alpha`,")
+        assertContains(source, "`F_bravo`,")
+        assertContains(source, "`F_charlie`,")
     }
 }

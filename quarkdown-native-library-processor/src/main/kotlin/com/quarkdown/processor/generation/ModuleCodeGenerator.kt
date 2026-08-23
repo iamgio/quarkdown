@@ -2,8 +2,23 @@ package com.quarkdown.processor.generation
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
+import com.quarkdown.processor.coercion.CoercionPlan
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.COERCE_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.CONVERT_ARGUMENT_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.FILE_SUPPRESS
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.FUNCTION_CALL_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.FUNCTION_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.FUNCTION_PARAMETER_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.INVOKE_GUARDED_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.MODULE_OF_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.QUARKDOWN_MODULE_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.RAW_OF_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.REQUIRE_CONTEXT_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.SIMPLE_FUNCTION_FQN
+import com.quarkdown.processor.generation.ModuleCodeGenerator.Companion.UNBOUND_FQN
 import com.quarkdown.processor.model.FunctionDescriptor
 import com.quarkdown.processor.model.ModuleDescriptor
+import com.quarkdown.processor.model.ParameterDescriptor
 import com.quarkdown.processor.util.ModuleNaming
 import com.quarkdown.processor.util.backtick
 import com.quarkdown.processor.util.backtickLastSegment
@@ -29,10 +44,18 @@ class ModuleCodeGenerator(
             .apply {
                 emitFileHeader(module)
                 block("object ${module.name} {") {
+                    module.functions.forEach { function ->
+                        function.parameters.flatParameters.forEach { emitParameterDescriptor(function, it) }
+                        blank()
+                        emitFunctionObject(function)
+                        blank()
+                    }
                     emitModuleVal(module)
                     module.functions.forEach { function ->
                         blank()
                         emitWrapper(function)
+                        blank()
+                        emitDynamicWrapper(function)
                     }
                 }
             }.toString()
@@ -45,6 +68,11 @@ class ModuleCodeGenerator(
         blank()
         line("import $QUARKDOWN_MODULE_FQN")
         line("import $MODULE_OF_FQN")
+        line("import $UNBOUND_FQN")
+        line("import $COERCE_FQN")
+        line("import $RAW_OF_FQN")
+        line("import $REQUIRE_CONTEXT_FQN")
+        line("import $INVOKE_GUARDED_FQN")
         module.sourceImports?.let {
             blank()
             lines(it)
@@ -57,7 +85,7 @@ class ModuleCodeGenerator(
         indent {
             commaList(
                 "moduleOf(",
-                module.functions.map { "this::${it.exportedName.backtick()}" },
+                module.functions.map { functionObjectName(it).backtick() },
                 ")",
             )
         }
@@ -80,6 +108,158 @@ class ModuleCodeGenerator(
         indent { line("${function.qualifiedName.backtickLastSegment()}($delegation)") }
     }
 
+    private fun parameterDescriptorName(
+        function: FunctionDescriptor,
+        parameter: ParameterDescriptor.Plain,
+    ): String = "P_${function.exportedName}_${parameter.exportedName}"
+
+    private fun functionObjectName(function: FunctionDescriptor): String = "F_${function.exportedName}"
+
+    private fun dynamicName(function: FunctionDescriptor): String = "${function.exportedName}__dynamic"
+
+    /**
+     * Name of the loosely typed parameter the dynamic wrapper receives.
+     *
+     * It cannot share the exported name, because the body declares a local under that name and
+     * Kotlin resolves an identifier inside a local `val`'s initializer to the variable being
+     * declared. `NoDoubleUnderscoreNameRule` keeps the suffix collision-free.
+     */
+    private fun rawName(parameter: ParameterDescriptor.Plain): String = "${parameter.exportedName}__raw"
+
+    /**
+     * Emits the compile-time parameter metadata that replaces the reflective parameter scan.
+     */
+    private fun KotlinSource.emitParameterDescriptor(
+        function: FunctionDescriptor,
+        parameter: ParameterDescriptor.Plain,
+    ) {
+        val name = parameterDescriptorName(function, parameter).backtick()
+        line("private val $name: $FUNCTION_PARAMETER_FQN =")
+        indent {
+            commaList(
+                "$FUNCTION_PARAMETER_FQN(",
+                listOf(
+                    "name = \"${parameter.exportedName}\"",
+                    "type = ${parameter.plan.parameterTypeExpression()}",
+                    "index = ${parameter.index}",
+                    "isOptional = ${parameter.defaultExpression != null}",
+                    "isExplicitlyBody = ${parameter.isBody}",
+                    "isInjected = ${parameter.isInjected}",
+                    "isNullable = ${parameter.isNullable}",
+                ) + parameter.converterEntry(),
+                ")",
+            )
+        }
+    }
+
+    /**
+     * The parameter's conversion, emitted as a single-entry list so parameters that need none
+     * (injected ones) contribute nothing.
+     *
+     * Conversion is carried by the parameter rather than written into the function body, so that
+     * binding applies it: a converted argument is what travels onwards when one call hands its
+     * arguments to another, as `.super` does.
+     */
+    private fun ParameterDescriptor.Plain.converterEntry(): List<String> =
+        when (val plan = this.plan) {
+            is CoercionPlan.ViaFactory -> {
+                listOf(
+                    "convert = { raw, parameter, call -> " +
+                        "$CONVERT_ARGUMENT_FQN<${KSTypeRenderer.render(type)}>(raw, parameter, call) " +
+                        "{ ${plan.factoryExpression} } }",
+                )
+            }
+
+            else -> {
+                emptyList()
+            }
+        }
+
+    /**
+     * Emits the ready-made function the module exports, whose invocation delegates to the
+     * generated dynamic wrapper.
+     */
+    private fun KotlinSource.emitFunctionObject(function: FunctionDescriptor) {
+        val returnType = KSTypeRenderer.render(function.returnType)
+        val flat = function.parameters.flatParameters
+        val descriptors = flat.map { parameterDescriptorName(function, it).backtick() }
+        val callArguments =
+            flat
+                .filterNot { it.isInjected }
+                .joinToString("") { "bindings.rawOf(${parameterDescriptorName(function, it).backtick()}), " }
+
+        line("private val ${functionObjectName(function).backtick()}: $FUNCTION_FQN<$returnType> =")
+        indent {
+            commaList(
+                "$SIMPLE_FUNCTION_FQN(",
+                listOf(
+                    "name = \"${function.exportedName}\"",
+                    "parameters = listOf(${descriptors.joinToString(", ")})",
+                    "validators = listOf(${function.validatorExpressions.joinToString(", ")})",
+                    "invoke = { bindings, call -> invokeGuarded(call) { ${dynamicName(function).backtick()}(${callArguments}call) } }",
+                ),
+                ")",
+            )
+        }
+    }
+
+    /**
+     * Emits the internal dynamic counterpart of the public wrapper: one local per parameter,
+     * converted through the factory chosen at build time, then a delegation to the wrapper.
+     *
+     * Locals are emitted in declaration order, which is what lets a default expression reference an
+     * earlier parameter, including an injected one.
+     */
+    private fun KotlinSource.emitDynamicWrapper(function: FunctionDescriptor) {
+        val flat = function.parameters.flatParameters
+        val rawParameters =
+            flat
+                .filterNot { it.isInjected }
+                .joinToString("") { "${rawName(it).backtick()}: Any = Unbound, " }
+        val returnType = KSTypeRenderer.render(function.returnType)
+        // The wrapper, not the source function, is the delegation target: its parameters are the
+        // flattened, exported-named ones, and it performs any spread reconstruction itself.
+        val delegation =
+            flat.joinToString(", ") { "${it.exportedName.backtick()} = ${it.exportedName.backtick()}" }
+
+        block("internal fun ${dynamicName(function).backtick()}(${rawParameters}call: $FUNCTION_CALL_FQN<*>): $returnType {") {
+            flat.forEach { emitLocal(function, it) }
+            line("return ${function.exportedName.backtick()}($delegation)")
+        }
+    }
+
+    /**
+     * Emits the local holding one statically typed argument, falling back to the parameter's
+     * declared default when the call omitted it.
+     */
+    private fun KotlinSource.emitLocal(
+        function: FunctionDescriptor,
+        parameter: ParameterDescriptor.Plain,
+    ) {
+        val local = parameter.exportedName.backtick()
+        val type = KSTypeRenderer.render(parameter.type)
+        val initializer =
+            when (val plan = parameter.plan) {
+                is CoercionPlan.ViaInjection -> {
+                    plan.localExpression
+                }
+
+                is CoercionPlan.ViaFactory -> {
+                    val raw = rawName(parameter).backtick()
+                    val descriptor = parameterDescriptorName(function, parameter).backtick()
+                    val conversion = "coerce($raw, $descriptor, call) { ${plan.factoryExpression} }"
+                    parameter.defaultExpression
+                        ?.let { "if ($raw === Unbound) $it else $conversion" }
+                        ?: conversion
+                }
+
+                is CoercionPlan.Unsupported -> {
+                    error(plan.reason)
+                }
+            }
+        line("val $local: $type = $initializer")
+    }
+
     /**
      * Emits [rawKDoc] as a `/** … */` block at the current depth. Each source line becomes a
      * `* <line>` entry; blank source lines are preserved as blank comment lines so Dokka sees
@@ -97,6 +277,16 @@ class ModuleCodeGenerator(
     private companion object {
         const val QUARKDOWN_MODULE_FQN = "com.quarkdown.core.function.library.module.QuarkdownModule"
         const val MODULE_OF_FQN = "com.quarkdown.core.function.library.module.moduleOf"
+        const val FUNCTION_FQN = "com.quarkdown.core.function.Function"
+        const val SIMPLE_FUNCTION_FQN = "com.quarkdown.core.function.SimpleFunction"
+        const val FUNCTION_PARAMETER_FQN = "com.quarkdown.core.function.FunctionParameter"
+        const val FUNCTION_CALL_FQN = "com.quarkdown.core.function.call.FunctionCall"
+        const val UNBOUND_FQN = "com.quarkdown.core.function.call.binding.Unbound"
+        const val COERCE_FQN = "com.quarkdown.core.function.call.binding.coerce"
+        const val CONVERT_ARGUMENT_FQN = "com.quarkdown.core.function.call.binding.convertArgument"
+        const val RAW_OF_FQN = "com.quarkdown.core.function.call.binding.rawOf"
+        const val REQUIRE_CONTEXT_FQN = "com.quarkdown.core.function.call.binding.requireContext"
+        const val INVOKE_GUARDED_FQN = "com.quarkdown.core.function.call.binding.invokeGuarded"
 
         /**
          * File-level [Suppress] annotation entries applied to every generated source.
@@ -104,21 +294,44 @@ class ModuleCodeGenerator(
         val FILE_SUPPRESS =
             listOf(
                 "RedundantVisibilityModifier",
+                "USELESS_CAST",
+                "UNCHECKED_CAST",
                 "RemoveRedundantBackticks",
                 "unused",
                 "ktlint:standard:annotation",
+                "ktlint:standard:binary-expression-wrapping",
                 "ktlint:standard:argument-list-wrapping",
                 "ktlint:standard:chain-method-continuation",
                 "ktlint:standard:filename",
+                "ktlint:standard:function-expression-body",
+                "ktlint:standard:function-literal",
                 "ktlint:standard:function-naming",
                 "ktlint:standard:function-signature",
+                "ktlint:standard:if-else-wrapping",
                 "ktlint:standard:import-ordering",
                 "ktlint:standard:indent",
                 "ktlint:standard:max-line-length",
+                "ktlint:standard:multiline-expression-wrapping",
+                "ktlint:standard:multiline-if-else",
+                "ktlint:standard:no-consecutive-blank-lines",
+                "ktlint:standard:no-empty-first-line-in-class-body",
                 "ktlint:standard:no-unused-imports",
                 "ktlint:standard:parameter-list-wrapping",
                 "ktlint:standard:parameter-wrapping",
                 "ktlint:standard:paren-spacing",
+                "ktlint:standard:property-naming",
+                "ktlint:standard:property-wrapping",
+                "ktlint:standard:wrapping",
             )
     }
 }
+
+/**
+ * @return Kotlin source of the `ParameterType` this plan stores in its parameter descriptor
+ */
+private fun CoercionPlan.parameterTypeExpression(): String =
+    when (this) {
+        is CoercionPlan.ViaFactory -> parameterTypeExpression
+        is CoercionPlan.ViaInjection -> parameterTypeExpression
+        is CoercionPlan.Unsupported -> error(reason)
+    }

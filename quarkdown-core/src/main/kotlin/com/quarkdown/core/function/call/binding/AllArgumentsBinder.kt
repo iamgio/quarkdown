@@ -6,27 +6,20 @@ import com.quarkdown.core.function.error.InvalidArgumentCountException
 
 /**
  * Builder of bindings for all arguments of a function call.
+ *
  * @param call function call to bind arguments for
  * @see RegularArgumentsBinder
- * @see InjectedArgumentsBinder
  */
 class AllArgumentsBinder(
     private val call: FunctionCall<*>,
 ) : ArgumentsBinder {
-    /**
-     * Joins the results of the subsets of regular ([RegularArgumentsBinder])
-     * and injected ([InjectedArgumentsBinder]) arguments.
-     */
-    override fun createBindings(parameters: List<FunctionParameter<*>>): ArgumentBindings {
-        val (injected, regular) = call.function.parameters.partition { it.isInjected }
+    override fun createBindings(parameters: List<FunctionParameter>): ArgumentBindings {
+        val bindable = parameters.filterNot { it.isInjected }
 
-        // Argument-parameter links are generated for both types of parameters and joined together.
-        val bindings =
-            RegularArgumentsBinder(call).createBindings(regular) +
-                InjectedArgumentsBinder(call).createBindings(injected)
+        val bindings = RegularArgumentsBinder(call).createBindings(bindable)
 
         // If mandatory params count > args count.
-        if (call.function.parameters.any { !it.isOptional && it !in bindings }) {
+        if (bindable.any { !it.isOptional && it !in bindings }) {
             throw InvalidArgumentCountException(call)
         }
 

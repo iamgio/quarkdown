@@ -3,6 +3,7 @@ package com.quarkdown.processor.discovery
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.quarkdown.processor.util.quarkdownName
 
 /**
  * Structural rule applied to a single `@QFunction` declaration during validation.
@@ -142,5 +143,36 @@ internal object NamedParametersRule : ValidationRule {
             return false
         }
         return true
+    }
+}
+
+/**
+ * Rejects exported names containing `__`, which is the separator the generator reserves for its
+ * own synthesized declarations. Without this rule a library author could pick a name that collides with a generated one.
+ */
+internal object NoDoubleUnderscoreNameRule : ValidationRule {
+    private const val RESERVED = "__"
+
+    override fun check(
+        function: KSFunctionDeclaration,
+        ctx: DiscoveryContext,
+    ): Boolean {
+        val offenders =
+            buildList {
+                if (RESERVED in (function.quarkdownName() ?: function.simpleName.asString())) {
+                    add("function '${function.simpleName.asString()}'")
+                }
+                function.parameters.forEach { parameter ->
+                    val name = parameter.quarkdownName() ?: parameter.name?.asString() ?: return@forEach
+                    if (RESERVED in name) add("parameter '$name'")
+                }
+            }
+        if (offenders.isEmpty()) return true
+
+        ctx.logger.error(
+            "'__' is reserved by the native library processor, but ${offenders.joinToString()} uses it.",
+            function,
+        )
+        return false
     }
 }

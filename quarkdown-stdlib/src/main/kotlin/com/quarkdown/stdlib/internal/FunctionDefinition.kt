@@ -3,6 +3,7 @@ package com.quarkdown.stdlib.internal
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.FunctionParameter
+import com.quarkdown.core.function.ParameterType
 import com.quarkdown.core.function.SimpleFunction
 import com.quarkdown.core.function.call.FunctionCall
 import com.quarkdown.core.function.call.binding.ArgumentBindings
@@ -39,7 +40,7 @@ internal const val CUSTOM_FUNCTION_LIBRARY_NAME_PREFIX = "__func__"
 internal fun declareFunction(
     context: MutableContext,
     name: String,
-    parameters: List<FunctionParameter<*>>,
+    parameters: List<FunctionParameter>,
     invoke: (call: FunctionCall<*>, args: List<Value<*>>, bindings: ArgumentBindings) -> OutputValue<*>,
 ) {
     val function =
@@ -90,7 +91,7 @@ internal fun declareFunctionFromLambda(
         bodyParameters.mapIndexed { index, parameter ->
             FunctionParameter(
                 name = parameter.name,
-                type = DynamicValue::class,
+                type = ParameterType.Dynamic,
                 index = index,
                 isOptional = parameter.isOptional,
                 isExplicitlyBody = parameter.isExplicitlyBody,

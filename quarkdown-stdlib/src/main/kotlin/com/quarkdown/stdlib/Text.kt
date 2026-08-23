@@ -14,6 +14,7 @@ import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.value.InlineMarkdownContentValue
 import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.data.Lambda
+import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.util.node.toPlainText
@@ -140,7 +141,8 @@ fun match(
         replacement
             .invoke<InlineMarkdownContent, InlineMarkdownContentValue>(
                 matched.wrappedAsValue(),
-            ).unwrappedValue.children
+            ) { ValueFactory.inlineMarkdown(it, replacement.parentContext) }
+            .unwrappedValue.children
     }
     val children =
         when {

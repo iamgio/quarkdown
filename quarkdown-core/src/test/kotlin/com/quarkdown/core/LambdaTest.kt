@@ -11,6 +11,7 @@ import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.data.LambdaParameter
+import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -45,7 +46,7 @@ class LambdaTest {
             }
         assertEquals(
             "Hello",
-            lambda.invoke<String, StringValue>().unwrappedValue,
+            lambda.invoke<String, StringValue> { ValueFactory.string(it) }.unwrappedValue,
         )
     }
 
@@ -87,11 +88,11 @@ class LambdaTest {
             }
         assertEquals(
             "Hello",
-            lambda.invoke<String, StringValue>("Hello".wrappedAsValue()).unwrappedValue,
+            lambda.invoke<String, StringValue>("Hello".wrappedAsValue()) { ValueFactory.string(it) }.unwrappedValue,
         )
         assertEquals(
             "none",
-            lambda.invoke<String, StringValue>().unwrappedValue,
+            lambda.invoke<String, StringValue> { ValueFactory.string(it) }.unwrappedValue,
         )
     }
 
@@ -117,17 +118,22 @@ class LambdaTest {
                 .invoke<String, StringValue>(
                     "Hello".wrappedAsValue(),
                     "world".wrappedAsValue(),
-                ).unwrappedValue,
+                ) { ValueFactory.string(it) }
+                .unwrappedValue,
         )
         assertEquals(
             "Hello, none",
-            lambda.invoke<String, StringValue>("Hello".wrappedAsValue()).unwrappedValue,
+            lambda.invoke<String, StringValue>("Hello".wrappedAsValue()) { ValueFactory.string(it) }.unwrappedValue,
         )
         assertFails {
-            lambda.invoke<String, StringValue>()
+            lambda.invoke<String, StringValue> { ValueFactory.string(it) }
         }
         assertFails {
-            lambda.invoke<String, StringValue>("Hello".wrappedAsValue(), "world".wrappedAsValue(), "extra".wrappedAsValue())
+            lambda.invoke<String, StringValue>(
+                "Hello".wrappedAsValue(),
+                "world".wrappedAsValue(),
+                "extra".wrappedAsValue(),
+            ) { ValueFactory.string(it) }
         }
     }
 

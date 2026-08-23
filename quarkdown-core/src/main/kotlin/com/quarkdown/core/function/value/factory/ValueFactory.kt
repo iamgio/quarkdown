@@ -13,6 +13,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.document.size.Sizes
+import com.quarkdown.core.function.error.NoSuchElementException
 import com.quarkdown.core.function.expression.ComposedExpression
 import com.quarkdown.core.function.expression.Expression
 import com.quarkdown.core.function.expression.SafeExpression
@@ -83,7 +84,6 @@ private val WHITESPACE_REGEX = "\\s+".toRegex()
 /**
  * Factory of [Value] wrappers from raw data.
  * @see com.quarkdown.core.function.reflect.FromDynamicType
- * @see com.quarkdown.core.function.reflect.DynamicValueConverter.convertTo
  */
 object ValueFactory {
     /**
@@ -277,13 +277,13 @@ object ValueFactory {
     /**
      * @param raw raw value to convert to an enum value
      * @param values enum values pool to pick the output value from
-     * @return the value whose name matches (ignoring case and with `_`s removed) with [raw], or `null` if no match is found
+     * @return the value whose name matches (ignoring case and with `_`s removed) with [raw]
+     * @throws IllegalRawValueException if no value matches [raw]
      */
-    @FromDynamicType(Enum::class)
     fun enum(
         raw: Any,
         values: Array<Enum<*>>,
-    ): EnumValue? =
+    ): EnumValue =
         when (raw) {
             is Enum<*> -> {
                 EnumValue(raw)
@@ -293,6 +293,7 @@ object ValueFactory {
                 values
                     .find { it.quarkdownName.equals(raw.toString(), ignoreCase = true) }
                     ?.let { EnumValue(it) }
+                    ?: throw NoSuchElementException(raw, values)
             }
         }
 
