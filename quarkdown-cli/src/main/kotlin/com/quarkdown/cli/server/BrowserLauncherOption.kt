@@ -9,6 +9,7 @@ import com.quarkdown.core.log.Log
 import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
 import com.quarkdown.server.browser.EnvBrowserLauncher
+import com.quarkdown.server.browser.KnownLocationBrowserLauncher
 import com.quarkdown.server.browser.NoneBrowserLauncher
 import com.quarkdown.server.browser.PathBrowserLauncher
 import com.quarkdown.server.browser.XdgBrowserLauncher
@@ -43,6 +44,23 @@ private fun fromEnv(
         ?.also { Log.info("Using browser launcher $input (env ${it.envName})") }
 
 /**
+ * Attempts to create a [BrowserLauncher] by looking the browser up where the current platform
+ * installs it (e.g. `chrome` -> `/Applications/Google Chrome.app/...` on macOS).
+ * Consulted only after [fromEnv], so an explicit `BROWSER_<NAME>` always wins.
+ * @param input the input string representing the browser choice (e.g. `chrome`, `firefox`)
+ * @param envLookup function to look up environment variable values.
+ *                  If different from `System::getenv`, it can be used for testing purposes
+ * @return the corresponding [BrowserLauncher], if any
+ */
+private fun fromKnownLocations(
+    input: String,
+    envLookup: (String) -> String?,
+): BrowserLauncher? =
+    KnownLocationBrowserLauncher(input, env = envLookup)
+        .takeIf { it.isValid }
+        ?.also { Log.info("Using browser launcher $input (found at ${it.executable})") }
+
+/**
  * Attempts to create a [BrowserLauncher] from a given file system path.
  * @param input the input string representing the file system path to the browser executable
  * @return the corresponding [BrowserLauncher], if any
@@ -74,12 +92,13 @@ fun CliktCommand.browserLauncherOption(
         val launcher =
             fromFixedChoices(caseInsensitiveInput)
                 ?: fromEnv(caseInsensitiveInput, envLookup)
+                ?: fromKnownLocations(caseInsensitiveInput, envLookup)
                 ?: fromPath(input)
 
         require(!shouldValidate() || launcher != null) {
-            "The specified browser ($input) cannot be launched " +
-                "because it is either not installed, not loaded in the environment (BROWSER_<NAME>), " +
-                "not executable, or unsupported."
+            "The specified browser ($input) cannot be launched because it was not found " +
+                "in the environment (BROWSER_<NAME>), in the locations this platform installs browsers in, " +
+                "or as an executable path."
         }
 
         launcher ?: default

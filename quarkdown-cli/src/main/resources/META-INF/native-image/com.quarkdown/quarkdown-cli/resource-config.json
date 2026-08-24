@@ -1,0 +1,15 @@
+{
+  "comment": [
+    "`creator/` holds the project templates and their assets, read through a non-constant resource",
+    "name, which the image builder cannot detect on its own.",
+    "The JNA native libraries back the macOS file watcher used by `--watch`; every platform's copy",
+    "is included so that this configuration stays platform-independent."
+  ],
+  "resources": {
+    "includes": [
+      { "pattern": "version\\.txt" },
+      { "pattern": "creator/.*" },
+      { "pattern": "com/sun/jna/.*/libjnidispatch\\..*" }
+    ]
+  }
+}

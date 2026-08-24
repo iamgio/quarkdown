@@ -112,3 +112,6 @@ nb-configuration.xml
 !.claude/skills/
 *.log
 **/_test/
+
+# Heap dumps, which the native image builder can emit when it runs out of memory
+*.hprof

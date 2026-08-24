@@ -16,6 +16,7 @@ import com.quarkdown.cli.util.MillisStopwatch
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.interaction.Env
+import com.quarkdown.interaction.os.isChromeSandboxUnavailableOn
 import com.quarkdown.server.browser.BrowserLauncher
 import com.quarkdown.server.browser.DefaultBrowserLauncher
 import java.io.File
@@ -55,12 +56,14 @@ class CompileCommand(
 
     /**
      * Whether to disable Chrome sandbox for PDF export from HTML. Potentially unsafe.
+     * Defaults to enabled on Linux, where the sandbox usually cannot start.
+     * @see isChromeSandboxUnavailableOn
      */
     private val noPdfSandbox: Boolean by option(
         "--pdf-no-sandbox",
-        help = "(Unsafe) Disable Chrome sandbox for PDF export",
+        help = "(Unsafe) Disable Chrome sandbox for PDF export. Enabled by default on Linux",
         envvar = Env.NO_SANDBOX,
-    ).flag()
+    ).flag(default = isChromeSandboxUnavailableOn())
 
     /**
      * Maximum time, in seconds, allowed for the entire execution (pipeline + export) to complete.

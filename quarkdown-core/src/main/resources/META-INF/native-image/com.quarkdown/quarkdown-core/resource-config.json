@@ -1,0 +1,14 @@
+{
+  "comment": [
+    "Resources this module reads from the classpath at run time.",
+    "CSL styles and locales are selected by user input (`.bibliography style:` and `.doclang`),",
+    "so they are matched by pattern: which one is needed is not knowable at build time."
+  ],
+  "resources": {
+    "includes": [
+      { "pattern": "log4j2\\.xml" },
+      { "pattern": ".*\\.csl" },
+      { "pattern": "locales-.*\\.xml" }
+    ]
+  }
+}

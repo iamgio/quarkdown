@@ -25,7 +25,7 @@ Running **`quarkdown c file.qd`** compiles the given file and saves the output t
   - `chrome`
   - `chromium`
   - `firefox`
-  - `edge` (Windows only)
+  - `edge`
   - Any other name, backed by the `BROWSER_<NAME>` environment variable
   - A full path to a browser executable
 

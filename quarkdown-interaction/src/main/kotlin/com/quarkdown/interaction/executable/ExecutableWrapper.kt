@@ -1,6 +1,7 @@
 package com.quarkdown.interaction.executable
 
 import com.quarkdown.core.log.Log
+import com.quarkdown.interaction.Env
 import java.io.File
 import kotlin.streams.asSequence
 
@@ -43,6 +44,16 @@ abstract class ExecutableWrapper {
         ProcessBuilder(path, *args)
             .directory(workingDirectory)
             .redirectErrorStream(true)
+            .also(::exportNodePath)
+
+    /**
+     * Exports the resolved [Env.nodePath] to [builder]'s environment, so that Node.js can resolve
+     * modules such as Puppeteer. The child would otherwise only inherit `NODE_PATH` if the process
+     * had been started by a launcher script that exported it, which is not the case for a native binary.
+     */
+    private fun exportNodePath(builder: ProcessBuilder) {
+        Env.nodePath?.let { builder.environment()[Env.NODE_PATH] = it }
+    }
 
     /**
      * @param args arguments to pass to the executable

@@ -1,0 +1,9 @@
+[
+  {
+    "comment": "LSP4J builds the client endpoint as a JDK dynamic proxy, which must be declared ahead of time.",
+    "interfaces": [
+      "org.eclipse.lsp4j.services.LanguageClient",
+      "org.eclipse.lsp4j.jsonrpc.Endpoint"
+    ]
+  }
+]

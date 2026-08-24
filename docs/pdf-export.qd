@@ -27,6 +27,7 @@ Package managers and install scripts already take care of these dependencies.
 ### Environment variables
 
 - `QD_NPM_PREFIX`: Directory where `node_modules` should be found. Defaults to `lib` if Quarkdown was installed via a package manager or install script.
+- `NODE_PATH`: Where Node.js resolves modules from. You rarely need to set this: Quarkdown derives it from `QD_NPM_PREFIX`, and only an explicitly set value takes precedence.
 
 ### Exporting manually (legacy way)
 

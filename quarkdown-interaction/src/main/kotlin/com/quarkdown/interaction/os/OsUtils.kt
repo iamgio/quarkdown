@@ -4,17 +4,22 @@ object OsUtils {
     /**
      * The name of the current operating system.
      */
-    private val osName: String by lazy { System.getProperty("os.name").lowercase() }
+    private val osName: String by lazy { System.getProperty("os.name") }
+
+    /**
+     * The family of the current operating system.
+     */
+    val family: OsFamily by lazy { OsFamily.of(osName) }
 
     /**
      * @return whether the current operating system is Windows
      */
-    private fun isWindows(): Boolean = "win" in osName
+    private fun isWindows(): Boolean = family == OsFamily.WINDOWS
 
     /**
-     * @return whether the current operating system is Unix-like
+     * @return whether the current operating system is Unix-like and recognized
      */
-    private fun isUnix(): Boolean = "nix" in osName || "nux" in osName || "mac" in osName
+    private fun isUnix(): Boolean = family == OsFamily.MACOS || family == OsFamily.LINUX
 
     /**
      * Runs the given [windows] or [unix] function depending on the current operating system.

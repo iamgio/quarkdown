@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 import java.time.Year
+import java.util.zip.ZipFile
 
 plugins {
     kotlin("jvm") version "2.3.21"
@@ -390,6 +391,66 @@ tasks.register("distZipAll") {
     dependsOn(jlinkTargets.map { "dist${it.taskSuffix}Zip" })
 }
 
+// GraalVM native image
+//
+// Unlike the jlink distribution, a native image cannot be cross-compiled: each platform's binary
+// must be produced on that platform, so there is a single host-targeted task rather than a matrix.
+// A GraalVM JDK must be the one running Gradle, or be pointed at by GRAALVM_HOME.
+
+/**
+ * Identifier of the host platform, used to name native distribution archives.
+ * The host is always the target, since native images cannot be cross-compiled.
+ */
+val hostPlatformId: String =
+    run {
+        val os = System.getProperty("os.name").lowercase()
+        val arch = System.getProperty("os.arch").lowercase()
+        val osId =
+            when {
+                "mac" in os || "darwin" in os -> "macos"
+                "win" in os -> "windows"
+                else -> "linux"
+            }
+        val archId = if (arch in setOf("aarch64", "arm64")) "aarch64" else "x64"
+        "$osId-$archId"
+    }
+
+/**
+ * Builds a distribution around the native image, mirroring the jlink zip layout minus the
+ * bundled runtime and the JARs, both of which the binary replaces. The `lib/` asset bundle is
+ * still required: it is read from the filesystem at render time, not from the image.
+ *
+ * The binary sits at `quarkdown/bin/quarkdown`, which is what lets the install layout resolve
+ * itself from the running executable's location without `QUARKDOWN_HOME` being set.
+ */
+tasks.register<Zip>("nativeDistZip") {
+    group = "distribution"
+    description = "Builds the Quarkdown native-image distribution zip for the host platform ($hostPlatformId)."
+    archiveBaseName.set("quarkdown-native-$hostPlatformId")
+    archiveVersion.set("")
+    destinationDirectory.set(layout.buildDirectory.dir("distributions"))
+
+    dependsOn(":quarkdown-cli:nativeCompile", quarkdocGenerate, ":quarkdown-html:bundleThirdParty")
+
+    into("quarkdown") {
+        from(project(":quarkdown-cli").layout.buildDirectory.dir("native/nativeCompile")) {
+            include("quarkdown", "quarkdown.exe")
+            into("bin")
+            fileMode = "755".toInt(8)
+        }
+        into("lib", installLibLayout)
+        from(layout.buildDirectory.file("docs")) {
+            into("docs")
+        }
+        into("docs/wiki") {
+            from(rootProject.file("docs")) {
+                include("**/*.qd")
+            }
+            includeEmptyDirs = false
+        }
+    }
+}
+
 distributions.main {
     contents {
         into("lib", installLibLayout)
@@ -443,6 +504,8 @@ tasks.test {
 
 tasks.named<CreateStartScripts>("startScripts") {
     classpath = files("lib/*") // Fixes the 'Input line is too long' error on Windows.
+    // Declared so that editing a subscript invalidates the generated start scripts.
+    inputs.dir(file("scripts"))
     // Prepends subscripts to the generated start scripts.
     doLast {
         val dir = file("scripts")
@@ -490,4 +553,103 @@ allprojects {
                 "org.jetbrains.dokka",
             )
     }
+}
+
+/**
+ * Jars whose resources Quarkdown is responsible for declaring to the image builder: its own modules,
+ * plus the CSL locale bundle, whose files are selected at run time by document language.
+ * Other third-party jars either ship their own metadata or are covered by the reachability repository.
+ */
+val nativeImageOwnedJars = Regex("^(quarkdown-.*|locales-.*)\\.jar$")
+
+/**
+ * Resource entries that never need registering: metadata, class files and Kotlin module descriptors.
+ */
+val nativeImageIrrelevantResources = Regex("^META-INF/.*|.*\\.class$|.*\\.kotlin_module$|.*/$")
+
+/**
+ * Fails if a resource shipped on the native image classpath is not matched by any declared
+ * `resource-config.json` pattern, which would make it silently unavailable at run time.
+ *
+ * Resources reached through a non-constant name, as most of Quarkdown's are, cannot be detected by
+ * the image builder. Enumerating them here means adding one without declaring it breaks the build,
+ * rather than producing a binary that fails only once a user exercises that particular path.
+ */
+tasks.register("verifyNativeImageResourceCoverage") {
+    group = "verification"
+    description = "Checks that every resource shipped on the native image classpath is declared to the image builder."
+
+    // The consuming project's own jar is not part of its `runtimeClasspath`, which holds only
+    // dependencies, so it is added explicitly: its resources ship in the native image too.
+    val cliJar = project(":quarkdown-cli").tasks.named("jar")
+    val classpath =
+        files(
+            project(":quarkdown-cli").configurations.named("runtimeClasspath"),
+            cliJar.map { it.outputs.files },
+        )
+    dependsOn(cliJar)
+    inputs.files(classpath)
+
+    doLast {
+        val patterns = mutableListOf<Regex>()
+        val resources = mutableListOf<Pair<String, String>>() // entry name to owning classpath element
+
+        /** Records a classpath entry as either a declared pattern source or a resource needing coverage. */
+        fun record(
+            name: String,
+            owner: String,
+            content: () -> String,
+        ) {
+            when {
+                name.startsWith("META-INF/native-image/") && name.endsWith("resource-config.json") ->
+                    patterns +=
+                        Regex("\"pattern\"\\s*:\\s*\"(.*?)\"")
+                            .findAll(content())
+                            .map { Regex(it.groupValues[1].replace("\\\\", "\\")) }
+
+                nativeImageIrrelevantResources.matches(name) -> Unit
+
+                else -> resources += name to owner
+            }
+        }
+
+        // Project dependencies normally resolve to jars, but a classpath element can also be a plain
+        // directory of classes and resources. Both shapes are walked so the check does not depend on
+        // which one Gradle happens to hand over.
+        classpath.files.forEach { element ->
+            when {
+                element.isDirectory ->
+                    element.walk().filter { it.isFile }.forEach { file ->
+                        record(file.relativeTo(element).invariantSeparatorsPath, element.name, file::readText)
+                    }
+
+                element.name.endsWith(".jar") && nativeImageOwnedJars.matches(element.name) ->
+                    ZipFile(element).use { zip ->
+                        zip.entries().toList().forEach { entry ->
+                            record(entry.name, element.name) { zip.getInputStream(entry).reader().readText() }
+                        }
+                    }
+            }
+        }
+
+        check(resources.isNotEmpty()) { "No Quarkdown resources found on the native image classpath." }
+
+        val uncovered = resources.filterNot { (name, _) -> patterns.any { it.matches(name) } }
+
+        if (uncovered.isNotEmpty()) {
+            val listed = uncovered.sortedBy { it.first }.joinToString("\n") { "  - ${it.first}  (in ${it.second})" }
+            throw GradleException(
+                "These resources ship on the native image classpath but no resource-config.json pattern " +
+                    "matches them, so they would be missing from the native binary:\n$listed\n\n" +
+                    "Declare them in the owning module's " +
+                    "src/main/resources/META-INF/native-image/com.quarkdown/<module>/resource-config.json.",
+            )
+        }
+
+        logger.lifecycle("Native image resource coverage: ${resources.size} resources matched by ${patterns.size} patterns.")
+    }
+}
+
+tasks.named("check") {
+    dependsOn("verifyNativeImageResourceCoverage")
 }

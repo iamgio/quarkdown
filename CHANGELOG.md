@@ -2,11 +2,31 @@
 
 ## [Unreleased]
 
+### Added
+
+#### Native executable
+
+Quarkdown can now be built as a self-contained native executable, alongside the existing distributions.
+It starts in about 10 milliseconds instead of about 360, so short commands finish almost instantly and
+live preview rebuilds feel immediate. Longer jobs benefit less, since only startup gets faster: compiling
+the official wiki goes from 2.5 to 2.1 seconds. The output it produces is identical, byte for byte.
+
+The native executable needs no Java installation at all, and its archive is smaller than the current one.
+
 ### Changed
 
 #### Reflectionless function calls
 
 Calling a native function no longer involves JVM reflection, improving performance (the official wiki now compiles 10% faster) on function-heavy documents and opening the door to future optimizations.
+
+#### Browser and Node.js discovery
+
+Quarkdown now finds your browser and your Node.js modules by itself, instead of relying on the launcher
+script to hand them over. Nothing changes in how you use it: `BROWSER_CHROME` and the other browser
+variables still take precedence when set, and `QD_NPM_PREFIX` still points at your Puppeteer install.
+Setting `NODE_PATH` by hand is no longer necessary, as it is derived from `QD_NPM_PREFIX`.
+
+On Linux, PDF export keeps disabling the Chrome sandbox by default, as it did before.
 
 ### Fixed
 

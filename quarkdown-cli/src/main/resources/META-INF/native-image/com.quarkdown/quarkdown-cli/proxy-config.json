@@ -1,0 +1,8 @@
+[
+  {
+    "comment": "JNA builds the macOS FSEvents binding used by `--watch` as a JDK dynamic proxy. Declared here rather than left to the tracing agent, which only sees it if a traced run happens to watch a directory.",
+    "interfaces": [
+      "io.methvin.watchservice.jna.CarbonAPI"
+    ]
+  }
+]

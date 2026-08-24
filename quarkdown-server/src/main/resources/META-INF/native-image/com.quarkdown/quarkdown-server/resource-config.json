@@ -1,0 +1,10 @@
+{
+  "comment": [
+    "slf4j-simple reads its configuration from the classpath at initialization."
+  ],
+  "resources": {
+    "includes": [
+      { "pattern": "simplelogger\\.properties" }
+    ]
+  }
+}

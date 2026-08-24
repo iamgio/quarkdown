@@ -1,0 +1,145 @@
+# Builds the GraalVM native image on every supported platform and checks that it behaves
+# identically to the JVM distribution.
+#
+# Unlike the jlink distribution, which one Linux runner cross-compiles for every target, a native
+# image must be built on the platform it targets. Hence the matrix.
+
+name: Gradle native
+
+on:
+  workflow_call:
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - '**/README.md'
+      - 'LICENSE'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/FUNDING.yml'
+
+jobs:
+  # Guards the metadata that the image builder cannot infer. Cheap, and independent of any
+  # native toolchain, so it runs on its own and fails fast.
+  metadata-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+
+    - name: Verify native image resource coverage
+      uses: burrunan/gradle-cache-action@v3
+      with:
+        job-id: native-metadata
+        arguments: verifyNativeImageResourceCoverage
+
+  native-build:
+    needs: [metadata-coverage]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            id: linux-x64
+          - os: macos-latest
+            id: macos-aarch64
+          - os: macos-13
+            id: macos-x64
+          - os: windows-latest
+            id: windows-x64
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '25'
+        distribution: 'graalvm-community'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+
+    - name: Build native image and distribution
+      # The macOS arm64 runner has 7 GB of RAM, against a ~6.7 GB default peak for this image.
+      # Capping the builder's heap and parallelism keeps it under the limit, at the cost of
+      # roughly a minute of wall clock. Both steps run in one invocation so that the image is
+      # not rebuilt with different arguments.
+      run: ./gradlew nativeDistZip -Pnative.buildMemory=4g
+
+    - name: Upload native distribution
+      uses: actions/upload-artifact@v4
+      with:
+        name: quarkdown-native-${{ matrix.id }}
+        path: build/distributions/quarkdown-native-*.zip
+        retention-days: 7
+
+  # The native binary must produce byte-identical output to the JVM one. This is the only check
+  # that catches behavioral drift, such as the image builder stripping JDK locale data: those
+  # failures still exit zero and still report a successful compilation.
+  jvm-parity:
+    needs: [native-build]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '25'
+        distribution: 'graalvm-community'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build both distributions
+      run: ./gradlew installDist :quarkdown-cli:nativeCompile
+
+    - name: Compile the wiki with each binary
+      run: |
+        JVM=build/install/quarkdown/bin/quarkdown
+        NATIVE=quarkdown-cli/build/native/nativeCompile/quarkdown
+        export QUARKDOWN_HOME="$PWD/build/install/quarkdown"
+
+        cd docs
+        "$PWD/../$JVM"    c main.qd --strict --allow all --clean -o "$RUNNER_TEMP/out-jvm"
+        "$PWD/../$NATIVE" c main.qd --strict --allow all --clean -o "$RUNNER_TEMP/out-native"
+
+    - name: Diff the outputs
+      run: |
+        if ! diff -r "$RUNNER_TEMP/out-jvm" "$RUNNER_TEMP/out-native"; then
+          echo "::error::The native binary produced different output from the JVM build."
+          exit 1
+        fi
+        echo "OK: native and JVM output are identical"
+
+  # Runs the existing Playwright suite against the native binary, which exercises both the
+  # compiler and the web server. No test changes are needed: the runner already honors
+  # QUARKDOWN_CLI_PATH.
+  native-e2e:
+    needs: [native-build]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+
+    steps:
+    - uses: iamgio/quarkdown/.github/actions/setup-environment@main
+
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '25'
+        distribution: 'graalvm-community'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build native image and asset bundle
+      run: ./gradlew :quarkdown-cli:nativeCompile assembleDevLib
+
+    - name: Run E2E tests against the native binary (shard ${{ matrix.shard }}/4)
+      env:
+        QUARKDOWN_CLI_PATH: ${{ github.workspace }}/quarkdown-cli/build/native/nativeCompile/quarkdown
+        # The binary sits in the build directory rather than in an installation's `bin/`, so it
+        # cannot locate the asset bundle from its own path and must be told where it is.
+        QUARKDOWN_HOME: ${{ github.workspace }}/build/dev-lib
+      run: ./gradlew :quarkdown-html:e2eTest -Pshard=${{ matrix.shard }} -PtotalShards=4

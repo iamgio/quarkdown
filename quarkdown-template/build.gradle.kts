@@ -53,3 +53,62 @@ val precompileTestJte =
 sourceSets.test {
     output.dir(layout.buildDirectory.dir("jte-classes/test"), "builtBy" to precompileTestJte)
 }
+
+// Native image metadata
+
+/**
+ * Generates native-image reflection metadata for the precompiled JTE templates.
+ *
+ * JTE resolves a template by calling `Class.forName` on its generated class name, which the image
+ * builder cannot detect. The list is derived from the precompiled output rather than maintained by
+ * hand, so that adding or renaming a template cannot silently break the native image.
+ */
+val generateJteNativeImageMetadata by tasks.registering {
+    group = "build"
+    description = "Generates native-image reflection metadata for the precompiled JTE templates."
+
+    val classesDir = layout.buildDirectory.dir("jte-classes/main")
+    val outputFile =
+        layout.buildDirectory.file(
+            "generated/native-image/META-INF/native-image/com.quarkdown/quarkdown-template/reflect-config.json",
+        )
+
+    dependsOn(tasks.precompileJte)
+    inputs.dir(classesDir)
+    outputs.file(outputFile)
+
+    doLast {
+        val root = classesDir.get().asFile
+        val templateClasses =
+            root
+                .walk()
+                .filter { it.isFile && it.extension == "class" }
+                .map {
+                    it
+                        .relativeTo(root)
+                        .path
+                        .removeSuffix(".class")
+                        .replace(File.separatorChar, '.')
+                }.sorted()
+                .toList()
+
+        check(templateClasses.isNotEmpty()) {
+            "No precompiled JTE templates found in $root. The native image would fail to render any template."
+        }
+
+        val entries =
+            templateClasses.joinToString(",\n") {
+                """  { "name": "$it", "allDeclaredMethods": true, "allDeclaredConstructors": true }"""
+            }
+
+        outputFile.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText("[\n$entries\n]\n")
+        }
+    }
+}
+
+tasks.jar {
+    dependsOn(generateJteNativeImageMetadata)
+    from(layout.buildDirectory.dir("generated/native-image"))
+}

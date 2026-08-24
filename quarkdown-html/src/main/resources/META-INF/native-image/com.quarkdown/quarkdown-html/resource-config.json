@@ -1,0 +1,11 @@
+{
+  "comment": [
+    "Bundled fonts copied next to generated documents, and the Puppeteer PDF export script."
+  ],
+  "resources": {
+    "includes": [
+      { "pattern": "fonts/.*" },
+      { "pattern": "pdf/.*" }
+    ]
+  }
+}

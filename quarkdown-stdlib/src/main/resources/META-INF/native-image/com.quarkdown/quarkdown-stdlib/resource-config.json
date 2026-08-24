@@ -1,0 +1,11 @@
+{
+  "comment": [
+    "The bundled localization table and the lorem ipsum sample text."
+  ],
+  "resources": {
+    "includes": [
+      { "pattern": "lib/.*\\.qd" },
+      { "pattern": "text/.*" }
+    ]
+  }
+}
