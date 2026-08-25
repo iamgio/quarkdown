@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-template"))
     implementation(project(":quarkdown-html"))
+    implementation(project(":quarkdown-html-pdf"))
     implementation(project(":quarkdown-markdown"))
     implementation(project(":quarkdown-plaintext"))
     implementation(project(":quarkdown-server"))
