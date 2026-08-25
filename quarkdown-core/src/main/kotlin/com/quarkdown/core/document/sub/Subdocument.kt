@@ -1,6 +1,6 @@
 package com.quarkdown.core.document.sub
 
-import java.io.File
+import com.quarkdown.core.filesystem.FsEntry
 
 private const val ROOT_NAME = "index"
 private const val UNIQUE_NAME_FORMAT = "%s@%d"
@@ -51,13 +51,13 @@ sealed interface Subdocument {
      * @param path the absolute path to the subdocument file or resource
      * @param workingDirectory the working directory to be used to resolve relative file paths within the subdocument.
      * Note that if this is `null`, then the pipeline's working directory should be used.
-     * To get consistent results, rely on the context's [com.quarkdown.core.context.file.FileSystem.workingDirectory].
+     * To get consistent results, rely on the context's [com.quarkdown.core.filesystem.FileSystem.workingDirectory].
      * @param content the subdocument text content
      */
     class Resource(
         override val name: String,
         val path: String,
-        val workingDirectory: File? = null,
+        val workingDirectory: FsEntry? = null,
         val content: CharSequence,
     ) : Subdocument {
         override val uniqueName: String

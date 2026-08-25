@@ -4,7 +4,7 @@ import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
-import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.visitor.node.NodeVisitor
 

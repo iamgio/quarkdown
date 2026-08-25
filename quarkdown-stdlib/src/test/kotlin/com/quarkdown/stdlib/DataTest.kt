@@ -7,6 +7,7 @@ import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.SharedContext
+import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DictionaryValue
@@ -39,7 +40,7 @@ class DataTest {
     @BeforeTest
     fun setup() {
         // Attach a mock pipeline to the context, in order to set a working directory for the function calls to use.
-        val options = PipelineOptions(workingDirectory = File(DATA_FOLDER))
+        val options = PipelineOptions(fileSystem = DiskFileSystem(File(DATA_FOLDER)))
         context.attachMockPipeline(options)
     }
 
@@ -82,11 +83,7 @@ class DataTest {
 
     @Test
     fun `path to root, nested`() {
-        val nested =
-            File(DATA_FOLDER, "nested")
-                .resolve("a")
-                .resolve("b")
-        val branchedOutFileSystem = context.fileSystem.branch(workingDirectory = nested)
+        val branchedOutFileSystem = context.fileSystem.branch(workingDirectory = context.fileSystem.resolve("nested/a/b"))
         val branchedOutContext = SharedContext(context, branchedOutFileSystem)
         val relativePath = pathToRoot(branchedOutContext).unwrappedValue
         assertEquals("..${File.separator}..${File.separator}..", relativePath)

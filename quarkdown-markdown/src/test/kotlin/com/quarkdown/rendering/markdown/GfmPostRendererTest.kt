@@ -2,6 +2,7 @@ package com.quarkdown.rendering.markdown
 
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
@@ -96,10 +97,17 @@ class GfmPostRendererTest {
     fun `media resource is emitted when storage is populated`() {
         val context = newContext()
         context.attachMockPipeline(
-            PipelineOptions(permissions = setOf(Permission.ProjectRead, Permission.GlobalRead, Permission.NetworkAccess)),
+            PipelineOptions(
+                permissions =
+                    setOf(
+                        Permission.ProjectRead,
+                        Permission.GlobalRead,
+                        Permission.NetworkAccess,
+                    ),
+            ),
         )
         context.options.enableLocalMediaStorage = true
-        context.mediaStorage.register("src/test/resources/media/file.txt", workingDirectory = null)
+        context.mediaStorage.register("src/test/resources/media/file.txt", fileSystem = DiskFileSystem())
 
         val postRenderer = GfmPostRenderer(context)
         val resources = postRenderer.generateResources("# Hello\n\n")

@@ -10,7 +10,7 @@ import com.quarkdown.core.ast.attributes.style.StylableNode
 import com.quarkdown.core.ast.base.LinkNode
 import com.quarkdown.core.ast.base.TextNode
 import com.quarkdown.core.ast.base.block.LinkDefinition
-import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.function.dsl.functionCallArguments
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
 import com.quarkdown.core.util.stripAnchor

@@ -627,7 +627,11 @@ class SubdocumentTest {
             loadableLibraries = setOf("hello", "content"),
             useDummyLibraryDirectory = true,
             outputResourceHook = {
-                val files = File(fileSystem.workingDirectory, "subdoc").listFiles()!!.filter { it.isFile }
+                val files =
+                    fileSystem.workingDirectory!!
+                        .resolve("subdoc")
+                        .children()
+                        .filter { it.isFile }
                 assertEquals(files.size + 1, subdocumentGraph.vertices.size) // +1 for root
 
                 files.forEach { file ->

@@ -10,9 +10,10 @@ import com.quarkdown.core.ast.dsl.buildBlock
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.iterator.ObservableAstIterator
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.file.FileSystem
-import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.context.hooks.LinkUrlResolverHook
+import com.quarkdown.core.filesystem.DiskFileSystem
+import com.quarkdown.core.filesystem.FileSystem
+import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import java.io.File
@@ -25,13 +26,16 @@ private val ROOT_DIR = File("src/test/resources").absoluteFile
  * Tests for relative link path resolution via [LinkUrlResolverHook].
  */
 class LinkUrlResolverTest {
+    /** Converts a [File] to a disk-backed [FsEntry]. */
+    private fun File.toEntry(): FsEntry = DiskFileSystem().resolve(absolutePath)
+
     private fun createContext(workingDirectory: File = ROOT_DIR): MutableContext {
         val context =
             object : MutableContext() {
                 override val permissions = setOf(Permission.GlobalRead)
             }
         context.attachMockPipeline(
-            options = PipelineOptions(workingDirectory = workingDirectory),
+            options = PipelineOptions(fileSystem = DiskFileSystem(workingDirectory)),
         )
         return context
     }
@@ -89,7 +93,7 @@ class LinkUrlResolverTest {
     @Test
     fun `no resolution when file system is root`() {
         val context = createContext()
-        val rootFs = SimpleFileSystem(ROOT_DIR)
+        val rootFs = DiskFileSystem(ROOT_DIR)
 
         val img = image("img/icon.png", fileSystem = rootFs)
         val root = buildBlock { root { +img } }
@@ -106,7 +110,7 @@ class LinkUrlResolverTest {
 
         // Simulate a subdocument in a child directory.
         val childDir = File(ROOT_DIR, "subdoc")
-        val childFs = SimpleFileSystem(ROOT_DIR).branch(childDir)
+        val childFs = DiskFileSystem(ROOT_DIR).branch(childDir.toEntry())
 
         val img = image("../img/icon.png", fileSystem = childFs)
         val root = buildBlock { root { +img } }
@@ -123,7 +127,7 @@ class LinkUrlResolverTest {
         val context = createContext()
 
         val childDir = File(ROOT_DIR, "subdoc")
-        val childFs = SimpleFileSystem(ROOT_DIR).branch(childDir)
+        val childFs = DiskFileSystem(ROOT_DIR).branch(childDir.toEntry())
 
         val img = image("picture.png", fileSystem = childFs)
         val root = buildBlock { root { +img } }
@@ -138,7 +142,7 @@ class LinkUrlResolverTest {
     fun `skips absolute URLs`() {
         val context = createContext()
 
-        val childFs = SimpleFileSystem(ROOT_DIR).branch(File(ROOT_DIR, "subdoc"))
+        val childFs = DiskFileSystem(ROOT_DIR).branch(File(ROOT_DIR, "subdoc").toEntry())
         val img = image("https://example.com/image.png", fileSystem = childFs)
         val root = buildBlock { root { +img } }
 
@@ -151,7 +155,7 @@ class LinkUrlResolverTest {
     fun `skips absolute file paths`() {
         val context = createContext()
 
-        val childFs = SimpleFileSystem(ROOT_DIR).branch(File(ROOT_DIR, "subdoc"))
+        val childFs = DiskFileSystem(ROOT_DIR).branch(File(ROOT_DIR, "subdoc").toEntry())
         val img = image("/absolute/path/image.png", fileSystem = childFs)
         val root = buildBlock { root { +img } }
 
@@ -164,7 +168,7 @@ class LinkUrlResolverTest {
     fun `skips passthrough paths`() {
         val context = createContext()
 
-        val childFs = SimpleFileSystem(ROOT_DIR).branch(File(ROOT_DIR, "subdoc"))
+        val childFs = DiskFileSystem(ROOT_DIR).branch(File(ROOT_DIR, "subdoc").toEntry())
         val img = image("@/img/icon.png", fileSystem = childFs)
         val root = buildBlock { root { +img } }
 
@@ -179,7 +183,7 @@ class LinkUrlResolverTest {
         val context = createContext()
 
         val childDir = File(ROOT_DIR, "subdoc")
-        val childFs = SimpleFileSystem(ROOT_DIR).branch(childDir)
+        val childFs = DiskFileSystem(ROOT_DIR).branch(childDir.toEntry())
 
         val def = linkDefinition("../img/icon.png", fileSystem = childFs)
         val root = buildBlock { root { +def } }

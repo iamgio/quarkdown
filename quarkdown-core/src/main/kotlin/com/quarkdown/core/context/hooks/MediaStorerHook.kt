@@ -43,7 +43,7 @@ class MediaStorerHook(
             try {
                 context.mediaStorage.register(
                     url,
-                    context.fileSystem.workingDirectory,
+                    context.fileSystem,
                 )
             } catch (_: IllegalArgumentException) {
                 Log.warn("Media cannot be resolved: ${link.url}")

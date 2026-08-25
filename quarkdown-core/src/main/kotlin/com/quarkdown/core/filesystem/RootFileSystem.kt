@@ -1,4 +1,4 @@
-package com.quarkdown.core.context.file
+package com.quarkdown.core.filesystem
 
 import com.quarkdown.core.context.ChildContext
 import com.quarkdown.core.context.Context
@@ -42,6 +42,7 @@ fun Context.getRootFileSystem(granularity: RootGranularity = RootGranularity.PRO
             val rootContext = (context as? ChildContext<*>)?.root ?: context
             rootContext.attachedPipeline
                 ?.options
+                ?.fileSystem
                 ?.workingDirectory
                 ?.let(context.fileSystem::branch)
         }

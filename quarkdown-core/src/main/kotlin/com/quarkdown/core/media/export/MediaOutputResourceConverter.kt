@@ -16,12 +16,25 @@ import com.quarkdown.core.pipeline.output.OutputResource
 class MediaOutputResourceConverter(
     private val name: String,
 ) : MediaVisitor<OutputResource> {
+    // Disk-backed media is copied efficiently by reference.
     override fun visit(media: LocalMedia) =
-        FileReferenceOutputArtifact(
-            name,
-            media.file,
-            useChecksumInvalidation = true,
-        )
+        when (val file = media.file.toFileOrNull()) {
+            null -> {
+                BinaryOutputArtifact(
+                    name,
+                    media.file.readBytes().toList(),
+                    ArtifactType.AUTO,
+                )
+            }
+
+            else -> {
+                FileReferenceOutputArtifact(
+                    name,
+                    file,
+                    useChecksumInvalidation = true,
+                )
+            }
+        }
 
     override fun visit(media: RemoteMedia) =
         BinaryOutputArtifact(

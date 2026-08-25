@@ -1,6 +1,6 @@
 package com.quarkdown.core.context
 
-import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.function.Function
 
 /**

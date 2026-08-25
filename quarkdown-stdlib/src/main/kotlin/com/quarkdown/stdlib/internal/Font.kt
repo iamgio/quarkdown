@@ -13,7 +13,7 @@ internal fun loadFontFamily(
     nameOrPath: String,
     context: MutableContext,
 ): FontFamily? {
-    val fontFamily = FontFamilyResolver.SYSTEM.resolve(nameOrPath, context.fileSystem.workingDirectory)
+    val fontFamily = FontFamilyResolver.SYSTEM.resolve(nameOrPath, context.fileSystem)
     if (fontFamily is FontFamily.Media) {
         context.mediaStorage.register(nameOrPath, fontFamily.media)
     }

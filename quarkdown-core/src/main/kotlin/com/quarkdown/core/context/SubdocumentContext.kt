@@ -1,8 +1,8 @@
 package com.quarkdown.core.context
 
-import com.quarkdown.core.context.file.FileSystem
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.pipeline.Pipeline
 

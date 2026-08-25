@@ -6,22 +6,27 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.media.StoredMediaProperty
 import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.file.FileSystem
-import com.quarkdown.core.context.file.SimpleFileSystem
+import com.quarkdown.core.filesystem.DiskFileSystem
+import com.quarkdown.core.filesystem.FileSystem
+import com.quarkdown.core.filesystem.VirtualFileSystem
 import com.quarkdown.core.media.LocalMedia
 import com.quarkdown.core.media.Media
 import com.quarkdown.core.media.MediaVisitor
 import com.quarkdown.core.media.RemoteMedia
 import com.quarkdown.core.media.ResolvableMedia
+import com.quarkdown.core.media.export.MediaOutputResourceConverter
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.StoredMedia
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
 import com.quarkdown.core.permissions.MissingPermissionException
 import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
+import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
@@ -88,30 +93,30 @@ class MediaTest {
 
     @Test
     fun `resolve valid local media`() {
-        val media = ResolvableMedia(File(WORKING_DIR_PATH, LOCAL_ICON).path).accept(selfVisitor)
+        val media = ResolvableMedia(File(WORKING_DIR_PATH, LOCAL_ICON).path, DiskFileSystem()).accept(selfVisitor)
         assertIs<LocalMedia>(media)
     }
 
     @Test
     fun `resolve valid remote media`() {
-        val media = ResolvableMedia(REMOTE_IMAGE).accept(selfVisitor)
+        val media = ResolvableMedia(REMOTE_IMAGE, DiskFileSystem()).accept(selfVisitor)
         assertIs<RemoteMedia>(media)
     }
 
     @Test
     fun `throw on invalid path`() {
-        assertFails { ResolvableMedia(INVALID_PATH).accept(selfVisitor) }
+        assertFails { ResolvableMedia(INVALID_PATH, DiskFileSystem()).accept(selfVisitor) }
     }
 
     @Test
     fun `throw on directory path`() {
-        assertFails { ResolvableMedia(WORKING_DIR_PATH).accept(selfVisitor) }
+        assertFails { ResolvableMedia(WORKING_DIR_PATH, DiskFileSystem()).accept(selfVisitor) }
     }
 
     @Test
     fun `register and resolve local media`() {
         val storage = createLocalOnlyStorage()
-        storage.register(LOCAL_ICON, workingDirectory = workingDir)
+        storage.register(LOCAL_ICON, fileSystem = DiskFileSystem(workingDir))
 
         val stored = storage.resolve(LOCAL_ICON)
         assertEquals(1, storage.all.size)
@@ -122,8 +127,8 @@ class MediaTest {
     @Test
     fun `resolve multiple local media entries`() {
         val storage = createLocalOnlyStorage()
-        storage.register(LOCAL_ICON, workingDirectory = workingDir)
-        storage.register(LOCAL_BANNER, workingDirectory = workingDir)
+        storage.register(LOCAL_ICON, fileSystem = DiskFileSystem(workingDir))
+        storage.register(LOCAL_BANNER, fileSystem = DiskFileSystem(workingDir))
 
         assertEquals(2, storage.all.size)
 
@@ -135,16 +140,16 @@ class MediaTest {
     @Test
     fun `unresolved remote media in local-only storage`() {
         val storage = createLocalOnlyStorage()
-        storage.register(REMOTE_LOGO, workingDirectory = null)
+        storage.register(REMOTE_LOGO, fileSystem = DiskFileSystem())
         assertEquals(0, storage.resolve(REMOTE_LOGO)?.let { 1 } ?: 0)
     }
 
     @Test
     fun `register and resolve both local and remote media`() {
         val storage = createLocalAndRemoteStorage()
-        storage.register(LOCAL_ICON, workingDir)
-        storage.register(LOCAL_BANNER, workingDir)
-        storage.register(REMOTE_LOGO, null)
+        storage.register(LOCAL_ICON, DiskFileSystem(workingDir))
+        storage.register(LOCAL_BANNER, DiskFileSystem(workingDir))
+        storage.register(REMOTE_LOGO, DiskFileSystem())
 
         assertEquals(3, storage.all.size)
         assertEquals(REMOTE_LOGO_OUT_NAME, storage.resolve(REMOTE_LOGO)?.name)
@@ -153,8 +158,8 @@ class MediaTest {
     @Test
     fun `media with same filename but different paths do not collide`() {
         val storage = createLocalAndRemoteStorage()
-        storage.register(OUT_PATH_1, workingDir)
-        storage.register(OUT_PATH_2, workingDir)
+        storage.register(OUT_PATH_1, DiskFileSystem(workingDir))
+        storage.register(OUT_PATH_2, DiskFileSystem(workingDir))
 
         val name1 = storage.resolve(OUT_PATH_1)!!.name
         val name2 = storage.resolve(OUT_PATH_2)!!.name
@@ -191,7 +196,7 @@ class MediaTest {
     @Test
     fun `remote media path retrieval`() {
         val storage = createLocalAndRemoteStorage()
-        val media = storage.register(REMOTE_LOGO, workingDirectory = null)!!
+        val media = storage.register(REMOTE_LOGO, fileSystem = DiskFileSystem())!!
         val image = remoteImage(media)
         assertEquals("$OUT_DIR/$REMOTE_LOGO_OUT_NAME", image.link.getStoredMedia(context.attributes)?.path)
     }
@@ -199,7 +204,7 @@ class MediaTest {
     @Test
     fun `local media path retrieval`() {
         val storage = createLocalAndRemoteStorage()
-        val media = storage.register(LOCAL_ICON, workingDirectory = workingDir)!!
+        val media = storage.register(LOCAL_ICON, fileSystem = DiskFileSystem(workingDir))!!
         val image = localImage(media)
         image.link.getStoredMedia(context.attributes)?.path?.let {
             assertTrue(it.startsWith("$OUT_DIR/icon@"))
@@ -210,7 +215,7 @@ class MediaTest {
     @Test
     fun `denied remote media path retrieval`() {
         val storage = createLocalOnlyStorage()
-        val media = storage.register(REMOTE_LOGO, workingDirectory = null)
+        val media = storage.register(REMOTE_LOGO, fileSystem = DiskFileSystem())
         val image = remoteImage(media)
         assertNull(media)
         assertNull(image.link.getStoredMedia(context.attributes))
@@ -236,7 +241,7 @@ class MediaTest {
     fun `denied local media registration without read permission`() {
         val storage = createStorageWithPermissions()
         assertFailsWith<MissingPermissionException> {
-            storage.register(LOCAL_ICON, workingDirectory = workingDir)
+            storage.register(LOCAL_ICON, fileSystem = DiskFileSystem(workingDir))
         }
     }
 
@@ -244,7 +249,7 @@ class MediaTest {
     fun `denied local media registration with only ProjectRead and no root file system`() {
         val storage = createStorageWithPermissions(permissions = setOf(Permission.ProjectRead))
         assertFailsWith<MissingPermissionException> {
-            storage.register(LOCAL_ICON, workingDirectory = workingDir)
+            storage.register(LOCAL_ICON, fileSystem = DiskFileSystem(workingDir))
         }
     }
 
@@ -256,7 +261,7 @@ class MediaTest {
                 permissions = setOf(Permission.GlobalRead),
             )
         assertFailsWith<MissingPermissionException> {
-            storage.register(REMOTE_LOGO, workingDirectory = null)
+            storage.register(REMOTE_LOGO, fileSystem = DiskFileSystem())
         }
     }
 
@@ -265,9 +270,9 @@ class MediaTest {
         val storage =
             createStorageWithPermissions(
                 permissions = setOf(Permission.ProjectRead),
-                rootFileSystem = SimpleFileSystem(workingDir),
+                rootFileSystem = DiskFileSystem(workingDir),
             )
-        val stored = storage.register(LOCAL_ICON, workingDirectory = workingDir)
+        val stored = storage.register(LOCAL_ICON, fileSystem = DiskFileSystem(workingDir))
         assertTrue(stored!!.name.startsWith("icon@"))
     }
 
@@ -277,10 +282,37 @@ class MediaTest {
         val storage =
             createStorageWithPermissions(
                 permissions = setOf(Permission.ProjectRead),
-                rootFileSystem = SimpleFileSystem(narrowRoot),
+                rootFileSystem = DiskFileSystem(narrowRoot),
             )
         assertFailsWith<MissingPermissionException> {
-            storage.register(LOCAL_ICON, workingDirectory = workingDir)
+            storage.register(LOCAL_ICON, fileSystem = DiskFileSystem(workingDir))
         }
+    }
+
+    @Test
+    fun `local media from virtual file system`() {
+        val fs = VirtualFileSystem("/project")
+        fs.writeBytes("media/icon.png", byteArrayOf(1, 2, 3))
+        val media = ResolvableMedia("media/icon.png", fs).accept(selfVisitor)
+        assertIs<LocalMedia>(media)
+        assertContentEquals(byteArrayOf(1, 2, 3), media.file.readBytes())
+        assertNull(media.file.toFileOrNull())
+    }
+
+    @Test
+    fun `virtual local media exports as binary artifact`() {
+        val fs = VirtualFileSystem("/project")
+        fs.writeBytes("icon.png", byteArrayOf(4, 5))
+        val media = LocalMedia(fs.resolve("icon.png"))
+        val resource = media.accept(MediaOutputResourceConverter("icon.png"))
+        assertIs<BinaryOutputArtifact>(resource)
+        assertEquals(listOf<Byte>(4, 5), resource.content)
+    }
+
+    @Test
+    fun `disk local media exports as file reference artifact`() {
+        val media = LocalMedia(DiskFileSystem(workingDir).resolve(LOCAL_ICON))
+        val resource = media.accept(MediaOutputResourceConverter("icon"))
+        assertIs<FileReferenceOutputArtifact>(resource)
     }
 }

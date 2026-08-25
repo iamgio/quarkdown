@@ -1,8 +1,7 @@
 package com.quarkdown.core.permissions
 
-import com.quarkdown.core.context.file.FileSystem
-import com.quarkdown.core.util.IOUtils
-import java.io.File
+import com.quarkdown.core.filesystem.FileSystem
+import com.quarkdown.core.filesystem.FsEntry
 
 /**
  * An entity that holds a set of granted [Permission]s and provides convenience methods
@@ -42,9 +41,9 @@ fun PermissionHolder.requirePermission(
  * @param file the file to check
  * @return the required [Permission] to read the file
  */
-private fun PermissionHolder.getReadPermission(file: File): Permission {
+private fun PermissionHolder.getReadPermission(file: FsEntry): Permission {
     val workingDirectory = rootFileSystem?.workingDirectory ?: return Permission.GlobalRead
-    return if (IOUtils.isSubPath(workingDirectory, file)) {
+    return if (file.isSubPathOf(workingDirectory)) {
         Permission.ProjectRead
     } else {
         Permission.GlobalRead
@@ -61,8 +60,8 @@ private fun PermissionHolder.getReadPermission(file: File): Permission {
  * @see getReadPermission
  */
 fun PermissionHolder.requireReadPermission(
-    file: File,
-    message: String = "Cannot access file ${file.absolutePath}",
+    file: FsEntry,
+    message: String = "Cannot access file ${file.fullPath}",
 ) {
     requirePermission(required = getReadPermission(file), message)
 }

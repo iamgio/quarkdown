@@ -17,6 +17,7 @@ import com.quarkdown.cli.util.checkCleanSafety
 import com.quarkdown.cli.watcher.DirectoryWatcher
 import com.quarkdown.core.TIMEOUT_EXIT_CODE
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
+import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
@@ -257,7 +258,7 @@ abstract class ExecuteCommand(
             resourceName = resolveResourceName(cliOptions),
             prettyOutput = prettyOutput,
             wrapOutput = !noWrap,
-            workingDirectory = cliOptions.source?.absoluteFile?.parentFile,
+            fileSystem = DiskFileSystem(cliOptions.source?.absoluteFile?.parentFile),
             enableMediaStorage = !noMediaStorage,
             forbidFunctionOverwriting = forbidFunctionOverwriting,
             subdocumentNaming = subdocumentNaming,

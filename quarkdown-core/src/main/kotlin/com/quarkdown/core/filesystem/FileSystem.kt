@@ -1,9 +1,4 @@
-package com.quarkdown.core.context.file
-
-import com.quarkdown.core.util.IOUtils
-import java.io.File
-import java.nio.file.Path
-import kotlin.io.path.absolute
+package com.quarkdown.core.filesystem
 
 /**
  * A file system abstraction which can retrieve files,
@@ -15,7 +10,7 @@ interface FileSystem {
      * If not `null`, [resolve] will be able to resolve relative paths
      * from this directory.
      */
-    val workingDirectory: File?
+    val workingDirectory: FsEntry?
 
     /**
      * The root file system that originated this one via [branch] calls.
@@ -33,9 +28,9 @@ interface FileSystem {
      * Resolves a local file path, either absolutely or relatively from [workingDirectory].
      * This does not perform any check for file existence.
      * @param path absolute or relative file path to resolve
-     * @return the resolved file
+     * @return the resolved entry
      */
-    fun resolve(path: String): File
+    fun resolve(path: String): FsEntry
 
     /**
      * Creates a new [FileSystem] branched from this one, with the given [workingDirectory].
@@ -46,36 +41,21 @@ interface FileSystem {
      * @param workingDirectory new working directory
      * @return the branched file system
      */
-    fun branch(workingDirectory: File?): FileSystem
+    fun branch(workingDirectory: FsEntry?): FileSystem
+
+    /**
+     * Creates a new root [FileSystem] on the same backend, with the given [workingDirectory]
+     * and no branch lineage, so that [isRoot] holds for the result.
+     * @param workingDirectory new working directory
+     * @return the new root file system
+     */
+    fun reroot(workingDirectory: FsEntry?): FileSystem
 
     /**
      * Computes the relative path from this file system's [workingDirectory] to [other]'s.
      * @param other the target file system
-     * @return the relative path from this working directory to the other,
-     *         or `null` if either working directory is `null`
+     * @return the relative entry from this working directory to the other,
+     *         or `null` if either working directory is `null` or no relative path exists
      */
-    fun relativePathTo(other: FileSystem): Path?
-}
-
-/**
- * A simple [FileSystem] implementation that resolves paths
- * based on an optional working directory.
- */
-internal data class SimpleFileSystem(
-    override val workingDirectory: File? = null,
-    override val root: FileSystem? = null,
-) : FileSystem {
-    override fun branch(workingDirectory: File?): FileSystem = SimpleFileSystem(workingDirectory, root ?: this)
-
-    override fun resolve(path: String): File = IOUtils.resolvePath(path, workingDirectory)
-
-    override fun relativePathTo(other: FileSystem): Path? {
-        val from = this.workingDirectory?.toPath()?.absolute() ?: return null
-        val to = other.workingDirectory?.toPath()?.absolute() ?: return null
-        return try {
-            from.relativize(to)
-        } catch (_: IllegalArgumentException) {
-            null
-        }
-    }
+    fun relativePathTo(other: FileSystem): FsEntry?
 }

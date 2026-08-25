@@ -1,6 +1,7 @@
 package com.quarkdown.core
 
-import com.quarkdown.core.context.file.SimpleFileSystem
+import com.quarkdown.core.filesystem.DiskFileSystem
+import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.core.permissions.MissingPermissionException
 import com.quarkdown.core.permissions.Permission.GlobalRead
 import com.quarkdown.core.permissions.Permission.NativeContent
@@ -17,6 +18,9 @@ import kotlin.test.assertFailsWith
  * Tests for the permission system primitives: [requirePermission] and [requireReadPermission].
  */
 class PermissionTest {
+    /** Creates a disk-backed [FsEntry] for the given absolute [path]. */
+    private fun entry(path: String): FsEntry = DiskFileSystem().resolve(path)
+
     @Test
     fun `requirePermission succeeds when permission is granted`() {
         requirePermission(ProjectRead, granted = setOf(ProjectRead, NativeContent), message = "test")
@@ -35,9 +39,9 @@ class PermissionTest {
         val holder =
             MockPermissionHolder(
                 permissions = setOf(ProjectRead),
-                rootFileSystem = SimpleFileSystem(workingDir),
+                rootFileSystem = DiskFileSystem(workingDir),
             )
-        holder.requireReadPermission(File("/project/src/file.txt"))
+        holder.requireReadPermission(entry("/project/src/file.txt"))
     }
 
     @Test
@@ -46,10 +50,10 @@ class PermissionTest {
         val holder =
             MockPermissionHolder(
                 permissions = setOf(ProjectRead),
-                rootFileSystem = SimpleFileSystem(workingDir),
+                rootFileSystem = DiskFileSystem(workingDir),
             )
         assertFailsWith<MissingPermissionException> {
-            holder.requireReadPermission(File("/other/file.txt"))
+            holder.requireReadPermission(entry("/other/file.txt"))
         }
     }
 
@@ -59,9 +63,9 @@ class PermissionTest {
         val holder =
             MockPermissionHolder(
                 permissions = setOf(ProjectRead, GlobalRead),
-                rootFileSystem = SimpleFileSystem(workingDir),
+                rootFileSystem = DiskFileSystem(workingDir),
             )
-        holder.requireReadPermission(File("/other/file.txt"))
+        holder.requireReadPermission(entry("/other/file.txt"))
     }
 
     @Test
@@ -75,10 +79,10 @@ class PermissionTest {
             val holder =
                 MockPermissionHolder(
                     permissions = setOf(ProjectRead),
-                    rootFileSystem = SimpleFileSystem(projectDir.toFile()),
+                    rootFileSystem = DiskFileSystem(projectDir.toFile()),
                 )
             assertFailsWith<MissingPermissionException> {
-                holder.requireReadPermission(symlink.toFile())
+                holder.requireReadPermission(entry(symlink.toString()))
             }
         } finally {
             tempDir.toFile().deleteRecursively()
@@ -88,11 +92,11 @@ class PermissionTest {
     @Test
     fun `requireReadPermission treats all files as global when rootFileSystem is null`() {
         val holderWithGlobal = MockPermissionHolder(permissions = setOf(GlobalRead), rootFileSystem = null)
-        holderWithGlobal.requireReadPermission(File("/any/file.txt"))
+        holderWithGlobal.requireReadPermission(entry("/any/file.txt"))
 
         val holderWithoutGlobal = MockPermissionHolder(permissions = setOf(ProjectRead), rootFileSystem = null)
         assertFailsWith<MissingPermissionException> {
-            holderWithoutGlobal.requireReadPermission(File("/any/file.txt"))
+            holderWithoutGlobal.requireReadPermission(entry("/any/file.txt"))
         }
     }
 }

@@ -5,6 +5,7 @@ import com.quarkdown.cli.exec.runQuarkdown
 import com.quarkdown.cli.exec.strategy.FileExecutionStrategy
 import com.quarkdown.cli.exec.strategy.PipelineExecutionStrategy
 import com.quarkdown.core.UNRESOLVED_REFERENCE_EXIT_CODE
+import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.PipelineException
@@ -47,7 +48,7 @@ class ExecuteTest : TempDirectory() {
 
     private fun pipelineOptions(strict: Boolean) =
         PipelineOptions(
-            workingDirectory = source.absoluteFile.parentFile,
+            fileSystem = DiskFileSystem(source.absoluteFile.parentFile),
             enableMediaStorage = false,
             errorHandler = if (strict) StrictPipelineErrorHandler() else PipelineOptions().errorHandler,
         )

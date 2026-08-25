@@ -1,17 +1,16 @@
 package com.quarkdown.core.media
 
-import com.quarkdown.core.util.IOUtils
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.util.toURLOrNull
-import java.io.File
 
 /**
  * A generic media that is yet to be resolved to a [Media] subclass.
  * @param path path to the media, either a file or a URL
- * @param workingDirectory directory to resolve the media from, in case the path is relative
+ * @param fileSystem file system to resolve the media from, in case the path is a local file
  */
 data class ResolvableMedia(
     private val path: String,
-    private val workingDirectory: File? = null,
+    private val fileSystem: FileSystem,
 ) : Media {
     /**
      * The resolved media as a [LocalMedia] or [RemoteMedia].
@@ -26,9 +25,9 @@ data class ResolvableMedia(
         // If the path is a URL, it is remote.
         path.toURLOrNull()?.let { return RemoteMedia(it) }
 
-        val file = IOUtils.resolvePath(path, workingDirectory)
+        val file = fileSystem.resolve(path)
 
-        if (!file.exists()) throw IllegalArgumentException("Media path cannot be resolved: $path")
+        if (!file.exists) throw IllegalArgumentException("Media path cannot be resolved: $path")
         if (file.isDirectory) throw IllegalArgumentException("Media is a directory: $path")
 
         return LocalMedia(file)

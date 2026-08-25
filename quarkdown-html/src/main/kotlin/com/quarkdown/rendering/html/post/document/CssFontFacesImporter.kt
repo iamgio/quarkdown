@@ -52,7 +52,7 @@ private class CssFontFaceImporterMediaVisitor(
     override fun visit(media: LocalMedia) =
         fontFaceSnippet(
             family.id,
-            "url('${storedMedia?.path ?: media.file.absolutePath}')",
+            "url('${storedMedia?.path ?: media.file.fullPath}')",
         )
 
     override fun visit(media: RemoteMedia) =
