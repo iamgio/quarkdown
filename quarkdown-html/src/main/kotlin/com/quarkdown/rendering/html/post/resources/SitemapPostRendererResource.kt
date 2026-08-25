@@ -2,9 +2,7 @@ package com.quarkdown.rendering.html.post.resources
 
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.document.sub.Subdocument
-import java.io.StringWriter
-import javax.xml.stream.XMLOutputFactory
-import javax.xml.stream.XMLStreamWriter
+import com.quarkdown.core.util.Escape
 
 private const val SITEMAP_FILE_NAME = "sitemap.xml"
 
@@ -29,38 +27,26 @@ class SitemapPostRendererResource(
     override val resourceName: String
         get() = SITEMAP_FILE_NAME
 
-    override fun buildResourceContent(subdocuments: Sequence<Pair<Subdocument, Context>>): String {
-        val writer = StringWriter()
-        val xml = XMLOutputFactory.newInstance().createXMLStreamWriter(writer)
+    override fun buildResourceContent(subdocuments: Sequence<Pair<Subdocument, Context>>): String =
+        buildString {
+            append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+            append("<urlset xmlns=\"").append(SITEMAP_NAMESPACE).append("\">")
 
-        xml.writeStartDocument("UTF-8", "1.0")
-        xml.writeStartElement("urlset")
-        xml.writeDefaultNamespace(SITEMAP_NAMESPACE)
+            // Root document.
+            appendUrl(baseUrl)
 
-        // Root document.
-        writeUrl(xml, baseUrl)
+            // Subdocuments.
+            subdocuments.forEach { (subdocument, subdocumentContext) ->
+                val url = super.getSubdocumentUrl(subdocument, subdocumentContext, extension = null)
+                appendUrl(url)
+            }
 
-        // Subdocuments.
-        subdocuments.forEach { (subdocument, subdocumentContext) ->
-            val url = super.getSubdocumentUrl(subdocument, subdocumentContext, extension = null)
-            writeUrl(xml, url)
+            append("</urlset>")
         }
 
-        xml.writeEndElement()
-        xml.writeEndDocument()
-        xml.flush()
-
-        return writer.toString()
-    }
-
-    private fun writeUrl(
-        xml: XMLStreamWriter,
-        absoluteUrl: String,
-    ) {
-        xml.writeStartElement("url")
-        xml.writeStartElement("loc")
-        xml.writeCharacters(absoluteUrl)
-        xml.writeEndElement()
-        xml.writeEndElement()
+    private fun StringBuilder.appendUrl(absoluteUrl: String) {
+        append("<url><loc>")
+        append(Escape.Xml.escape(absoluteUrl))
+        append("</loc></url>")
     }
 }

@@ -1,7 +1,5 @@
 package com.quarkdown.core.util
 
-import java.util.Locale
-
 /**
  * @param prefix prefix to remove
  * @param ignoreCase whether to ignore case when searching for the prefix
@@ -123,7 +121,7 @@ fun String.sanitizeFileName(replacement: String) = this.replace("^\\.|\\.$|[^\\p
  */
 fun String.toUriIdentifier(): String =
     this
-        .lowercase(Locale.ROOT)
+        .lowercase()
         .replace("\\s+".toRegex(), "-")
         .replace("[^\\p{L}\\p{N}-]".toRegex(), "")
 

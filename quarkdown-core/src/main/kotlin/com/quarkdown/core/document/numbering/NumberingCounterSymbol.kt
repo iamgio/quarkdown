@@ -1,6 +1,6 @@
 package com.quarkdown.core.document.numbering
 
-import com.github.fracpete.romannumerals4j.RomanNumeralFormat
+import com.quarkdown.core.util.RomanNumerals
 import com.quarkdown.core.util.StringCase
 import com.quarkdown.core.util.case
 
@@ -55,15 +55,8 @@ data class AlphaNumberingSymbol(
 data class RomanNumberingSymbol(
     val case: StringCase,
 ) : NumberingCounterSymbol {
-    // Provided by the romannumerals4j library: https://github.com/fracpete/romannumerals4j
-    private val format = RomanNumeralFormat()
-
     override val supportedRange: IntRange
-        get() = 1..3999
+        get() = RomanNumerals.SUPPORTED_RANGE
 
-    override fun map(index: Int) =
-        index.let {
-            format.format(it)?.case(case)
-                ?: throw IllegalStateException("Failed to format $it as a roman numeral")
-        }
+    override fun map(index: Int) = RomanNumerals.format(index).case(case)
 }

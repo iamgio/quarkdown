@@ -18,7 +18,7 @@ dependencies {
     implementation(project(":quarkdown-server"))
     implementation(project(":quarkdown-plaintext")) // For search index generation
     implementation(project(":quarkdown-install-layout-navigator"))
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.12.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-html:0.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 }
 

@@ -1,6 +1,6 @@
 package com.quarkdown.core.misc.font
 
-import java.net.URLEncoder
+import io.ktor.http.encodeURLParameter
 
 private const val GOOGLE_FONTS_URL = "https://fonts.googleapis.com/css2"
 
@@ -50,7 +50,7 @@ sealed interface FontFamily {
         val name: String,
     ) : FontFamily {
         override val path: String
-            get() = "$GOOGLE_FONTS_URL?family=${URLEncoder.encode(name, Charsets.UTF_8)}"
+            get() = "$GOOGLE_FONTS_URL?family=${name.encodeURLParameter(spaceToPlus = true)}"
 
         override val id: String
             get() = name
