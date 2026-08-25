@@ -69,7 +69,7 @@ class CompileCommandTest : TempDirectory() {
         val pipelineOptions = command.createPipelineOptions(cliOptions)
 
         assertEquals(main, cliOptions.source)
-        assertEquals(directory, pipelineOptions.workingDirectory)
+        assertEquals(directory, pipelineOptions.fileSystem.workingDirectory?.toFileOrNull())
         assertEquals(
             outputDirectory.takeUnless { cliOptions.pipe },
             cliOptions.outputDirectory,

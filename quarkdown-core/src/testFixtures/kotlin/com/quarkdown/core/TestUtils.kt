@@ -4,7 +4,7 @@ import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.context.MutableContext
-import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.tokens.LineBreakToken
 import com.quarkdown.core.lexer.tokens.NewlineToken
@@ -28,6 +28,7 @@ fun assertNodeEquals(
     actual: Node,
 ) = assertThat(actual)
     .usingRecursiveComparison()
+    .withEqualsForType({ a, b -> a == b }, FileSystem::class.java)
     .isEqualTo(expected)!!
 
 /**

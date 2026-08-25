@@ -1,6 +1,6 @@
 package com.quarkdown.core.context
 
-import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.filesystem.FileSystem
 
 /**
  * A context that is the result of a fork from an original parent [Context].

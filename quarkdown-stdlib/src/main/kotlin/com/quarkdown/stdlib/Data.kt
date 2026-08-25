@@ -8,9 +8,10 @@ import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.context.file.FileSystem
-import com.quarkdown.core.context.file.RootGranularity
-import com.quarkdown.core.context.file.getRootFileSystem
+import com.quarkdown.core.filesystem.FileSystem
+import com.quarkdown.core.filesystem.FsEntry
+import com.quarkdown.core.filesystem.RootGranularity
+import com.quarkdown.core.filesystem.getRootFileSystem
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.value.IterableValue
@@ -35,12 +36,11 @@ import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.Sorting
 import com.quarkdown.stdlib.internal.sortedBy
 import kotlinx.serialization.json.Json
-import java.io.File
 
 /**
  * @param path path of the file, relative or absolute (with extension)
  * @param requireExistence whether the corresponding file must exist
- * @return a [File] instance of the file located in [path].
+ * @return an [FsEntry] of the file located in [path].
  *         If the path is relative, the location is determined by the working directory of the pipeline.
  * @throws IllegalArgumentException if the file does not exist and [requireExistence] is `true`
  */
@@ -48,12 +48,12 @@ internal fun file(
     context: Context,
     path: String,
     requireExistence: Boolean = true,
-): File {
+): FsEntry {
     val file = context.fileSystem.resolve(path)
     context.requireReadPermission(file)
 
-    if (requireExistence && !file.exists()) {
-        throw IllegalArgumentException("File $file does not exist.")
+    if (requireExistence && !file.exists) {
+        throw IllegalArgumentException("File ${file.fullPath} does not exist.")
     }
 
     return file
@@ -147,7 +147,7 @@ fun pathToRoot(
 ): StringValue {
     val root: FileSystem = context.getRootFileSystem(granularity) ?: return ".".wrappedAsValue()
     val path: String =
-        context.fileSystem.relativePathTo(root)?.toString()
+        context.fileSystem.relativePathTo(root)?.fullPath
             ?: throw IllegalStateException(
                 """
                 Unable to determine relative path to file system root.
@@ -168,8 +168,8 @@ fun pathToRoot(
  * @see listFiles
  */
 enum class FileSorting(
-    override val sort: (Sequence<File>, Ordering) -> Sequence<File>,
-) : Sorting<File> {
+    override val sort: (Sequence<FsEntry>, Ordering) -> Sequence<FsEntry>,
+) : Sorting<FsEntry> {
     /** No sorting is applied. */
     NONE({ files, _ -> files }),
 
@@ -180,7 +180,7 @@ enum class FileSorting(
 
     /** Files are sorted by last modified date. */
     LAST_MODIFIED({ files, ordering ->
-        files.sortedBy(ordering) { it.lastModified() }
+        files.sortedBy(ordering) { it.lastModifiedAtMillis ?: 0L }
     }),
 }
 
@@ -217,11 +217,11 @@ fun listFiles(
 ): IterableValue<StringValue> {
     val rootDirectory = file(context, path)
 
-    if (!rootDirectory.exists()) {
-        throw IllegalArgumentException("Directory $rootDirectory does not exist.")
+    if (!rootDirectory.exists) {
+        throw IllegalArgumentException("Directory ${rootDirectory.fullPath} does not exist.")
     }
     if (!rootDirectory.isDirectory) {
-        throw IllegalArgumentException("Path $rootDirectory is not a directory.")
+        throw IllegalArgumentException("Path ${rootDirectory.fullPath} is not a directory.")
     }
 
     val nameRegex = pattern?.toRegex()
@@ -231,7 +231,7 @@ fun listFiles(
             .filter { listDirectories || it.isFile }
             .filter { currentFile -> nameRegex == null || nameRegex.matches(currentFile.name) }
             .let { sortBy.sort(it, order) }
-            .map { if (fullPath) it.absolutePath else it.name }
+            .map { if (fullPath) it.fullPath else it.name }
             .map(::StringValue)
 
     return when {
@@ -241,13 +241,13 @@ fun listFiles(
 }
 
 private fun listFiles(
-    directory: File,
+    directory: FsEntry,
     recursive: Boolean,
-): Sequence<File> =
+): Sequence<FsEntry> =
     if (recursive) {
-        directory.walkTopDown().drop(1)
+        directory.descendants()
     } else {
-        directory.listFiles()?.asSequence() ?: emptySequence()
+        directory.children().asSequence()
     }
 
 /**
@@ -350,7 +350,7 @@ fun csv(
     val columns = mutableListOf<Table.MutableColumn>()
 
     // CSV is read row-by-row, while the Table is built by columns.
-    csvReader().open(file) {
+    csvReader().open(file.readBytes().inputStream()) {
         readAllWithHeaderAsSequence()
             .forEach { row ->
                 row.entries.forEachIndexed { index, (header, content) ->

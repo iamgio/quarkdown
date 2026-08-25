@@ -13,8 +13,8 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
-import com.quarkdown.core.context.file.SimpleFileSystem
 import com.quarkdown.core.document.size.Size
+import com.quarkdown.core.filesystem.DiskFileSystem
 
 /**
  * A builder of inline nodes.
@@ -73,7 +73,7 @@ class InlineAstBuilder : AstBuilder() {
         referenceId: String? = null,
         label: InlineAstBuilder.() -> Unit = {},
     ) = +Image(
-        Link(buildInline(label), url, title?.let { listOf(Text(it)) }, fileSystem = SimpleFileSystem()),
+        Link(buildInline(label), url, title?.let { listOf(Text(it)) }, fileSystem = DiskFileSystem()),
         width,
         height,
         referenceId,

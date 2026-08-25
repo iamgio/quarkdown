@@ -2,7 +2,7 @@ package com.quarkdown.core.ast.base
 
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.attributes.error.ErrorCapableNode
-import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.filesystem.FileSystem
 
 /**
  * A general link node.

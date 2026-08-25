@@ -2,15 +2,15 @@ package com.quarkdown.core.context
 
 import com.quarkdown.core.ast.attributes.AstAttributes
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
-import com.quarkdown.core.context.file.FileSystem
-import com.quarkdown.core.context.file.RootGranularity
-import com.quarkdown.core.context.file.SimpleFileSystem
-import com.quarkdown.core.context.file.getRootFileSystem
 import com.quarkdown.core.context.options.ContextOptions
 import com.quarkdown.core.context.options.MutableContextOptions
 import com.quarkdown.core.context.subdocument.SubdocumentsData
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.filesystem.DiskFileSystem
+import com.quarkdown.core.filesystem.FileSystem
+import com.quarkdown.core.filesystem.RootGranularity
+import com.quarkdown.core.filesystem.getRootFileSystem
 import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.function.Function
 import com.quarkdown.core.function.call.FunctionCall
@@ -66,10 +66,11 @@ open class BaseContext(
         )
 
     override val fileSystem: FileSystem by lazy {
+        val base = attachedPipeline?.options?.fileSystem ?: DiskFileSystem()
         val workingDirectory =
             (subdocument as? Subdocument.Resource)?.workingDirectory
-                ?: attachedPipeline?.options?.workingDirectory
-        SimpleFileSystem(workingDirectory)
+                ?: base.workingDirectory
+        base.reroot(workingDirectory)
     }
 
     override val permissions: Set<Permission> by lazy {

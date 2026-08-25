@@ -1,6 +1,6 @@
 package com.quarkdown.cli.util
 
-import com.quarkdown.core.util.IOUtils
+import com.quarkdown.core.filesystem.DiskFileSystem
 import java.io.File
 
 /**
@@ -83,7 +83,8 @@ fun File.checkCleanSafety(
     if (workingDirectory != null && target == workingDirectory) return CleanRefusal.WorkingDirectory
     if (PROJECT_ROOT_MARKERS.any { File(target, it).exists() }) return CleanRefusal.RepositoryRoot
 
-    if (sourceFile != null && IOUtils.isSubPath(parent = target, child = sourceFile)) {
+    val disk = DiskFileSystem()
+    if (sourceFile != null && disk.resolve(sourceFile.absolutePath).isSubPathOf(disk.resolve(target.absolutePath))) {
         return CleanRefusal.ContainsSourceFile(sourceFile.canonicalFile)
     }
 

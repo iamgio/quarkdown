@@ -10,7 +10,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.context.SharedContext
 import com.quarkdown.core.context.SubdocumentContext
-import com.quarkdown.core.context.file.FileSystem
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -103,7 +103,7 @@ fun include(
     val file = file(context, path)
 
     // Context initialization with updated working directory.
-    val newFileSystem: FileSystem = context.fileSystem.branch(workingDirectory = file.parentFile)
+    val newFileSystem: FileSystem = context.fileSystem.branch(workingDirectory = file.parent)
     val newContext: Context =
         when (sandbox) {
             ContextSandbox.SHARE -> SharedContext(context, newFileSystem)
@@ -111,7 +111,7 @@ fun include(
             ContextSandbox.SUBDOCUMENT -> SubdocumentContext(context, context.subdocument, newFileSystem)
         }
 
-    return includeResource(newContext, file.bufferedReader())
+    return includeResource(newContext, file.readText().reader())
 }
 
 /**

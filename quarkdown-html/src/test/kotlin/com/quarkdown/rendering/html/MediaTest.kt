@@ -6,6 +6,7 @@ import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.media.StoredMediaProperty
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.media.storage.StoredMedia
@@ -79,7 +80,7 @@ class MediaTest {
     @Test
     fun `remote media path update`() {
         val media =
-            context.mediaStorage.register(REMOTE_URL, workingDirectory = null)!!
+            context.mediaStorage.register(REMOTE_URL, fileSystem = DiskFileSystem())!!
 
         val image = remoteImage(media)
 
@@ -91,7 +92,7 @@ class MediaTest {
 
     @Test
     fun `local media path update`() {
-        val media = context.mediaStorage.register(LOCAL_PATH, workingDirectory = File(WORKING_DIR_PATH))!!
+        val media = context.mediaStorage.register(LOCAL_PATH, fileSystem = DiskFileSystem(File(WORKING_DIR_PATH)))!!
         val image = localImage(media)
 
         assertTrue(image.accept(renderer).startsWith("<img src=\"$OUT_DIR/icon@"))

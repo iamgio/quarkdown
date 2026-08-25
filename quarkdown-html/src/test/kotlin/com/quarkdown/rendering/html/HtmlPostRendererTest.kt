@@ -14,6 +14,7 @@ import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
 import com.quarkdown.core.document.size.inch
 import com.quarkdown.core.document.tex.TexInfo
+import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.media.ResolvableMedia
@@ -275,7 +276,7 @@ class HtmlPostRendererTest {
     fun `local font, no media storage`() {
         val workingDirectory = File("src/test/resources")
         val path = "media/NotoSans-Regular.ttf"
-        val media = ResolvableMedia(path, workingDirectory)
+        val media = ResolvableMedia(path, DiskFileSystem(workingDirectory))
 
         setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, path)))
         val result = postRenderer().wrap("")
@@ -289,8 +290,9 @@ class HtmlPostRendererTest {
     fun `local font, with media storage`() {
         val workingDirectory = File("src/test/resources")
         val path = "media/NotoSans-Regular.ttf"
-        val file = File(workingDirectory, path)
-        val media = ResolvableMedia(path, workingDirectory)
+        val fileSystem = DiskFileSystem(workingDirectory)
+        val file = fileSystem.resolve(path)
+        val media = ResolvableMedia(path, fileSystem)
 
         setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, path)))
 
@@ -306,7 +308,7 @@ class HtmlPostRendererTest {
     fun `remote font, no media storage`() {
         val url =
             "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
-        val media = ResolvableMedia(url)
+        val media = ResolvableMedia(url, DiskFileSystem())
 
         setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, url)))
         val result = postRenderer().wrap("")
@@ -319,7 +321,7 @@ class HtmlPostRendererTest {
     fun `remote font, with media storage`() {
         val url =
             "https://fonts.gstatic.com/s/notosans/v39/o-0mIpQlx3QUlC5A4PNB6Ryti20_6n1iPHjcz6L1SoM-jCpoiyD9A-9U6VTYyWtZ3rKW9w.woff"
-        val media = ResolvableMedia(url)
+        val media = ResolvableMedia(url, DiskFileSystem())
 
         setFontInfo(FontInfo(mainFamily = FontFamily.Media(media, url)))
 

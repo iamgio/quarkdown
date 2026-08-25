@@ -27,7 +27,7 @@ class SubdocumentRegistrationHook(
             val fileSystem = link.fileSystem ?: context.fileSystem
             val file = fileSystem.resolve(path = link.url)
 
-            if (!file.exists()) {
+            if (!file.exists) {
                 link.setError(UnresolvedSubdocumentException(link), context)
                 return@on
             }
@@ -39,7 +39,8 @@ class SubdocumentRegistrationHook(
                 return@on
             }
 
-            val path = file.canonicalFile.absolutePath
+            val canonical = file.canonical
+            val path = canonical.fullPath
 
             // Reuse an already-registered subdocument to avoid redundant file I/O.
             val subdocument =
@@ -47,7 +48,7 @@ class SubdocumentRegistrationHook(
                     ?: Subdocument.Resource(
                         name = file.nameWithoutExtension,
                         path = path,
-                        workingDirectory = file.parentFile.canonicalFile,
+                        workingDirectory = canonical.parent,
                         content = file.readText(),
                     )
 

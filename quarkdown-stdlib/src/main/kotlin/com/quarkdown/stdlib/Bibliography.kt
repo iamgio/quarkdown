@@ -73,7 +73,7 @@ fun bibliography(
     @Name("indexheading") indexHeading: Boolean = false,
 ): NodeValue {
     val file = file(context, path)
-    val resolvedStyle = CslBibliographyStyle.from(style, file.inputStream(), file.name, context.documentInfo.locale)
+    val resolvedStyle = CslBibliographyStyle.from(style, file.readBytes().inputStream(), file.name, context.documentInfo.locale)
 
     val heading =
         Heading.createSectionHeading(

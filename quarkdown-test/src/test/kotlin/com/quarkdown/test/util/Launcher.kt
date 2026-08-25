@@ -6,6 +6,8 @@ import com.quarkdown.core.context.options.MutableContextOptions
 import com.quarkdown.core.context.subdocument.subdocumentGraph
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
+import com.quarkdown.core.filesystem.DiskFileSystem
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.graph.VisitableOnceGraph
@@ -43,6 +45,7 @@ val DEFAULT_OPTIONS =
  * @param options execution options
  * @param renderer function that provides the rendering components to use (defaults to HTML)
  * @param workingDirectory working directory to use for the execution, used for resolving relative paths and as the root for the file system
+ * @param fileSystem file system to run the pipeline on; defaults to a disk file system rooted at [workingDirectory]
  * @param subdocumentGraph modifier of the subdocument graph before rendering
  * @param loadableLibraries file names to export as libraries from the `data/libraries` folder, and loadable by the user via `.include`
  * @param useDummyLibraryDirectory whether to use the dummy library directory for loading libraries instead of the one from the `libs` module
@@ -62,6 +65,7 @@ fun execute(
     options: MutableContextOptions = DEFAULT_OPTIONS.copy(),
     renderer: (RendererFactory, Context) -> RenderingComponents = { rendererFactory, ctx -> rendererFactory.html(ctx) },
     workingDirectory: File = File(DATA_FOLDER),
+    fileSystem: FileSystem? = null,
     subdocumentGraph: (VisitableOnceGraph<Subdocument>) -> VisitableOnceGraph<Subdocument> = { it },
     loadableLibraries: Set<String> = emptySet(),
     useDummyLibraryDirectory: Boolean = false,
@@ -108,7 +112,7 @@ fun execute(
             context,
             PipelineOptions(
                 errorHandler = errorHandler,
-                workingDirectory = workingDirectory,
+                fileSystem = fileSystem ?: DiskFileSystem(workingDirectory),
                 enableMediaStorage = enableMediaStorage,
                 permissions = permissions,
                 subdocumentNaming = subdocumentNaming,

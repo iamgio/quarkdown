@@ -1,5 +1,6 @@
 package com.quarkdown.core.media.storage
 
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.media.Media
 import com.quarkdown.core.media.ResolvableMedia
 import com.quarkdown.core.media.export.MediaOutputResourceConverter
@@ -11,7 +12,6 @@ import com.quarkdown.core.media.storage.permissions.MediaAccessPermissionChecker
 import com.quarkdown.core.permissions.PermissionHolder
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
-import java.io.File
 
 /**
  * The name of the media subdirectory in the output resources.
@@ -103,13 +103,13 @@ class MutableMediaStorage(
     /**
      * Registers a media by its path. The corresponding media is resolved lazily from the path.
      * @param path path to the media, either a file or a URL
-     * @param workingDirectory directory to resolve the media from, in case the path is relative
-     * @return the [StoredMedia] associated with the path. If a media was already bound to the path, it is returned. Otherwise, the new [media] is returned.
-     * It may also return `null` if the media is not accepted into the storage.
+     * @param fileSystem file system to resolve the media from, in case the path is a local file
+     * @return the [StoredMedia] associated with the path: the existing binding if the path was already registered,
+     * or the newly resolved media otherwise. It may also return `null` if the media is not accepted into the storage.
      * @see ResolvableMedia
      */
     fun register(
         path: String,
-        workingDirectory: File?,
-    ): StoredMedia? = register(path, ResolvableMedia(path, workingDirectory))
+        fileSystem: FileSystem,
+    ): StoredMedia? = register(path, ResolvableMedia(path, fileSystem))
 }

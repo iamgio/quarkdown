@@ -1,12 +1,13 @@
 package com.quarkdown.core.pipeline
 
 import com.quarkdown.core.document.sub.SubdocumentOutputNaming
+import com.quarkdown.core.filesystem.DiskFileSystem
+import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
-import java.io.File
 
 /**
  * Read-only settings that affect different behaviors of a [Pipeline].
@@ -15,8 +16,11 @@ import java.io.File
  * @param wrapOutput whether the rendered code should be wrapped in a template code.
  * For example, an HTML wrapper may add `<html><head>...</head><body>...</body></html>`,
  * with the actual content injected in `body`
- * @param workingDirectory the starting directory to use when resolving relative paths from function calls.
- * Note: subdocuments may have different working directories. For consistent results rely on [com.quarkdown.core.context.file.FileSystem.workingDirectory]
+ * @param fileSystem the file system used to resolve and read input files, such as data files,
+ * included sources, subdocuments, and media. Its working directory is the starting directory
+ * for resolving relative paths from function calls.
+ * Note: subdocuments may have different working directories. For consistent results rely on
+ * [com.quarkdown.core.filesystem.FileSystem.workingDirectory] of the current context.
  * @param enableMediaStorage whether media storage should be enabled.
  * If enabled, media objects referenced in the document are copied to the output directory
  * and those elements that use them (e.g. images) automatically reference the new local path.
@@ -36,7 +40,7 @@ data class PipelineOptions(
     val resourceName: String? = null,
     val prettyOutput: Boolean = false,
     val wrapOutput: Boolean = true,
-    val workingDirectory: File? = null,
+    val fileSystem: FileSystem = DiskFileSystem(),
     val enableMediaStorage: Boolean = true,
     val forbidFunctionOverwriting: Boolean = false,
     val subdocumentNaming: SubdocumentOutputNaming = SubdocumentOutputNaming.FILE_NAME,

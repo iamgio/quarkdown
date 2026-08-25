@@ -11,6 +11,7 @@ import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.document.sub.Subdocument
+import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
@@ -134,7 +135,7 @@ class HtmlResourceGenerationTest {
     @Test
     fun `with media`() {
         context.options.enableLocalMediaStorage = true
-        context.mediaStorage.register("src/test/resources/media/file.txt", workingDirectory = null)
+        context.mediaStorage.register("src/test/resources/media/file.txt", fileSystem = DiskFileSystem())
         `generate resources` { resources ->
             // theme + script + lib + media + HTML
             assertEquals(5, resources.size)
