@@ -321,7 +321,7 @@ open class BaseMarkdownInlineTokenRegexPatterns {
     }
 }
 
-private const val PUNCTUATION_HELPER = "\\p{P}\\p{S}"
+private const val PUNCTUATION_HELPER = "\\p{IsP}\\p{IsS}"
 
 // [this is a label]
 private const val LABEL_HELPER = "(?:\\[(?:\\\\.|[^\\[\\]\\\\])*\\]|\\\\.|`[^`]*`|[^\\[\\]\\\\`])*?"
