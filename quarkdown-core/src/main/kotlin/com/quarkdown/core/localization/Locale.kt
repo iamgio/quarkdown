@@ -22,18 +22,6 @@ interface Locale {
     val displayName: String
 
     /**
-     * Name of the locale, possibly in the locale's language itself.
-     * For instance, `English` for English and `italiano` for Italian.
-     */
-    val localizedName: String
-
-    /**
-     * Name of the country of the locale, possibly in the locale's language itself.
-     * For instance, `United States` for `en-US` and `Italia` for `it`.
-     */
-    val localizedCountryName: String?
-
-    /**
      * Tag of the locale.
      * For instance, `en-US` for US English and `it` for Italian.
      */

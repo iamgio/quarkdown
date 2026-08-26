@@ -13,6 +13,7 @@ rootProject.name = "quarkdown"
 
 include("quarkdown-core")
 include("quarkdown-native-library-processor")
+include("quarkdown-locale-table-processor")
 include("quarkdown-html")
 include("quarkdown-html-pdf")
 include("quarkdown-markdown")
