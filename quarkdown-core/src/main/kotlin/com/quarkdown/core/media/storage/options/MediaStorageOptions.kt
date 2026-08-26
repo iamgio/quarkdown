@@ -1,5 +1,7 @@
 package com.quarkdown.core.media.storage.options
 
+import com.quarkdown.core.media.fetch.RemoteMediaFetcher
+
 /**
  * Read-only options that affect the rules of a context's media storage.
  * @see com.quarkdown.core.context.options.MutableContextOptions for an implementation
@@ -12,6 +14,13 @@ interface MediaStorageOptions {
      * If null, the preference is determined by the active renderer.
      */
     val enableRemoteMediaStorage: Boolean?
+
+    /**
+     * Strategy used to download the content of remote media
+     * when the storage materializes it into the output resources.
+     * If null, the default URL-based fetcher is used.
+     */
+    val remoteMediaFetcher: RemoteMediaFetcher?
 
     /**
      * Whether local media should be stored locally in the output directory.

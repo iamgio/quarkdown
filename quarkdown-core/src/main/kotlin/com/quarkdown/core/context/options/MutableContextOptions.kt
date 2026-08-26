@@ -1,5 +1,7 @@
 package com.quarkdown.core.context.options
 
+import com.quarkdown.core.media.fetch.RemoteMediaFetcher
+import com.quarkdown.core.media.fetch.UrlRemoteMediaFetcher
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -18,6 +20,7 @@ data class MutableContextOptions(
     override var uuidSupplier: () -> String = { Uuid.random().toString() },
     override var enableRemoteMediaStorage: Boolean = false,
     override var enableLocalMediaStorage: Boolean = false,
+    override var remoteMediaFetcher: RemoteMediaFetcher = UrlRemoteMediaFetcher,
     override var html: HtmlOptions = HtmlOptions(),
 ) : ContextOptions {
     /**
@@ -28,5 +31,6 @@ data class MutableContextOptions(
     fun mergeMediaStorageOptions(options: MediaStorageOptions) {
         options.enableRemoteMediaStorage?.let { enableRemoteMediaStorage = it }
         options.enableLocalMediaStorage?.let { enableLocalMediaStorage = it }
+        options.remoteMediaFetcher?.let { remoteMediaFetcher = it }
     }
 }
