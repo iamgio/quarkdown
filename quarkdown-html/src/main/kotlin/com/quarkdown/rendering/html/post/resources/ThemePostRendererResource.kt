@@ -1,13 +1,14 @@
 package com.quarkdown.rendering.html.post.resources
 
 import com.quarkdown.core.document.DocumentTheme
+import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
+import com.quarkdown.core.pipeline.output.toOutputResource
 import com.quarkdown.installlayout.InstallLayout
 import com.quarkdown.installlayout.InstallLayoutDirectory
 
@@ -72,7 +73,7 @@ class ThemePostRendererResource(
      */
     private data class Component(
         val name: String,
-        val source: java.io.File,
+        val source: FsEntry,
     ) {
         val importPath: String get() = importPathFor(name)
     }
@@ -90,15 +91,14 @@ class ThemePostRendererResource(
     }
 
     /**
-     * Builds the artifact set for a theme group: one [FileReferenceOutputArtifact] per
-     * [Component] plus a single-entry `theme.css` manifest that `@import`s them all.
+     * Builds the artifact set for a theme group: one artifact per [Component]
+     * plus a single-entry `theme.css` manifest that `@import`s them all.
      */
     private fun buildArtifacts(components: List<Component>): Set<OutputResource> =
         buildSet {
             components.mapTo(this) {
-                FileReferenceOutputArtifact(
+                it.source.toOutputResource(
                     name = it.name,
-                    file = it.source,
                     useChecksumInvalidation = true,
                 )
             }
@@ -113,7 +113,7 @@ class ThemePostRendererResource(
 
     /**
      * Resolves the set of active theme [Component]s from [themeLayout].
-     * Returns `null` if [themeLayout] is absent or does not exist on disk.
+     * Returns `null` if [themeLayout] is absent or does not exist.
      * Missing layout or color themes are logged and skipped rather than raising,
      * so a broken theme reference degrades gracefully; missing locales are silently
      * skipped, since most locales have no stylesheet.
@@ -149,7 +149,7 @@ class ThemePostRendererResource(
         if (!directory.exists()) {
             if (warnIfMissing) {
                 Log.error(
-                    "'${kindDirectory.name}' theme not found: $name (looked in ${directory.file.absolutePath}).\n" +
+                    "'${kindDirectory.name}' theme not found: $name (looked in ${directory.file.fullPath}).\n" +
                         "For a list of available themes, check https://quarkdown.com/wiki/themes or your local theme directory.",
                 )
             }

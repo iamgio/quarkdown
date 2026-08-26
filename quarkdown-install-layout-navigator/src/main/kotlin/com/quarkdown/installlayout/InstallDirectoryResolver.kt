@@ -1,5 +1,6 @@
 package com.quarkdown.installlayout
 
+import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.log.Log
 import java.io.File
 
@@ -33,7 +34,7 @@ internal object InstallDirectoryResolver {
         val directory = resolveFrom(executable)
 
         Log.debug { "Resolved install directory: $directory" }
-        return InstallLayout(InstallLayoutDirectory(directory))
+        return InstallLayout(InstallLayoutDirectory(DiskFileSystem().resolve(directory.absolutePath)))
     }
 
     private fun resolveFrom(executable: File): File {

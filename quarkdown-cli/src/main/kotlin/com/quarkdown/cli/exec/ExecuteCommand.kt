@@ -215,7 +215,12 @@ abstract class ExecuteCommand(
             // Might be overridden by a subclass via `finalizeCliOptions`, e.g. `CompileCommand` which requires a source file.
             source = null,
             outputDirectory,
-            libraryDirectory = libraryDirectory ?: InstallLayout.get.quarkdownLibraries.file,
+            libraryDirectory =
+                libraryDirectory
+                    ?: InstallLayout.get
+                        .quarkdownLibraries
+                        .file
+                        .toFileOrNull(),
             renderer,
             clean,
             pipe = false,

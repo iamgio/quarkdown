@@ -52,7 +52,7 @@ class ThirdPartyPostRendererResource(
                         .map { libraryName ->
                             librariesLayout
                                 .resolveDirectory(libraryName)
-                                .also { if (!it.exists()) error("HTML library directory not found: ${it.file.path}") }
+                                .also { if (!it.exists()) error("HTML library directory not found: ${it.file.fullPath}") }
                                 .asOutputResource(symlink = symlink)
                         }.toSet(),
             )

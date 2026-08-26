@@ -22,7 +22,9 @@ class DoctorGetInstallDirCommandTest {
 
     @Test
     fun `prints the resolved install directory`() {
-        val expected = InstallLayout.get.file.parentFile.absolutePath
+        val expected =
+            InstallLayout.get.file.parent
+                ?.fullPath
         assertEquals(expected, runCommand())
     }
 

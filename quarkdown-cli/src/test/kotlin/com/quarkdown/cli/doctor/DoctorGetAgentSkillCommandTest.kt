@@ -22,7 +22,7 @@ class DoctorGetAgentSkillCommandTest {
 
     @Test
     fun `prints the resolved agent skill directory`() {
-        val expected = InstallLayout.get.agentSkill.file.absolutePath
+        val expected = InstallLayout.get.agentSkill.file.fullPath
         assertEquals(expected, runCommand())
     }
 
