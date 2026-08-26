@@ -1,11 +1,8 @@
-package com.quarkdown.rendering.html
+package com.quarkdown.rendering.html.pdf
 
 import com.quarkdown.interaction.Env
 import com.quarkdown.interaction.executable.NodeJsWrapper
 import com.quarkdown.interaction.executable.NpmWrapper
-import com.quarkdown.rendering.html.pdf.HtmlPdfExportOptions
-import com.quarkdown.rendering.html.pdf.HtmlPdfExporter
-import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.junit.Assume.assumeTrue

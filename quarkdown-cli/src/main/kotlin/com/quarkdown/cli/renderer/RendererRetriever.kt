@@ -6,8 +6,8 @@ import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.rendering.RenderingComponents
 import com.quarkdown.rendering.html.HtmlExportOptions
 import com.quarkdown.rendering.html.extension.html
-import com.quarkdown.rendering.html.extension.htmlPdf
 import com.quarkdown.rendering.html.pdf.HtmlPdfExportOptions
+import com.quarkdown.rendering.html.pdf.htmlPdf
 import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.rendering.plaintext.extension.plainText
 

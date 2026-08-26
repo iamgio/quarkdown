@@ -294,8 +294,9 @@ After the Kotlin extension renders the Quarkdown AST to HTML elements,
 the front-end TypeScript code takes care of interactivity and dynamic features,
 while SCSS files handle styling and layout.
 
-Additionally, Puppeteer is used to generate PDF output from the HTML rendering,
-relying on the webserver, located in [quarkdown-server](quarkdown-server).
+Additionally, Puppeteer is used to generate PDF output from the HTML rendering.
+This lives in the separate, JVM-only [quarkdown-html-pdf](quarkdown-html-pdf) module,
+which decorates the HTML post-renderer and relies on the webserver, located in [quarkdown-server](quarkdown-server).
 
 ### Offline asset bundling
 

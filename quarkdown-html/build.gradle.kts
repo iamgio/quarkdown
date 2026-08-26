@@ -12,10 +12,7 @@ plugins {
 dependencies {
     testImplementation(kotlin("test"))
     testImplementation(testFixtures(project(":quarkdown-core")))
-    testImplementation("org.apache.pdfbox:pdfbox:3.0.6")
     implementation(project(":quarkdown-core"))
-    implementation(project(":quarkdown-interaction"))
-    implementation(project(":quarkdown-server"))
     implementation(project(":quarkdown-plaintext")) // For search index generation
     implementation(project(":quarkdown-install-layout-navigator"))
     implementation("org.jetbrains.kotlinx:kotlinx-html:0.12.0")
