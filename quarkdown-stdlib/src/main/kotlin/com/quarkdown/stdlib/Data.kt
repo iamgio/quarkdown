@@ -2,7 +2,9 @@
 
 package com.quarkdown.stdlib
 
-import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.jsoizo.kotlincsv.csvReader
+import com.jsoizo.kotlincsv.reader.read
+import com.jsoizo.kotlincsv.reader.withHeader
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Table
@@ -35,6 +37,8 @@ import com.quarkdown.stdlib.internal.JsonValueDeserializer
 import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.Sorting
 import com.quarkdown.stdlib.internal.sortedBy
+import kotlinx.io.Buffer
+import kotlinx.io.write
 import kotlinx.serialization.json.Json
 
 /**
@@ -350,8 +354,9 @@ fun csv(
     val columns = mutableListOf<Table.MutableColumn>()
 
     // CSV is read row-by-row, while the Table is built by columns.
-    csvReader().open(file.readBytes().inputStream()) {
-        readAllWithHeaderAsSequence()
+    csvReader().read(Buffer().apply { write(file.readBytes()) }) { rows ->
+        rows
+            .withHeader()
             .forEach { row ->
                 row.entries.forEachIndexed { index, (header, content) ->
                     val cell = mode.transform(content.trim(), context).let(Table::Cell)

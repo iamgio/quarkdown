@@ -1,7 +1,9 @@
 package com.quarkdown.core.util
 
-import org.apache.commons.text.StringEscapeUtils
-import java.net.URLEncoder
+import com.mohamedrejeb.ksoup.entities.KsoupEntities
+import io.ktor.http.encodeURLParameter
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * Represents a target (commonly a language or format) that strings can be escaped for.
@@ -44,21 +46,31 @@ sealed interface UnescapeTarget {
  */
 object Escape {
     object Html : EscapeTarget, UnescapeTarget {
-        override fun escape(input: String): String = StringEscapeUtils.escapeHtml4(input)
+        override fun escape(input: String): String = KsoupEntities.encodeHtml4(input)
 
-        override fun unescape(input: String): String = StringEscapeUtils.unescapeHtml4(input)
+        override fun unescape(input: String): String = KsoupEntities.decodeHtml4(input)
+    }
+
+    object Xml : EscapeTarget, UnescapeTarget {
+        override fun escape(input: String): String = KsoupEntities.encodeXml(input)
+
+        override fun unescape(input: String): String = KsoupEntities.decodeXml(input)
     }
 
     object JavaScript : EscapeTarget, UnescapeTarget {
-        override fun escape(input: String): String = StringEscapeUtils.escapeEcmaScript(input)
+        override fun escape(input: String): String = Json.escape(input).replace("</", "<\\/")
 
-        override fun unescape(input: String): String = StringEscapeUtils.unescapeEcmaScript(input)
+        override fun unescape(input: String): String = Json.unescape(input)
     }
 
     object Json : EscapeTarget, UnescapeTarget {
-        override fun escape(input: String): String = StringEscapeUtils.escapeJson(input)
+        override fun escape(input: String): String = JsonPrimitive(input).toString().removeSurrounding("\"")
 
-        override fun unescape(input: String): String = StringEscapeUtils.unescapeJson(input)
+        override fun unescape(input: String): String =
+            kotlinx.serialization.json.Json
+                .parseToJsonElement("\"$input\"")
+                .jsonPrimitive
+                .content
     }
 
     /**
@@ -68,7 +80,7 @@ object Escape {
     object Url : EscapeTarget {
         override fun escape(input: String): String =
             input.split("/").joinToString("/") {
-                URLEncoder.encode(it, Charsets.UTF_8).replace("+", "%20")
+                it.encodeURLParameter(spaceToPlus = false)
             }
     }
 }

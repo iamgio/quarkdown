@@ -54,7 +54,6 @@ import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.removeOptionalPrefix
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.BlockTokenVisitor
-import java.nio.file.Files.lines
 
 /**
  * The position of this character in the delimiter of a table header defines its column alignment.
