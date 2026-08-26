@@ -29,7 +29,6 @@ import com.quarkdown.rendering.html.post.resources.HTML_LIBRARY_OUTPUT_PATH
 import com.quarkdown.rendering.html.post.resources.ThemePostRendererResource
 import com.quarkdown.rendering.html.post.resources.ThirdPartyPostRendererResource
 import com.quarkdown.rendering.html.post.thirdparty.ThirdPartyLibrary
-import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -238,7 +237,7 @@ class HtmlResourceGenerationTest {
 
     @Test
     fun `no lib group when library directory does not exist`() {
-        val bogusLibDir = InstallLayoutDirectory(File("nonexistent"))
+        val bogusLibDir = InstallLayoutDirectory(DiskFileSystem().resolve("nonexistent"))
         val resources =
             buildSet {
                 ThirdPartyPostRendererResource(context, librariesLayout = bogusLibDir, symlink = false)

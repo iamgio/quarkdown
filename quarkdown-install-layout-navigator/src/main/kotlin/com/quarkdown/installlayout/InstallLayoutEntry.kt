@@ -1,21 +1,21 @@
 package com.quarkdown.installlayout
 
-import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
+import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.core.pipeline.output.OutputResource
-import java.io.File
+import com.quarkdown.core.pipeline.output.toOutputResource
 
 /**
  * A navigable entry (file or directory) within the Quarkdown install layout.
  */
 interface InstallLayoutEntry {
-    /** The filesystem location this entry points to. */
-    val file: File
+    /** The file system location this entry points to. */
+    val file: FsEntry
 
     /** Short name of this entry (file name) */
     val name: String
         get() = file.name
 
-    /** Whether this entry exists on disk with the expected type (file vs. directory). */
+    /** Whether this entry exists with the expected type (file vs. directory). */
     fun exists(): Boolean
 
     /** Resolves a child file relative to this entry's [file]. */
@@ -26,12 +26,12 @@ interface InstallLayoutEntry {
 
     /**
      * Wraps this entry as an [OutputResource] for the pipeline to output.
-     * @param symlink whether to create a symbolic link to the source file instead of copying it
+     * Disk-backed entries are copied by reference, while virtual entries are materialized in memory.
+     * @param symlink whether disk-backed entries should be symlinked instead of copied
      */
     fun asOutputResource(symlink: Boolean = false): OutputResource =
-        FileReferenceOutputArtifact(
+        file.toOutputResource(
             name,
-            file,
             useChecksumInvalidation = true,
             symlink = symlink,
         )
@@ -42,7 +42,7 @@ interface InstallLayoutEntry {
  * [exists] returns `true` only if the path is an existing regular file.
  */
 data class InstallLayoutFile(
-    override val file: File,
+    override val file: FsEntry,
 ) : InstallLayoutEntry {
     override fun exists(): Boolean = file.isFile
 }
@@ -52,7 +52,7 @@ data class InstallLayoutFile(
  * [exists] returns `true` only if the path is an existing directory.
  */
 data class InstallLayoutDirectory(
-    override val file: File,
+    override val file: FsEntry,
 ) : InstallLayoutEntry {
     override fun exists(): Boolean = file.isDirectory
 }

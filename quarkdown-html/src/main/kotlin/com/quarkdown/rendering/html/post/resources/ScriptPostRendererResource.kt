@@ -41,7 +41,7 @@ class ScriptPostRendererResource(
         if (scriptsLayout == null) return
 
         check(scriptsLayout.exists()) {
-            "Required Quarkdown runtime script file is missing: ${scriptsLayout.file.absolutePath}. " +
+            "Required Quarkdown runtime script file is missing: ${scriptsLayout.file.fullPath}. " +
                 "This likely indicates a broken Quarkdown installation."
         }
 

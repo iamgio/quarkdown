@@ -10,7 +10,11 @@ import com.quarkdown.lsp.QuarkdownLanguageServerLauncher
 class LanguageServerCommand : CliktCommand("language-server") {
     override fun run() {
         // The distribution directory which contains lib/, docs/, etc.
-        val quarkdownDirectory = InstallLayout.getOrNull?.file?.parentFile
+        val quarkdownDirectory =
+            InstallLayout.getOrNull
+                ?.file
+                ?.parent
+                ?.toFileOrNull()
         QuarkdownLanguageServerLauncher(quarkdownDirectory).startListening()
     }
 }

@@ -1,11 +1,8 @@
 package com.quarkdown.rendering.html.post.resources
 
 import com.quarkdown.core.filesystem.FsEntry
-import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
-import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.pipeline.output.OutputResourceGroup
+import com.quarkdown.core.pipeline.output.toOutputResource
 
 private const val STATIC_ASSETS_DIRECTORY_NAME = "public"
 
@@ -33,31 +30,6 @@ class StaticAssetsPostRendererResource(
         val staticAssetsDirectory = parentDirectory.resolve(STATIC_ASSETS_DIRECTORY_NAME)
         if (!staticAssetsDirectory.isDirectory) return
 
-        resources +=
-            staticAssetsDirectory
-                .toFileOrNull()
-                ?.let { FileReferenceOutputArtifact(".", it) }
-                ?: staticAssetsDirectory.toResourceGroup(".")
+        resources += staticAssetsDirectory.toOutputResource(name = ".")
     }
-
-    /**
-     * Recursively materializes a virtual directory entry into an [OutputResourceGroup]
-     * of in-memory artifacts.
-     */
-    private fun FsEntry.toResourceGroup(name: String): OutputResourceGroup =
-        OutputResourceGroup(
-            name,
-            children()
-                .map { child ->
-                    when {
-                        child.isDirectory -> child.toResourceGroup(child.name)
-                        else ->
-                            BinaryOutputArtifact(
-                                child.name,
-                                child.readBytes().toList(),
-                                ArtifactType.AUTO,
-                            )
-                    }
-                }.toSet(),
-        )
 }

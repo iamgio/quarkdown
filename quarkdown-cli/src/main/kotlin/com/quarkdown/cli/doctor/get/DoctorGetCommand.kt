@@ -2,8 +2,8 @@ package com.quarkdown.cli.doctor.get
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.subcommands
+import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.installlayout.InstallLayout
-import java.io.File
 
 /**
  * Command group that retrieves individual pieces of information about the Quarkdown installation.
@@ -36,7 +36,7 @@ class DoctorGetCommand : CliktCommand("get") {
             name = "install-dir",
             description = "Quarkdown install directory",
         ) {
-        override fun getFile(installLayout: InstallLayout): File? = installLayout.file.parentFile
+        override fun getEntry(installLayout: InstallLayout): FsEntry? = installLayout.file.parent
     }
 
     /**
@@ -55,6 +55,6 @@ class DoctorGetCommand : CliktCommand("get") {
             name = "agent-skill",
             description = "bundled agent skill directory",
         ) {
-        override fun getFile(installLayout: InstallLayout): File = installLayout.agentSkill.file
+        override fun getEntry(installLayout: InstallLayout): FsEntry = installLayout.agentSkill.file
     }
 }
