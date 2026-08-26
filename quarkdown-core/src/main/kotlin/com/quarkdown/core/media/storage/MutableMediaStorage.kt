@@ -4,6 +4,8 @@ import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.media.Media
 import com.quarkdown.core.media.ResolvableMedia
 import com.quarkdown.core.media.export.MediaOutputResourceConverter
+import com.quarkdown.core.media.fetch.RemoteMediaFetcher
+import com.quarkdown.core.media.fetch.UrlRemoteMediaFetcher
 import com.quarkdown.core.media.storage.name.MediaNameProviderStrategy
 import com.quarkdown.core.media.storage.name.SanitizedMediaNameProvider
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
@@ -19,6 +21,12 @@ import com.quarkdown.core.pipeline.output.OutputResourceGroup
 const val MEDIA_SUBDIRECTORY_NAME = "media"
 
 /**
+ * The platform's default [RemoteMediaFetcher], used when
+ * [MediaStorageOptions.remoteMediaFetcher] is undetermined.
+ */
+private val DEFAULT_REMOTE_MEDIA_FETCHER: RemoteMediaFetcher = UrlRemoteMediaFetcher
+
+/**
  * A media storage that can be modified with new entries.
  * @param options storage rules
  * @param permissionHolder holder to check media access permissions against
@@ -31,6 +39,11 @@ class MutableMediaStorage(
     permissionHolder: PermissionHolder,
     private val nameProvider: MediaNameProviderStrategy = SanitizedMediaNameProvider(),
 ) : ReadOnlyMediaStorage {
+    /**
+     * Strategy used to download the content of remote media in [toResource].
+     */
+    private val remoteFetcher: RemoteMediaFetcher = options.remoteMediaFetcher ?: DEFAULT_REMOTE_MEDIA_FETCHER
+
     /**
      * All the stored entries.
      */
@@ -58,7 +71,7 @@ class MutableMediaStorage(
         val subResources =
             this.all
                 .map {
-                    val converter = MediaOutputResourceConverter(it.name)
+                    val converter = MediaOutputResourceConverter(it.name, remoteFetcher)
                     it.media.accept(converter)
                 }.toSet()
 

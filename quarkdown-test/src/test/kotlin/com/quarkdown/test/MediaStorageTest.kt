@@ -3,6 +3,7 @@ package com.quarkdown.test
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.test.util.DATA_FOLDER
@@ -85,13 +86,24 @@ class MediaStorageTest {
 
                 ![Banner](https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/tbanner-light.svg)
             """.trimIndent(),
-            options = DEFAULT_OPTIONS.copy(enableRemoteMediaStorage = true),
+            options =
+                DEFAULT_OPTIONS.copy(
+                    enableRemoteMediaStorage = true,
+                    // Fake networkless fetcher.
+                    remoteMediaFetcher = { media -> "<svg><!-- ${media.url} --></svg>".toByteArray() },
+                ),
             enableMediaStorage = true,
             permissions = Permission.DEFAULT_SET + Permission.NetworkAccess,
             outputResourceHook = { group ->
+                val icon = getMediaResources(group).single { "ticon" in it.name }
                 assertEquals(
                     "https-raw.githubusercontent.com-iamgio-quarkdown-project-files-images-ticon-light.svg",
-                    getMediaResources(group).single { "ticon" in it.name }.name,
+                    icon.name,
+                )
+                assertIs<BinaryOutputArtifact>(icon)
+                assertEquals(
+                    "<svg><!-- https://raw.githubusercontent.com/iamgio/quarkdown/project-files/images/ticon-light.svg --></svg>",
+                    icon.content.toByteArray().decodeToString(),
                 )
             },
         ) {

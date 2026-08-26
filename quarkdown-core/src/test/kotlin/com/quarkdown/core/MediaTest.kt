@@ -15,6 +15,8 @@ import com.quarkdown.core.media.MediaVisitor
 import com.quarkdown.core.media.RemoteMedia
 import com.quarkdown.core.media.ResolvableMedia
 import com.quarkdown.core.media.export.MediaOutputResourceConverter
+import com.quarkdown.core.media.fetch.RemoteMediaFetcher
+import com.quarkdown.core.media.fetch.UrlRemoteMediaFetcher
 import com.quarkdown.core.media.storage.MEDIA_SUBDIRECTORY_NAME
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.StoredMedia
@@ -23,6 +25,7 @@ import com.quarkdown.core.permissions.MissingPermissionException
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
+import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -304,7 +307,7 @@ class MediaTest {
         val fs = VirtualFileSystem("/project")
         fs.writeBytes("icon.png", byteArrayOf(4, 5))
         val media = LocalMedia(fs.resolve("icon.png"))
-        val resource = media.accept(MediaOutputResourceConverter("icon.png"))
+        val resource = media.accept(MediaOutputResourceConverter("icon.png", UrlRemoteMediaFetcher))
         assertIs<BinaryOutputArtifact>(resource)
         assertEquals(listOf<Byte>(4, 5), resource.content)
     }
@@ -312,7 +315,33 @@ class MediaTest {
     @Test
     fun `disk local media exports as file reference artifact`() {
         val media = LocalMedia(DiskFileSystem(workingDir).resolve(LOCAL_ICON))
-        val resource = media.accept(MediaOutputResourceConverter("icon"))
+        val resource = media.accept(MediaOutputResourceConverter("icon", UrlRemoteMediaFetcher))
         assertIs<FileReferenceOutputArtifact>(resource)
+    }
+
+    @Test
+    fun `remote media exports through the injected fetcher`() {
+        val media = RemoteMedia(java.net.URL(REMOTE_IMAGE))
+        val fetcher = RemoteMediaFetcher { byteArrayOf(6, 7, 8) }
+        val resource = media.accept(MediaOutputResourceConverter("image.jpg", fetcher))
+        assertIs<BinaryOutputArtifact>(resource)
+        assertEquals(listOf<Byte>(6, 7, 8), resource.content)
+    }
+
+    @Test
+    fun `storage resource materializes remote media through the injected fetcher`() {
+        val storage =
+            MutableMediaStorage(
+                ReadOnlyMediaStorageOptions(
+                    enableLocalMediaStorage = true,
+                    enableRemoteMediaStorage = true,
+                    remoteMediaFetcher = { media -> media.url.toExternalForm().toByteArray() },
+                ),
+                permissionHolder = localAndRemotePermissionHolder,
+            )
+        storage.register(REMOTE_IMAGE, fileSystem = DiskFileSystem())
+        val resource = assertIs<OutputResourceGroup>(storage.toResource())
+        val artifact = assertIs<BinaryOutputArtifact>(resource.resources.single())
+        assertEquals(REMOTE_IMAGE, artifact.content.toByteArray().decodeToString())
     }
 }
