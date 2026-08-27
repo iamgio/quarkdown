@@ -4,6 +4,7 @@ import com.quarkdown.core.ast.base.inline.Emphasis
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.bibliography.style.csl.CslBibliographyStyle
 import com.quarkdown.core.util.node.toPlainText
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -14,8 +15,14 @@ import kotlin.test.assertTrue
 class CslBibliographyStyleTest {
     private fun bibResource(name: String) = javaClass.getResourceAsStream("/bib/$name")!!
 
+    /**
+     * Reads a CSL style definition from the `extractCslStyles` Gradle task output.
+     */
+    private fun styleSource(styleName: String): String =
+        File(System.getProperty("quarkdown.test.csl.styles.path"), "$styleName.csl").readText()
+
     private fun cslStyle(styleName: String): CslBibliographyStyle =
-        CslBibliographyStyle.from(styleName, bibResource("bibliography.bib"), "bibliography.bib")
+        CslBibliographyStyle.from(styleName, styleSource(styleName), bibResource("bibliography.bib"), "bibliography.bib")
 
     @Test
     fun `csl apa, article citation label`() {

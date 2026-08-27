@@ -78,7 +78,7 @@ fun usesQuarkdoc(project: Project): Boolean {
         .any { it.dependencyProject == quarkdoc }
 }
 
-val quarkdocGenerate =
+val quarkdocGenerate: TaskProvider<Task> =
     tasks.register("quarkdocGenerate") {
         group = "documentation"
         description = "Generates the Quarkdoc documentation for modules that include the Quarkdoc plugin."
@@ -156,6 +156,10 @@ val installLibLayout: CopySpec.() -> Unit = {
     into("skills") {
         from(rootProject.file("skills"))
     }
+    // CSL citation style definitions for bibliographies, extracted by :quarkdown-core:extractCslStyles.
+    into("csl") {
+        from(project(":quarkdown-core").layout.buildDirectory.dir("generated/csl-styles"))
+    }
 }
 
 // Bundled JVM runtime
@@ -177,7 +181,7 @@ data class JlinkTarget(
     val jdkHomeRelative: String,
 )
 
-val jdkVersion = providers.gradleProperty("bundledJdkVersion").get()
+val jdkVersion = providers.gradleProperty("bundledJdkVersion").get()!!
 val jdkVersionEncoded = jdkVersion.replace("+", "%2B") // URL-encoded for the GitHub release path
 val jdkBaseUrl = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$jdkVersionEncoded/"
 val jdkFileVersion = jdkVersion.replace("+", "_") // Adoptium uses underscores in archive filenames
@@ -417,21 +421,22 @@ distributions.main {
 // directory at runtime.
 val assembleDevLib by tasks.registering(Sync::class) {
     dependsOn(":quarkdown-html:bundleThirdParty")
+    dependsOn(":quarkdown-core:extractCslStyles")
     into(layout.buildDirectory.dir("dev-lib"))
     installLibLayout()
 }
 
 tasks.installDist {
-    dependsOn(quarkdocGenerate, bundleRuntime)
+    dependsOn(quarkdocGenerate, bundleRuntime, ":quarkdown-core:extractCslStyles")
 }
 
 tasks.distZip {
-    dependsOn(quarkdocGenerate, bundleRuntime)
+    dependsOn(quarkdocGenerate, bundleRuntime, ":quarkdown-core:extractCslStyles")
     archiveVersion.set("")
 }
 
 tasks.distTar {
-    dependsOn(quarkdocGenerate, bundleRuntime)
+    dependsOn(quarkdocGenerate, bundleRuntime, ":quarkdown-core:extractCslStyles")
     archiveVersion.set("")
 }
 

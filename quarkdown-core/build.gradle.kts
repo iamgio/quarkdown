@@ -65,6 +65,15 @@ val extractCslStyles by tasks.registering {
     }
 }
 
-sourceSets.main {
-    resources.srcDir(extractCslStyles)
+tasks.test {
+    // Lets tests read CSL styles from the extraction output.
+    dependsOn(extractCslStyles)
+    systemProperty(
+        "quarkdown.test.csl.styles.path",
+        layout.buildDirectory
+            .dir("generated/csl-styles")
+            .get()
+            .asFile
+            .absolutePath,
+    )
 }
