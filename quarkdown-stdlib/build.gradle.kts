@@ -11,6 +11,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation(testFixtures(project(":quarkdown-core")))
     implementation(project(":quarkdown-core"))
+    implementation(project(":quarkdown-install-layout-navigator"))
     implementation("se.sawano.java:alphanumeric-comparator:2.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation("com.jsoizo:kotlin-csv-jvm:2.0.0")

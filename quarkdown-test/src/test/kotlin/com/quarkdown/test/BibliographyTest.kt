@@ -1,11 +1,13 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.function.error.InvalidFunctionCallException
 import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.rendering.plaintext.extension.plainText
 import com.quarkdown.test.util.DEFAULT_OPTIONS
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 private const val BIBLIOGRAPHY_CALL = ".bibliography {bib/bibliography.bib} breakpage:{no}"
@@ -52,6 +54,16 @@ class BibliographyTest {
                 ieeeBibliographyOutput(),
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `style name cannot escape the styles directory`() {
+        // Traversal and separator attempts must be rejected before any file resolution.
+        listOf("../apa", "..\\apa", "styles/apa", "/etc/apa", "../../qd/main").forEach { style ->
+            assertFailsWith<InvalidFunctionCallException> {
+                execute(".bibliography {bib/bibliography.bib} style:{$style}") {}
+            }
         }
     }
 

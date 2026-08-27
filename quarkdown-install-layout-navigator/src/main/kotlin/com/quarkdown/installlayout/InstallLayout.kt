@@ -18,6 +18,9 @@ class InstallLayout(
     /** The bundled agent skill directory, containing the `SKILL.md` entrypoint and any supporting files. */
     val agentSkill get() = resolveDirectory("skills").resolveDirectory("quarkdown")
 
+    /** The directory containing CSL citation style definitions for bibliographies. */
+    val cslStyles get() = resolveDirectory("csl")
+
     companion object {
         /** Lazily resolved singleton pointing to the current process's install layout. Throws if resolution fails. */
         val get by lazy(InstallDirectoryResolver::resolve)
