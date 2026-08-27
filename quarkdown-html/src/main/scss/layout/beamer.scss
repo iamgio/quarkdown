@@ -3,12 +3,10 @@
 @use "util/progressive-heading-sizes" as *;
 @use "util/latex-tables" as *;
 @use "util/beamer-toc" as *;
-//noinspection CssUnknownTarget
-@import url('source-sans-pro/index.css');
-//noinspection CssUnknownTarget
-@import url('fira-sans/index.css');
-//noinspection CssUnknownTarget
-@import url('noto-sans-mono/index.css');
+@use "util/font-imports" as *;
+@include import-font-family('source-sans-pro');
+@include import-font-family('fira-sans');
+@include import-font-family('noto-sans-mono', $variants: '400' '700');
 
 :root {
   --reveal-center-vertically: false;

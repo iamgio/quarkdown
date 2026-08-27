@@ -236,6 +236,16 @@ fun discoverThemeNames(kind: String): List<String> =
 /** CSS file plus its source map, the unit we copy around per stylesheet. */
 fun cssWithMap(name: String): List<String> = listOf("$name.css", "$name.css.map")
 
+/**
+ * Include patterns for `@fontsource` package exports, keeping only the variants Quarkdown themes
+ * import (regular, italic, bold, bold italic) in `woff2` form (universally supported), across all
+ * language subsets. Everything else in the package (other weights, `woff` fallbacks, per-weight
+ * stylesheets) would inflate the distribution and every rendered document without ever being loaded.
+ */
+val fontsourceIncludes: List<String> =
+    listOf("400" to "400-normal", "400-italic" to "400-italic", "700" to "700-normal", "700-italic" to "700-italic")
+        .flatMap { (stylesheet, file) -> listOf("$stylesheet.css", "files/*-$file.woff2") }
+
 // Reshapes the flat SCSS-compiled output into a per-theme directory layout under
 // build/install/theme/, and copies each theme's declared export assets alongside
 // its CSS file. The flat global.css is preserved as-is; layouts, colors, and locales
@@ -270,6 +280,9 @@ val assembleThemes =
                     declaredExports += src
                     from(src) {
                         into("$kind/$name/${src.name}")
+                        if ("node_modules/@fontsource/" in exportPath) {
+                            include(fontsourceIncludes)
+                        }
                     }
                 }
             }

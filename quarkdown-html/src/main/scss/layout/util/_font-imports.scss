@@ -1,0 +1,10 @@
+/* Utilities for importing font families bundled alongside the assembled theme. */
+
+/* Imports a font family's variant stylesheets from its sibling directory in the theme.
+   The default variants provide regular, italic, bold and bold italic;
+   families without italics (e.g. monospace) can pass `$variants: '400' '700'`. */
+@mixin import-font-family($family, $variants: '400' '400-italic' '700' '700-italic') {
+  @each $variant in $variants {
+    @import url('#{$family}/#{$variant}.css');
+  }
+}
