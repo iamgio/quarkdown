@@ -7,9 +7,9 @@ import com.quarkdown.server.stop.KtorStoppableAdapter
 import com.quarkdown.server.stop.Stoppable
 import io.ktor.server.application.ServerReady
 import io.ktor.server.application.install
+import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.http.content.staticFiles
-import io.ktor.server.netty.Netty
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
@@ -57,7 +57,7 @@ class LocalFileWebServer(
         }
 
         val server =
-            embeddedServer(Netty, port) {
+            embeddedServer(CIO, port) {
                 install(SSE)
 
                 routing {
