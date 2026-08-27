@@ -10,10 +10,7 @@ dependencies {
 
     val ktorVersion = "3.5.0"
 
-    implementation("io.ktor:ktor-server-netty:$ktorVersion") {
-        exclude(group = "io.netty", module = "netty-codec-marshalling")
-        exclude(group = "io.netty", module = "netty-codec-protobuf")
-    }
+    implementation("io.ktor:ktor-server-cio:$ktorVersion")
     implementation("io.ktor:ktor-server-sse:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
