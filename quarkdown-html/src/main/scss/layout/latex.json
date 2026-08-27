@@ -1,6 +1,6 @@
 {
   "exports": [
-    "src/main/resources/fonts/computermodern",
-    "src/main/resources/fonts/latinmodern-mono"
+    "src/main/fonts/computermodern",
+    "src/main/fonts/latinmodern-mono"
   ]
 }

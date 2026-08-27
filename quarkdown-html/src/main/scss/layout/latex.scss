@@ -5,10 +5,9 @@
 @use "util/latex-tables" as *;
 @use "util/latex-toc" as *;
 @use "../components/util/location-selectors" as location-selectors;
-//noinspection CssUnknownTarget
-@import url('computermodern/index.css');
-//noinspection CssUnknownTarget
-@import url('latinmodern-mono/index.css');
+@use "util/font-imports" as *;
+@include import-font-family('computermodern', $variants: 'index');
+@include import-font-family('latinmodern-mono', $variants: 'index');
 
 :root {
   --qd-main-font: 'Computer Modern Serif', sans-serif;
