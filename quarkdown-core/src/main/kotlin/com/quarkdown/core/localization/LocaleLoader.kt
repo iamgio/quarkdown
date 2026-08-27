@@ -1,15 +1,17 @@
 package com.quarkdown.core.localization
 
-import com.quarkdown.core.localization.jvm.JVMLocaleLoader
+import com.quarkdown.core.localization.table.TableLocaleLoader
 
 /**
  * Loader of [Locale]s.
  */
 interface LocaleLoader {
     /**
-     * All available locales.
+     * All supported base-language locales, without territory variants.
+     * Territory-carrying locales (e.g. `en-US`) are resolved on demand
+     * via [fromTag] or [fromName].
      */
-    val all: Iterable<Locale>
+    val all: Sequence<Locale>
 
     /**
      * @param tag language code of the locale and optionally the country code, separated by a hyphen.
@@ -34,9 +36,10 @@ interface LocaleLoader {
 
     companion object {
         /**
-         * Default system [LocaleLoader] implementation.
+         * Default [LocaleLoader] implementation, backed by bundled locale name tables
+         * for platform-independent, deterministic results.
          */
         val SYSTEM: LocaleLoader
-            get() = JVMLocaleLoader
+            get() = TableLocaleLoader
     }
 }

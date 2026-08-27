@@ -349,7 +349,7 @@ fun docKeywords(
  *               either a locale tag (e.g. `en`, `en-US`, `it`, `fr-CA`)
  *               or an English name of a locale (e.g. `English`, `English (United States)`, `Italian`, `French (Canada)`)
  *               to assign to the document
- * @return the localized name of the current document language if [locale] is unset, nothing otherwise
+ * @return the English name of the current document language if [locale] is unset, nothing otherwise
  * @throws IllegalArgumentException if the locale tag is invalid or not found
  * @wiki document-metadata
  */
@@ -361,7 +361,7 @@ fun docLanguage(
 ): OutputValue<*> =
     context.modifyOrEchoDocumentInfo(
         locale,
-        get = { (this.locale?.localizedName ?: "").wrappedAsValue() },
+        get = { (this.locale?.displayName ?: "").wrappedAsValue() },
         modify = {
             copy(
                 locale =

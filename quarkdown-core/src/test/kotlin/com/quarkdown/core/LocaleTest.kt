@@ -2,7 +2,7 @@ package com.quarkdown.core
 
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.localization.isCJK
-import com.quarkdown.core.localization.jvm.JVMLocaleLoader
+import com.quarkdown.core.localization.table.TableLocaleLoader
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -14,7 +14,7 @@ import kotlin.test.assertTrue
  * @see LocalizationTest
  */
 class LocaleTest {
-    private val retriever = JVMLocaleLoader
+    private val retriever = TableLocaleLoader
 
     @Test
     fun `default retriever`() {
@@ -32,9 +32,7 @@ class LocaleTest {
             assertEquals("en", tag)
             assertEquals("en", shortTag)
             assertEquals("English", displayName)
-            assertEquals("English", localizedName)
             assertNull(countryCode)
-            assertNull(localizedCountryName)
         }
     }
 
@@ -49,9 +47,7 @@ class LocaleTest {
             assertEquals("it", tag)
             assertEquals("it", shortTag)
             assertEquals("Italian", displayName)
-            assertEquals("italiano", localizedName)
             assertNull(countryCode)
-            assertNull(localizedCountryName)
         }
     }
 
@@ -65,9 +61,7 @@ class LocaleTest {
             assertEquals("en-US", tag)
             assertEquals("en", shortTag)
             assertEquals("English (United States)", displayName)
-            assertEquals("English (United States)", localizedName)
             assertEquals("US", countryCode)
-            assertEquals("United States", localizedCountryName)
         }
     }
 
@@ -80,9 +74,17 @@ class LocaleTest {
             assertEquals("fr-CA", tag)
             assertEquals("fr", shortTag)
             assertEquals("French (Canada)", displayName)
-            assertEquals("français (Canada)", localizedName)
             assertEquals("CA", countryCode)
-            assertEquals("Canada", localizedCountryName)
+        }
+    }
+
+    @Test
+    fun `territory name containing parentheses`() {
+        with(retriever.find("en-CC")) {
+            assertNotNull(this)
+            assertEquals("English (Cocos (Keeling) Islands)", displayName)
+            // Round-trip: the display name resolves back to the same locale.
+            assertEquals(this, retriever.fromName(displayName))
         }
     }
 
