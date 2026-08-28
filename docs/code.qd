@@ -38,12 +38,16 @@ The `.code` function specifies the language through the optional `lang` argument
     .code lang:{typescript}
         .read {assets/point.ts}
 
-### Line numbers
+### Callouts
 
-Standard code blocks always show line numbers by default. The `.code` function lets you toggle line numbers using the optional `linenumbers` [`Boolean`](boolean.qd) argument, which defaults to `yes` (equivalent to `true`).
+The `.code` function can attach numbered markers to specific lines through the optional `callouts` argument, a [`Dictionary`](dictionary.qd) that pairs line numbers with a description.
 
 .examplemirror
-    .code linenumbers:{no}
+    .code callouts:{
+        - 3: Defines the horizontal coordinate.
+        - 5: Takes the two coordinates.
+        - 6: Assigns the horizontal coordinate.
+    }
         .read {assets/point.ts}
 
 ### Focused lines
@@ -53,6 +57,16 @@ The `.code` function allows you to focus on a [`Range`](range.qd) of lines, star
 .examplemirror
     .code focus:{5..8}
         .read {assets/point.ts}
+
+### Line numbers
+
+Standard code blocks always show line numbers by default. The `.code` function lets you toggle line numbers using the optional `linenumbers` [`Boolean`](boolean.qd) argument, which defaults to `yes` (equivalent to `true`).
+
+.examplemirror
+    .code linenumbers:{no}
+        .read {assets/point.ts}
+
+Note that line numbers are required for callouts and focused lines to work.
 
 ### Extending
 

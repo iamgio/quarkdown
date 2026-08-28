@@ -9,6 +9,7 @@ import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.reference.CrossReferenceableNode
 import com.quarkdown.core.function.dsl.functionCallArguments
 import com.quarkdown.core.function.value.data.Range
+import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.visitor.node.NodeVisitor
 
 /**
@@ -17,7 +18,8 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param language optional syntax language
  * @param showLineNumbers whether to show line numbers
  * @param highlight whether to apply syntax highlighting
- * @param focusedLines range of lines to focus on. No lines are focused if `null`
+ * @param focusedLines range of lines to focus on (1-based). No lines are focused if `null`
+ * @param callouts callout contents associated with line numbers (1-based)
  * @param caption optional caption
  * @param referenceId optional ID for cross-referencing via a [com.quarkdown.core.ast.quarkdown.reference.CrossReference]
  */
@@ -27,6 +29,7 @@ class Code(
     val showLineNumbers: Boolean = true,
     val highlight: Boolean = true,
     val focusedLines: Range? = null,
+    val callouts: Map<Int, String> = emptyMap(),
     override val caption: InlineContent? = null,
     override val referenceId: String? = null,
 ) : LocationTrackableNode,
@@ -46,6 +49,14 @@ class Code(
             arg("caption", inline(caption))
             arg("linenumbers", boolean(showLineNumbers))
             arg("focus", obj(focusedLines))
+            arg(
+                "callouts",
+                dictionary(
+                    callouts
+                        .map { it.key.toString() to it.value.wrappedAsValue() }
+                        .toMap(),
+                ),
+            )
             arg("ref", string(referenceId))
             arg("code", evaluable(content))
         }

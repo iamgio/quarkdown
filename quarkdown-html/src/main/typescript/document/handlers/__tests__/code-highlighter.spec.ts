@@ -23,6 +23,10 @@ describe('CodeHighlighter', () => {
         <div class="hljs-ln-line" data-line-number="2"></div>
         <div class="hljs-ln-line" data-line-number="3"></div>
         <div class="hljs-ln-line" data-line-number="4"></div>
+      </code></pre>
+      <pre><code class="hljs" data-callouts="2">
+        <div class="hljs-ln-line hljs-ln-code" data-line-number="1"></div>
+        <div class="hljs-ln-line hljs-ln-code" data-line-number="2"></div>
       </code></pre>`;
 
     const h = new CodeHighlighter(new DummyDoc() as any);
@@ -36,5 +40,8 @@ describe('CodeHighlighter', () => {
 
     const focused = document.querySelectorAll('.hljs-ln-line.focused');
     expect(focused.length).toBe(2); // lines 2 and 3
+
+    const marker = document.querySelector('.hljs-ln-code[data-line-number="2"] .code-callout-marker');
+    expect(marker?.textContent).toBe('1');
   });
 });

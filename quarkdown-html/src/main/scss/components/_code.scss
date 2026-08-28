@@ -70,6 +70,36 @@
     color: white;
   }
 
+  // Code block callouts
+
+  .code-callout-marker {
+    @include font.global-font-family;
+
+    background-color: var(--qd-background-color);
+    font-variant-numeric: tabular-nums;
+    color: var(--qd-main-color);
+    border: 1px solid var(--qd-main-color);
+    border-radius: 100%;
+    padding: 0 var(--qd-digit-circle-padding);
+  }
+
+  pre .code-callout-marker {
+    margin-left: 0.5em;
+  }
+
+  .code-callouts {
+    list-style: none;
+    padding-left: 0;
+
+    .code-callout-marker {
+      margin-right: 0.5em;
+    }
+  }
+
+  :is(pre, figure):has(code[data-callouts]) {
+    margin-bottom: 0;
+  }
+
   // Code block copy button
 
   .hljs-copy-wrapper {

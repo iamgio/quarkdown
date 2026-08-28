@@ -8,6 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 
 /**
  * Tests for possible security issues.
@@ -58,6 +59,22 @@ class SecurityTest {
                     "graph TD\n    A --&gt; B&lt;/pre&gt;Hello</pre></figure>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `code callout injection`() {
+        execute(
+            """
+            .code callouts:{
+                - 1: <script>alert('XSS')</script>
+            }
+                code 1
+            """.trimIndent(),
+        ) {
+            assertContains(it, "&lt;script&gt;")
+            assertContains(it, "&lt;/script&gt;")
+            assertFalse("<script>" in it)
         }
     }
 
@@ -163,7 +180,7 @@ class SecurityTest {
             .numbering
                 - equations: 1
 
-            ${'$'} E=mc^2 ${'$'} {#" onclick="alert(1)}
+            $ E=mc^2 $ {#" onclick="alert(1)}
             """.trimIndent(),
         ) {
             // Quotes and spaces are stripped from IDs.

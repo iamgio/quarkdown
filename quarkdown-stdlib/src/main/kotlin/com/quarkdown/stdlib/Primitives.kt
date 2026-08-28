@@ -21,6 +21,7 @@ import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.value.NodeValue
+import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.data.EvaluableString
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.wrappedAsValue
@@ -232,6 +233,19 @@ fun pageBreak() = PageBreak().wrappedAsValue()
  *     .read {snippet.kt}
  * ```
  *
+ * [callouts] can be specified to annotate specific lines of code with additional information:
+ *
+ * ```markdown
+ * .code lang:{javascript} callouts:{
+ *     - 1: Declares the function.
+ *     - 3: Builds the greeting.
+ * }
+ *     function greet() {
+ *         const name = "World";
+ *         return `Hello, ${name}!`;
+ *     }
+ * ```
+ *
  * As a [Code] primitive, this function can be used in `.extend` to affect every code block in the document,
  * including those introduced by the standard triple-backtick and triple-tilde fences:
  *
@@ -243,7 +257,9 @@ fun pageBreak() = PageBreak().wrappedAsValue()
  * @param language optional language of the code
  * @param caption optional caption
  * @param showLineNumbers whether to show line numbers
- * @param focusedLines range of lines to focus on. No lines are focused if unset. Supports open ranges.
+ * @param focusedLines range of lines to focus on (1-based). No lines are focused if unset. Supports open ranges.
+ * Note: HTML rendering requires [showLineNumbers] to be enabled.
+ * @param callouts optional dictionary of callout content, associated to their 1-based line number.
  * Note: HTML rendering requires [showLineNumbers] to be enabled.
  * @param referenceId optional identifier for cross-referencing this code block elsewhere via [reference]
  * @param code code content
@@ -254,6 +270,7 @@ fun code(
     @LikelyNamed caption: InlineMarkdownContent? = null,
     @Name("linenumbers") showLineNumbers: Boolean = true,
     @Name("focus") focusedLines: Range? = null,
+    @LikelyNamed callouts: Map<String, OutputValue<String>> = emptyMap(),
     @Name("ref") referenceId: String? = null,
     @LikelyBody code: EvaluableString,
 ): NodeValue =
@@ -262,9 +279,28 @@ fun code(
         language = language,
         showLineNumbers = showLineNumbers,
         focusedLines = focusedLines,
+        callouts = codeCalloutsByLine(callouts),
         caption = caption?.children,
         referenceId = referenceId,
     ).wrappedAsValue()
+
+/**
+ * Validates and converts the raw callout dictionary of [code] into a map of
+ * 1-based line numbers to their callout content, sorted by line number.
+ * @param callouts raw callout dictionary, keyed by line number
+ * @return a map of line numbers to callout content, sorted by line number
+ * @throws IllegalArgumentException if a key is not a positive integer
+ */
+private fun codeCalloutsByLine(callouts: Map<String, OutputValue<String>>): Map<Int, String> =
+    callouts
+        .asSequence()
+        .map { (rawLineNumber, content) ->
+            val lineNumber =
+                requireNotNull(rawLineNumber.toIntOrNull()) { "Callout keys must be integers, but got '$rawLineNumber'." }
+            require(lineNumber > 0) { "Callout line numbers must be positive, but got $lineNumber." }
+            lineNumber to content.unwrappedValue
+        }.sortedBy { it.first }
+        .toMap()
 
 /**
  * Creates a math (TeX) node, either inline or as a block.

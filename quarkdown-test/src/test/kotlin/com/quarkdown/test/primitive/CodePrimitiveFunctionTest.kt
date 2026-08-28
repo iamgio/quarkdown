@@ -102,6 +102,35 @@ class CodePrimitiveFunctionTest {
     }
 
     @Test
+    fun `callouts can be attached to matching languages via super`() {
+        execute(
+            """
+            .extend {code} where:{lang: .lang::equals {kotlin}}
+                .super callouts:{
+                    - 1: Prints a greeting
+                }
+
+            ```kotlin
+            println("Hello")
+            ```
+
+            ```
+            No callouts
+            ```
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<pre><code class=\"language-kotlin\" data-callouts=\"1\">println(&quot;Hello&quot;)</code></pre>" +
+                    "<ul class=\"code-callouts\">" +
+                    "<li class=\"code-callout\"><span class=\"code-callout-marker\">1</span>Prints a greeting</li>" +
+                    "</ul>" +
+                    "<pre><code>No callouts</code></pre>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `focus range can be set via super`() {
         execute(
             """

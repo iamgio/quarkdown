@@ -12,10 +12,20 @@
 
 <<<
 
+#### With callouts
+
+.code lang:{java} callouts:{
+	- 4: The constructor.
+	- 8: Getter for the wrapped value.
+}
+	.read {code/Wrapper.java}
+
 #### Focused
 
 .code lang:{java} focus:{4..6}
 	.read {code/Wrapper.java}
+
+<<<
 
 #### Without line numbers
 

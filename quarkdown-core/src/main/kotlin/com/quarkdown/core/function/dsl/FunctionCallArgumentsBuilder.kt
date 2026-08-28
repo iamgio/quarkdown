@@ -8,9 +8,11 @@ import com.quarkdown.core.ast.attributes.primitive.PrimitiveFunctionBackedNode
 import com.quarkdown.core.function.call.FunctionCallArgument
 import com.quarkdown.core.function.expression.Expression
 import com.quarkdown.core.function.value.BooleanValue
+import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.NumberValue
 import com.quarkdown.core.function.value.ObjectValue
+import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.data.EvaluableString
 import com.quarkdown.core.function.value.wrappedAsValue
@@ -75,6 +77,11 @@ class FunctionCallArgumentsBuilder internal constructor() {
      * @return [value] wrapped as a boolean expression, or [NoneValue] if `null`
      */
     fun boolean(value: Boolean?): Expression = value?.let(::BooleanValue) ?: NoneValue
+
+    /**
+     * @return [value] wrapped as a dictionary expression, or [NoneValue] if `null`
+     */
+    fun <V : OutputValue<*>> dictionary(value: Map<String, V>?): Expression = value?.let { DictionaryValue(it.toMutableMap()) } ?: NoneValue
 
     /**
      * @return [value] wrapped as an evaluable string, expanded (including nested function calls)
