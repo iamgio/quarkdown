@@ -10,14 +10,14 @@ The new `callouts` argument of the `.code` function attaches numbered markers to
 
 ```markdown
 .code callouts:{
-    - 3: Defines the horizontal coordinate.
+    - 2: Defines the horizontal coordinate.
     - 5: Takes the two coordinates.
     - 6: Assigns the horizontal coordinate.
 }
-    .read {assets/point.ts}
+    .read {point.ts}
 ```
 
-<img width="660" alt="Callout" src="https://github.com/user-attachments/assets/b2f183ab-0e11-4213-bdd4-7913dd8622c1" />
+<img width="660" alt="Callout" src="https://github.com/user-attachments/assets/99521edd-4ef0-4566-b114-3027c4fb5c91" />
 
 ### Changed
 

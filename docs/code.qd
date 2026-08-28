@@ -44,7 +44,7 @@ The `.code` function can attach numbered markers to specific lines through the o
 
 .examplemirror
     .code callouts:{
-        - 3: Defines the horizontal coordinate.
+        - 2: Defines the horizontal coordinate.
         - 5: Takes the two coordinates.
         - 6: Assigns the horizontal coordinate.
     }
