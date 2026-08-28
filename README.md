@@ -9,7 +9,7 @@
   <a href="https://quarkdown.com/docs"><img alt="Docs" src="https://img.shields.io/badge/docs-read-blue"></a>
   <a href="https://github.com/iamgio/quarkdown/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/iamgio/quarkdown?color=mediumseagreen"></a>
   <a href="https://marketplace.visualstudio.com/items?itemName=quarkdown.quarkdown-vscode"><img alt="Visual Studio Code Extension Version" src="https://img.shields.io/github/v/release/quarkdown-labs/quarkdown-vscode?color=blue&label=vscode"></a>
-  <a href="https://pinterest.github.io/ktlint"><img alt="FMT: Ktlint" src="https://img.shields.io/badge/fmt-ktlint-7f52ff?logo=kotlin&logoColor=f5f5f5"></a>
+  <a href="https://ktlint.github.io/ktlint/latest/"><img alt="FMT: Ktlint" src="https://img.shields.io/badge/fmt-ktlint-7f52ff?logo=kotlin&logoColor=f5f5f5"></a>
   <a href="https://www.codefactor.io/repository/github/iamgio/quarkdown"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/iamgio/quarkdown/badge/main"></a>
   <br><br>
   <a href="https://trendshift.io/repositories/13945" target="_blank"><img src="https://trendshift.io/api/badge/repositories/13945" alt="iamgio%2Fquarkdown | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
