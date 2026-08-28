@@ -152,7 +152,11 @@ class QuarkdownHtmlNodeRenderer(
 
             // The reference ID or label is set as the ID of the element, allowing cross-references to link to it.
             val label = node.getLocationLabel(context)
-            val id = (node as? CrossReferenceableNode)?.linkableReferenceId?.let(::sanitizeId) ?: label?.let { "$idPrefix-$it" }
+            val id =
+                (node as? CrossReferenceableNode)
+                    ?.linkableReferenceId
+                    ?.let(::sanitizeId)
+                    ?: label?.let { "$idPrefix-$it" }
             id?.let { optionalAttribute("id", it) }
 
             if (node.caption == null && label == null) {
@@ -688,16 +692,51 @@ class QuarkdownHtmlNodeRenderer(
                 )
             }.build()
 
+    /**
+     * Whether a rendered [Code] block must be wrapped in a `<figure>` tag hosting its caption:
+     * that is, when the block is numbered, captioned, or referenceable via a cross-reference.
+     */
+    private val Code.requiresFigure: Boolean
+        get() = caption != null || getLocationLabel(context) != null || linkableReferenceId != null
+
+    /**
+     * Builds the list of callout descriptions displayed below a code block,
+     * with each item numbered to match the marker attached to its corresponding line of code.
+     * @param callouts callout contents, in marker order
+     * @return the `ul.code-callouts` tag
+     */
+    private fun calloutList(callouts: Collection<String>) =
+        buildTag("ul") {
+            className("code-callouts")
+            callouts.forEachIndexed { index, content ->
+                tag("li") {
+                    className("code-callout")
+                    tag("span") {
+                        className("code-callout-marker")
+                        +(index + 1).toString()
+                    }
+                    +escapeCriticalContent(content)
+                }
+            }
+        }
+
     override fun visit(node: Code): String {
         val block = super.visit(node)
+        val code =
+            if (node.requiresFigure) {
+                buildTag("figure") {
+                    +block
+                    numberedCaption(node, positionProvider = { codeBlocks })
+                }
+            } else {
+                block
+            }
 
-        // If the code is numbered, has a caption, or has a reference ID, it is wrapped in a figure.
-        if (node.caption == null && node.getLocationLabel(context) == null && node.linkableReferenceId == null) {
-            return block
-        }
-        return buildTag("figure") {
-            +block
-            numberedCaption(node, positionProvider = { codeBlocks })
+        if (node.callouts.isEmpty()) return code
+
+        return buildMultiTag {
+            +code
+            +calloutList(node.callouts.values)
         }
     }
 

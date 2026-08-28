@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [Code block callouts](https://quarkdown.com/wiki/code#callouts)
+
+The new `callouts` argument of the `.code` function attaches numbered markers to specific lines of a code block, each paired with a description displayed right below the block.
+
+```markdown
+.code callouts:{
+    - 3: Defines the horizontal coordinate.
+    - 5: Takes the two coordinates.
+    - 6: Assigns the horizontal coordinate.
+}
+    .read {assets/point.ts}
+```
+
+<img width="660" alt="Callout" src="https://github.com/user-attachments/assets/b2f183ab-0e11-4213-bdd4-7913dd8622c1" />
+
 ### Changed
 
 #### Reflectionless function calls

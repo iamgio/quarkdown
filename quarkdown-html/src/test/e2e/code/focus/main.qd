@@ -10,3 +10,29 @@
             return this.value;
         }
     }
+
+.code lang:{java} focus:{8..}
+    public final class Wrapper<T> {
+        private final T value;
+
+        public Wrapper(T value) {
+            this.value = value;
+        }
+
+        public T getValue() {
+            return this.value;
+        }
+    }
+
+.code lang:{java} focus:{..3}
+    public final class Wrapper<T> {
+        private final T value;
+
+        public Wrapper(T value) {
+            this.value = value;
+        }
+
+        public T getValue() {
+            return this.value;
+        }
+    }

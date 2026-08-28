@@ -1,11 +1,14 @@
 package com.quarkdown.test
 
 import com.quarkdown.core.ast.attributes.presence.hasCode
+import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.rendering.markdown.extension.gfm
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 /**
@@ -97,6 +100,93 @@ class CodeTest {
                 it,
             )
             assertTrue(attributes.hasCode)
+        }
+    }
+
+    @Test
+    fun `block with callouts`() {
+        execute(
+            """
+            .code callouts:{
+                - 1: First line
+                - 3: Third line
+            }
+                code 1
+                code 2
+                code 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<pre><code data-callouts=\"1,3\">code 1\ncode 2\ncode 3</code></pre>" +
+                    "<ul class=\"code-callouts\">" +
+                    "<li class=\"code-callout\"><span class=\"code-callout-marker\">1</span>First line</li>" +
+                    "<li class=\"code-callout\"><span class=\"code-callout-marker\">2</span>Third line</li>" +
+                    "</ul>",
+                it,
+            )
+            assertTrue(attributes.hasCode)
+        }
+    }
+
+    @Test
+    fun `block with callouts from file content`() {
+        execute(
+            """
+            .code callouts:{
+                - 2: Second line
+            }
+                .read {code.txt}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<pre><code data-callouts=\"2\">Line 1\nLine 2\n\nLine 3</code></pre>" +
+                    "<ul class=\"code-callouts\">" +
+                    "<li class=\"code-callout\"><span class=\"code-callout-marker\">1</span>Second line</li>" +
+                    "</ul>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `block with non-positive callout line number`() {
+        assertFailsWith<FunctionCallRuntimeException> {
+            execute(
+                """
+                .code callouts:{
+                    - 0: Invalid
+                }
+                    code 1
+                """.trimIndent(),
+            ) {}
+        }.also { exception ->
+            assertIs<IllegalArgumentException>(exception.cause)
+        }
+    }
+
+    @Test
+    fun `block with callouts and focused lines`() {
+        execute(
+            """
+            .code focus:{2..3} callouts:{
+                - 2: Focused and marked
+            }
+                code 1
+                code 2
+                code 3
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<pre>" +
+                    "<code class=\"focus-lines\" data-callouts=\"2\" data-focus-start=\"2\" data-focus-end=\"3\">" +
+                    "code 1\ncode 2\ncode 3" +
+                    "</code>" +
+                    "</pre>" +
+                    "<ul class=\"code-callouts\">" +
+                    "<li class=\"code-callout\"><span class=\"code-callout-marker\">1</span>Focused and marked</li>" +
+                    "</ul>",
+                it,
+            )
         }
     }
 

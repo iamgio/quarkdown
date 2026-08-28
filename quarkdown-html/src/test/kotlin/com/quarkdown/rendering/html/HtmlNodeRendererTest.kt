@@ -471,6 +471,14 @@ class HtmlNodeRendererTest {
                 caption = listOf(Text("A Java code example.")),
             ).render(),
         )
+        assertEquals(
+            out.next(),
+            Code(
+                "class Point {\n    ...\n}",
+                language = "java",
+                callouts = mapOf(1 to "The class declaration.", 3 to "End of the class."),
+            ).render(),
+        )
     }
 
     @Test

@@ -156,6 +156,14 @@ open class BaseHtmlNodeRenderer(
                     "focus-lines".takeIf { node.focusedLines != null },
                 )
 
+                // Lines marked with a callout, e.g. `data-callouts="1,3,5"`.
+                optionalAttribute(
+                    "data-callouts",
+                    node.callouts.keys
+                        .takeIf { it.isNotEmpty() }
+                        ?.joinToString(","),
+                )
+
                 // Focus range.
                 optionalAttribute("data-focus-start", node.focusedLines?.start)
                 optionalAttribute("data-focus-end", node.focusedLines?.end)

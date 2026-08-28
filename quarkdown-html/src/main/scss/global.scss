@@ -100,6 +100,7 @@
   --qd-caption-margin: 0.4em; // Margin between a caption and its content
   --qd-box-margin-multiplier: 1.5; // --qd-block-margin * this = box vertical margin
   --qd-box-content-vertical-padding: 8px; // Vertical padding of box content
+  --qd-digit-circle-padding: 0.55cap; // Horizontal padding applied to digits in order to draw a circle (e.g. code callout markers)
   --qd-nested-navigation-padding-left: 28px; // When expected by the layout theme, padding-left of nested ToC entries
 
   // Border
