@@ -17,6 +17,8 @@ The new `callouts` argument of the `.code` function attaches numbered markers to
     .read {assets/point.ts}
 ```
 
+<img width="660" alt="Callout" src="https://github.com/user-attachments/assets/b2f183ab-0e11-4213-bdd4-7913dd8622c1" />
+
 ### Changed
 
 #### Reflectionless function calls
