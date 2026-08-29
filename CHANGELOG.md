@@ -43,6 +43,10 @@ Additionally, the two themes now ship smaller font artifacts that reduce the siz
 
 Function extensions declared in a nested scope now compose with inherited extensions only within that scope, without leaking into parent or sibling scopes.
 
+#### [LSP] Fixed incorrect parameter completions inside body arguments
+
+When inside a body argument, the language server doesn't suggest other sibling parameters anymore.
+
 ## [2.5.1] - 2026-08-12
 
 ### Changed

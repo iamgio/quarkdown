@@ -180,6 +180,13 @@ class FunctionCallTokenizer {
                 FunctionCallToken.Type.LINE_CONTINUATION
             }
 
+            // .function
+            //     body
+            //     ^^^^
+            FUNCTION_CALL_BODY_ARGUMENT_CONTENT_TOKEN_NAME -> {
+                FunctionCallToken.Type.BODY_ARGUMENT
+            }
+
             else -> {
                 null
             }
