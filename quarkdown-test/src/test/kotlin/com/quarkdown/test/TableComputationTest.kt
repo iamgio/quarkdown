@@ -258,6 +258,56 @@ class TableComputationTest {
     }
 
     @Test
+    fun `generation by rows, dynamic rows`() {
+        execute(
+            """
+            .tablebyrows
+                .repeat {3}
+                    y:
+                    .repeat {3}
+                        x:
+                        Cell .x:.y
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<table><thead><tr><th></th><th></th><th></th></tr></thead><tbody>" +
+                    (1..3).joinToString("") { y ->
+                        "<tr>" + (1..3).joinToString("") { x -> "<td>Cell $x:$y</td>" } + "</tr>"
+                    } +
+                    "</tbody></table>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `generation by rows, with inlined headers`() {
+        execute(
+            """
+            .tablebyrows headers:{
+                - Name
+                - Age
+                - City
+            }
+                - - John
+                  - 25
+                  - NY
+                - - Lisa
+                  - 32
+                  - LA
+                - - Mike
+                  - 19
+                  - CHI
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                htmlTable(john + lisa + mike),
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `generation by rows, with headers`() {
         execute(
             """
