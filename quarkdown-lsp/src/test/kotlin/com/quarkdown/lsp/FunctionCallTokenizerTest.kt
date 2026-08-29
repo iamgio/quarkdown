@@ -179,6 +179,19 @@ class FunctionCallTokenizerTest {
     }
 
     @Test
+    fun `body argument tokenization`() {
+        val text = ".function\n    body content"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        assertEquals(1, calls.size)
+
+        val bodyToken = calls.first().tokens.find { it.type == FunctionCallToken.Type.BODY_ARGUMENT }
+        assertNotNull(bodyToken, "body argument was not tokenized")
+        assertEquals("\n    body content", bodyToken.lexeme)
+        assertTrue(text.lastIndex in bodyToken.range)
+    }
+
+    @Test
     fun `multiple function calls in text`() {
         val text = "Text .function1 {arg1} more text .function2 param:{value}"
         val calls = tokenizer.getFunctionCalls(text)

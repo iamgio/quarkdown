@@ -352,6 +352,39 @@ class FunctionCompletionSupplierTest {
         assertTrue(completions.isEmpty())
     }
 
+    // Body arguments
+
+    @Test
+    fun `no parameter completions inside body argument`() {
+        val text = ".$COLUMN_FUNCTION\n    cr"
+        val completions = getCompletions(text, Position(1, 6))
+        assertTrue(completions.isEmpty())
+    }
+
+    @Test
+    fun `no parameter completions inside multiline body argument`() {
+        val text = ".$COLUMN_FUNCTION\n    content\n    cr"
+        val completions = getCompletions(text, Position(2, 6))
+        assertTrue(completions.isEmpty())
+    }
+
+    @Test
+    fun `name completions for nested call inside body argument`() {
+        val text = ".$COLUMN_FUNCTION\n    .cl"
+        val completions = getCompletions(text, Position(1, 7))
+
+        assertEquals(1, completions.size)
+        assertEquals(CLIP_FUNCTION, completions.first().label)
+    }
+
+    @Test
+    fun `parameter completions for nested call inside body argument`() {
+        val text = ".$COLUMN_FUNCTION\n    .$ALIGN_FUNCTION align"
+        val completions = getCompletions(text, Position(1, text.lines()[1].length)).map { it.label }
+
+        assertEquals(ALIGNMENT_PARAMETER, completions.single())
+    }
+
     // Wrapped (tight) function calls
 
     @Test
