@@ -1,7 +1,7 @@
 package com.quarkdown.lsp.cache
 
-import com.quarkdown.lsp.documentation.extractContentAsMarkup
-import com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker
+import com.quarkdown.lsp.documentation.markdownToMarkup
+import com.quarkdown.quarkdoc.reader.json.DocsIndexWalker
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -47,18 +47,26 @@ object CacheableFunctionCatalogue {
         return catalogue[docsDirectory]?.asSequence() ?: emptySequence()
     }
 
+    /**
+     * Loads the documented functions from the pre-extracted documentation index,
+     * which carries descriptions and documentation in Markdown.
+     * @return the documented functions, or an empty set if the directory carries no index
+     */
     private fun walk(docsDirectory: DocsDirectory): Set<DocumentedFunction> =
-        DokkaHtmlWalker(docsDirectory)
-            .walk()
-            .filter { it.isInModule }
-            .mapNotNull {
+        DocsIndexWalker
+            .fromDirectoryOrNull(docsDirectory)
+            ?.walk()
+            ?.filter { it.isInModule }
+            ?.map {
                 val extractor = it.extractor()
+                val data = extractor.extractFunctionData()
                 DocumentedFunction(
-                    data = extractor.extractFunctionData() ?: return@mapNotNull null,
+                    data = data,
                     rawData = it,
-                    documentationAsMarkup = extractor.extractContentAsMarkup(),
+                    documentationAsMarkup = extractor.extractContent()?.markdownToMarkup(),
                 )
-            }.toSet()
+            }?.toSet()
+            .orEmpty()
 
     /**
      * Searches for functions whose names start with the given query string, case-insensitively.

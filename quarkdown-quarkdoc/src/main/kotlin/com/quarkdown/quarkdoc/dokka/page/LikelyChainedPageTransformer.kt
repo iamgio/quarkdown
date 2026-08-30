@@ -3,8 +3,6 @@ package com.quarkdown.quarkdoc.dokka.page
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.quarkdoc.dokka.signature.QuarkdownSignatureProvider
 import com.quarkdown.quarkdoc.dokka.util.hasAnnotation
-import com.quarkdown.quarkdoc.dokka.util.scrapingAnchor
-import com.quarkdown.quarkdoc.reader.anchors.Anchors
 import org.jetbrains.dokka.base.translators.documentables.PageContentBuilder
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.Documentable
@@ -40,7 +38,6 @@ class LikelyChainedPageTransformer(
         documentable: DFunction,
         builder: PageContentBuilder.DocumentableContentBuilder,
     ) = builder.buildGroup {
-        scrapingAnchor(Anchors.LIKELY_CHAINED)
         text("This function is designed to be ")
         link(
             "chained",

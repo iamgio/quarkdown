@@ -2,7 +2,7 @@ package com.quarkdown.lsp.completion
 
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.FunctionCallInsertionSnippet
-import com.quarkdown.lsp.documentation.htmlToMarkup
+import com.quarkdown.lsp.documentation.markdownToMarkup
 import com.quarkdown.quarkdoc.reader.DocsParameter
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionItemKind
@@ -33,7 +33,7 @@ fun DocsParameter.toCompletionItem() =
     CompletionItem().apply {
         label = name
         detail = if (!isOptional) "required" else null
-        documentation = Either.forRight(description.htmlToMarkup())
+        documentation = Either.forRight(description.markdownToMarkup())
         kind = CompletionItemKind.Field
         insertTextFormat = InsertTextFormat.Snippet
         insertText = FunctionCallInsertionSnippet.forParameter(this@toCompletionItem, alwaysNamed = true)

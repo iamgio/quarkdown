@@ -6,7 +6,9 @@ package com.quarkdown.quarkdoc.reader
  */
 interface DocsContentExtractor {
     /**
-     * @return the extracted main content, if available
+     * @return the extracted main content, if available.
+     * The format depends on the source: HTML for Dokka resources,
+     * Markdown for pre-extracted index entries
      */
     fun extractContent(): String?
 

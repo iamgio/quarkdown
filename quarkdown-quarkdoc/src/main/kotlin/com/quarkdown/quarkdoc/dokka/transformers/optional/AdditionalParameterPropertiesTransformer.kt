@@ -9,8 +9,6 @@ import com.quarkdown.quarkdoc.dokka.kdoc.buildDocTags
 import com.quarkdown.quarkdoc.dokka.page.WIKI_ROOT
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocParameterDocumentationTransformer
 import com.quarkdown.quarkdoc.dokka.util.hasAnnotation
-import com.quarkdown.quarkdoc.dokka.util.scrapingAnchor
-import com.quarkdown.quarkdoc.reader.anchors.Anchors
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.DefaultValue
 import org.jetbrains.dokka.model.doc.Dl
@@ -40,14 +38,21 @@ class AdditionalParameterPropertiesTransformer(
         val isOptional: Boolean,
         val isLikelyNamed: Boolean,
         val isLikelyBody: Boolean,
-    )
+    ) {
+        companion object {
+            /**
+             * @return the properties of [parameter], extracted from the Dokka model
+             */
+            fun of(parameter: DParameter) =
+                ParameterProperties(
+                    isOptional = parameter.extra[DefaultValue] != null,
+                    isLikelyNamed = parameter.hasAnnotation<LikelyNamed>() || parameter.hasAnnotation<Name>(),
+                    isLikelyBody = parameter.hasAnnotation<LikelyBody>() || parameter.hasAnnotation<Body>(),
+                )
+        }
+    }
 
-    override fun extractValue(parameter: DParameter) =
-        ParameterProperties(
-            isOptional = parameter.extra[DefaultValue] != null,
-            isLikelyNamed = parameter.hasAnnotation<LikelyNamed>() || parameter.hasAnnotation<Name>(),
-            isLikelyBody = parameter.hasAnnotation<LikelyBody>() || parameter.hasAnnotation<Body>(),
-        )
+    override fun extractValue(parameter: DParameter) = ParameterProperties.of(parameter)
 
     /**
      * @return the documentation content to add to the parameter documentation,
@@ -57,20 +62,17 @@ class AdditionalParameterPropertiesTransformer(
         buildDocTags {
             if (value.isLikelyBody) {
                 listItem {
-                    scrapingAnchor(Anchors.LIKELY_BODY)
                     text("Likely a ")
                     link(address = BODY_PARAMETER_WIKI_URL, "body argument")
                 }
             }
             if (value.isOptional) {
                 listItem {
-                    scrapingAnchor(Anchors.OPTIONAL)
                     text("Optional")
                 }
             }
             if (value.isLikelyNamed) {
                 listItem {
-                    scrapingAnchor(Anchors.LIKELY_NAMED)
                     text("Likely ")
                     link(address = NAMED_PARAMETER_WIKI_URL, "named")
                 }

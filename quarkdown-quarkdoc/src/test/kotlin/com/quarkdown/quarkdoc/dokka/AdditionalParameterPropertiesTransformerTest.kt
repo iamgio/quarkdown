@@ -3,8 +3,6 @@ package com.quarkdown.quarkdoc.dokka
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
-import com.quarkdown.quarkdoc.reader.anchors.Anchors
-import com.quarkdown.quarkdoc.reader.anchors.AnchorsHtml
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertFalse
@@ -31,11 +29,6 @@ class AdditionalParameterPropertiesTransformerTest :
                 LikelyBody::class.java.packageName + ".QuarkdocAnnotations",
             ),
     ) {
-    private fun containsAnchor(
-        html: String,
-        anchor: String,
-    ): Boolean = AnchorsHtml.toAnchorAttribute(anchor) in html
-
     @Test
     fun `no additional properties`() {
         test(
@@ -51,8 +44,8 @@ class AdditionalParameterPropertiesTransformerTest :
             assertContains(parameters, "x")
             assertFalse(OPTIONAL_TEXT in parameters)
             assertFalse(BODY_TEXT in parameters)
-            assertFalse(containsAnchor(it, Anchors.LIKELY_NAMED))
-            assertFalse(containsAnchor(it, Anchors.LIKELY_BODY))
+            assertFalse(NAMED_TEXT in getParametersTable(it).text())
+            assertFalse(BODY_TEXT in getParametersTable(it).text())
         }
     }
 
@@ -70,7 +63,7 @@ class AdditionalParameterPropertiesTransformerTest :
             val parameters = getParametersTable(it).text()
             assertContains(parameters, "x")
             assertContains(parameters, OPTIONAL_TEXT)
-            assertTrue(containsAnchor(it, Anchors.OPTIONAL))
+            assertTrue(OPTIONAL_TEXT in getParametersTable(it).text())
         }
     }
 
@@ -88,7 +81,7 @@ class AdditionalParameterPropertiesTransformerTest :
             val parameters = getParametersTable(it).text()
             assertContains(parameters, "x")
             assertContains(parameters, BODY_TEXT)
-            assertTrue(containsAnchor(it, Anchors.LIKELY_BODY))
+            assertTrue(BODY_TEXT in getParametersTable(it).text())
             assertFalse(OPTIONAL_TEXT in parameters)
         }
     }
@@ -107,7 +100,7 @@ class AdditionalParameterPropertiesTransformerTest :
             val parameters = getParametersTable(it).text()
             assertContains(parameters, "x")
             assertContains(parameters, BODY_TEXT)
-            assertTrue(containsAnchor(it, Anchors.LIKELY_BODY))
+            assertTrue(BODY_TEXT in getParametersTable(it).text())
             assertFalse(OPTIONAL_TEXT in parameters)
         }
     }
@@ -127,8 +120,8 @@ class AdditionalParameterPropertiesTransformerTest :
             assertContains(parameters, "x")
             assertContains(parameters, BODY_TEXT)
             assertContains(parameters, OPTIONAL_TEXT)
-            assertTrue(containsAnchor(it, Anchors.LIKELY_BODY))
-            assertTrue(containsAnchor(it, Anchors.OPTIONAL))
+            assertTrue(BODY_TEXT in getParametersTable(it).text())
+            assertTrue(OPTIONAL_TEXT in getParametersTable(it).text())
         }
     }
 
@@ -147,8 +140,8 @@ class AdditionalParameterPropertiesTransformerTest :
             assertContains(parameters, "x")
             assertContains(parameters, NAMED_TEXT)
             assertContains(parameters, OPTIONAL_TEXT)
-            assertTrue(containsAnchor(it, Anchors.LIKELY_NAMED))
-            assertTrue(containsAnchor(it, Anchors.OPTIONAL))
+            assertTrue(NAMED_TEXT in getParametersTable(it).text())
+            assertTrue(OPTIONAL_TEXT in getParametersTable(it).text())
         }
     }
 }

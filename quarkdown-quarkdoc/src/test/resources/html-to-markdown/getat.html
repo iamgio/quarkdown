@@ -1,0 +1,71 @@
+<div class="content sourceset-dependent-content" data-active="" data-togglable=":quarkdown-stdlib/main">
+ <div class="sample-container">
+  <pre><code class="block lang-kotlin" theme="idea"><span class="token punctuation">.</span><span class="token function">getat</span><span class="token punctuation"> </span><span class="token constant">from</span><span class="token operator">:</span><span class="token punctuation">{</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><span data-unresolved-link="com.quarkdown.core.function.value/Any///PointingToDeclaration/">Any</span><span class="token operator">&gt;</span><span class="token punctuation">}</span><span class="token punctuation"> \</span><br><span class="token punctuation">     </span><span class="token punctuation"> </span><span class="token constant">index</span><span class="token operator">:</span><span class="token punctuation">{</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">}</span><span class="token punctuation"> \</span><br><span class="token punctuation">    </span><span class="token punctuation"> </span><span class="token constant">orelse</span><span class="token operator">:</span><span class="token punctuation">{</span><span data-unresolved-link="com.quarkdown.core.function.value/Dynamic///PointingToDeclaration/">Dynamic</span><span class="token operator"> = </span>DynamicValue(NOT_FOUND)<span class="token punctuation">}</span><br><span class="token operator">-&gt; </span><span data-unresolved-link="com.quarkdown.core.function.value/Any///PointingToDeclaration/">Any</span></code></pre>
+ </div>
+ <span class="kdoc-tag">
+  <h4 class="">Return</h4>
+  <p class="paragraph">element at the given index, or <a href="../../quarkdown-stdlib/com.quarkdown.stdlib/index.html">none</a> if the index is out of bounds</p>
+ </span>
+ <h4 class="tableheader">Parameters</h4>
+ <div class="table">
+  <div class="table-row table-row_content" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+   <div class="main-subrow keyValue ">
+    <div class="">
+     <span class="inline-flex">
+      <div>
+       <u><span><span>from</span></span></u>
+      </div>
+     </span>
+    </div>
+    <div>
+     <div class="title">
+      <p class="paragraph">collection to get the element from</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="table-row table-row_content" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+   <div class="main-subrow keyValue ">
+    <div class="">
+     <span class="inline-flex">
+      <div>
+       <u><span><span>index</span></span></u>
+      </div>
+     </span>
+    </div>
+    <div>
+     <div class="title">
+      <p class="paragraph">index of the element to get <strong>(starting at 1)</strong></p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="table-row table-row_content" data-filterable-current=":quarkdown-stdlib/main" data-filterable-set=":quarkdown-stdlib/main">
+   <div class="main-subrow keyValue ">
+    <div class="">
+     <span class="inline-flex">
+      <div>
+       <u><span><span>orelse</span></span></u>
+      </div>
+     </span>
+    </div>
+    <div>
+     <div class="title">
+      <dl>
+       <ul>
+        <li>Optional</li>
+       </ul>
+      </dl>
+      <p class="paragraph">value to return if the index is out of bounds. If unset, <code class="lang-kotlin">false</code> is returned.</p>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+ <span class="kdoc-tag">
+  <h4 class="kdoctag">Chaining</h4>This function is designed to be <a href="https://quarkdown.com/wiki/syntax-of-a-function-call#chaining-calls">chained</a> with other function calls:
+  <div class="sample-container">
+   <pre><code class="block lang-kotlin" theme="idea"><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><span data-unresolved-link="com.quarkdown.core.function.value/Any///PointingToDeclaration/">Any</span><span class="token operator">&gt;</span><span class="token punctuation">::</span><span class="token function">getat</span><span class="token punctuation"> </span><span class="token constant">index</span><span class="token operator">:</span><span class="token punctuation">{</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">}</span><span class="token punctuation"> \</span><br><span class="token punctuation">    </span><span class="token punctuation"> </span><span class="token constant">orelse</span><span class="token operator">:</span><span class="token punctuation">{</span><span data-unresolved-link="com.quarkdown.core.function.value/Dynamic///PointingToDeclaration/">Dynamic</span><span class="token punctuation">}</span><br><span class="token operator">-&gt; </span><span data-unresolved-link="com.quarkdown.core.function.value/Any///PointingToDeclaration/">Any</span></code></pre>
+  </div>
+ </span>
+</div>

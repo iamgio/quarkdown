@@ -4,8 +4,6 @@ import com.quarkdown.core.function.toQuarkdownNamingFormat
 import com.quarkdown.quarkdoc.dokka.kdoc.buildDocTags
 import com.quarkdown.quarkdoc.dokka.transformers.QuarkdocParameterDocumentationTransformer
 import com.quarkdown.quarkdoc.dokka.transformers.enumeration.adapters.QuarkdocEnumAdapters
-import com.quarkdown.quarkdoc.dokka.util.scrapingAnchor
-import com.quarkdown.quarkdoc.reader.anchors.Anchors
 import org.jetbrains.dokka.base.signatures.KotlinSignatureUtils.driOrNull
 import org.jetbrains.dokka.model.DParameter
 import org.jetbrains.dokka.model.doc.DocTag
@@ -26,7 +24,6 @@ class EnumParameterEntryListerTransformer(
     override fun createNewDocumentation(value: QuarkdocEnum): List<DocTag> =
         buildDocTags {
             h4 { text("Values") }
-            scrapingAnchor(Anchors.VALUES)
             unorderedList {
                 value.entries.forEach { entry ->
                     listItem {

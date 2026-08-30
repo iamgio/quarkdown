@@ -1,5 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.quarkdown.quarkdoc.dokka.index.DocsIndexCollectorTransformer
+import com.quarkdown.quarkdoc.dokka.index.DocsIndexWriterPostAction
 import com.quarkdown.quarkdoc.dokka.page.DocumentTypeConstraintsPageTransformer
 import com.quarkdown.quarkdoc.dokka.page.LikelyChainedPageTransformer
 import com.quarkdown.quarkdoc.dokka.page.PermissionsPageTransformer
@@ -139,6 +141,26 @@ class QuarkdocDokkaPlugin : DokkaPlugin() {
         CoreExtensions.pageTransformer providing ::WikiLinkPageTransformer order {
             after(permissionsPageTransformer)
         }
+    }
+
+    /**
+     * Collects the documentation index data of module functions from the Dokka model,
+     * after parameter documentation is finalized.
+     */
+    val docsIndexCollector by extending {
+        base.preMergeDocumentableTransformer providing ::DocsIndexCollectorTransformer order {
+            after(moduleAsPackageTransformer)
+            after(suppressInjectedTransformer)
+            after(enumParameterEntryListerTransformer)
+            after(additionalParameterPropertiesTransformer)
+        }
+    }
+
+    /**
+     * Writes the documentation index to the output directory after rendering.
+     */
+    val docsIndexWriter by extending {
+        CoreExtensions.postActions providing ::DocsIndexWriterPostAction
     }
 
     /**

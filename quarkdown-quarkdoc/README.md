@@ -16,3 +16,8 @@ When a module adopts this plugin, its benefits include:
 - Suppression of `@Injected` function parameters;
 
 To see all enhancements, [`QuarkdocDokkaPlugin`](src/main/kotlin/com/quarkdown/quarkdoc/dokka/QuarkdocDokkaPlugin.kt) features a complete list.
+
+Besides HTML documentation, quarkdoc emits a `docs-index.json` file per documentation module,
+carrying pre-extracted function data and Markdown content for consumers such as the
+[language server](../quarkdown-lsp), via the [reader](../quarkdown-quarkdoc-reader).
+The format is defined by [`docs-index.schema.json`](docs-index.schema.json).
