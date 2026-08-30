@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quarkdown.com/schema/docs-index.schema.json",
+  "title": "Quarkdown documentation index",
+  "description": "Pre-extracted documentation of the Quarkdown functions of a documentation module, emitted as docs-index.json by the Quarkdoc Dokka plugin next to the module's HTML documentation.",
+  "type": "object",
+  "required": ["functions"],
+  "properties": {
+    "functions": {
+      "description": "The indexed functions.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/indexedFunction" }
+    }
+  },
+  "$defs": {
+    "indexedFunction": {
+      "type": "object",
+      "required": ["name", "moduleName", "function", "contentMarkdown"],
+      "properties": {
+        "name": {
+          "description": "The name of the documentation resource, matching the function's page name.",
+          "type": "string"
+        },
+        "moduleName": {
+          "description": "The name of the Quarkdown module containing the function.",
+          "type": ["string", "null"]
+        },
+        "function": { "$ref": "#/$defs/function" },
+        "contentMarkdown": {
+          "description": "The function's full documentation content, in Markdown.",
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "function": {
+      "type": "object",
+      "required": ["name", "parameters", "isLikelyChained"],
+      "properties": {
+        "name": {
+          "description": "The name of the function.",
+          "type": "string"
+        },
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/parameter" }
+        },
+        "isLikelyChained": {
+          "description": "Whether the function is likely to be called via chaining syntax.",
+          "type": "boolean"
+        }
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "required": ["name", "description", "isOptional", "isLikelyNamed", "isLikelyBody", "allowedValues"],
+      "properties": {
+        "name": {
+          "description": "The name of the parameter.",
+          "type": "string"
+        },
+        "description": {
+          "description": "The description of the parameter, in Markdown.",
+          "type": "string"
+        },
+        "isOptional": {
+          "description": "Whether the parameter is optional.",
+          "type": "boolean"
+        },
+        "isLikelyNamed": {
+          "description": "Whether the parameter is likely to be passed as a named argument.",
+          "type": "boolean"
+        },
+        "isLikelyBody": {
+          "description": "Whether the parameter is likely to be passed as a body argument.",
+          "type": "boolean"
+        },
+        "allowedValues": {
+          "description": "The allowed enum values of the parameter, or null if unconstrained.",
+          "type": ["array", "null"],
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

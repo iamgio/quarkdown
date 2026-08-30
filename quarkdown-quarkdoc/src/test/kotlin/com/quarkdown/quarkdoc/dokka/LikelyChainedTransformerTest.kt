@@ -1,8 +1,6 @@
 package com.quarkdown.quarkdoc.dokka
 
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
-import com.quarkdown.quarkdoc.reader.anchors.Anchors
-import com.quarkdown.quarkdoc.reader.anchors.AnchorsHtml
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertFalse
@@ -18,7 +16,7 @@ class LikelyChainedTransformerTest :
         stringImports = listOf(LikelyChained::class.qualifiedName!!, LikelyChained::class.qualifiedName!!),
         stringPaths = listOf(LikelyChained::class.java.packageName + ".QuarkdocAnnotations"),
     ) {
-    private fun containsAnchor(html: String) = AnchorsHtml.toAnchorAttribute(Anchors.LIKELY_CHAINED) in html
+    private fun containsChainingSection(html: String) = "Chaining" in html
 
     @Test
     fun `not chained`() {
@@ -32,7 +30,7 @@ class LikelyChainedTransformerTest :
             "func",
         ) {
             assertFalse(CHAINING_TEXT in it)
-            assertFalse(containsAnchor(it))
+            assertFalse(containsChainingSection(it))
         }
     }
 
@@ -49,8 +47,8 @@ class LikelyChainedTransformerTest :
             "func",
         ) {
             assertContains(it, CHAINING_TEXT)
-            assertTrue(containsAnchor(it))
-            assertTrue(containsAnchor(it))
+            assertTrue(containsChainingSection(it))
+            assertTrue(containsChainingSection(it))
             assertContains(getText(it), "Int::func b:{String}")
         }
     }
@@ -68,7 +66,7 @@ class LikelyChainedTransformerTest :
             "func",
         ) {
             assertContains(it, CHAINING_TEXT)
-            assertTrue(containsAnchor(it))
+            assertTrue(containsChainingSection(it))
             assertContains(getText(it), "Int::func")
         }
     }
@@ -86,7 +84,7 @@ class LikelyChainedTransformerTest :
             "func",
         ) {
             assertContains(it, CHAINING_TEXT)
-            assertTrue(containsAnchor(it))
+            assertTrue(containsChainingSection(it))
             assertContains(getText(it), "Int::func b:{String?}") // Default value is not shown.
         }
     }

@@ -1,13 +1,11 @@
-package com.quarkdown.lsp.documentation
+package com.quarkdown.quarkdoc.dokka.index
 
 import com.fleeksoft.ksoup.Ksoup
-import com.quarkdown.quarkdoc.reader.DocsContentExtractor
+import com.fleeksoft.ksoup.nodes.TextNode
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter
-import org.eclipse.lsp4j.MarkupContent
-import org.eclipse.lsp4j.MarkupKind
 
 /**
- * Helper to convert HTML to Markdown, suitable for use in LSP documentation.
+ * Helper to convert documentation HTML to Markdown.
  *
  * The HTML is preprocessed with ksoup into a simplified, structurally valid form,
  * then serialized and handed to the Markdown converter.
@@ -16,7 +14,7 @@ object HtmlToMarkdown {
     private val converter = FlexmarkHtmlConverter.builder().build()
 
     /**
-     * Converts HTML to Markdown, suitable for use in LSP documentation.
+     * Converts HTML to Markdown.
      * @param html the HTML string to convert
      * @return the converted Markdown string
      */
@@ -26,12 +24,10 @@ object HtmlToMarkdown {
                 .parse(html)
                 .apply {
                     // Flattens links and spans in code blocks to plain text: a fence must not carry Markdown links.
-                    // Dokka renders signatures as per-token spans split across formatted source lines,
-                    // whose line breaks are formatting artifacts to collapse; plain code samples keep theirs.
-                    select("pre code").forEach {
-                        val isTokenized = it.select("span.token").isNotEmpty()
-                        val text = it.wholeText()
-                        it.text(if (isTokenized) text.replace(Regex("\\s+"), " ").trim() else text)
+                    // Line breaks, which Dokka renders as <br> elements (e.g. in wrapped signatures), are preserved.
+                    select("pre code").forEach { code ->
+                        code.select("br").forEach { it.replaceWith(TextNode("\n")) }
+                        code.text(code.wholeText())
                     }
 
                     // Parameter names are underlined in the source, but bold reads better in tooltips.
@@ -66,13 +62,3 @@ object HtmlToMarkdown {
         return converter.convert(document.body().html())
     }
 }
-
-/**
- * @return [this] HTML content converted to [MarkupContent]
- */
-fun String.htmlToMarkup(): MarkupContent? = MarkupContent(MarkupKind.MARKDOWN, HtmlToMarkdown.convert(this))
-
-/**
- * @return the content extracted from the documentation as [MarkupContent], or `null` if no content is available
- */
-fun DocsContentExtractor.extractContentAsMarkup(): MarkupContent? = extractContent()?.htmlToMarkup()

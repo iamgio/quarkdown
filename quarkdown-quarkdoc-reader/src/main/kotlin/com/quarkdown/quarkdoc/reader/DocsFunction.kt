@@ -1,11 +1,14 @@
 package com.quarkdown.quarkdoc.reader
 
+import kotlinx.serialization.Serializable
+
 /**
  * A function in a documentation file.
  * @param name the name of the function
  * @param parameters the parameters of the function
  * @param isLikelyChained whether the function is likely to be chained
  */
+@Serializable
 data class DocsFunction(
     val name: String,
     val parameters: List<DocsParameter>,
@@ -21,6 +24,7 @@ data class DocsFunction(
  * @param isLikelyBody whether the parameter is likely to be passed as a body parameter
  * @param allowedValues the allowed enum values for the parameter, or `null` if not applicable
  */
+@Serializable
 data class DocsParameter(
     val name: String,
     val description: String,

@@ -1,12 +1,13 @@
-package com.quarkdown.quarkdoc.reader.dokka
+package com.quarkdown.quarkdoc.dokka.index
 
 import com.quarkdown.quarkdoc.reader.DocsWalker
 import java.io.File
 
 /**
- * A directory with this name is a Quarkdown module.
+ * A package/directory segment with this name marks a Quarkdown module:
+ * module functions live in `<package>.module.<Name>` synthetic packages.
  */
-private const val MODULE_DIR_NAME = "module"
+const val MODULE_PACKAGE_SEGMENT = "module"
 
 /**
  * Recursive walker of Dokka HTML files.
@@ -19,7 +20,7 @@ class DokkaHtmlWalker(
         get() =
             parentFile.name
                 .split('.')
-                .takeIf { it.getOrNull(it.size - 2) == MODULE_DIR_NAME }
+                .takeIf { it.getOrNull(it.size - 2) == MODULE_PACKAGE_SEGMENT }
                 ?.lastOrNull()
 
     /**
@@ -28,7 +29,6 @@ class DokkaHtmlWalker(
     override fun walk(): Sequence<DocsWalker.Result<DokkaHtmlContentExtractor>> =
         root
             .walkTopDown()
-            .asSequence()
             .filter { it.isFile }
             .filter { it.extension == "html" }
             .filterNot { it.name == "index.html" }

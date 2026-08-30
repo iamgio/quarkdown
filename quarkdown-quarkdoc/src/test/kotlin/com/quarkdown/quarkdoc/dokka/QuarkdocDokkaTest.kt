@@ -3,6 +3,7 @@ package com.quarkdown.quarkdoc.dokka
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import com.quarkdown.core.log.Log
+import com.quarkdown.quarkdoc.dokka.index.DocsIndexStorage
 import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumStorage
 import com.quarkdown.quarkdoc.dokka.transformers.module.QuarkdownModulesStorage
 import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
@@ -49,6 +50,7 @@ open class QuarkdocDokkaTest(
     fun setUp() {
         EnumStorage.clear()
         QuarkdownModulesStorage.clear()
+        DocsIndexStorage.clear()
     }
 
     private fun createConfiguration(sourcePaths: List<String>) =
