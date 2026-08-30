@@ -12,24 +12,19 @@ the new aligned Container node
 
 * **alignment**
 
-
   content alignment anchor and text alignment
 
   Values
   * `start`
   * `center`
   * `end`
-
 * **body**
-
 
   content to center
 
 #### See also
 
 * [container](container.html)
-
-  <br />
 
 #### Wiki page
 

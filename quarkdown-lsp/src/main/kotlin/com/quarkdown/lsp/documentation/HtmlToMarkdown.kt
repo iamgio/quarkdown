@@ -1,50 +1,69 @@
 package com.quarkdown.lsp.documentation
 
+import com.fleeksoft.ksoup.Ksoup
 import com.quarkdown.quarkdoc.reader.DocsContentExtractor
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter
 import org.eclipse.lsp4j.MarkupContent
 import org.eclipse.lsp4j.MarkupKind
-import org.jsoup.Jsoup
 
 /**
  * Helper to convert HTML to Markdown, suitable for use in LSP documentation.
+ *
+ * The HTML is preprocessed with ksoup into a simplified, structurally valid form,
+ * then serialized and handed to the Markdown converter.
  */
 object HtmlToMarkdown {
+    private val converter = FlexmarkHtmlConverter.builder().build()
+
     /**
      * Converts HTML to Markdown, suitable for use in LSP documentation.
      * @param html the HTML string to convert
      * @return the converted Markdown string
      */
     fun convert(html: String): String {
-        val processedHtml =
-            Jsoup
+        val document =
+            Ksoup
                 .parse(html)
                 .apply {
-                    // Cleans up links in code blocks.
+                    // Flattens links and spans in code blocks to plain text: a fence must not carry Markdown links.
+                    // Dokka renders signatures as per-token spans split across formatted source lines,
+                    // whose line breaks are formatting artifacts to collapse; plain code samples keep theirs.
                     select("pre code").forEach {
-                        it.text(it.wholeText())
+                        val isTokenized = it.select("span.token").isNotEmpty()
+                        val text = it.wholeText()
+                        it.text(if (isTokenized) text.replace(Regex("\\s+"), " ").trim() else text)
                     }
 
+                    // Parameter names are underlined in the source, but bold reads better in tooltips.
+                    select("u").forEach {
+                        it.tagName("strong")
+                    }
+
+                    // Parameter tables become lists.
                     select(".table").forEach {
                         it.tagName("ul")
                     }
                     select(".main-subrow").forEach {
                         it.tagName("li")
                     }
-
-                    select(".table h4").forEach {
+                    select(".main-subrow h4").forEach {
                         it.tagName("p")
                     }
 
-                    select(".main-subrow > *").forEach {
-                        it.tagName("p")
+                    // Wrappers dissolve so the serialized HTML remains structurally valid:
+                    // block elements inside `p`, or between `ul` and `li`, would be relocated
+                    // when the converter reparses the serialized document.
+                    select(".table-row").forEach {
+                        it.unwrap()
+                    }
+                    select(".main-subrow div, .main-subrow span").forEach {
+                        it.unwrap()
                     }
 
-                    select("u").forEach {
-                        it.tagName("strong")
-                    }
+                    // Compact serialization: pretty-printing would inject whitespace between elements.
+                    outputSettings().prettyPrint(false)
                 }
-        return FlexmarkHtmlConverter.builder().build().convert(processedHtml)
+        return converter.convert(document.body().html())
     }
 }
 

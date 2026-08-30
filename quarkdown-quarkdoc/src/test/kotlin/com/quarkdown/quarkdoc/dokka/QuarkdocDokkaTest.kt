@@ -1,5 +1,7 @@
 package com.quarkdown.quarkdoc.dokka
 
+import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.nodes.Element
 import com.quarkdown.core.log.Log
 import com.quarkdown.quarkdoc.dokka.transformers.enumeration.EnumStorage
 import com.quarkdown.quarkdoc.dokka.transformers.module.QuarkdownModulesStorage
@@ -7,8 +9,6 @@ import org.jetbrains.dokka.base.testApi.testRunner.BaseAbstractTest
 import org.jetbrains.dokka.testApi.logger.TestLogger
 import org.jetbrains.dokka.utilities.DokkaConsoleLogger
 import org.jetbrains.dokka.utilities.LoggingLevel
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
 import utils.TestOutputWriterPlugin
 import java.io.File
 import kotlin.reflect.KClass
@@ -135,7 +135,7 @@ open class QuarkdocDokkaTest(
     )
 
     protected fun getText(html: String): String =
-        Jsoup
+        Ksoup
             .parse(html)
             .text()
 
@@ -145,7 +145,7 @@ open class QuarkdocDokkaTest(
      * @throws IllegalStateException if the signature is not found
      */
     protected fun getSignature(html: String) =
-        Jsoup
+        Ksoup
             .parse(html)
             .select(".content :is(pre, .monospace)")
             .firstOrNull()
@@ -158,7 +158,7 @@ open class QuarkdocDokkaTest(
      * @throws IllegalStateException if the paragraph is not found
      */
     protected fun getParagraph(html: String) =
-        Jsoup
+        Ksoup
             .parse(html)
             .select(".content > .paragraph")
             .firstOrNull()
@@ -169,7 +169,7 @@ open class QuarkdocDokkaTest(
         html: String,
         name: String,
     ): Element =
-        Jsoup
+        Ksoup
             .parse(html)
             .select("h4:contains($name)")
             .firstOrNull()

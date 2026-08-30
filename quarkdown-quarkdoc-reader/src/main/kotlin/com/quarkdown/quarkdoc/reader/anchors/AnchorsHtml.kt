@@ -1,7 +1,7 @@
 package com.quarkdown.quarkdoc.reader.anchors
 
+import com.fleeksoft.ksoup.nodes.Element
 import com.quarkdown.quarkdoc.reader.anchors.AnchorsHtml.ANCHOR_TAG
-import org.jsoup.nodes.Element
 
 /**
  * Utilities for handling HTML [Anchors].

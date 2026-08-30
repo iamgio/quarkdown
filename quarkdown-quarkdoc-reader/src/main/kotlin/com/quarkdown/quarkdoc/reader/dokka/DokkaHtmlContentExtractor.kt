@@ -1,5 +1,7 @@
 package com.quarkdown.quarkdoc.reader.dokka
 
+import com.fleeksoft.ksoup.Ksoup
+import com.fleeksoft.ksoup.nodes.Element
 import com.quarkdown.quarkdoc.reader.DocsContentExtractor
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsParameter
@@ -7,8 +9,6 @@ import com.quarkdown.quarkdoc.reader.anchors.Anchors
 import com.quarkdown.quarkdoc.reader.anchors.getAnchorNextElement
 import com.quarkdown.quarkdoc.reader.anchors.hasAnchor
 import com.quarkdown.quarkdoc.reader.anchors.stripAnchors
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
 
 private const val PARAMETERS_HEADER = "Parameters"
 
@@ -19,7 +19,7 @@ class DokkaHtmlContentExtractor(
     private val html: String,
 ) : DocsContentExtractor {
     override fun extractContent(): String? =
-        Jsoup
+        Ksoup
             .parse(html)
             .selectFirst("#main .content")
             ?.apply {
@@ -29,7 +29,7 @@ class DokkaHtmlContentExtractor(
 
     override fun extractFunctionData(): DocsFunction? {
         val main =
-            Jsoup
+            Ksoup
                 .parse(html)
                 .selectFirst("#main > .main-content")
                 ?.takeIf { it.attr("data-page-type") == "member" }
