@@ -2,8 +2,8 @@ package com.quarkdown.lsp.subservices
 
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.hover.HoverSupplier
-import org.eclipse.lsp4j.Hover
-import org.eclipse.lsp4j.HoverParams
+import com.quarkdown.lsp.model.CursorPosition
+import com.quarkdown.lsp.model.HoverInfo
 
 /**
  * Subservice for handling hover requests.
@@ -12,11 +12,11 @@ import org.eclipse.lsp4j.HoverParams
  */
 class HoverSubservice(
     private val hoverSuppliers: List<HoverSupplier>,
-) : TextDocumentSubservice<HoverParams, Hover?> {
+) : TextDocumentSubservice<CursorPosition, HoverInfo?> {
     override fun process(
-        params: HoverParams,
+        params: CursorPosition,
         document: TextDocument,
-    ): Hover? =
+    ): HoverInfo? =
         hoverSuppliers
             .asSequence()
             .mapNotNull { it.getHover(params, document) }

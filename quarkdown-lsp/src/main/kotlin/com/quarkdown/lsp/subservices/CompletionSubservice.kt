@@ -2,8 +2,8 @@ package com.quarkdown.lsp.subservices
 
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.completion.CompletionSupplier
-import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionParams
+import com.quarkdown.lsp.model.Completion
+import com.quarkdown.lsp.model.CursorPosition
 
 /**
  * Subservice for handling completion requests.
@@ -12,11 +12,11 @@ import org.eclipse.lsp4j.CompletionParams
  */
 class CompletionSubservice(
     private val completionSuppliers: List<CompletionSupplier>,
-) : TextDocumentSubservice<CompletionParams, List<CompletionItem>> {
+) : TextDocumentSubservice<CursorPosition, List<Completion>> {
     override fun process(
-        params: CompletionParams,
+        params: CursorPosition,
         document: TextDocument,
-    ): List<CompletionItem> =
+    ): List<Completion> =
         completionSuppliers
             .asSequence()
             .map { it.getCompletionItems(params, document) }

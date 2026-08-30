@@ -5,7 +5,7 @@ import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGN_FUNCTION
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.CSV_FUNCTION
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS_DIRECTORY
 import com.quarkdown.lsp.diagnostics.function.FunctionParameterValueDiagnosticsSupplier
-import org.eclipse.lsp4j.DiagnosticSeverity
+import com.quarkdown.lsp.model.Severity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -49,7 +49,7 @@ class FunctionParameterValueDiagnosticsSupplierTest {
 
         assertEquals(1, diagnostics.size)
         val diagnostic = diagnostics.single()
-        assertEquals(DiagnosticSeverity.Warning, diagnostic.severity)
+        assertEquals(Severity.WARNING, diagnostic.severity)
         assertEquals(text.indexOf(value), diagnostic.range.start)
         assertEquals(text.length - 1, diagnostic.range.endInclusive)
     }

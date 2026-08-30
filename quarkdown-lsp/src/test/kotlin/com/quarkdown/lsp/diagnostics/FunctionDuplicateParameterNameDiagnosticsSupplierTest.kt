@@ -3,7 +3,7 @@ package com.quarkdown.lsp.diagnostics
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGNMENT_PARAMETER
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGN_FUNCTION
 import com.quarkdown.lsp.diagnostics.function.FunctionDuplicateParameterNameDiagnosticsSupplier
-import org.eclipse.lsp4j.DiagnosticSeverity
+import com.quarkdown.lsp.model.Severity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -47,7 +47,7 @@ class FunctionDuplicateParameterNameDiagnosticsSupplierTest {
         assertEquals(2, diagnostics.size)
 
         diagnostics.forEach { diagnostic ->
-            assertEquals(DiagnosticSeverity.Error, diagnostic.severity)
+            assertEquals(Severity.ERROR, diagnostic.severity)
             assertTrue(diagnostic.range.start >= text.indexOf(ALIGNMENT_PARAMETER))
             assertTrue(diagnostic.range.endInclusive <= text.length)
         }

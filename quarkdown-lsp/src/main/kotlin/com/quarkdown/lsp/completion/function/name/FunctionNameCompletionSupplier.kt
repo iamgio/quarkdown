@@ -2,8 +2,8 @@ package com.quarkdown.lsp.completion.function.name
 
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.completion.CompletionSupplier
-import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionParams
+import com.quarkdown.lsp.model.Completion
+import com.quarkdown.lsp.model.CursorPosition
 import java.io.File
 
 /**
@@ -27,9 +27,9 @@ class FunctionNameCompletionSupplier(
     private val fromChain = ChainedFunctionNameCompletionSupplier(docsDirectory)
 
     override fun getCompletionItems(
-        params: CompletionParams,
+        position: CursorPosition,
         document: TextDocument,
-    ): List<CompletionItem> =
-        fromBegin.getCompletionItems(params, document).takeIf { it.isNotEmpty() }
-            ?: fromChain.getCompletionItems(params, document)
+    ): List<Completion> =
+        fromBegin.getCompletionItems(position, document).takeIf { it.isNotEmpty() }
+            ?: fromChain.getCompletionItems(position, document)
 }

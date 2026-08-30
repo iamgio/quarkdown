@@ -6,7 +6,7 @@ import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.CSV_FUNCTION
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS_DIRECTORY
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.PATH_PARAMETER
 import com.quarkdown.lsp.diagnostics.function.FunctionUnresolvedParameterNameDiagnosticsSupplier
-import org.eclipse.lsp4j.DiagnosticSeverity
+import com.quarkdown.lsp.model.Severity
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -51,7 +51,7 @@ class FunctionUnresolvedParameterNameDiagnosticsSupplierTest {
 
         assertEquals(1, diagnostics.size)
         val diagnostic = diagnostics.single()
-        assertEquals(DiagnosticSeverity.Error, diagnostic.severity)
+        assertEquals(Severity.ERROR, diagnostic.severity)
         assertEquals(text.indexOf(INVALID_PARAMETER), diagnostic.range.start)
         assertEquals(text.indexOf(INVALID_PARAMETER) + INVALID_PARAMETER.length, diagnostic.range.endInclusive)
     }

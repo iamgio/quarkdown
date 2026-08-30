@@ -1,7 +1,7 @@
 package com.quarkdown.lsp.util
 
 import com.quarkdown.core.util.substringWithinBounds
-import org.eclipse.lsp4j.Position
+import com.quarkdown.lsp.model.CursorPosition
 
 /**
  * @param line the line number (0-based)
@@ -13,39 +13,39 @@ fun String.getLine(line: Int): String? = lines().getOrNull(line)
  * @param text the text content to search in
  * @return the character at the specified position, or null if the position is out of bounds
  */
-fun Position.getChar(text: String): Char? = text.getLine(line)?.getOrNull(character - 1)
+fun CursorPosition.getChar(text: String): Char? = text.getLine(line)?.getOrNull(column - 1)
 
 /**
  * @param text the text content to search in
  * @return the substring from the start of the line, up to the specified position, or `null` if the position is out of bounds
  */
-fun Position.getLineUntilPosition(text: String): String? = text.getLine(line)?.substringWithinBounds(0, character)
+fun CursorPosition.getLineUntilPosition(text: String): String? = text.getLine(line)?.substringWithinBounds(0, column)
 
 /**
  * @param text the text content to search in
  * @return the substring that matches the given pattern and contains the given position, or null if no match is found
  */
-fun Position.getByPatternContaining(
+fun CursorPosition.getByPatternContaining(
     pattern: Regex,
     text: String,
 ): String? {
     val lineText = text.lines().getOrNull(line) ?: return null
     return pattern
         .findAll(lineText)
-        .firstOrNull { it.range.contains(character) }
+        .firstOrNull { it.range.contains(column) }
         ?.value
 }
 
 /**
- * Converts a character offset in the text to a [Position].
+ * Converts a character offset in the text to a [CursorPosition].
  * @param text the text content to search in
  * @param offset the character offset to convert
- * @return the [Position] corresponding to the given offset
+ * @return the [CursorPosition] corresponding to the given offset
  */
 fun offsetToPosition(
     text: String,
     offset: Int,
-): Position {
+): CursorPosition {
     var line = 0
     var lastLineStart = 0
 
@@ -56,19 +56,19 @@ fun offsetToPosition(
         }
     }
 
-    val character = offset - lastLineStart
-    return Position(line, character)
+    val column = offset - lastLineStart
+    return CursorPosition(line, column)
 }
 
 /**
- * Converts a [Position] to a character offset (index) in the text.
+ * Converts a [CursorPosition] to a character offset (index) in the text.
  * @param text the text content to search in
  * @return the character offset corresponding to the given position, or -1 if the position is out of bounds
  */
-fun Position.toOffset(text: String): Int {
+fun CursorPosition.toOffset(text: String): Int {
     val lines = text.lines()
     if (line < 0 || line >= lines.size) return -1
     val lineText = lines[line]
-    if (character < 0 || character > lineText.length) return -1
-    return lines.take(line).sumOf { it.length + 1 } + character // +1 for the newline character
+    if (column < 0 || column > lineText.length) return -1
+    return lines.take(line).sumOf { it.length + 1 } + column // +1 for the newline character
 }

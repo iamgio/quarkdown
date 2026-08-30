@@ -1,21 +1,21 @@
 package com.quarkdown.lsp.hover
 
 import com.quarkdown.lsp.TextDocument
-import org.eclipse.lsp4j.Hover
-import org.eclipse.lsp4j.HoverParams
+import com.quarkdown.lsp.model.CursorPosition
+import com.quarkdown.lsp.model.HoverInfo
 
 /**
  * Interface for providing hover information based on the current context in a text document.
  */
 interface HoverSupplier {
     /**
-     * Generates a hover object.
-     * @param params the parameters for the hover request, including the position in the document
+     * Generates hover information.
+     * @param position the position in the document the hover was requested at
      * @param document the current document
-     * @return a [Hover] object containing the hover information, or `null` if no hover information is available
+     * @return the hover information, or `null` if none is available
      */
     fun getHover(
-        params: HoverParams,
+        position: CursorPosition,
         document: TextDocument,
-    ): Hover?
+    ): HoverInfo?
 }

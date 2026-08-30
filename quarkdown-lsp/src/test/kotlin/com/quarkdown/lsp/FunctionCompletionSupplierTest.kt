@@ -1,11 +1,9 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSuppliersFactory
+import com.quarkdown.lsp.model.Completion
+import com.quarkdown.lsp.model.CursorPosition
 import com.quarkdown.lsp.subservices.CompletionSubservice
-import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionParams
-import org.eclipse.lsp4j.Position
-import org.eclipse.lsp4j.TextDocumentIdentifier
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -33,43 +31,40 @@ private const val CAPTION_PARAMETER = "caption"
 class FunctionCompletionSupplierTest {
     private val docsDirectory = File("src/test/resources/docs")
     private val suppliers = CompletionSuppliersFactory.functions(docsDirectory)
-    private val testDocumentUri = "file:///test.qd"
 
     private fun getCompletions(
         text: String,
-        position: Position,
-    ): List<CompletionItem> {
-        val textDocument = TextDocumentIdentifier(testDocumentUri)
-        val params = CompletionParams(textDocument, position)
+        position: CursorPosition,
+    ): List<Completion> {
         val document = TextDocument(text = text)
-        return CompletionSubservice(suppliers).process(params, document)
+        return CompletionSubservice(suppliers).process(position, document)
     }
 
     @Test
     fun `no completions at empty position`() {
         val text = ""
-        val completions = getCompletions(text, Position(0, 0))
+        val completions = getCompletions(text, CursorPosition(0, 0))
         assertTrue(completions.isEmpty())
     }
 
     @Test
     fun `no completions outside function call`() {
         val text = "hello world"
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
         assertTrue(completions.isEmpty())
     }
 
     @Test
     fun `no completions at out-of-bounds position`() {
         val text = "hello .$ALIGN_FUNCTION"
-        val completions = getCompletions(text, Position(5, 0))
+        val completions = getCompletions(text, CursorPosition(5, 0))
         assertTrue(completions.isEmpty())
     }
 
     @Test
     fun `no completions in invalid function call position`() {
         val text = "hello."
-        val position = Position(0, text.length)
+        val position = CursorPosition(0, text.length)
         val completions = getCompletions(text, position)
         assertTrue(completions.isEmpty())
     }
@@ -77,7 +72,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `completions at beginning of function call`() {
         val text = "hello ."
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
         assertEquals(4, completions.size)
 
         // Verifies the expected function names are present.
@@ -101,29 +96,29 @@ class FunctionCompletionSupplierTest {
         // Only mandatory parameters.
         val alignCompletion = completions.first { it.label == ALIGN_FUNCTION }
         assertEquals(
-            "align {\${1:alignment (start|center|end)}} \n    \${2:body}",
-            alignCompletion.insertText,
+            $$"align {${1:alignment (start|center|end)}} \n    ${2:body}",
+            alignCompletion.insertionSnippet,
         )
 
         // One optional parameter.
         val csvCompletion = completions.first { it.label == CSV_FUNCTION }
         assertEquals(
-            "csv {\${1:path}} ",
-            csvCompletion.insertText,
+            $$"csv {${1:path}} ",
+            csvCompletion.insertionSnippet,
         )
 
         // Only optional parameters + body.
         val columnCompletion = completions.first { it.label == COLUMN_FUNCTION }
         assertEquals(
-            "column \${1:}\n    \${2:body}",
-            columnCompletion.insertText,
+            $$"column ${1:}\n    ${2:body}",
+            columnCompletion.insertionSnippet,
         )
     }
 
     @Test
     fun `name completions for partial function name`() {
         val text = "hello .ali"
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
 
         assertEquals(1, completions.size)
         assertEquals(ALIGN_FUNCTION, completions.first().label)
@@ -133,21 +128,21 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `name completion in chain for empty name`() {
         val text = "hello .$ALIGN_FUNCTION::"
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
         assertEquals(4, completions.size)
     }
 
     @Test
     fun `name completion in chain with args`() {
         val text = "hello .$ALIGN_FUNCTION {arg}::"
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
         assertEquals(4, completions.size)
     }
 
     @Test
     fun `name completion in chain for partial function name`() {
         val text = "hello .$ALIGN_FUNCTION::c"
-        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length)).map { it.label }
 
         assertEquals(3, completions.size)
         assertContains(completions, CSV_FUNCTION)
@@ -159,27 +154,27 @@ class FunctionCompletionSupplierTest {
     fun `name completion in chain with other content`() {
         val suffix = " abc"
         val text = "hello .$ALIGN_FUNCTION::$suffix"
-        val completions = getCompletions(text, Position(0, text.length - suffix.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length - suffix.length))
         assertEquals(4, completions.size)
     }
 
     @Test
     fun `name completion in chain should skip first parameter`() {
         val text = "hello .$ALIGN_FUNCTION::cs"
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
 
         assertEquals(1, completions.size)
 
         val completion = completions.single()
         assertEquals(CSV_FUNCTION, completion.label)
         // The call is chained, so the first parameter (which should be the path) is skipped.
-        assertEquals(CSV_FUNCTION, completion.insertText.trim())
+        assertEquals(CSV_FUNCTION, completion.insertionSnippet!!.trim())
     }
 
     @Test
     fun `parameter completions at beginning of parameter list`() {
         val text = "hello .$ALIGN_FUNCTION "
-        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length)).map { it.label }
 
         assertEquals(2, completions.size)
         assertContains(completions, ALIGNMENT_PARAMETER)
@@ -190,7 +185,7 @@ class FunctionCompletionSupplierTest {
     fun `parameter completions in the middle of parameter list`() {
         val suffix = " x:{arg}"
         val text = "hello .$ALIGN_FUNCTION $suffix"
-        val completions = getCompletions(text, Position(0, text.length - suffix.length)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length - suffix.length)).map { it.label }
 
         assertEquals(2, completions.size)
         assertContains(completions, ALIGNMENT_PARAMETER)
@@ -200,7 +195,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions with partial parameter name`() {
         val text = "hello .$ALIGN_FUNCTION align"
-        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length)).map { it.label }
 
         assertFalse(BODY_PARAMETER in completions)
         assertEquals(ALIGNMENT_PARAMETER, completions.single())
@@ -209,7 +204,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions after line break`() {
         val text = "abc\n\n.$ALIGN_FUNCTION "
-        val position = Position(text.lines().lastIndex, text.lines().last().length)
+        val position = CursorPosition(text.lines().lastIndex, text.lines().last().length)
         val completions = getCompletions(text, position).map { it.label }
 
         assertContains(completions, ALIGNMENT_PARAMETER)
@@ -218,7 +213,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions on blank line continuation`() {
         val text = ".$ALIGN_FUNCTION \\\n"
-        val position = Position(1, 0)
+        val position = CursorPosition(1, 0)
         val completions = getCompletions(text, position).map { it.label }
 
         assertContains(completions, ALIGNMENT_PARAMETER)
@@ -228,7 +223,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions on line continuation with some parameters specified`() {
         val text = ".$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{center} \\\n"
-        val position = Position(1, 0)
+        val position = CursorPosition(1, 0)
         val completions = getCompletions(text, position).map { it.label }
 
         assertFalse(ALIGNMENT_PARAMETER in completions)
@@ -238,7 +233,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions on non-blank continuation line`() {
         val text = ".$COLUMN_FUNCTION $ALIGNMENT_PARAMETER:{center} \\\n        $GAP_PARAMETER:{1px} "
-        val position = Position(1, text.lines()[1].length)
+        val position = CursorPosition(1, text.lines()[1].length)
         val completions = getCompletions(text, position).map { it.label }
 
         assertContains(completions, CROSS_PARAMETER)
@@ -253,7 +248,7 @@ class FunctionCompletionSupplierTest {
         //        <cursor here> \
         //        gap:{1px}
         val text = ".$COLUMN_FUNCTION $ALIGNMENT_PARAMETER:{center} \\\n \\\n        $GAP_PARAMETER:{1px}"
-        val position = Position(1, 1)
+        val position = CursorPosition(1, 1)
         val completions = getCompletions(text, position).map { it.label }
 
         assertContains(completions, CROSS_PARAMETER)
@@ -263,7 +258,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions before and after line break`() {
         val text = "abc\n\n.$ALIGN_FUNCTION \n\ndef"
-        val position = Position(2, text.lines()[2].length)
+        val position = CursorPosition(2, text.lines()[2].length)
         val completions = getCompletions(text, position).map { it.label }
 
         assertContains(completions, ALIGNMENT_PARAMETER)
@@ -272,7 +267,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions with some parameters already specified`() {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{center} "
-        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length)).map { it.label }
 
         assertFalse(ALIGNMENT_PARAMETER in completions)
         assertEquals(BODY_PARAMETER, completions.single())
@@ -281,14 +276,14 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `no parameter completions when all parameters are specified`() {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{center} $BODY_PARAMETER:{content} "
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
         assertTrue(completions.isEmpty())
     }
 
     @Test
     fun `parameter completions in nested function call`() {
         val text = "hello .func {.$ALIGN_FUNCTION al}"
-        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length - 1)).map { it.label }
 
         assertEquals(ALIGNMENT_PARAMETER, completions.single())
     }
@@ -296,7 +291,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions with nested function call`() {
         val text = "hello .$CSV_FUNCTION {.func {arg}} capt"
-        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length)).map { it.label }
 
         assertEquals(CAPTION_PARAMETER, completions.single())
     }
@@ -304,7 +299,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions should not happen in empty values`() {
         val text = "hello .$CSV_FUNCTION {}"
-        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length - 1)).map { it.label }
 
         assertTrue(completions.isEmpty())
     }
@@ -312,7 +307,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions should not happen in partial values`() {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{$BODY_PARAMETER}"
-        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length - 1)).map { it.label }
 
         assertTrue(completions.isEmpty())
     }
@@ -320,7 +315,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter value by name, empty argument`() {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{}"
-        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length - 1)).map { it.label }
 
         assertEquals(3, completions.size)
         assertContains(completions, "start")
@@ -331,7 +326,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter value by name, partial argument`() {
         val text = "hello .$ALIGN_FUNCTION $ALIGNMENT_PARAMETER:{cen}"
-        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length - 1)).map { it.label }
 
         assertEquals(completions.single(), "center")
     }
@@ -339,7 +334,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter value by position, partial argument`() {
         val text = "hello .$ALIGN_FUNCTION {cen}"
-        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length - 1)).map { it.label }
 
         assertEquals(completions.single(), "center")
     }
@@ -347,7 +342,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter value by position should not be preceded by named arguments`() {
         val text = "hello .$ALIGN_FUNCTION x:{} {cen}"
-        val completions = getCompletions(text, Position(0, text.length - 1)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length - 1)).map { it.label }
 
         assertTrue(completions.isEmpty())
     }
@@ -357,21 +352,21 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `no parameter completions inside body argument`() {
         val text = ".$COLUMN_FUNCTION\n    cr"
-        val completions = getCompletions(text, Position(1, 6))
+        val completions = getCompletions(text, CursorPosition(1, 6))
         assertTrue(completions.isEmpty())
     }
 
     @Test
     fun `no parameter completions inside multiline body argument`() {
         val text = ".$COLUMN_FUNCTION\n    content\n    cr"
-        val completions = getCompletions(text, Position(2, 6))
+        val completions = getCompletions(text, CursorPosition(2, 6))
         assertTrue(completions.isEmpty())
     }
 
     @Test
     fun `name completions for nested call inside body argument`() {
         val text = ".$COLUMN_FUNCTION\n    .cl"
-        val completions = getCompletions(text, Position(1, 7))
+        val completions = getCompletions(text, CursorPosition(1, 7))
 
         assertEquals(1, completions.size)
         assertEquals(CLIP_FUNCTION, completions.first().label)
@@ -380,7 +375,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions for nested call inside body argument`() {
         val text = ".$COLUMN_FUNCTION\n    .$ALIGN_FUNCTION align"
-        val completions = getCompletions(text, Position(1, text.lines()[1].length)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(1, text.lines()[1].length)).map { it.label }
 
         assertEquals(ALIGNMENT_PARAMETER, completions.single())
     }
@@ -390,14 +385,14 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `name completions in wrapped function call`() {
         val text = "hello{."
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
         assertEquals(4, completions.size)
     }
 
     @Test
     fun `name completions in wrapped function call for partial name`() {
         val text = "hello{.ali"
-        val completions = getCompletions(text, Position(0, text.length))
+        val completions = getCompletions(text, CursorPosition(0, text.length))
 
         assertEquals(1, completions.size)
         assertEquals(ALIGN_FUNCTION, completions.first().label)
@@ -407,7 +402,7 @@ class FunctionCompletionSupplierTest {
     fun `name completions in closed wrapped function call for partial name`() {
         val text = "hello{.ali}"
         // Cursor before the closing brace.
-        val completions = getCompletions(text, Position(0, text.length - 1))
+        val completions = getCompletions(text, CursorPosition(0, text.length - 1))
 
         assertEquals(1, completions.size)
         assertEquals(ALIGN_FUNCTION, completions.first().label)
@@ -416,7 +411,7 @@ class FunctionCompletionSupplierTest {
     @Test
     fun `parameter completions in wrapped function call`() {
         val text = "hello{.$ALIGN_FUNCTION "
-        val completions = getCompletions(text, Position(0, text.length)).map { it.label }
+        val completions = getCompletions(text, CursorPosition(0, text.length)).map { it.label }
 
         assertEquals(2, completions.size)
         assertContains(completions, ALIGNMENT_PARAMETER)

@@ -1,9 +1,9 @@
 package com.quarkdown.lsp.subservices
 
 import com.quarkdown.lsp.TextDocument
+import com.quarkdown.lsp.model.CursorPosition
+import com.quarkdown.lsp.model.TextPatch
 import com.quarkdown.lsp.ontype.OnTypeFormattingEditSupplier
-import org.eclipse.lsp4j.DocumentOnTypeFormattingParams
-import org.eclipse.lsp4j.TextEdit
 
 /**
  * Subservice for handling on-type formatting requests.
@@ -11,9 +11,9 @@ import org.eclipse.lsp4j.TextEdit
  */
 class OnTypeFormattingSubservice(
     private val editSuppliers: List<OnTypeFormattingEditSupplier>,
-) : TextDocumentSubservice<DocumentOnTypeFormattingParams, List<TextEdit>> {
+) : TextDocumentSubservice<CursorPosition, List<TextPatch>> {
     override fun process(
-        params: DocumentOnTypeFormattingParams,
+        params: CursorPosition,
         document: TextDocument,
-    ): List<TextEdit> = editSuppliers.flatMap { it.getEdits(params, document) }
+    ): List<TextPatch> = editSuppliers.flatMap { it.getEdits(params, document) }
 }

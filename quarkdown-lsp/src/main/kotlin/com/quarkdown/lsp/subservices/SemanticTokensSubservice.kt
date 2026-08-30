@@ -5,8 +5,6 @@ import com.quarkdown.lsp.highlight.SemanticTokenData
 import com.quarkdown.lsp.highlight.SemanticTokensEncoder
 import com.quarkdown.lsp.highlight.SemanticTokensSupplier
 import com.quarkdown.lsp.highlight.toSemanticData
-import org.eclipse.lsp4j.SemanticTokens
-import org.eclipse.lsp4j.SemanticTokensParams
 
 /**
  * Subservice for handling semantic tokens requests.
@@ -14,17 +12,19 @@ import org.eclipse.lsp4j.SemanticTokensParams
  */
 class SemanticTokensSubservice(
     private val tokensSuppliers: List<SemanticTokensSupplier>,
-) : TextDocumentSubservice<SemanticTokensParams, SemanticTokens> {
+) : TextDocumentSubservice<Unit, List<Int>> {
+    /**
+     * @return the semantic tokens of [document], encoded as by the LSP specification
+     */
     override fun process(
-        params: SemanticTokensParams,
+        params: Unit,
         document: TextDocument,
-    ): SemanticTokens {
+    ): List<Int> {
         val tokens: List<SemanticTokenData> =
             this.tokensSuppliers
-                .flatMap { it.getTokens(params, document) }
+                .flatMap { it.getTokens(document) }
                 .map { it.toSemanticData(document.text) }
 
-        val encoded = SemanticTokensEncoder.encode(tokens)
-        return SemanticTokens(encoded)
+        return SemanticTokensEncoder.encode(tokens)
     }
 }

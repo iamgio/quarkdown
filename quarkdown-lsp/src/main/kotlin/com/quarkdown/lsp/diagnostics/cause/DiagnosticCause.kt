@@ -1,6 +1,6 @@
 package com.quarkdown.lsp.diagnostics.cause
 
-import org.eclipse.lsp4j.DiagnosticSeverity
+import com.quarkdown.lsp.model.Severity
 
 /**
  * The cause of a diagnostic.
@@ -14,5 +14,5 @@ interface DiagnosticCause {
     /**
      * The severity of the diagnostic.
      */
-    val severity: DiagnosticSeverity
+    val severity: Severity
 }

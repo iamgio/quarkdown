@@ -41,5 +41,5 @@ fun SimpleTokenData.toSemanticData(text: String): SemanticTokenData {
     val pos = offsetToPosition(text, start)
     val length = end - start
 
-    return SemanticTokenData(pos.line, pos.character, length, type.index, 0)
+    return SemanticTokenData(pos.line, pos.column, length, type.index, 0)
 }
