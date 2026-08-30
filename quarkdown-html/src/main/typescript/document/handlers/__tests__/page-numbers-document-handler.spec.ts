@@ -110,4 +110,42 @@ describe('PageNumbersDocumentHandler', () => {
         const numbers = Array.from(document.querySelectorAll<HTMLSpanElement>('.toc-page-number')).map(span => span.textContent);
         expect(numbers).toEqual(['1', '5']);
     });
+    it('uses reset start value when computing section total pages', async () => {
+    document.body.className = 'quarkdown quarkdown-paged';
+    document.body.innerHTML = `
+      <div class="pagedjs_page" data-page-number="1">
+        <span class="total-page-number" data-scope="document"></span>
+      </div>
+
+      <div class="pagedjs_page" data-page-number="2">
+        <div class="pagedjs_area">
+          <span class="page-number-reset" data-start="5"></span>
+          <span class="total-page-number" data-scope="section"></span>
+        </div>
+      </div>
+
+      <div class="pagedjs_page" data-page-number="3">
+        <div class="pagedjs_area">
+          <span class="total-page-number" data-scope="section"></span>
+        </div>
+      </div>
+
+      <div class="pagedjs_page" data-page-number="4">
+        <div class="pagedjs_area">
+          <span class="total-page-number" data-scope="section"></span>
+        </div>
+      </div>`;
+
+      const pages = Array.from(document.querySelectorAll<HTMLElement>('.pagedjs_page'));
+      const handler = new Concrete(new DummyDocument(pages));
+
+      await handler.onPostRendering();
+
+      const totals = Array.from(
+          document.querySelectorAll<HTMLElement>('.total-page-number')
+      ).map(el => el.textContent);
+
+      expect(totals[0]).toBe('4');
+      expect(totals.slice(1)).toEqual(['7', '7', '7']);
+    });
 });
