@@ -3,15 +3,13 @@ package com.quarkdown.lsp.ontype
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.functionCalls
+import com.quarkdown.lsp.model.CursorPosition
+import com.quarkdown.lsp.model.TextPatch
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.util.getLine
 import com.quarkdown.lsp.util.toOffset
-import org.eclipse.lsp4j.DocumentOnTypeFormattingParams
-import org.eclipse.lsp4j.Position
-import org.eclipse.lsp4j.Range
-import org.eclipse.lsp4j.TextEdit
 
 /**
  * Formatter that, when the user presses Enter after a line ending with `\` (line continuation)
@@ -29,11 +27,11 @@ import org.eclipse.lsp4j.TextEdit
  */
 class LineContinuationAutoIndentOnTypeFormattingEditSupplier : OnTypeFormattingEditSupplier {
     override fun getEdits(
-        params: DocumentOnTypeFormattingParams,
+        position: CursorPosition,
         document: TextDocument,
-    ): List<TextEdit> {
+    ): List<TextPatch> {
         val text = document.text
-        val previousLineNum = params.position.line - 1
+        val previousLineNum = position.line - 1
         val previousLine = text.getLine(previousLineNum) ?: return emptyList()
 
         if (!previousLine.trimEnd().endsWith(FunctionCallGrammar.LINE_CONTINUATION)) {
@@ -58,18 +56,16 @@ class LineContinuationAutoIndentOnTypeFormattingEditSupplier : OnTypeFormattingE
 
         val call: FunctionCall =
             document.functionCalls
-                .getAtSourceIndex(Position(previousLineNum, searchColumn).toOffset(text))
+                .getAtSourceIndex(CursorPosition(previousLineNum, searchColumn).toOffset(text))
                 ?: return emptyList()
 
         val indentation = call.argumentStartColumn(text)
 
         return listOf(
-            TextEdit(
-                Range(
-                    Position(params.position.line, 0),
-                    Position(params.position.line, 0),
-                ),
-                " ".repeat(indentation),
+            TextPatch(
+                start = CursorPosition(position.line, 0),
+                end = CursorPosition(position.line, 0),
+                text = " ".repeat(indentation),
             ),
         )
     }

@@ -37,7 +37,7 @@ class DocsIndexCatalogueTest {
         assertEquals("greet", function.name)
         assertEquals("String", function.rawData.moduleName)
         // Index content is already Markdown: no conversion is applied.
-        assertEquals("Greets **somebody**.", function.documentationAsMarkup?.value)
+        assertEquals("Greets **somebody**.", function.documentationMarkdown)
         assertEquals(
             "the *target* of the greeting",
             function.data.parameters

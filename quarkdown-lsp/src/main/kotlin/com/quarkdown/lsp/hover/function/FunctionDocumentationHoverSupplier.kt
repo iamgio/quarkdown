@@ -5,13 +5,13 @@ import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.cache.functionCalls
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.hover.HoverSupplier
+import com.quarkdown.lsp.model.CursorPosition
+import com.quarkdown.lsp.model.HoverInfo
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.toOffset
-import org.eclipse.lsp4j.Hover
-import org.eclipse.lsp4j.HoverParams
 import java.io.File
 
 /**
@@ -22,13 +22,13 @@ class FunctionDocumentationHoverSupplier(
     private val docsDirectory: File,
 ) : HoverSupplier {
     override fun getHover(
-        params: HoverParams,
+        position: CursorPosition,
         document: TextDocument,
-    ): Hover? {
+    ): HoverInfo? {
         val text = document.text
 
         // Gets the function call at the specified hover position.
-        val index = params.position.toOffset(text)
+        val index = position.toOffset(text)
         val call: FunctionCall =
             document.functionCalls
                 .getAtSourceIndex(index)
@@ -46,6 +46,6 @@ class FunctionDocumentationHoverSupplier(
             getDocumentation(docsDirectory, nameToken?.lexeme ?: call.lastChainedName)
                 ?: return null
 
-        return Hover(function.documentationAsMarkup)
+        return function.documentationMarkdown?.let(::HoverInfo)
     }
 }

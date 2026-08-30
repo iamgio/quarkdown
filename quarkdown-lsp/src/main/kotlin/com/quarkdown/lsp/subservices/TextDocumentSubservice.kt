@@ -1,10 +1,9 @@
 package com.quarkdown.lsp.subservices
 
 import com.quarkdown.lsp.TextDocument
-import org.eclipse.lsp4j.services.TextDocumentService
 
 /**
- * Represents a single operation that is part of a [TextDocumentService].
+ * Represents a single operation that is part of a text document service.
  *
  * This is to ensure the main service does not break single-responsibility principles.
  * @param P type of the parameters

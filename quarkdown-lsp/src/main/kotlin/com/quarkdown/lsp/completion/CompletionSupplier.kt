@@ -1,8 +1,8 @@
 package com.quarkdown.lsp.completion
 
 import com.quarkdown.lsp.TextDocument
-import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionParams
+import com.quarkdown.lsp.model.Completion
+import com.quarkdown.lsp.model.CursorPosition
 
 /**
  * Interface for providing completion items based on the current context in a text document.
@@ -13,12 +13,12 @@ import org.eclipse.lsp4j.CompletionParams
 interface CompletionSupplier {
     /**
      * Generates a list of completion items.
-     * @param params the parameters for the completion request, including the position in the document
+     * @param position the position in the document the completion was requested at
      * @param document the current document
      * @return a list of completion items that can be suggested
      */
     fun getCompletionItems(
-        params: CompletionParams,
+        position: CursorPosition,
         document: TextDocument,
-    ): List<CompletionItem>
+    ): List<Completion>
 }

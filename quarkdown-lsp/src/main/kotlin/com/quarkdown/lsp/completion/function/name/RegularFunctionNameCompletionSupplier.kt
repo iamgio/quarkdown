@@ -4,10 +4,10 @@ import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
 import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
+import com.quarkdown.lsp.model.Completion
+import com.quarkdown.lsp.model.CursorPosition
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.lsp.util.getLineUntilPosition
-import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionParams
 import java.io.File
 
 /**
@@ -27,11 +27,11 @@ class RegularFunctionNameCompletionSupplier(
     private val callPattern = Regex("${QuarkdownPatterns.FunctionCall.identifierInCall}$")
 
     override fun getCompletionItems(
-        params: CompletionParams,
+        position: CursorPosition,
         document: TextDocument,
-    ): List<CompletionItem> {
+    ): List<Completion> {
         val text = document.text
-        val line = params.position.getLineUntilPosition(text) ?: return emptyList()
+        val line = position.getLineUntilPosition(text) ?: return emptyList()
 
         // The name of the function call at the cursor position to complete.
         val snippet: String = callPattern.find(line)?.value ?: return emptyList()

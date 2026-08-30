@@ -5,6 +5,8 @@ import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.diagnostics.DiagnosticsSupplier
 import com.quarkdown.lsp.highlight.SemanticTokensSupplier
 import com.quarkdown.lsp.hover.HoverSupplier
+import com.quarkdown.lsp.interop.toCursorPosition
+import com.quarkdown.lsp.interop.toLsp4j
 import com.quarkdown.lsp.ontype.OnTypeFormattingEditSupplier
 import com.quarkdown.lsp.subservices.CompletionSubservice
 import com.quarkdown.lsp.subservices.DiagnosticsSubservice
@@ -101,7 +103,10 @@ class QuarkdownTextDocumentService(
         uri: String,
         document: TextDocument,
     ) {
-        val diagnostics: List<Diagnostic> = diagnosticsService.process(params = null, document)
+        val diagnostics: List<Diagnostic> =
+            diagnosticsService
+                .process(params = Unit, document)
+                .map { it.toLsp4j(document.text) }
         server.publishDiagnostics(uri, diagnostics)
     }
 
@@ -149,7 +154,7 @@ class QuarkdownTextDocumentService(
 
         return CompletableFuture.supplyAsync({
             server.log("Operation 'text/completion'")
-            Either.forLeft(completionService.process(params, document))
+            Either.forLeft(completionService.process(params.position.toCursorPosition(), document).map { it.toLsp4j() })
         }, executor)
     }
 
@@ -160,20 +165,22 @@ class QuarkdownTextDocumentService(
         server.log("Operation 'text/semanticTokens/full'")
 
         val document = getDocument(params.textDocument)
-        return CompletableFuture.completedFuture(semanticTokensService.process(params, document))
+        return CompletableFuture.completedFuture(SemanticTokens(semanticTokensService.process(params = Unit, document)))
     }
 
     override fun hover(params: HoverParams): CompletableFuture<Hover?>? {
         server.log("Operation 'text/hover'")
 
         val document = getDocument(params.textDocument)
-        return CompletableFuture.completedFuture(hoverService.process(params, document))
+        return CompletableFuture.completedFuture(hoverService.process(params.position.toCursorPosition(), document)?.toLsp4j())
     }
 
     override fun onTypeFormatting(params: DocumentOnTypeFormattingParams): CompletableFuture<List<TextEdit?>?>? {
         server.log("Operation 'text/onTypeFormatting'")
 
         val document = getDocument(params.textDocument)
-        return CompletableFuture.completedFuture(onTypeFormattingService.process(params, document))
+        return CompletableFuture.completedFuture(
+            onTypeFormattingService.process(params.position.toCursorPosition(), document).map { it.toLsp4j() },
+        )
     }
 }

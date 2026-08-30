@@ -4,7 +4,6 @@ import com.quarkdown.core.util.normalizeLineSeparators
 import com.quarkdown.lsp.highlight.SimpleTokenData
 import com.quarkdown.lsp.highlight.TokenType
 import com.quarkdown.lsp.highlight.function.FunctionCallTokensSupplier
-import org.eclipse.lsp4j.SemanticTokensParams
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -32,14 +31,13 @@ private val TYPE_INLINE_ARGUMENT_DELIMITER = TokenType.FUNCTION_CALL_INLINE_ARGU
  */
 class FunctionCallTokensSupplierTest {
     private val supplier = FunctionCallTokensSupplier()
-    private val params = SemanticTokensParams()
 
     private fun tokenize(
         text: String,
         block: Iterator<SimpleTokenData>.() -> Unit = {},
     ): Iterator<SimpleTokenData> =
         supplier
-            .getTokens(params, TextDocument(text))
+            .getTokens(TextDocument(text))
             .iterator()
             .also { tokens ->
                 block(tokens)

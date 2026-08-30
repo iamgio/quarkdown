@@ -16,16 +16,12 @@ import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.INLINE_ARGUMENT_VALUE
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.LINE_CONTINUATION
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.NAMED_PARAMETER_DELIMITER
 import com.quarkdown.lsp.tokenizer.FunctionCallToken.Type.PARAMETER_NAME
-import org.eclipse.lsp4j.SemanticTokensParams
 
 /**
  * Supplier for semantic tokens that highlight function calls.
  */
 class FunctionCallTokensSupplier : SemanticTokensSupplier {
-    override fun getTokens(
-        params: SemanticTokensParams,
-        document: TextDocument,
-    ): Iterable<SimpleTokenData> =
+    override fun getTokens(document: TextDocument): Iterable<SimpleTokenData> =
         document.functionCalls
             .asSequence()
             .flatMap { it.tokens }

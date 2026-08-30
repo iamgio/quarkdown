@@ -1,6 +1,5 @@
 package com.quarkdown.lsp.cache
 
-import com.quarkdown.lsp.documentation.markdownToMarkup
 import com.quarkdown.quarkdoc.reader.json.DocsIndexWalker
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
@@ -63,7 +62,7 @@ object CacheableFunctionCatalogue {
                 DocumentedFunction(
                     data = data,
                     rawData = it,
-                    documentationAsMarkup = extractor.extractContent()?.markdownToMarkup(),
+                    documentationMarkdown = extractor.extractContent(),
                 )
             }?.toSet()
             .orEmpty()

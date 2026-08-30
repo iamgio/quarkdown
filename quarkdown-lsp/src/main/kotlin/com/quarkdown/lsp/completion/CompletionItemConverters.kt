@@ -2,49 +2,42 @@ package com.quarkdown.lsp.completion
 
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.FunctionCallInsertionSnippet
-import com.quarkdown.lsp.documentation.markdownToMarkup
+import com.quarkdown.lsp.model.Completion
+import com.quarkdown.lsp.model.CompletionKind
 import com.quarkdown.quarkdoc.reader.DocsParameter
-import org.eclipse.lsp4j.CompletionItem
-import org.eclipse.lsp4j.CompletionItemKind
-import org.eclipse.lsp4j.InsertTextFormat
-import org.eclipse.lsp4j.jsonrpc.messages.Either
 
-// Converters from various types to LSP completion items.
+// Converters from various types to completion proposals.
 
 /**
- * Converts a [DocumentedFunction] to a [CompletionItem] for use in function name completion.
- * @param function the documented function to convert
- * @param chained whether the function is chained call, hence the first parameter should not be included in the snippet
+ * Converts a [DocumentedFunction] to a [Completion] for use in function name completion.
+ * @param chained whether the function is a chained call, hence the first parameter should not be included in the snippet
  */
 fun DocumentedFunction.toCompletionItem(chained: Boolean) =
-    CompletionItem().apply {
-        label = name
-        detail = rawData.moduleName
-        documentation = Either.forRight(documentationAsMarkup)
-        kind = CompletionItemKind.Function
-        insertTextFormat = InsertTextFormat.Snippet
-        insertText = FunctionCallInsertionSnippet.forFunction(this@toCompletionItem.data, chained)
-    }
+    Completion(
+        label = name,
+        kind = CompletionKind.FUNCTION,
+        detail = rawData.moduleName,
+        documentationMarkdown = documentationMarkdown,
+        insertionSnippet = FunctionCallInsertionSnippet.forFunction(data, chained),
+    )
 
 /**
- * Converts a [DocsParameter] to a [CompletionItem] for use in parameter name completion.
+ * Converts a [DocsParameter] to a [Completion] for use in parameter name completion.
  */
 fun DocsParameter.toCompletionItem() =
-    CompletionItem().apply {
-        label = name
-        detail = if (!isOptional) "required" else null
-        documentation = Either.forRight(description.markdownToMarkup())
-        kind = CompletionItemKind.Field
-        insertTextFormat = InsertTextFormat.Snippet
-        insertText = FunctionCallInsertionSnippet.forParameter(this@toCompletionItem, alwaysNamed = true)
-    }
+    Completion(
+        label = name,
+        kind = CompletionKind.PARAMETER,
+        detail = if (!isOptional) "required" else null,
+        documentationMarkdown = description,
+        insertionSnippet = FunctionCallInsertionSnippet.forParameter(this, alwaysNamed = true),
+    )
 
 /**
- * Converts a generic string value, such as an allowed value for a parameter, to a [CompletionItem].
+ * Converts a generic string value, such as an allowed value for a parameter, to a [Completion].
  */
 fun String.toCompletionItem() =
-    CompletionItem().apply {
-        label = this@toCompletionItem
-        kind = CompletionItemKind.Value
-        insertTextFormat = InsertTextFormat.Snippet
-    }
+    Completion(
+        label = this,
+        kind = CompletionKind.VALUE,
+    )

@@ -1,12 +1,9 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.lsp.model.CursorPosition
+import com.quarkdown.lsp.model.TextPatch
 import com.quarkdown.lsp.ontype.LineContinuationAutoIndentOnTypeFormattingEditSupplier
-import org.eclipse.lsp4j.DocumentOnTypeFormattingParams
-import org.eclipse.lsp4j.FormattingOptions
-import org.eclipse.lsp4j.Position
-import org.eclipse.lsp4j.TextDocumentIdentifier
-import org.eclipse.lsp4j.TextEdit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,12 +17,9 @@ class LineContinuationAutoIndentOnTypeFormattingEditSupplierTest {
     private fun getEdits(
         text: String,
         atLine: Int,
-    ): List<TextEdit> {
+    ): List<TextPatch> {
         val doc = TextDocument(text.normalizeLineSeparators().toString())
-        val options = FormattingOptions(2, true)
-        val params =
-            DocumentOnTypeFormattingParams(TextDocumentIdentifier("mem://test.qd"), options, Position(atLine, 0), "\n")
-        return supplier.getEdits(params, doc)
+        return supplier.getEdits(CursorPosition(atLine, 0), doc)
     }
 
     @Test
@@ -37,9 +31,9 @@ class LineContinuationAutoIndentOnTypeFormattingEditSupplierTest {
         assertEquals(1, edits.size)
         val edit = edits.single()
         // Inserts indentation to align with the first argument (after `.container `).
-        assertEquals(1, edit.range.start.line)
-        assertEquals(0, edit.range.start.character)
-        assertEquals(" ".repeat(".container ".length), edit.newText)
+        assertEquals(1, edit.start.line)
+        assertEquals(0, edit.start.column)
+        assertEquals(" ".repeat(".container ".length), edit.text)
     }
 
     @Test
@@ -49,7 +43,7 @@ class LineContinuationAutoIndentOnTypeFormattingEditSupplierTest {
         val text = ".func {arg1} \\\n"
         val edits = getEdits(text, 1)
         assertEquals(1, edits.size)
-        assertEquals(" ".repeat(".func ".length), edits.single().newText)
+        assertEquals(" ".repeat(".func ".length), edits.single().text)
     }
 
     @Test
@@ -59,7 +53,7 @@ class LineContinuationAutoIndentOnTypeFormattingEditSupplierTest {
         val text = ".func \\\n"
         val edits = getEdits(text, 1)
         assertEquals(1, edits.size)
-        assertEquals(" ".repeat(".func ".length), edits.single().newText)
+        assertEquals(" ".repeat(".func ".length), edits.single().text)
     }
 
     @Test
@@ -69,7 +63,7 @@ class LineContinuationAutoIndentOnTypeFormattingEditSupplierTest {
         val text = "Hello .func {arg1} \\\n"
         val edits = getEdits(text, 1)
         assertEquals(1, edits.size)
-        assertEquals(" ".repeat("Hello .func ".length), edits.single().newText)
+        assertEquals(" ".repeat("Hello .func ".length), edits.single().text)
     }
 
     @Test

@@ -3,11 +3,11 @@ package com.quarkdown.lsp.completion.function.parameter
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
+import com.quarkdown.lsp.model.Completion
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.remainderUntilIndex
-import org.eclipse.lsp4j.CompletionItem
 import java.io.File
 
 /**
@@ -36,7 +36,7 @@ class FunctionParameterNameCompletionSupplier(
         function: DocumentedFunction?,
         cursorIndex: Int,
         originalCursorIndex: Int,
-    ): List<CompletionItem> {
+    ): List<Completion> {
         if (function == null) return emptyList()
         // Parameter names are only completed when the parameter name is being typed, so it's not yet part of the function call.
         // A line continuation token is allowed: the cursor is on a blank continuation line, ready for a new parameter.

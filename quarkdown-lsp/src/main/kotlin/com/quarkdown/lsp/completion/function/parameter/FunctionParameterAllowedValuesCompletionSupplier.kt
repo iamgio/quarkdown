@@ -3,12 +3,12 @@ package com.quarkdown.lsp.completion.function.parameter
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
+import com.quarkdown.lsp.model.Completion
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.getParameterAtSourceIndex
 import com.quarkdown.quarkdoc.reader.DocsParameter
-import org.eclipse.lsp4j.CompletionItem
 import java.io.File
 
 /**
@@ -26,7 +26,7 @@ class FunctionParameterAllowedValuesCompletionSupplier(
         function: DocumentedFunction?,
         cursorIndex: Int,
         originalCursorIndex: Int,
-    ): List<CompletionItem> {
+    ): List<Completion> {
         if (function == null) return emptyList()
 
         // If a value is partially present, it can be completed.

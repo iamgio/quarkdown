@@ -1,12 +1,9 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.lsp.model.CursorPosition
+import com.quarkdown.lsp.model.TextPatch
 import com.quarkdown.lsp.ontype.TrailingSpacesRemoverOnTypeFormattingEditSupplier
-import org.eclipse.lsp4j.DocumentOnTypeFormattingParams
-import org.eclipse.lsp4j.FormattingOptions
-import org.eclipse.lsp4j.Position
-import org.eclipse.lsp4j.TextDocumentIdentifier
-import org.eclipse.lsp4j.TextEdit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,12 +16,9 @@ class TrailingSpacesRemoverFormattingEditSupplierTest {
     private fun getEdits(
         text: String,
         atLine: Int,
-    ): List<TextEdit> {
+    ): List<TextPatch> {
         val doc = TextDocument(text.normalizeLineSeparators().toString())
-        val options = FormattingOptions(2, true)
-        val params =
-            DocumentOnTypeFormattingParams(TextDocumentIdentifier("mem://test.md"), options, Position(atLine, 0), "\n")
-        return supplier.getEdits(params, doc)
+        return supplier.getEdits(CursorPosition(atLine, 0), doc)
     }
 
     @Test
@@ -36,13 +30,13 @@ class TrailingSpacesRemoverFormattingEditSupplierTest {
             5,
             edits
                 .single()
-                .range.start.character,
+                .start.column,
         )
         assertEquals(
             6,
             edits
                 .single()
-                .range.end.character,
+                .end.column,
         )
     }
 
