@@ -18,5 +18,5 @@ dependencies {
     testImplementation("org.jetbrains.dokka:dokka-test-api:$dokkaVersion")
     testImplementation("org.jetbrains.dokka:dokka-base-test-utils:$dokkaVersion")
     testRuntimeOnly("org.jetbrains.dokka:analysis-kotlin-symbols:$dokkaVersion")
-    testImplementation("org.jsoup:jsoup:1.21.2")
+    testImplementation("com.fleeksoft.ksoup:ksoup:0.2.6")
 }

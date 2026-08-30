@@ -10,6 +10,15 @@ import kotlin.test.assertEquals
  */
 class HtmlToMarkdownTest {
     @Test
+    fun `links in code blocks are flattened to plain text`() {
+        val html = """<pre><code class="lang-kotlin">.func {<a href="type.html">Type</a>}</code></pre>"""
+        assertEquals(
+            "```lang-kotlin\n.func {Type}\n```",
+            HtmlToMarkdown.convert(html).trim(),
+        )
+    }
+
+    @Test
     fun `stdlib page`() {
         val html = javaClass.getResourceAsStream("/html-to-markdown/align.html")!!.bufferedReader().use { it.readText() }
         val md = javaClass.getResourceAsStream("/html-to-markdown/align.md")!!.bufferedReader().use { it.readText() }

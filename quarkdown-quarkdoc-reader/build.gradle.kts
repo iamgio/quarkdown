@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("org.jsoup:jsoup:1.22.2")
+    implementation("com.fleeksoft.ksoup:ksoup:0.2.6")
 }
 
 tasks.test {
