@@ -21,6 +21,14 @@ The new `callouts` argument of the `.code` function attaches numbered markers to
 
 ### Changed
 
+#### PDF export without Node.js [ecosystem breaking change]
+
+Exporting to PDF no longer requires Node.js, npm, and Puppeteer. Quarkdown now communicates directly with a Chromium-family browser, which makes PDF generation faster to start and much simpler to set up.
+
+Package manager installations download a headless Chrome shell automatically. If you installed Quarkdown manually, download it from the [Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/) page, or point Quarkdown to an existing Chromium-family installation with the new `--chrome-path` option or the `QD_CHROME_PATH` environment variable.
+
+> Migration note: the `--node-path` and `--npm-path` options, along with the `QD_NPM_PREFIX` and `NODE_PATH` environment variables, are no longer used. `quarkdown doctor env` now reports the browser's status.
+
 #### Reflectionless function calls
 
 Calling a native function no longer involves JVM reflection, improving performance (the official wiki now compiles 10% faster) on function-heavy documents and opening the door to future optimizations.

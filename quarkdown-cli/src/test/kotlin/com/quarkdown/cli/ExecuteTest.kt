@@ -42,8 +42,7 @@ class ExecuteTest : TempDirectory() {
             rendererName = "html",
             clean = false,
             pipe = false,
-            nodePath = "",
-            npmPath = "",
+            chromePath = "unused",
         )
 
     private fun pipelineOptions(strict: Boolean) =

@@ -29,27 +29,11 @@ runs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1
       id: setup-chrome
 
-    - name: Set Puppeteer's executable path
+    - name: Set browser path
       run: |
-        echo "PUPPETEER_EXECUTABLE_PATH=${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_ENV
-      shell: bash
-
-    - name: Set npm environment variables
-      run: |
-        mkdir -p $HOME/.npm-global/lib
-        echo "QD_NPM_PREFIX=$HOME/.npm-global/lib" >> $GITHUB_ENV
-        echo "NODE_PATH=$HOME/.npm-global/lib/node_modules" >> $GITHUB_ENV
-      shell: bash
-
-    - name: Install Puppeteer
-      run: |
-        export PUPPETEER_SKIP_DOWNLOAD=true
-        npm install puppeteer --prefix ${{ env.QD_NPM_PREFIX }}
+        echo "QD_CHROME_PATH=${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_ENV
       shell: bash

@@ -1,8 +1,6 @@
 package com.quarkdown.rendering.html.pdf
 
-import com.quarkdown.interaction.Env
-import com.quarkdown.interaction.executable.NodeJsWrapper
-import com.quarkdown.interaction.executable.NpmWrapper
+import com.quarkdown.interaction.executable.ChromiumWrapper
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.junit.Assume.assumeTrue
@@ -25,8 +23,7 @@ class HtmlToPdfTest {
     private val options =
         HtmlPdfExportOptions(
             outputDirectory = directory,
-            nodeJsPath = NodeJsWrapper.defaultPath,
-            npmPath = NpmWrapper.defaultPath,
+            chromePath = ChromiumWrapper.defaultPath,
         )
 
     @BeforeTest
@@ -36,15 +33,15 @@ class HtmlToPdfTest {
     }
 
     @Test
-    fun `bare script on simple html`() {
-        assumeTrue(Env.npmPrefix != null)
-        assumeTrue(Env.nodePath != null)
-        val node = NodeJsWrapper(options.nodeJsPath, workingDirectory = directory)
-        assumeTrue(node.isValid)
-        with(NpmWrapper(options.npmPath)) {
-            assumeTrue(isValid)
-            assumeTrue(isInstalled(node, PuppeteerNodeModule))
-        }
+    fun `export with blank browser path fails gracefully`() {
+        val out = File(directory, "out.pdf")
+        HtmlPdfExporter(options.copy(chromePath = " ")).export(directory, out)
+        assertFalse(out.exists())
+    }
+
+    @Test
+    fun `bare generation on simple html`() {
+        assumeTrue(runCatching { ChromiumWrapper(options.chromePath).isValid }.getOrDefault(false))
 
         val html = File(directory, "index.html")
         html.writeText(
@@ -65,17 +62,10 @@ class HtmlToPdfTest {
             """.trimIndent(),
         )
 
-        println(directory)
-        println(directory.list().contentToString())
-
         val out = File(directory, "out.pdf")
         HtmlPdfExporter(options.copy(noSandbox = true)).export(directory, out)
 
         assertTrue(out.exists())
-        assertFalse(File(directory, "pdf.js").exists())
-        assertFalse(File(directory, "package.json").exists())
-        assertFalse(File(directory, "package-lock.json").exists())
-        assertFalse(File(directory, "node_modules").exists())
 
         Loader.loadPDF(out).use {
             val text = PDFTextStripper().getText(it).trim()

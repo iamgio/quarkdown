@@ -10,10 +10,7 @@ import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
-import com.quarkdown.interaction.Env
-import com.quarkdown.interaction.executable.NodeJsWrapper
-import com.quarkdown.interaction.executable.NpmWrapper
-import com.quarkdown.rendering.html.pdf.PuppeteerNodeModule
+import com.quarkdown.interaction.executable.ChromiumWrapper
 import org.apache.pdfbox.Loader
 import org.junit.Assume.assumeTrue
 import java.io.File
@@ -353,14 +350,7 @@ class CompileCommandTest : TempDirectory() {
     }
 
     private fun assumePdfEnvironmentInstalled() {
-        assumeTrue(Env.npmPrefix != null)
-        assumeTrue(Env.nodePath != null)
-        val node = NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = directory)
-        assumeTrue(node.isValid)
-        with(NpmWrapper(NpmWrapper.defaultPath)) {
-            assumeTrue(isValid)
-            assumeTrue(isInstalled(node, PuppeteerNodeModule))
-        }
+        assumeTrue(runCatching { ChromiumWrapper(ChromiumWrapper.defaultPath).isValid }.getOrDefault(false))
     }
 
     private fun checkPdf(
@@ -448,16 +438,14 @@ class CompileCommandTest : TempDirectory() {
     }
 
     @Test
-    fun `pdf with node and npm set`() {
+    fun `pdf with browser path set`() {
         assumePdfEnvironmentInstalled()
         val (_, _) =
             test(
                 "--pdf",
                 "--pdf-no-sandbox",
-                "--node-path",
-                NodeJsWrapper.defaultPath,
-                "--npm-path",
-                NpmWrapper.defaultPath,
+                "--chrome-path",
+                ChromiumWrapper.defaultPath,
             )
         checkPdf()
     }
@@ -496,6 +484,9 @@ class CompileCommandTest : TempDirectory() {
     @Test
     fun `timeout aborts pdf generation`() {
         assumePdfEnvironmentInstalled()
+
+        // Enough content to keep in-browser pagination busy beyond the timeout.
+        main.writeText(main.readText() + "\n\n.repeat {500}\n\t.loremipsum")
 
         val cmd = CompileCommand()
         val result =

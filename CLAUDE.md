@@ -5,7 +5,7 @@ This is the Quarkdown project. Quarkdown is a:
 - Typesetting system, as an alternative to LaTeX, with high-quality typography and layout customization
 - Compiler, parser and renderer to:
   - HTML
-  - PDF (via Puppeteer)
+  - PDF (via a headless Chromium browser)
   - Plain text
 - CLI tool
 
@@ -294,7 +294,7 @@ After the Kotlin extension renders the Quarkdown AST to HTML elements,
 the front-end TypeScript code takes care of interactivity and dynamic features,
 while SCSS files handle styling and layout.
 
-Additionally, Puppeteer is used to generate PDF output from the HTML rendering.
+Additionally, a Chromium-family browser (`chrome-headless-shell`), driven from the JVM over the Chrome DevTools Protocol, is used to generate PDF output from the HTML rendering.
 This lives in the separate, JVM-only [quarkdown-html-pdf](quarkdown-html-pdf) module,
 which decorates the HTML post-renderer and relies on the webserver, located in [quarkdown-server](quarkdown-server).
 
@@ -333,7 +333,7 @@ A layout or color theme can ship sibling assets (e.g. fonts) that travel with it
 
 ## Server
 
-[quarkdown-server](quarkdown-server) is a Ktor-based web server that serves the HTML rendering and allows PDF generation via Puppeteer. The `/preview/<path>` endpoint, used in combination with the CLI's `--preview` and `--watch` options, serves the HTML through a double iframe buffer, allowing for live preview during editing.
+[quarkdown-server](quarkdown-server) is a Ktor-based web server that serves the HTML rendering and allows PDF generation via a headless Chromium browser. The `/preview/<path>` endpoint, used in combination with the CLI's `--preview` and `--watch` options, serves the HTML through a double iframe buffer, allowing for live preview during editing.
 
 ## Testing
 

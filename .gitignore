@@ -112,3 +112,4 @@ nb-configuration.xml
 !.claude/skills/
 *.log
 **/_test/
+docs/superpowers/

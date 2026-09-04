@@ -6,9 +6,7 @@ import com.github.ajalt.mordant.rendering.TextColors.green
 import com.github.ajalt.mordant.rendering.TextColors.red
 import com.github.ajalt.mordant.rendering.TextStyles.bold
 import com.quarkdown.core.log.Log
-import com.quarkdown.interaction.executable.NodeJsWrapper
-import com.quarkdown.interaction.executable.NodeModule
-import kotlin.io.path.createTempDirectory
+import com.quarkdown.interaction.executable.ChromiumWrapper
 
 /**
  * Reports the status of external runtimes used by Quarkdown:
@@ -16,20 +14,12 @@ import kotlin.io.path.createTempDirectory
  */
 class DoctorEnvCommand : CliktCommand("env") {
     override fun run() {
-        // Run Node from a temp directory not to pick up a stray `node_modules`.
-        val workingDirectory = createTempDirectory("quarkdown-doctor-env-").toFile()
-        try {
-            val node = NodeJsWrapper(NodeJsWrapper.defaultPath, workingDirectory = workingDirectory)
-            val checks: List<EnvironmentCheck> =
-                listOf(
-                    JvmCheck,
-                    NodeCheck(node),
-                    NodeModuleCheck(node, NodeModule("puppeteer"), name = "Puppeteer"),
-                )
-            echo(render(checks))
-        } finally {
-            workingDirectory.deleteRecursively()
-        }
+        val checks: List<EnvironmentCheck> =
+            listOf(
+                JvmCheck,
+                ChromeCheck(ChromiumWrapper(ChromiumWrapper.defaultPath)),
+            )
+        echo(render(checks))
     }
 }
 
@@ -85,33 +75,19 @@ private object JvmCheck : EnvironmentCheck {
 }
 
 /**
- * Detects the Node.js runtime.
+ * Detects the Chromium-family browser used for PDF export.
  */
-private class NodeCheck(
-    private val node: NodeJsWrapper,
-) : GuardedEnvironmentCheck("Node") {
-    override fun detect() =
-        EnvironmentCheck.Result(
+private class ChromeCheck(
+    private val browser: ChromiumWrapper,
+) : GuardedEnvironmentCheck("Chrome (PDF export)") {
+    override fun detect(): EnvironmentCheck.Result {
+        val version = browser.version()
+        return EnvironmentCheck.Result(
             found = true,
-            path = node.getProcessPath(),
-            version = node.getVersion(),
+            path = browser.path,
+            version = version,
         )
-}
-
-/**
- * Detects a Node.js [module] resolvable from [node].
- */
-private class NodeModuleCheck(
-    private val node: NodeJsWrapper,
-    private val module: NodeModule,
-    name: String,
-) : GuardedEnvironmentCheck(name) {
-    override fun detect() =
-        EnvironmentCheck.Result(
-            found = true,
-            path = node.getModulePath(module),
-            version = node.getModuleVersion(module),
-        )
+    }
 }
 
 private const val FOUND_BADGE = "✓ found"

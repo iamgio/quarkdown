@@ -11,7 +11,7 @@ import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import java.io.File
 
 /**
- * Decorator for [HtmlPostRenderer] that generates a PDF file from the HTML output via Puppeteer.
+ * Decorator for [HtmlPostRenderer] that generates a PDF file from the HTML output via a Chromium-family browser.
  * @param postRenderer the original [HtmlPostRenderer] to be decorated
  * @param options options for the PDF export process
  */
