@@ -41,6 +41,6 @@ Read the relevant wiki pages before writing anything non-trivial.
 3. **Read** the specific wiki pages relevant to the task, and stdlib API pages under `docs/` when you need exact function signatures.
 4. **Write** the `.qd` file.
 5. **Compile to verify**: `quarkdown c <main>.qd --strict --out /tmp/quarkdown-verify`. `<main>` is usually `main.qd` but confirm against the project. `--strict` surfaces errors; `--out /tmp/quarkdown-verify` keeps build artifacts out of the user's project (otherwise output lands in `./quarkdown-output` relative to your CWD).
-   - PDF export (`--pdf`) is slow because it spins up Puppeteer. Only use it when the user asks for a PDF.
+   - PDF export (`--pdf`) is slower because it spins up a headless browser. Only use it when the user asks for a PDF.
    - **Never** run live preview (`-p`, `-w`) yourself; it starts a long-running web server. Suggest the command to the user instead.
 6. **Report** any compile errors back to the user.

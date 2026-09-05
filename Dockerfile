@@ -1,3 +1,7 @@
+# Version of the headless browser bundle used for PDF export.
+# To keep in sync with quarkdown-html-pdf/scripts/chrome.properties, the version shared with the installers.
+ARG HEADLESS_SHELL_VERSION=151.0.7922.109
+
 # Build stage via Gradle
 FROM gradle:8.14.3-jdk17 AS builder
 
@@ -25,13 +29,20 @@ WORKDIR build/distributions
 RUN unzip quarkdown.zip && rm quarkdown.zip
 
 # Run stage
-FROM ghcr.io/puppeteer/puppeteer:24.15.0 AS runner
+FROM docker.io/chromedp/headless-shell:${HEADLESS_SHELL_VERSION} AS runner
 
-ENV QD_NPM_PREFIX="/home/pptruser" \
-    NODE_PATH="/home/pptruser/node_modules" \
-    PUPPETEER_CACHE_DIR="/home/pptruser/.cache/puppeteer"
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates fontconfig fonts-liberation \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-USER pptruser
+RUN useradd -m quarkdown
+USER quarkdown
+
+ENV QD_CHROME_PATH="/headless-shell/headless-shell" \
+    QD_NO_SANDBOX="true"
+
 WORKDIR /app
 COPY --from=builder /app/build/distributions/quarkdown quarkdown
 ENV PATH="/app/quarkdown/bin:${PATH}"

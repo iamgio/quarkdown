@@ -28,14 +28,4 @@ object OsUtils {
         isUnix() -> unix()
         else -> throw UnsupportedOperationException("Unexpected OS: $osName")
     }
-
-    /**
-     * @param basePath the base path of the executable
-     * @return the path to the executable, with `.cmd` appended on Windows
-     */
-    fun cmdBasedExecutablePath(basePath: String): String =
-        dependent(
-            windows = { "$basePath.cmd" },
-            unix = { basePath },
-        )
 }

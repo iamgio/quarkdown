@@ -28,8 +28,8 @@ import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.installlayout.InstallLayout
-import com.quarkdown.interaction.executable.NodeJsWrapper
-import com.quarkdown.interaction.executable.NpmWrapper
+import com.quarkdown.interaction.Env
+import com.quarkdown.interaction.executable.ChromiumWrapper
 import java.io.File
 
 /**
@@ -190,16 +190,13 @@ abstract class ExecuteCommand(
         .default(DEFAULT_SERVER_PORT)
 
     /**
-     * Path to the Node.js executable, needed for PDF export.
+     * Path to the Chromium-family browser executable, needed for PDF export.
      */
-    private val nodePath: String by option("--node-path", help = "Path to the Node.js executable")
-        .default(NodeJsWrapper.defaultPath)
-
-    /**
-     * Path to the npm executable, needed for PDF export.
-     */
-    private val npmPath: String by option("--npm-path", help = "Path to the npm executable")
-        .default(NpmWrapper.defaultPath)
+    private val chromePath: String by option(
+        "--chrome-path",
+        help = "Path to the Chromium-family browser executable, used for PDF export",
+        envvar = Env.QUARKDOWN_CHROME_PATH,
+    ).default(ChromiumWrapper.defaultPath)
 
     /**
      * Maximum time, in seconds, allowed for the entire execution (pipeline + export) to complete.
@@ -224,8 +221,7 @@ abstract class ExecuteCommand(
             renderer,
             clean,
             pipe = false,
-            nodePath,
-            npmPath,
+            chromePath,
             timeoutSeconds = timeoutSeconds,
         ).let(::finalizeCliOptions)
 

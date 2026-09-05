@@ -1,4 +1,4 @@
-name: PDF generation via Puppeteer
+name: PDF generation
 
 on:
   push:
@@ -17,10 +17,6 @@ jobs:
 
     steps:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@main
-
-    - name: Setup Chrome
-      uses: browser-actions/setup-chrome@v1.7.3
-      id: setup-chrome
 
     - name: Build distribution
       uses: burrunan/gradle-cache-action@v3

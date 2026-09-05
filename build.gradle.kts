@@ -413,6 +413,16 @@ distributions.main {
             }
             includeEmptyDirs = false
         }
+        // Browser installation scripts, invoked by package managers and installers.
+        into("scripts") {
+            from(project(":quarkdown-html-pdf").file("scripts")) {
+                include("*.sh", "*.ps1")
+                filePermissions { unix("rwxr-xr-x") }
+            }
+            from(project(":quarkdown-html-pdf").file("scripts")) {
+                include("chrome.properties")
+            }
+        }
     }
 }
 

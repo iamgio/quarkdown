@@ -5,7 +5,7 @@
 
 ## `doctor env`
 
-**`quarkdown doctor env`** reports the status of the external runtimes Quarkdown depends on: the JVM, Node.js, and Puppeteer (required for PDF export).
+**`quarkdown doctor env`** reports the status of the external runtimes Quarkdown depends on: the JVM, and the Chrome browser required for [PDF export](pdf-export.qd).
 
 ```shell
 quarkdown doctor env

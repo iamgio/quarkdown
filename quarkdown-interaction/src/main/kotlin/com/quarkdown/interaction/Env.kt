@@ -5,29 +5,24 @@ package com.quarkdown.interaction
  */
 object Env {
     /**
-     * The prefix for NPM operations used by Quarkdown.
+     * The path to the Chromium-family browser executable used for PDF export.
      */
-    const val QUARKDOWN_NPM_PREFIX = "QD_NPM_PREFIX"
-    private const val NODE_PATH = "NODE_PATH"
+    const val QUARKDOWN_CHROME_PATH = "QD_CHROME_PATH"
 
     /**
      * Whether to disable the Chrome sandbox for PDF export.
      */
     const val NO_SANDBOX = "QD_NO_SANDBOX"
 
-    private operator fun get(key: String): String? = System.getenv(key)
+    /**
+     * @return the value of the [key] environment variable, or `null` if it is unset or blank
+     */
+    private operator fun get(key: String): String? = System.getenv(key)?.takeIf { it.isNotBlank() }
 
     /**
-     * The global prefix for NPM operations, if set.
-     * This is determined by the `QD_NPM_PREFIX` environment variable.
+     * The path to the Chromium-family browser executable used for PDF export, if set.
+     * This is determined by the `QD_CHROME_PATH` environment variable.
      */
-    val npmPrefix: String?
-        get() = this[QUARKDOWN_NPM_PREFIX]
-
-    /**
-     * The path to the Node.js modules, if set. Ideally, this should point to `${QD_NPM_PREFIX}/node_modules`.
-     * This is determined by the `NODE_PATH` environment variable.
-     */
-    val nodePath: String?
-        get() = this[NODE_PATH]
+    val chromePath: String?
+        get() = this[QUARKDOWN_CHROME_PATH]
 }

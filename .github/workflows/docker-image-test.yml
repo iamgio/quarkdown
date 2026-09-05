@@ -5,6 +5,7 @@ on:
     paths:
       - 'Dockerfile'
       - 'quarkdown-html/**'
+      - 'quarkdown-html-pdf/**'
       - '.github/workflows/docker-image-test.yml'
       - 'build.gradle.kts'
       - 'settings.gradle.kts'
@@ -21,6 +22,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Check Chrome version pin is in sync
+      run: |
+        PROPERTIES=quarkdown-html-pdf/scripts/chrome.properties
+        VERSION=$(grep '^version=' $PROPERTIES | cut -d= -f2)
+        if ! grep -q "HEADLESS_SHELL_VERSION=$VERSION" Dockerfile; then
+          echo "ERROR: Dockerfile HEADLESS_SHELL_VERSION is out of sync with $PROPERTIES ($VERSION)"
+          exit 1
+        fi
+
+    - name: Check browser archive checksums match the pinned ones
+      run: |
+        PROPERTIES=quarkdown-html-pdf/scripts/chrome.properties
+        VERSION=$(grep '^version=' $PROPERTIES | cut -d= -f2)
+        for PLATFORM in linux64 mac-arm64 mac-x64 win64; do
+          PINNED=$(grep "^$PLATFORM=" $PROPERTIES | cut -d= -f2)
+          ACTUAL=$(curl -fsSL "https://storage.googleapis.com/chrome-for-testing-public/$VERSION/$PLATFORM/chrome-headless-shell-$PLATFORM.zip" | sha256sum | cut -d' ' -f1)
+          if [ "$ACTUAL" != "$PINNED" ]; then
+            echo "ERROR: SHA-256 mismatch for chrome-headless-shell-$PLATFORM.zip: expected $PINNED, got $ACTUAL"
+            exit 1
+          fi
+          echo "chrome-headless-shell-$PLATFORM.zip OK"
+        done
 
     - name: Build Docker image
       run: docker build -t quarkdown:test .
