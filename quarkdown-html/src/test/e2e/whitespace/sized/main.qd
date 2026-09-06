@@ -1,0 +1,5 @@
+Before A .whitespace width:{2cm} B
+
+.whitespace width:{3cm} height:{2cm}
+
+After.

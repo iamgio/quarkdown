@@ -41,6 +41,11 @@ Breaking change: calling `.doclang` without a parameter now returns the *English
 
 ### Fixed
 
+#### Block-aware [`.text`](https://quarkdown.com/wiki/text) and `.whitespace`
+
+The `.text` and `.whitespace` functions now adapt to where they are called.
+This fixes spacing issues when invoked as block-level functions.
+
 #### Layout themes: bold weight and leaner font artifacts
 
 Fixed an issue that caused bold text in `minimal` and `beamer` themes to be browser-synthesized. It is now correctly and consistently rendered.
