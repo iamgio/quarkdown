@@ -186,7 +186,6 @@ class BibliographyTest {
         execute(
             """
             .doclang {en}
-            .noautopagebreak
             .tableofcontents title:{}
 
             .bibliography {bib/bibliography.bib} indexheading:{yes}
@@ -209,7 +208,6 @@ class BibliographyTest {
             .doclang {en}
             .numbering
                - headings: 1.A.a
-            .noautopagebreak
             .tableofcontents title:{}
 
             .bibliography {bib/bibliography.bib} indexheading:{yes} numberheading:{yes}

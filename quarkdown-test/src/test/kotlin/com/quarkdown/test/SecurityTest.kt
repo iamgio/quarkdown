@@ -130,8 +130,6 @@ class SecurityTest {
         // headings would emit the same id and references could no longer disambiguate them.
         execute(
             """
-            .noautopagebreak
-
             ## A {#"><script>alert(1)</script>}
 
             ## B {#<script>alert(1)</script>"}
@@ -144,8 +142,6 @@ class SecurityTest {
         // Sanity check: payloads that sanitize to *different* strings (1 vs 2) keep distinct ids.
         execute(
             """
-            .noautopagebreak
-
             ## A {#"><script>alert(1)</script>}
 
             ## B {#"><script>alert(2)</script>}

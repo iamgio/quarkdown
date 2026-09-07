@@ -13,7 +13,7 @@ private val DEFAULT_SUBDOCUMENT_URL_SUFFIXES = setOf(".qd", ".md")
  */
 @OptIn(ExperimentalUuidApi::class)
 data class MutableContextOptions(
-    override var autoPageBreakHeadingMaxDepth: Int = 1,
+    override var autoPageBreakHeadingMaxDepth: Int? = null,
     override var enableAutomaticIdentifiers: Boolean = true,
     override var enableLocationAwareness: Boolean = true,
     override var subdocumentUrlSuffixes: Set<String> = DEFAULT_SUBDOCUMENT_URL_SUFFIXES,

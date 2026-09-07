@@ -13,8 +13,6 @@ class HeadingPrimitiveFunctionTest {
     fun `no extension renders unchanged`() {
         execute(
             """
-            .noautopagebreak
-
             # Hello
 
             ## Hi
@@ -28,8 +26,6 @@ class HeadingPrimitiveFunctionTest {
     fun `extension wraps every heading`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 .container
                     .super
@@ -45,8 +41,6 @@ class HeadingPrimitiveFunctionTest {
     fun `content can be matched and conditionally wrapped (where)`() {
         execute(
             """
-             .noautopagebreak
-
             .extend {heading} where:{depth: .depth::equals {2}}
                  content:
                  .super foreground:{red}
@@ -82,8 +76,6 @@ class HeadingPrimitiveFunctionTest {
     fun `ref can be matched and conditionally styled (where)`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading} where:{ref: .ref::equals {title}}
                 .super foreground:{blue}
 
@@ -104,8 +96,6 @@ class HeadingPrimitiveFunctionTest {
     fun `content can be matched and conditionally wrapped (if)`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 content:
                 .if {.content::equals {Hi}}
@@ -149,8 +139,6 @@ class HeadingPrimitiveFunctionTest {
     fun `content can be transformed`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 content:
                 .super content:{.content::plaintext::capitalize}
@@ -166,8 +154,6 @@ class HeadingPrimitiveFunctionTest {
     fun `depth can be read and drive container styling`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 depth:
                 .container background:{hsl(.depth::multiply {20}, 50, 50)} fullwidth:{yes}
@@ -187,8 +173,6 @@ class HeadingPrimitiveFunctionTest {
     fun `depth can be overridden via super`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 .super depth:{4}
 
@@ -203,8 +187,6 @@ class HeadingPrimitiveFunctionTest {
     fun `ref can be set via super`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 .super ref:{my-id}
 
@@ -276,8 +258,6 @@ class HeadingPrimitiveFunctionTest {
     fun `chained extensions can reset styling via none`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 .super foreground:{red} background:{blue}
 
@@ -349,8 +329,6 @@ class HeadingPrimitiveFunctionTest {
     fun `extension reaches headings nested inside a blockquote`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 .container
                     .super
@@ -369,8 +347,6 @@ class HeadingPrimitiveFunctionTest {
     fun `extension reaches headings nested inside a list item`() {
         execute(
             """
-            .noautopagebreak
-
             .extend {heading}
                 .container
                     .super
@@ -405,10 +381,10 @@ class HeadingPrimitiveFunctionTest {
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<div class=\"container\"><h1 class=\"page-break\" id=\"a\">a</h1></div>" +
+                "<div class=\"container\"><h1 id=\"a\">a</h1></div>" +
                     "<div class=\"container\"><h2 id=\"b\">b</h2></div>" +
                     "<div class=\"container\">" +
-                    "<h1 class=\"page-break\" id=\"table-of-contents\">Table of Contents</h1>" +
+                    "<h1 id=\"table-of-contents\">Table of Contents</h1>" +
                     "</div>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"a\" data-depth=\"1\"><a href=\"#a\">a</a>" +
@@ -423,8 +399,6 @@ class HeadingPrimitiveFunctionTest {
     fun `extension considers function call as content`() {
         execute(
             """
-            .noautopagebreak
-            
             .extend {heading}
                 content:
                 .container foreground:{.takeif {red} {.content::plaintext::equals {Hello}}}

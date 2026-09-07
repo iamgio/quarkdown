@@ -126,7 +126,7 @@ class LoopTest {
         ) {
             val innerBlock =
                 "<h2>Title 2</h2><h2>Title 2</h2>" +
-                    "<h1 class=\"page-break\">Title 1</h1>"
+                    "<h1>Title 1</h1>"
             val outerIteration = innerBlock.repeat(2) + "<p>Some text</p>"
             assertEquals(
                 outerIteration.repeat(2) + "<h3>Title 3</h3>",

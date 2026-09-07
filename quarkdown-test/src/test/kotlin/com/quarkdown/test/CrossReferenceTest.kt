@@ -108,7 +108,6 @@ class CrossReferenceTest {
     fun `numbered references (heading)`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                 - headings: 1.1
             
@@ -134,7 +133,6 @@ class CrossReferenceTest {
     fun `localized numbered references (heading)`() {
         execute(
             """
-            .noautopagebreak
             .doclang {en}
             .numbering
                 - headings: 1.1
@@ -215,7 +213,6 @@ class CrossReferenceTest {
     fun `numbered references (figure, gfm)`() {
         execute(
             """
-            .noautopagebreak
             .doclang {en}
             .numbering
                 - figures: a
@@ -292,7 +289,6 @@ class CrossReferenceTest {
     fun `numbered references (figure)`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                 - figures: a
             
@@ -317,7 +313,6 @@ class CrossReferenceTest {
     fun `localized numbered references (figure)`() {
         execute(
             """
-            .noautopagebreak
             .doclang {en}
             .numbering
                 - figures: a
@@ -344,7 +339,6 @@ class CrossReferenceTest {
     fun `numbered references (mermaid figure)`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                 - figures: A
             

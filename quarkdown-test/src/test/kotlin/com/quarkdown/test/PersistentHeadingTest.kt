@@ -57,7 +57,7 @@ class PersistentHeadingTest {
                     "data-on-left-page=\"top-center\" data-on-right-page=\"top-center\">" +
                     "<p><em><span class=\"last-heading\" data-depth=\"2\"></span></em></p>" +
                     "</div>" +
-                    "<h2>Heading</h2>",
+                    "<h2 class=\"page-break\">Heading</h2>",
                 it,
             )
         }
