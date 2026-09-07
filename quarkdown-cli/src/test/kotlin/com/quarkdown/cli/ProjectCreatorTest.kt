@@ -4,6 +4,7 @@ import com.quarkdown.cli.creator.ProjectCreator
 import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.DocsProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
+import com.quarkdown.cli.creator.content.SlidesProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
 import com.quarkdown.cli.creator.template.DocsProjectCreatorTemplateProcessorFactory
 import com.quarkdown.core.document.DocumentAuthor
@@ -46,6 +47,13 @@ class ProjectCreatorTest {
         if (includeInitialContent) DocsProjectCreatorInitialContentSupplier() else EmptyProjectCreatorInitialContentSupplier(),
         mainFileName = "main",
     )
+
+    private fun slidesProjectCreator(info: DocumentInfo) =
+        ProjectCreator(
+            DefaultProjectCreatorTemplateProcessorFactory(info),
+            SlidesProjectCreatorInitialContentSupplier(),
+            mainFileName = "main",
+        )
 
     @Test
     fun empty() {
@@ -390,5 +398,44 @@ class ProjectCreatorTest {
         assertTrue(resources.any { it.name == "page-1.qd" })
         assertTrue(resources.any { it.name == "page-2.qd" })
         assertTrue(resources.any { it.name == "page-3.qd" })
+    }
+
+    @Test
+    fun `slides with initial content`() {
+        val creator =
+            slidesProjectCreator(
+                DocumentInfo(name = "Test", description = "My slides", type = DocumentType.SLIDES),
+            )
+        val resources = creator.createResources()
+        assertEquals(2, resources.size)
+
+        // The logo image is supplied, like in default projects.
+        val images = resources.filterIsInstance<OutputResourceGroup>().single { it.name == "image" }
+        assertEquals("logo.png", images.resources.single().name)
+
+        val main = resources.first { it is TextOutputArtifact }
+        val content = main.textContent
+
+        assertContains(content, ".docname {Test}")
+        assertContains(content, ".doctype {slides}")
+
+        // Slide-specific structure.
+        assertContains(content, ".footer\n    .docauthor\n\n    .docname\n\n    .currentpage / .totalpages")
+        assertContains(content, "# .docname")
+        assertContains(content, ".text {.docdescription} variant:{smallcaps}")
+        assertContains(content, "\n## First slide\n")
+        assertContains(content, "\n## Second slide\n")
+
+        // Shared getting-started content.
+        assertContains(content, "quarkdown c main.qd")
+        assertContains(content, "official wiki")
+
+        // The second slide lays out text and a formula in a row, followed by the logo.
+        assertContains(content, ".row alignment:{spacebetween}\n    This is a multi-column layout.")
+        assertContains(content, "!(25%)[Quarkdown](image/logo.png)")
+
+        // No docs sections or heading with raw name.
+        assertFalse("## Compiling" in content)
+        assertFalse("# Test" in content)
     }
 }

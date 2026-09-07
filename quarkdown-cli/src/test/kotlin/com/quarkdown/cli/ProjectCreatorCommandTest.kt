@@ -45,9 +45,9 @@ class ProjectCreatorCommandTest : TempDirectory() {
             "--authors",
             "Aaa, Bbb,Ccc",
             "--type",
-            "slides",
+            "plain",
             "--description",
-            if (includeDescription) "A test document for slides" else "",
+            if (includeDescription) "A test document" else "",
             "--lang",
             "en",
             "--color-theme",
@@ -73,7 +73,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
                 .toString()
         assertTrue(main.startsWith(".docname {test}"))
         if (includeDescription) {
-            assertTrue(".docdescription {A test document for slides}" in main)
+            assertTrue(".docdescription {A test document}" in main)
         }
         if (includeKeywords) {
             assertTrue(".dockeywords\n  - testing\n  - slides\n  - quarkdown" in main)
@@ -81,7 +81,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
         assertTrue("- Aaa" in main)
         assertTrue("- Bbb" in main)
         assertTrue("- Ccc" in main)
-        assertTrue(".doctype {slides}" in main)
+        assertTrue(".doctype {plain}" in main)
         assertTrue(".doclang {English}" in main)
         assertTrue(".theme {darko} layout:{latex}" in main)
 
@@ -123,6 +123,47 @@ class ProjectCreatorCommandTest : TempDirectory() {
     fun `no keywords`() {
         val main = test(includeKeywords = false)
         assertTrue(".dockeywords" !in main)
+    }
+
+    @Test
+    fun slides() {
+        command.test(
+            directory.resolve(".").absolutePath,
+            "--name",
+            "test",
+            "--authors",
+            "Aaa",
+            "--type",
+            "slides",
+            "--description",
+            "A presentation",
+            "--lang",
+            "",
+            "--main-file",
+            "main",
+        )
+        assertTrue(directory.exists())
+
+        // Slides projects supply the main file and the image assets.
+        val fileNames = directory.listFiles()!!.map { it.name }
+        assertEquals(setOf("main.qd", "image"), fileNames.toSet())
+
+        val main =
+            directory
+                .resolve("main.qd")
+                .readText()
+                .normalizeLineSeparators()
+                .toString()
+        assertContains(main, ".doctype {slides}")
+        // Default theme for slides.
+        assertContains(main, ".theme {paperwhite} layout:{focus}")
+        // Slides starter content.
+        assertContains(main, ".footer")
+        assertContains(main, "# .docname")
+        assertContains(main, ".text {.docdescription} variant:{smallcaps}")
+        assertContains(main, "\n## First slide\n")
+        assertContains(main, "\n## Second slide\n")
+        assertContains(main, "image/logo.png")
     }
 
     @Test
