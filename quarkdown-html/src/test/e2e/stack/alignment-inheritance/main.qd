@@ -1,0 +1,8 @@
+.row
+    First
+
+.row alignment:{end}
+    Second
+
+.column
+    Third

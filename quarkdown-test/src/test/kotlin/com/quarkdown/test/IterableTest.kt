@@ -267,7 +267,7 @@ class IterableTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<div style=\"justify-content: flex-start; align-items: center;\" class=\"stack stack-row\">" +
+                "<div class=\"stack stack-row\">" +
                     "<p>text</p>" +
                     "<p><em>italic</em></p>" +
                     "<p><strong>bold</strong></p>" +
