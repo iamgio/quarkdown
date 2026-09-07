@@ -1,6 +1,6 @@
 package com.quarkdown.rendering.html.pdf
 
-import com.quarkdown.core.log.Log
+import com.quarkdown.core.pipeline.error.IOPipelineException
 import com.quarkdown.interaction.executable.ChromiumWrapper
 import java.io.File
 
@@ -17,6 +17,7 @@ class HtmlPdfExporter(
      * Exports a PDF from the given source directory.
      * @param sourcesDirectory the directory containing the HTML source files
      * @param out the output file for the generated PDF
+     * @throws IOPipelineException if the browser is not available or the export fails
      */
     fun export(
         sourcesDirectory: File,
@@ -31,10 +32,9 @@ class HtmlPdfExporter(
                 options.noSandbox,
             ).launch()
         } catch (e: IllegalArgumentException) {
-            // Rejected by ChromiumWrapper's validation, e.g. a blank path.
-            Log.error("Invalid Chrome path: ${e.message}")
+            throw IOPipelineException("Invalid Chrome path: ${e.message}")
         } catch (e: IllegalStateException) {
-            Log.error(e.message!!)
+            throw IOPipelineException(e.message ?: "Chrome executable is not available")
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.quarkdown.rendering.html.pdf
 
+import com.quarkdown.core.pipeline.error.IOPipelineException
 import com.quarkdown.interaction.executable.ChromiumWrapper
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
@@ -9,6 +10,7 @@ import kotlin.io.path.createTempDirectory
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -33,9 +35,20 @@ class HtmlToPdfTest {
     }
 
     @Test
-    fun `export with blank browser path fails gracefully`() {
+    fun `export with blank chrome path fails the pipeline`() {
         val out = File(directory, "out.pdf")
-        HtmlPdfExporter(options.copy(chromePath = " ")).export(directory, out)
+        assertFailsWith<IOPipelineException> {
+            HtmlPdfExporter(options.copy(chromePath = " ")).export(directory, out)
+        }
+        assertFalse(out.exists())
+    }
+
+    @Test
+    fun `export with missing chrome fails the pipeline`() {
+        val out = File(directory, "out.pdf")
+        assertFailsWith<IOPipelineException> {
+            HtmlPdfExporter(options.copy(chromePath = "not-a-chrome-executable")).export(directory, out)
+        }
         assertFalse(out.exists())
     }
 

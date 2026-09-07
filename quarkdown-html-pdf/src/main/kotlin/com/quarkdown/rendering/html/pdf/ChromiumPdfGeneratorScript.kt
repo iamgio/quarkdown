@@ -1,6 +1,7 @@
 package com.quarkdown.rendering.html.pdf
 
 import com.quarkdown.core.log.Log
+import com.quarkdown.core.pipeline.error.IOPipelineException
 import com.quarkdown.interaction.cdp.ChromiumInteraction
 import com.quarkdown.interaction.executable.ChromiumWrapper
 import com.quarkdown.server.LocalFileWebServer
@@ -59,8 +60,8 @@ class ChromiumPdfGeneratorScript(
                 } catch (e: InterruptedException) {
                     throw e
                 } catch (e: Exception) {
-                    Log.error("Failed to export PDF: ${e.message}")
                     Log.debug(e)
+                    throw IOPipelineException("Failed to export PDF: ${e.message}")
                 } finally {
                     server.stop()
                 }
