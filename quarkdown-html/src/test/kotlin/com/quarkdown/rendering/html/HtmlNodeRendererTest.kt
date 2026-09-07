@@ -57,6 +57,7 @@ import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.ast.quarkdown.inline.TextSymbol
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.TextTransformData
+import com.quarkdown.core.ast.quarkdown.inline.Whitespace
 import com.quarkdown.core.attachMockPipeline
 import com.quarkdown.core.bibliography.Bibliography
 import com.quarkdown.core.bibliography.BibliographyEntry
@@ -68,6 +69,7 @@ import com.quarkdown.core.context.options.MutableContextOptions
 import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.document.size.cm
 import com.quarkdown.core.document.size.inch
+import com.quarkdown.core.document.size.mm
 import com.quarkdown.core.document.size.percent
 import com.quarkdown.core.document.size.px
 import com.quarkdown.core.flavor.base.BaseMarkdownFlavor
@@ -1089,6 +1091,19 @@ class HtmlNodeRendererTest {
                 listOf(Keybinding.CtrlModifier, Keybinding.Key("C")),
             ).render(),
         )
+    }
+
+    @Test
+    fun whitespace() {
+        val out = readParts("quarkdown/whitespace.html")
+
+        assertEquals(out.next(), Whitespace(width = null, height = null, isBlock = false).render())
+
+        assertEquals(out.next(), Whitespace(width = null, height = null, isBlock = true).render())
+
+        assertEquals(out.next(), Whitespace(width = 1.0.cm, height = null, isBlock = false).render())
+
+        assertEquals(out.next(), Whitespace(width = 1.0.cm, height = 3.0.mm, isBlock = true).render())
     }
 
     @Test

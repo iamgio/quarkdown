@@ -87,7 +87,7 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
         when (value.unwrappedValue) {
             is OutputValue<*> -> value.unwrappedValue.accept(this)
             is Iterable<*> -> GeneralCollectionValue(value.unwrappedValue as Iterable<OutputValue<*>>).accept(this)
-            is Node -> value.unwrappedValue
+            is Node -> this.visit(NodeValue(value.unwrappedValue))
             else -> this.visit(parseRaw(value.unwrappedValue.toString(), value.evaluationContext))
         }
 

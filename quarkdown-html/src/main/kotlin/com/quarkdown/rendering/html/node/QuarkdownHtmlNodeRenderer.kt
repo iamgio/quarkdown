@@ -299,20 +299,15 @@ class QuarkdownHtmlNodeRenderer(
         }
 
     override fun visit(node: Whitespace) =
-        // If at least one of the dimensions is set, the square will have a fixed size.
-        // Otherwise, a blank character is rendered.
-        when {
-            node.width == null && node.height == null -> {
-                buildTag("span", "&nbsp;")
+        buildTag(if (node.isBlock) "div" else "span") {
+            className("whitespace")
+            val hasSize = node.width != null || node.height != null
+            if (!hasSize) {
+                +"&nbsp;"
             }
-
-            else -> {
-                buildTag("div") {
-                    style {
-                        "width" value node.width
-                        "height" value node.height
-                    }
-                }
+            style {
+                "width" value node.width
+                "height" value node.height
             }
         }
 

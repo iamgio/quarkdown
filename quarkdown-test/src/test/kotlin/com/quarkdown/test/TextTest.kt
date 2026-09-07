@@ -113,6 +113,16 @@ class TextTest {
     }
 
     @Test
+    fun `block text is wrapped in a paragraph`() {
+        execute(".text {some text} size:{tiny}") {
+            assertEquals(
+                "<p><span style=\"font-size: var(--qd-size-tiny, 1em);\">some text</span></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `text with body argument`() {
         execute(
             """
@@ -121,7 +131,7 @@ class TextTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<span style=\"font-size: var(--qd-size-tiny, 1em); font-variant: small-caps;\">small text</span>",
+                "<p><span style=\"font-size: var(--qd-size-tiny, 1em); font-variant: small-caps;\">small text</span></p>",
                 it,
             )
         }
@@ -148,18 +158,43 @@ class TextTest {
             Line 2 after a long break
             """.trimIndent(),
         ) {
-            assertEquals("<p>Line 1</p><span>&nbsp;</span><p>Line 2 after a long break</p>", it)
+            assertEquals("<p>Line 1</p><div class=\"whitespace\">&nbsp;</div><p>Line 2 after a long break</p>", it)
         }
     }
 
     @Test
-    fun `sized whitespace`() {
+    fun `inline whitespace`() {
+        execute("A .whitespace B") {
+            assertEquals("<p>A <span class=\"whitespace\">&nbsp;</span> B</p>", it)
+        }
+    }
+
+    @Test
+    fun `sized inline whitespace`() {
         execute("A .whitespace width:{1cm} B") {
-            assertEquals("<p>A <div style=\"width: 1.0cm;\"></div> B</p>", it)
+            assertEquals("<p>A <span class=\"whitespace\" style=\"width: 1.0cm;\"></span> B</p>", it)
         }
 
         execute("A .whitespace width:{1cm} height:{3mm} B") {
-            assertEquals("<p>A <div style=\"width: 1.0cm; height: 3.0mm;\"></div> B</p>", it)
+            assertEquals("<p>A <span class=\"whitespace\" style=\"width: 1.0cm; height: 3.0mm;\"></span> B</p>", it)
+        }
+    }
+
+    @Test
+    fun `sized block whitespace`() {
+        execute(
+            """
+            Line 1
+            
+            .whitespace width:{1cm} height:{3mm}
+            
+            Line 2
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p>Line 1</p><div class=\"whitespace\" style=\"width: 1.0cm; height: 3.0mm;\"></div><p>Line 2</p>",
+                it,
+            )
         }
     }
 

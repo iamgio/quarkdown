@@ -253,7 +253,7 @@ class OptionalityTest {
     @Test
     fun `node as fallback`() {
         execute(".none::otherwise {.text {hi}}") {
-            assertEquals("<span>hi</span>", it)
+            assertEquals("<p><span>hi</span></p>", it)
         }
 
         execute(".none::otherwise {a .text {hi}}") {

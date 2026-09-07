@@ -1,0 +1,9 @@
+.quarkdown {
+  div.whitespace {
+    margin-top: var(--qd-block-margin);
+  }
+
+  span.whitespace {
+    display: inline-block;
+  }
+}
