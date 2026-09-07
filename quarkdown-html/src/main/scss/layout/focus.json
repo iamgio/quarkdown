@@ -1,0 +1,7 @@
+{
+  "exports": [
+    "node_modules/@fontsource/source-sans-pro",
+    "node_modules/@fontsource/fira-sans",
+    "node_modules/@fontsource/noto-sans-mono"
+  ]
+}

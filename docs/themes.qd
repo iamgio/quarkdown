@@ -17,15 +17,17 @@ You can set a theme via the **`.theme {colortheme} layout:{layouttheme}`** funct
 - `latex` (default)
 - `hyperlegible`
 - `minimal`
+- `focus`
 - `beamer`
 
 ---
 
 Some suggested combinations are:
-- `paperwhite+latex` (LaTeX look, great for `paged` documents)
-- `galactic+hyperlegible` (this wiki)
+- `paperwhite+latex`: LaTeX look, great for paged documents
+- `galactic+hyperlegible`: this wiki
+- `paperwhite+focus`: simple, clean look for slides and articles
 - `darko+minimal`
-- `beaver+beamer` (Beamer look, great for academic-style presentations)
+- `beaver+beamer`: Beamer look, great for academic-style presentations)
 
 ## Contributing
 

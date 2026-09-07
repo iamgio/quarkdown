@@ -1,0 +1,55 @@
+@use "beamer";
+
+@use "util/progressive-heading-sizes" as *;
+@use "util/beamer-toc" as *;
+@use "util/heading-background-inset" as *;
+@use "util/segmented-footer" as *;
+@use "../components/util/slides" as *;
+@use "../components/util/heading-selectors" as *;
+@use "../components/util/location-selectors" as location-selectors;
+
+:root {
+  --qd-main-font-size: 1.1rem;
+}
+
+.quarkdown-slides, .quarkdown-slides #{$slide-selector} {
+  --qd-horizontal-alignment-global: start !important;
+}
+
+.quarkdown.quarkdown {
+  @include progressive-heading-sizes($multiplier: 1.1);
+  @include beamer-toc($marker-color: var(--qd-background-color), $marker-background-color: var(--tint));
+
+  --tint: color-mix(in srgb, var(--qd-main-color) 90%, transparent);
+
+  h1, h2 {
+    text-align: unset;
+    border-radius: 8px;
+    background-color: var(--tint);
+    color: var(--qd-background-color);
+  }
+
+  h1 {
+    @include heading-background-inset($inset-multiplier: 2, $padding-top: 20%, $padding-bottom: 16px, $margin-bottom-multiplier: 2);
+    margin-top: 3rem !important;
+  }
+
+  h2 {
+    @include heading-background-inset($inset-multiplier: 2, $padding-top: 14px, $padding-bottom: 14px);
+    font-weight: normal;
+  }
+
+  #{location-selectors.$location-heading}:is(#{$headings})::before {
+    opacity: .4;
+  }
+
+  @include segmented-footer(
+          $padding: 4px,
+          $font-size: 0.8em,
+          $first-background-color: var(--tint),
+          $first-color: var(--qd-background-color),
+          $even-background-color: var(--qd-background-color),
+          $even-color: var(--qd-main-color),
+          $odd-background-color: var(--qd-main-color-muted),
+  );
+}

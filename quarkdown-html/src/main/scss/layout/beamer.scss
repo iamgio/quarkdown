@@ -4,6 +4,8 @@
 @use "util/latex-tables" as *;
 @use "util/beamer-toc" as *;
 @use "util/font-imports" as *;
+@use "util/heading-background-inset" as *;
+@use "util/segmented-footer" as *;
 @use "../components/util/slides" as *;
 
 @include import-font-family('source-sans-pro');
@@ -30,10 +32,6 @@
       --qd-horizontal-alignment-global: center;
     }
   }
-
-  h2:not(.box *) {
-    margin-right: calc(-2 * var(--qd-slides-horizontal-inset));
-  }
 }
 
 .quarkdown {
@@ -41,23 +39,20 @@
   @include latex-tables;
   @include beamer-toc;
 
-  // Slide-level headings only: headings nested inside boxes (e.g. callouts) keep their own styling.
-  h1:not(.box *), h2:not(.box *) {
+  h1, h2 {
     background-color: var(--qd-main-color-muted);
     color: var(--qd-link-color);
   }
 
-  h1:not(.box *) {
+  h1 {
     border-radius: 8px;
     padding: 12px 0;
-    margin-top: 15vh !important;
+    margin-top: 7rem !important;
     text-align: center;
   }
 
-  h2:not(.box *) {
-    padding: 12px 0 12px calc(2 * var(--qd-slides-horizontal-inset));
-    margin-bottom: var(--qd-block-margin);
-    margin-left: calc(-2 * var(--qd-slides-horizontal-inset));
+  h2 {
+    @include heading-background-inset($inset-multiplier: 2, $padding-top: 12px, $padding-bottom: 12px);
   }
 
   p {
@@ -104,20 +99,12 @@
     }
   }
 
-  // Footer
-  .page-margin-bottom-center > * {
-    padding: 12px;
-    margin-bottom: 0;
-    background-color: var(--qd-main-color-muted);
-    color: var(--qd-link-color);
-
-    &:first-child {
-      background-color: var(--qd-primary-color);
-      color: var(--qd-color-on-primary);
-    }
-
-    &:nth-child(even) {
-      background-color: var(--qd-background-color);
-    }
-  }
+  @include segmented-footer(
+          $padding: 12px,
+          $first-background-color: var(--qd-primary-color),
+          $first-color: var(--qd-color-on-primary),
+          $even-background-color: var(--qd-background-color),
+          $even-color: var(--qd-link-color),
+          $odd-background-color: var(--qd-main-color-muted),
+  );
 }

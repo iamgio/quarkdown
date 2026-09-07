@@ -1,0 +1,30 @@
+// A footer with different background colors for the first, even, and odd children of the page margin bottom center element.
+// Applies only if there are at least two children in the page margin bottom center element.
+@mixin segmented-footer(
+  $padding,
+  $font-size: inherit,
+  $first-background-color,
+    $first-color,
+  $even-background-color,
+  $even-color,
+  $odd-background-color,
+  $odd-color: $even-color,
+) {
+  .page-margin-bottom-center:has(> :nth-child(2)) > * {
+    padding: $padding;
+    font-size: $font-size;
+    margin-bottom: 0;
+    background-color: $odd-background-color;
+    color: $odd-color;
+
+    &:first-child {
+      background-color: $first-background-color;
+      color: $first-color;
+    }
+
+    &:nth-child(even) {
+      background-color: $even-background-color;
+      color: $even-color;
+    }
+  }
+}

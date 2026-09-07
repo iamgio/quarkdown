@@ -6,6 +6,16 @@ The highlights of this release include significant performance improvements, bet
 
 ### Added
 
+#### [New layout theme: `focus`](https://quarkdown.com/wiki/themes)
+
+The new `focus` layout theme is a port of the [Focus Beamer theme](https://www.overleaf.com/latex/templates/focus-a-minimalist-beamer-theme/bytzgdfmdpjq). It’s a simple and clean theme well-suited for slides and articles.
+
+Recommended combination:
+
+```text
+.theme {paperwhite} layout:{focus}
+```
+
 #### [Code block callouts](https://quarkdown.com/wiki/code#callouts)
 
 The new `callouts` argument of the `.code` function attaches numbered markers to specific lines of a code block, each paired with a description displayed right below the block.
@@ -31,13 +41,18 @@ Package manager installations download a headless Chrome shell automatically. If
 
 > Migration note: the `--node-path` and `--npm-path` options, along with the `QD_NPM_PREFIX` and `NODE_PATH` environment variables, are no longer used. `quarkdown doctor env` now reports the browser's status.
 
+#### `slides` break page on H2
+
+Unless overridden via `.autopagebreak`, `slides` documents now automatically break page on every H1 and H2.
+This release aims at making H1 the standard for title slides, and H2 for content slides.
+
 #### [`.row` and `.column`](https://quarkdown.com/wiki/stacks) inherit global alignment by default
 
 When `alignment` isn't explicitly set, `.row` and `.column` now inherit the parent's alignment (e.g. `center` in centered slides) instead of defaulting to `start`.
 
 #### Improved `beamer` theme
 
-The `beamer` theme's layout was improved for a consistent look
+The `beamer` theme's layout was improved for a more consistent look.
 
 #### Reflectionless function calls
 
