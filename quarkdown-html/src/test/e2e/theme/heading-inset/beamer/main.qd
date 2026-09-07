@@ -1,0 +1,8 @@
+.doctype {slides}
+.theme layout:{beamer}
+
+# Title heading
+
+## Section heading
+
+Some content.

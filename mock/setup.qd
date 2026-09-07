@@ -24,7 +24,7 @@
 .center
 	#! .docname
 	
-	.docauthor (c) 2024-2025
+	.docauthor (c) 2024-2026
 
 ---
 
@@ -35,16 +35,17 @@
 
 	Whether you are looking to experiment with **color schemes, typography, or layout designs**, or just taking a look at some Quarkdown snippets, this mock document will provide the support you need.
 
-.whitespace height:{1cm}
+.whitespace
 
 .center
-	To compile this document, run:  
-	**`quarkdown c mock/main.qd -p`**
+	To compile this document, run: .br
+	**`cd mock`** .br
+	**`quarkdown c main.qd -p`**
 	
-	Different themes and document types may be tested  
-	by changing the first lines of `main.qd`.
+Different themes and document types may be tested
+by changing the first lines of `main.qd`.
 
-.whitespace height:{3cm}
+.whitespace
 
 .conditionalpagebreak ontype:{slides}
 

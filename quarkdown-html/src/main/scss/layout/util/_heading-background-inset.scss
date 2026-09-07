@@ -1,0 +1,24 @@
+@mixin heading-background-inset(
+  $padding-top,
+  $padding-bottom,
+  $inset-multiplier: 1,
+  $margin-bottom-multiplier: 1,
+) {
+  width: 100%;
+  padding-top: $padding-top;
+  padding-bottom: $padding-bottom;
+  margin-bottom: calc(#{$margin-bottom-multiplier} * var(--qd-block-margin));
+
+  &:not(.container *, .box *) {
+    padding-inline-start: 0.5em;
+  }
+
+  @at-root .quarkdown-slides#{&} {
+    box-sizing: border-box;
+    width: calc(100% + #{2 * $inset-multiplier} * var(--qd-slides-horizontal-inset));
+    padding-inline-end: 0;
+    padding-inline-start: calc(#{$inset-multiplier} * var(--qd-slides-horizontal-inset));
+    margin-inline-start: calc(#{-$inset-multiplier} * var(--qd-slides-horizontal-inset));
+    margin-inline-end: calc(#{-$inset-multiplier} * var(--qd-slides-horizontal-inset));
+  }
+}

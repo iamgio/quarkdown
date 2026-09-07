@@ -1,7 +1,6 @@
 @use "latex-toc" as *;
 
-@mixin beamer-toc {
-
+@mixin beamer-toc($marker-color: var(--qd-primary-color), $marker-background-color: var(--qd-color-on-primary)) {
   nav {
     a:not(:hover) {
       color: var(--qd-main-color);
@@ -24,13 +23,13 @@
 
         // Custom marker for first-level entries
         &::before {
-          background-color: var(--qd-primary-color);
-          color: var(--qd-color-on-primary);
+          background-color: $marker-background-color;
+          color: $marker-color;
           border-radius: 100%;
           margin-right: 1em;
           padding: 2px 10px;
           display: inline-block;
-          border: 1px solid color-mix(in srgb, var(--qd-color-on-primary) 25%, transparent);
+          border: 1px solid color-mix(in srgb, #{$marker-background-color} 25%, transparent);
         }
 
         > a {
