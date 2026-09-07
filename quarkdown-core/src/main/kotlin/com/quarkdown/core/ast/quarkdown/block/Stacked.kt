@@ -18,8 +18,8 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  */
 class Stacked(
     val layout: Layout,
-    val mainAxisAlignment: MainAxisAlignment,
-    val crossAxisAlignment: CrossAxisAlignment,
+    val mainAxisAlignment: MainAxisAlignment?,
+    val crossAxisAlignment: CrossAxisAlignment?,
     val rowGap: Size?,
     val columnGap: Size?,
     @Diverge override val children: List<Node>,

@@ -208,8 +208,8 @@ fun float(
  */
 private fun stack(
     layout: Stacked.Layout,
-    mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
-    crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
+    mainAxisAlignment: Stacked.MainAxisAlignment? = null,
+    crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     rowGap: Size? = null,
     columnGap: Size? = null,
     body: MarkdownContent,
@@ -218,7 +218,7 @@ private fun stack(
 /**
  * Stacks content horizontally.
  *
- * @param mainAxisAlignment content alignment along the main axis
+ * @param mainAxisAlignment content alignment along the main axis. If unset, it inherits the parent's alignment
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
@@ -227,8 +227,8 @@ private fun stack(
  */
 @QFunction
 fun row(
-    @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
-    @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
+    @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment? = null,
+    @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     @LikelyNamed gap: Size? = null,
     @Body body: MarkdownContent,
 ) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, null, gap, body)
@@ -236,7 +236,7 @@ fun row(
 /**
  * Stacks content vertically.
  *
- * @param mainAxisAlignment content alignment along the main axis
+ * @param mainAxisAlignment content alignment along the main axis. If unset, it inherits the parent's alignment
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
  * @param body content to stack
@@ -245,8 +245,8 @@ fun row(
  */
 @QFunction
 fun column(
-    @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment = Stacked.MainAxisAlignment.START,
-    @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment = Stacked.CrossAxisAlignment.CENTER,
+    @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment? = null,
+    @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     @LikelyNamed gap: Size? = null,
     @Body body: MarkdownContent,
 ) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, null, body)

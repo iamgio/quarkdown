@@ -1,6 +1,10 @@
 @use "util/misc-selectors" as *;
 
 .quarkdown {
+  .stack {
+    align-items: center;
+  }
+
   .stack > #{$margin-reset} {
     margin: 0 !important;
   }
