@@ -1,5 +1,6 @@
 @use "util/media-queries";
 @use "util/heading-selectors" as *;
+@use "util/slides" as *;
 
 .quarkdown {
   text-align: var(--qd-horizontal-alignment-global);
@@ -57,7 +58,7 @@
   --qd-horizontal-alignment-local: center;
   --qd-horizontal-alignment-list-items: start;
 
-  .reveal .slides > :is(section, .pdf-page) {
+  .reveal .slides > #{$slide-selector} {
     text-align: var(--qd-horizontal-alignment-global);
   }
 

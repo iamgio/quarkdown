@@ -6,7 +6,7 @@
   --qd-color-scheme: dark;
   --qd-primary-color: #224A51;
   --qd-background-color: #242528;
-  --qd-main-color: #DADAEB;
+  --qd-main-color: #dfdff0;
   --qd-link-color: #5FC7C7;
   --qd-nested-navigation-line-color: rgba(255, 255, 255, 0.1);
   --qd-box-header-background-color: rgba(23, 53, 56, 0.35);
@@ -19,7 +19,7 @@
   --qd-warning-background-color: rgb(239, 203, 99);
   --qd-warning-title-foreground-color: #333;
   --qd-important-title-foreground-color: #FF7373;
-  --qd-color-on-primary: var(--qd-main-color);
+  --qd-color-on-primary: white;
   --qd-mermaid-node-background-color: #ECECFF;
   --qd-mermaid-node-text-color: var(--qd-background-color);
   --qd-kbd-background-color: color-mix(in srgb, var(--qd-main-color-muted) 25%, var(--qd-background-color));

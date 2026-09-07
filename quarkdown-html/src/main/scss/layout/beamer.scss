@@ -4,6 +4,8 @@
 @use "util/latex-tables" as *;
 @use "util/beamer-toc" as *;
 @use "util/font-imports" as *;
+@use "../components/util/slides" as *;
+
 @include import-font-family('source-sans-pro');
 @include import-font-family('fira-sans');
 @include import-font-family('noto-sans-mono', $variants: '400' '700');
@@ -22,6 +24,16 @@
 
 .quarkdown-slides {
   --qd-horizontal-alignment-global: start;
+
+  #{$slide-selector} {
+    &:has(h1) {
+      --qd-horizontal-alignment-global: center;
+    }
+  }
+
+  h2:not(.box *) {
+    margin-right: calc(-2 * var(--qd-slides-horizontal-inset));
+  }
 }
 
 .quarkdown {
@@ -29,8 +41,23 @@
   @include latex-tables;
   @include beamer-toc;
 
-  h1 {
-    padding: 12px;
+  // Slide-level headings only: headings nested inside boxes (e.g. callouts) keep their own styling.
+  h1:not(.box *), h2:not(.box *) {
+    background-color: var(--qd-main-color-muted);
+    color: var(--qd-link-color);
+  }
+
+  h1:not(.box *) {
+    border-radius: 8px;
+    padding: 12px 0;
+    margin-top: 15vh !important;
+    text-align: center;
+  }
+
+  h2:not(.box *) {
+    padding: 12px 0 12px calc(2 * var(--qd-slides-horizontal-inset));
+    margin-bottom: var(--qd-block-margin);
+    margin-left: calc(-2 * var(--qd-slides-horizontal-inset));
   }
 
   p {
@@ -81,5 +108,16 @@
   .page-margin-bottom-center > * {
     padding: 12px;
     margin-bottom: 0;
+    background-color: var(--qd-main-color-muted);
+    color: var(--qd-link-color);
+
+    &:first-child {
+      background-color: var(--qd-primary-color);
+      color: var(--qd-color-on-primary);
+    }
+
+    &:nth-child(even) {
+      background-color: var(--qd-background-color);
+    }
   }
 }
