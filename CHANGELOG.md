@@ -8,7 +8,7 @@ The highlights of this release include significant performance improvements, bet
 
 #### [New layout theme: `focus`](https://quarkdown.com/wiki/themes)
 
-The new `focus` layout theme is a port of the [Focus Beamer theme](https://www.overleaf.com/latex/templates/focus-a-minimalist-beamer-theme/bytzgdfmdpjq). It’s a simple and clean theme well-suited for slides and articles.
+The new `focus` layout theme is an adaptation of the [Focus Beamer theme](https://www.overleaf.com/latex/templates/focus-a-minimalist-beamer-theme/bytzgdfmdpjq). It’s a simple and clean theme well-suited for slides and articles.
 
 Recommended combination:
 
@@ -69,6 +69,11 @@ Locale resolution from `.doclang` was optimized, via a compile-time-generated an
 Breaking change: calling `.doclang` without a parameter now returns the *English* name of the current locale, rather than its localized name.
 
 ### Fixed
+
+#### `slides` PDF export improvements
+
+PDF artifacts generated from `slides` documents now feature a more polished layout. 
+Blank (headerless) slides are now spaced correctly.
 
 #### Block-aware [`.text`](https://quarkdown.com/wiki/text) and `.whitespace`
 

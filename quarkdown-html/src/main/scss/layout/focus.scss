@@ -16,6 +16,12 @@
   --qd-horizontal-alignment-global: start !important;
 }
 
+.quarkdown-slides.quarkdown-slides.quarkdown-slides {
+  h1, h2 {
+    margin-top: 0 !important;
+  }
+}
+
 .quarkdown.quarkdown {
   @include progressive-heading-sizes($multiplier: 1.1);
   @include beamer-toc($marker-color: var(--qd-background-color), $marker-background-color: var(--tint));
@@ -31,7 +37,6 @@
 
   h1 {
     @include heading-background-inset($inset-multiplier: 2, $padding-top: 20%, $padding-bottom: 16px, $margin-bottom-multiplier: 2);
-    margin-top: 3rem !important;
   }
 
   h2 {

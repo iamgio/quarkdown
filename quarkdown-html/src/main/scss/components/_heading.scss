@@ -14,10 +14,6 @@
     @include font.global-font-family-with-main-fallback($kind: "heading");
   }
 
-  &.quarkdown-slides section > :is(#{$headings}):first-child {
-    margin-top: 0;
-  }
-
   div.marker {
     display: none;
   }

@@ -195,6 +195,8 @@
   --qd-kbd-border-color: color-mix(in srgb, var(--qd-main-color-muted) 90%, var(--qd-main-color));
 
   // Slides
+  // Top padding of blank slides (no H1 or H2).
+  --qd-slides-blank-vertical-inset: 3rem;
   // PDF-only horizontal padding of slides.
   --qd-slides-horizontal-inset: 2rem;
 

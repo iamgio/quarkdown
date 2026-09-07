@@ -31,6 +31,10 @@
     &:has(h1) {
       --qd-horizontal-alignment-global: center;
     }
+
+    h2 {
+      margin-top: 0 !important;
+    }
   }
 }
 
