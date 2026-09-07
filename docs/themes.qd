@@ -7,18 +7,28 @@ Themes are split into two groups: *color* themes, which define the color scheme 
 
 You can set a theme via the **`.theme {colortheme} layout:{layouttheme}`** function.
 
+.var {colorthemes}
+    - paperwhite
+    - darko
+    - galactic
+    - beaver
+
+.var {layoutthemes}
+    - latex
+    - hyperlegible
+    - minimal
+    - focus
+    - beamer
+
 ### Color themes
-- `paperwhite` (default)
-- `darko`
-- `galactic`
-- `beaver`
+
+.colorthemes::foreach
+    .1::codespan
 
 ### Layout themes
-- `latex` (default)
-- `hyperlegible`
-- `minimal`
-- `focus`
-- `beamer`
+
+.layoutthemes::foreach
+    .1::codespan
 
 ---
 
@@ -29,8 +39,25 @@ Some suggested combinations are:
 - `darko+minimal`
 - `beaver+beamer`: Beamer look, great for academic-style presentations)
 
+The table below shows how each combination renders the same page of the .repolink {Mock document} {tree/main/mock#readme}. Click a preview to open the full PDF.
+
+.function {mockpreview}
+    color layout:
+    .var {name} {{.color}_{.layout}}
+
+    .link url:{https://github.com/quarkdown-labs/generated/blob/main/mock/.name.pdf}
+        .image url:{https://raw.githubusercontent.com/quarkdown-labs/generated/main/mock-jpg/.name.jpg} \
+               label:{.color, .layout}
+
+.tablebyrows headers:{.layoutthemes}
+    .layoutthemes::foreach
+        layouttheme:
+        .colorthemes::foreach
+            colortheme:
+            .mockpreview {.colortheme} {.layouttheme}
+
 ## Contributing
 
 .repolink {Theme contributions} {tree/main/quarkdown-html/src/main/scss} are welcome.
 
-Please make sure themes work well with all three document types before submitting. The .repolink {Mock document} {tree/main/mock#readme} is a great way to test themes against a variety of different elements.
+Please make sure themes work well with all four document types before submitting. The .repolink {Mock document} {tree/main/mock#readme} is a great way to test themes against a variety of different elements.
