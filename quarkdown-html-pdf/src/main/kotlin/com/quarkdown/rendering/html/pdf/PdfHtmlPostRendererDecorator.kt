@@ -1,6 +1,7 @@
 package com.quarkdown.rendering.html.pdf
 
 import com.quarkdown.core.document.sub.getOutputFileName
+import com.quarkdown.core.pipeline.error.IOPipelineException
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
@@ -27,21 +28,24 @@ class PdfHtmlPostRendererDecorator(
                 .createTempDirectory(prefix = "quarkdown-pdf")
                 .toFile()
 
-        val sourcesDirectory: File = OutputResourceGroup("sources", resources).saveTo(tempDirectory)
-        val outName = postRenderer.context.subdocument.getOutputFileName(postRenderer.context)
-        val out: File = tempDirectory.resolve("$outName.pdf")
+        try {
+            val sourcesDirectory: File = OutputResourceGroup("sources", resources).saveTo(tempDirectory)
+            val outName = postRenderer.context.subdocument.getOutputFileName(postRenderer.context)
+            val out: File = tempDirectory.resolve("$outName.pdf")
 
-        HtmlPdfExporter(options).export(sourcesDirectory, out)
+            HtmlPdfExporter(options).export(sourcesDirectory, out)
 
-        // In order to comply with the pipeline's contract, the output PDF is wrapped in an OutputResource.
-        // It is deleted along with its temporary directory, and will be recreated in the output directory
-        // by the pipeline's final process.
-        return out
-            .takeIf { it.exists() }
-            ?.let(BinaryOutputArtifact::fromFile)
-            .also { tempDirectory.deleteRecursively() }
-            ?.let(::setOf)
-            ?: emptySet()
+            if (!out.exists()) {
+                throw IOPipelineException("PDF export did not produce an output file")
+            }
+
+            // In order to comply with the pipeline's contract, the output PDF is wrapped in an OutputResource.
+            // It is deleted along with its temporary directory, and will be recreated in the output directory
+            // by the pipeline's final process.
+            return setOf(BinaryOutputArtifact.fromFile(out))
+        } finally {
+            tempDirectory.deleteRecursively()
+        }
     }
 
     override fun wrapResources(

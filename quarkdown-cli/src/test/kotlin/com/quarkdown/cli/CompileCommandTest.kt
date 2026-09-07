@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.parse
 import com.github.ajalt.clikt.testing.CliktCommandTestResult
 import com.github.ajalt.clikt.testing.test
 import com.quarkdown.cli.exec.CompileCommand
+import com.quarkdown.core.IO_ERROR_EXIT_CODE
 import com.quarkdown.core.TIMEOUT_EXIT_CODE
 import com.quarkdown.core.UNRESOLVED_REFERENCE_EXIT_CODE
 import com.quarkdown.core.permissions.Permission
@@ -435,6 +436,21 @@ class CompileCommandTest : TempDirectory() {
         assumePdfEnvironmentInstalled()
         val (_, _) = test("--render", "html-pdf", "--pdf-no-sandbox")
         checkPdf()
+    }
+
+    @Test
+    fun `pdf with missing chrome fails the pipeline`() {
+        val result =
+            CompileCommand().test(
+                main.absolutePath,
+                "-o",
+                outputDirectory.absolutePath,
+                "--pdf",
+                "--chrome-path",
+                "not-a-chrome-executable",
+            )
+        assertEquals(IO_ERROR_EXIT_CODE, result.statusCode)
+        assertFalse(File(outputDirectory, "$DEFAULT_OUTPUT_DIRECTORY_NAME.pdf").exists())
     }
 
     @Test
