@@ -216,7 +216,12 @@ body.quarkdown {
 
       section {
         padding: 0 var(--qd-slides-horizontal-inset, 0) !important;
+        top: 0 !important;
       }
+    }
+
+    .slides.slides.slides section:not(:has(h1, h2)) {
+      padding-top: var(--qd-slides-blank-vertical-inset, 0) !important;
     }
   }
 
