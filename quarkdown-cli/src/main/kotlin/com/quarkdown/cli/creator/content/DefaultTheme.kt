@@ -9,6 +9,7 @@ import com.quarkdown.core.document.DocumentType
 object DefaultTheme {
     private const val DEFAULT_LAYOUT_THEME = "latex"
     private const val DEFAULT_DOCS_LAYOUT_THEME = "hyperlegible"
+    private const val DEFAULT_SLIDES_LAYOUT_THEME = "focus"
 
     private const val DEFAULT_COLOR_THEME = "paperwhite"
     private const val DEFAULT_DOCS_COLOR_THEME = "galactic"
@@ -20,6 +21,7 @@ object DefaultTheme {
     fun getLayoutTheme(type: DocumentType): String =
         when (type) {
             DocumentType.DOCS -> DEFAULT_DOCS_LAYOUT_THEME
+            DocumentType.SLIDES -> DEFAULT_SLIDES_LAYOUT_THEME
             else -> DEFAULT_LAYOUT_THEME
         }
 

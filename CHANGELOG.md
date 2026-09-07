@@ -31,11 +31,15 @@ The new `callouts` argument of the `.code` function attaches numbered markers to
 
 <img width="660" alt="Callout" src="https://github.com/user-attachments/assets/99521edd-4ef0-4566-b114-3027c4fb5c91" />
 
+#### Slides-tailored project creation
+
+Creating a new `slides` project via `quarkdown create` now generates starter content designed for presentations.
+
 ### Changed
 
 #### PDF export without Node.js [ecosystem breaking change]
 
-Exporting to PDF no longer requires Node.js, npm, and Puppeteer. Quarkdown now communicates directly with a Chromium-family browser, which makes PDF generation much faster and simpler to set up.
+Exporting to PDF no longer requires Node.js, npm, and Puppeteer. Quarkdown now communicates directly with a Chromium-family browser, which makes PDF generation significantly faster and simpler to set up.
 
 Package manager installations download a headless Chrome shell automatically. If you installed Quarkdown manually, download it from the [Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/) page, or point Quarkdown to an existing Chromium-family installation with the new `--chrome-path` option or the `QD_CHROME_PATH` environment variable.
 

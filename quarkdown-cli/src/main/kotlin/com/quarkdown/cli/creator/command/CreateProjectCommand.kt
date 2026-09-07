@@ -18,6 +18,7 @@ import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupp
 import com.quarkdown.cli.creator.content.DefaultTheme
 import com.quarkdown.cli.creator.content.DocsProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
+import com.quarkdown.cli.creator.content.SlidesProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
 import com.quarkdown.cli.creator.template.DocsProjectCreatorTemplateProcessorFactory
 import com.quarkdown.core.document.DocumentAuthor
@@ -133,6 +134,7 @@ class CreateProjectCommand : CliktCommand("create") {
     private fun createProjectCreator(): ProjectCreator {
         val mainFileName = this.mainFileName ?: DEFAULT_MAIN_FILE_NAME
         val documentInfo = this.createDocumentInfo()
+        val isSlides = documentInfo.type == DocumentType.SLIDES
         val isDocs = documentInfo.type == DocumentType.DOCS
         return ProjectCreator(
             templateProcessorFactory =
@@ -143,6 +145,7 @@ class CreateProjectCommand : CliktCommand("create") {
             initialContentSupplier =
                 when {
                     noInitialContent -> EmptyProjectCreatorInitialContentSupplier()
+                    isSlides -> SlidesProjectCreatorInitialContentSupplier()
                     isDocs -> DocsProjectCreatorInitialContentSupplier()
                     else -> DefaultProjectCreatorInitialContentSupplier()
                 },
