@@ -1,5 +1,6 @@
 @use "_font";
 @use "util/media-queries" as media-queries;
+@use "util/slides" as *;
 
 @mixin content-area-border {
   border-width: var(--qd-page-content-border-width);
@@ -212,6 +213,10 @@ body.quarkdown {
 
     .slides > .pdf-page {
       @include content-area-border;
+
+      section {
+        padding: 0 var(--qd-slides-horizontal-inset, 0) !important;
+      }
     }
   }
 

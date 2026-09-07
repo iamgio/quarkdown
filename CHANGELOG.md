@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+The highlights of this release include significant performance improvements, better portability thanks to reduced binary size and less external dependencies, and enhanced `slides` artifacts.
+
 ### Added
 
 #### [Code block callouts](https://quarkdown.com/wiki/code#callouts)
@@ -32,6 +34,10 @@ Package manager installations download a headless Chrome shell automatically. If
 #### [`.row` and `.column`](https://quarkdown.com/wiki/stacks) inherit global alignment by default
 
 When `alignment` isn't explicitly set, `.row` and `.column` now inherit the parent's alignment (e.g. `center` in centered slides) instead of defaulting to `start`.
+
+#### Improved `beamer` theme
+
+The `beamer` theme's layout was improved for a consistent look
 
 #### Reflectionless function calls
 

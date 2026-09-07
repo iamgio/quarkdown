@@ -7,10 +7,9 @@
 :root {
   --qd-primary-color: rgb(187, 39, 26);
   --primary-darker: rgb(149, 29, 18);
-  --secondary: rgb(236, 236, 236);
-  --tertiary: rgb(216, 216, 216);
 
   --qd-main-color: rgb(10, 10, 10);
+  --qd-main-color-muted: rgb(236, 236, 236);
   --qd-background-color: white;
   --qd-link-color: var(--qd-primary-color);
   --qd-color-on-primary: var(--qd-background-color);
@@ -22,37 +21,19 @@
 }
 
 .quarkdown {
-  h1, h2 {
-    color: var(--qd-primary-color) !important;
-  }
-
-  h1:not(.box h1) {
-    background-color: var(--secondary);
-  }
-
   .box.callout {
     --qd-box-header-background-color: color-mix(in srgb, var(--qd-callout-title-foreground-color) 7%, var(--qd-callout-background-color));
 
-    .box-content li::marker {
-      color: var(--qd-callout-foreground-color);
-    }
-
     &:has(.box-content h1) {
-      background-color: var(--secondary);
-    }
-  }
+      --qd-callout-background-color: var(--qd-main-color-muted);
 
-  .page-margin-bottom-center > * {
-    background-color: var(--tertiary);
-    color: var(--qd-primary-color);
-
-    &:first-child {
-      background-color: var(--qd-primary-color);
-      color: white;
+      .box-content h1 {
+        color: var(--qd-primary-color);
+      }
     }
 
-    &:nth-child(even) {
-      background-color: var(--secondary);
+    .box-content li::marker {
+      color: var(--qd-callout-content-foreground-color);
     }
   }
 }

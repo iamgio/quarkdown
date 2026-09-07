@@ -194,6 +194,10 @@
   --qd-kbd-background-color: color-mix(in srgb, var(--qd-main-color-muted) 15%, var(--qd-background-color));
   --qd-kbd-border-color: color-mix(in srgb, var(--qd-main-color-muted) 90%, var(--qd-main-color));
 
+  // Slides
+  // PDF-only horizontal padding of slides.
+  --qd-slides-horizontal-inset: 2rem;
+
   // Docs
   --qd-docs-header-height: 60px;
   --qd-docs-header-vertical-padding: 12px;
