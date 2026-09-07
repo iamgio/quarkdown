@@ -16,7 +16,6 @@ class NumberingTest {
         // Numbering is disabled by default.
         execute(
             """
-            .noautopagebreak
             # A
             ## A/1
             # B
@@ -38,7 +37,6 @@ class NumberingTest {
     fun `heading numbering`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                 - headings: 1.1
             # A
@@ -57,7 +55,6 @@ class NumberingTest {
 
         execute(
             """
-            .noautopagebreak
             .numbering
                - headings: 1.1
             # A
@@ -83,7 +80,6 @@ class NumberingTest {
         // Decorative headings are not numbered.
         execute(
             """
-            .noautopagebreak
             .numbering
                - headings: 1.1
             # A
@@ -111,7 +107,6 @@ class NumberingTest {
         // Roman numerals.
         execute(
             """
-            .noautopagebreak
             .numbering
                 - headings: I::i
             # A
@@ -138,7 +133,6 @@ class NumberingTest {
 
         execute(
             """
-            .noautopagebreak
             .numbering
                 - headings: A.a.1
             # A
@@ -172,7 +166,6 @@ class NumberingTest {
         // Nesting levels that don't fit in the numbering format are ignored.
         execute(
             """
-            .noautopagebreak
             .numbering
                 - headings: 1.1
             # A
@@ -198,7 +191,6 @@ class NumberingTest {
     fun `heading primitive unnumbered`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                - headings: 1.1
             # A
@@ -226,7 +218,6 @@ class NumberingTest {
         // Unnumbered but still indexed in the ToC.
         execute(
             """
-            .noautopagebreak
             .numbering
                - headings: 1.1
             # A
@@ -277,8 +268,8 @@ class NumberingTest {
         execute(
             """
             .doctype {paged}
-            .nonumbering
             .noautopagebreak
+            .nonumbering
             # A
             ## A/1
             # B
@@ -310,7 +301,6 @@ class NumberingTest {
     fun `figure and table numbering`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                 - headings: 1.1.1
                 - figures: 1.1
@@ -345,7 +335,6 @@ class NumberingTest {
 
         execute(
             """
-            .noautopagebreak
             .numbering
                 - headings: 1
                 - figures: 1.A.a
@@ -425,7 +414,6 @@ class NumberingTest {
         // Non-captioned tables are numbered since v1.10.
         execute(
             """
-            .noautopagebreak
             .numbering
                 - figures: 1.1
                 - tables: 1.1
@@ -496,7 +484,6 @@ class NumberingTest {
     fun `code block numbering`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                 - code: 1.1
             
@@ -535,8 +522,6 @@ class NumberingTest {
     fun `numbering merging`() {
         execute(
             """
-            .noautopagebreak
-            
             .numbering
                 - figures: a
                 
@@ -565,7 +550,6 @@ class NumberingTest {
             """
             .doctype {paged}
             .noautopagebreak
-            
             .numbering
                 - figures: 1.a
                 
@@ -589,8 +573,6 @@ class NumberingTest {
     fun `numbering override, no merging`() {
         execute(
             """
-            .noautopagebreak
-            
             .numbering
                 - figures: a
                 
@@ -617,7 +599,6 @@ class NumberingTest {
     fun `mermaid diagram numbered as figure`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                 - headings: 1.1.1
                 - figures: 1.1
@@ -710,7 +691,6 @@ class NumberingTest {
     fun `localized numbering captions`() {
         execute(
             """
-            .noautopagebreak
             .doclang {italian}
             .numbering
                 - headings: none
@@ -755,7 +735,6 @@ class NumberingTest {
     fun `custom numbering`() {
         execute(
             """
-            .noautopagebreak
             .numbering
                 - key1: 1.1
                 - key2: A

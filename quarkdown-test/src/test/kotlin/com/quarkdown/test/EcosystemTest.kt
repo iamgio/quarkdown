@@ -46,7 +46,6 @@ class EcosystemTest {
         forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
             execute(
                 """
-                .noautopagebreak
                 .include {include/basic-source.md} sandbox:{$sandbox}
                 """.trimIndent(),
             ) {
@@ -124,7 +123,6 @@ class EcosystemTest {
         forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
             execute(
                 """
-                .noautopagebreak
                 # Main
                 .include {include/function-with-content.md} sandbox:{$sandbox}
                 """.trimIndent(),
@@ -161,7 +159,6 @@ class EcosystemTest {
         forSandboxes(ContextSandbox.SHARE, ContextSandbox.SCOPE, ContextSandbox.SUBDOCUMENT) { sandbox ->
             execute(
                 """
-                .noautopagebreak
                 # Main
                 .include {include/transitive-include.md} sandbox:{$sandbox}
                 """.trimIndent(),
@@ -378,7 +375,6 @@ class EcosystemTest {
         forSandboxes(ContextSandbox.SHARE) { sandbox ->
             execute(
                 """
-                .noautopagebreak
                 .include {include/basic-source.md} sandbox:{$sandbox}
                 .include {include/function-with-content.md} sandbox:{$sandbox}
                 
@@ -397,7 +393,6 @@ class EcosystemTest {
     fun `include multiple sources via bulk`() {
         execute(
             """
-            .noautopagebreak
             .includeall
                 - include/basic-source.md
                 - include/function-with-content.md
@@ -416,7 +411,6 @@ class EcosystemTest {
     fun `bulk-include all from directory`() {
         execute(
             """
-            .noautopagebreak
             .includeall {.listfiles {include} sortby:{name}}
             """.trimIndent(),
         ) {

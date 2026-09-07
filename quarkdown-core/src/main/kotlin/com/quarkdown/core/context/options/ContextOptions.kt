@@ -12,7 +12,7 @@ interface ContextOptions : MediaStorageOptions {
     /**
      * When a [Heading] node has a depth equals or less than this value, a page break is forced.
      */
-    val autoPageBreakHeadingMaxDepth: Int
+    val autoPageBreakHeadingMaxDepth: Int?
 
     /**
      * Whether automatic identifiers should be generated for elements
@@ -48,12 +48,22 @@ interface ContextOptions : MediaStorageOptions {
 }
 
 /**
- * @return whether the [heading] node should force a page break
+ * Checks whether the [heading] node should force a page break, depending on:
+ * - whether the heading can break a page
+ * - if [ContextOptions.autoPageBreakHeadingMaxDepth] is set, whether the heading's depth is <= the maximum depth.
+ * - if unset, checks against [com.quarkdown.core.document.DocumentType.preferredAutoPageBreakHeadingMaxDepth].
  * @see ContextOptions.autoPageBreakHeadingMaxDepth
  */
-fun Context.shouldAutoPageBreak(heading: Heading) =
-    heading.canBreakPage &&
-        heading.depth <= this.options.autoPageBreakHeadingMaxDepth
+fun Context.shouldAutoPageBreak(heading: Heading): Boolean {
+    if (!heading.canBreakPage) return false
+
+    val maxDepth =
+        this.options.autoPageBreakHeadingMaxDepth
+            ?: this.documentInfo.type.preferredAutoPageBreakHeadingMaxDepth
+            ?: return false
+
+    return heading.depth <= maxDepth
+}
 
 /**
  * @param url URL or file path to check, without any surrounding whitespace or anchors

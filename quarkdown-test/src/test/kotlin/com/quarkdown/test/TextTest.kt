@@ -84,7 +84,7 @@ class TextTest {
 
     @Test
     fun `text in headings`() {
-        execute(".noautopagebreak\n# Title\n Hello, world!\n## Subtitle\nHello, world!") {
+        execute("# Title\n Hello, world!\n## Subtitle\nHello, world!") {
             assertEquals(
                 "<h1>Title</h1><p>Hello, world!</p><h2>Subtitle</h2><p>Hello, world!</p>",
                 it,

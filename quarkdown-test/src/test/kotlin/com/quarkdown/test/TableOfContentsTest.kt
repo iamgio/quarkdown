@@ -27,13 +27,13 @@ class TableOfContentsTest {
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<h1 class=\"page-break\" id=\"table-of-contents\"></h1>" +
+                "<h1 id=\"table-of-contents\"></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
                     "<li data-target-id=\"def\" data-depth=\"1\"><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
-                    "<h1 class=\"page-break\" id=\"abc\">ABC</h1><p>Hi</p>" +
-                    "<h1 class=\"page-break\" id=\"def\">DEF</h1>" +
+                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h1 id=\"def\">DEF</h1>" +
                     "<p>Hello</p>",
                 it,
             )
@@ -63,7 +63,7 @@ class TableOfContentsTest {
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<h1 class=\"page-break\" id=\"table-of-contents\"><em>TOC</em></h1>" +
+                "<h1 id=\"table-of-contents\"><em>TOC</em></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a>" +
                     "<ol><li data-target-id=\"abc1\" data-depth=\"2\"><a href=\"#abc1\">ABC/1</a></li></ol></li>" +
@@ -72,9 +72,9 @@ class TableOfContentsTest {
                     "<ol><li data-target-id=\"def2\" data-depth=\"3\"><a href=\"#def2\">DEF/2</a></li>" +
                     "</ol></li></ol></li>" +
                     "</ol></nav>" +
-                    "<h1 class=\"page-break\" id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
                     "<h2 id=\"abc1\"><em>ABC/1</em></h2><p>Hello</p>" +
-                    "<h1 class=\"page-break\" id=\"def\">DEF</h1>" +
+                    "<h1 id=\"def\">DEF</h1>" +
                     "<h2 id=\"def1\">DEF/1</h2>" +
                     "<p>Hi there</p>" +
                     "<h3 id=\"def2\">DEF/2</h3>",
@@ -99,14 +99,14 @@ class TableOfContentsTest {
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<h1 class=\"page-break\" id=\"abc\">ABC</h1><p>Hi</p>" +
-                    "<h1 class=\"page-break\" id=\"table-of-contents\"></h1>" +
+                "<h1 id=\"abc\">ABC</h1><p>Hi</p>" +
+                    "<h1 id=\"table-of-contents\"></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a></li>" +
                     "<li data-target-id=\"def\" data-depth=\"1\"><a href=\"#def\">DEF</a></li>" +
                     "</ol></nav>" +
                     "<h2 id=\"ignored-from-toc\" data-decorative=\"\">Ignored from TOC</h2>" +
-                    "<h1 class=\"page-break\" id=\"def\">DEF</h1>" +
+                    "<h1 id=\"def\">DEF</h1>" +
                     "<p>Hello</p>",
                 it,
             )
@@ -119,7 +119,6 @@ class TableOfContentsTest {
             """
             .doctype {docs}
             .doclang {english}
-            .noautopagebreak
             .tableofcontents
 
             # ABC
@@ -151,7 +150,6 @@ class TableOfContentsTest {
     fun `table of contents skipping level 1`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents
 
             ## ABC
@@ -194,13 +192,13 @@ class TableOfContentsTest {
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<h1 class=\"page-break\" id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
+                "<h1 id=\"table-of-contents\"><em><strong>TOC</strong></em></h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"marker-1\" data-depth=\"0\"><a href=\"#marker-1\">Marker 1</a></li>" +
                     "<li data-target-id=\"marker-2\" data-depth=\"0\"><a href=\"#marker-2\">Marker 2</a></li>" +
                     "</ol></nav>" +
                     "<div class=\"marker\" data-hidden=\"\" id=\"marker-1\"></div>" +
-                    "<h1 class=\"page-break\" id=\"abc\">ABC</h1>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
                     "<div class=\"marker\" data-hidden=\"\" id=\"marker-2\"></div>" +
                     "<h2 id=\"def\">DEF</h2>",
                 it,
@@ -212,7 +210,6 @@ class TableOfContentsTest {
     fun `unnumbered headings excluded from table of contents`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents
 
             #! Unnumbered 1
@@ -248,7 +245,6 @@ class TableOfContentsTest {
     fun `exclude unnumbered headings from table of contents, but spread children`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents
 
             #! ABC
@@ -295,16 +291,16 @@ class TableOfContentsTest {
             DEFAULT_OPTIONS.copy(enableAutomaticIdentifiers = true),
         ) {
             assertEquals(
-                "<h1 class=\"page-break\" id=\"table-of-contents\">TOC</h1>" +
+                "<h1 id=\"table-of-contents\">TOC</h1>" +
                     "<nav role=\"table-of-contents\" data-role=\"table-of-contents\"><ol>" +
                     "<li data-target-id=\"abc\" data-depth=\"1\"><a href=\"#abc\">ABC</a><ol>" +
                     "<li data-target-id=\"x\" data-depth=\"2\"><a href=\"#x\">X</a></li></ol></li>" +
                     "<li data-target-id=\"def\" data-depth=\"1\" class=\"focused\"><a href=\"#def\">DEF</a><ol>" +
                     "<li data-target-id=\"y\" data-depth=\"2\"><a href=\"#y\">Y</a></li></ol></li>" +
                     "</ol></nav>" +
-                    "<h1 class=\"page-break\" id=\"abc\">ABC</h1>" +
+                    "<h1 id=\"abc\">ABC</h1>" +
                     "<h2 id=\"x\">X</h2>" +
-                    "<h1 class=\"page-break\" id=\"def\">DEF</h1>" +
+                    "<h1 id=\"def\">DEF</h1>" +
                     "<h2 id=\"y\">Y</h2>",
                 it,
             )
@@ -315,7 +311,6 @@ class TableOfContentsTest {
     fun `table of contents custom heading depth`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents headingdepth:{3}
 
             # ABC
@@ -337,7 +332,6 @@ class TableOfContentsTest {
     fun `table of contents heading indexed in toc, unnumbered`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents title:{TOC} indexheading:{yes}
 
             # ABC
@@ -367,7 +361,6 @@ class TableOfContentsTest {
             """
             .numbering
                - headings: 1.A.a
-            .noautopagebreak
             .tableofcontents title:{TOC} indexheading:{yes} numberheading:{yes}
 
             # ABC
@@ -395,7 +388,6 @@ class TableOfContentsTest {
     fun `heading primitive numbered but not indexed`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents title:{}
 
             .heading {Tracked} depth:{1} numbered:{yes} indexed:{no}
@@ -419,7 +411,6 @@ class TableOfContentsTest {
     fun `heading primitive not numbered and not indexed`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents title:{}
 
             .heading {Untracked} depth:{1} numbered:{no} indexed:{no}
@@ -443,7 +434,6 @@ class TableOfContentsTest {
     fun `heading primitive indexed in toc`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents title:{}
 
             .heading {Custom} depth:{2} ref:{custom}
@@ -468,7 +458,6 @@ class TableOfContentsTest {
     fun `table of contents duplicate heading identifiers`() {
         execute(
             """
-            .noautopagebreak
             .tableofcontents title:{Examples}
 
             # Chapter 1
@@ -556,7 +545,6 @@ class TableOfContentsTest {
             """
             .numbering
                - headings: 1.A.a
-            .noautopagebreak
             .tableofcontents title:{TOC}
 
             # A

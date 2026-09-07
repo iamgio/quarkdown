@@ -172,8 +172,6 @@ class LayoutTest {
     fun `layout function called directly`() {
         execute(
             """
-            .noautopagebreak
-
             .function {mylayout}
                 name number:
                 # Hello, .name!
@@ -196,8 +194,6 @@ class LayoutTest {
     fun `layout function called from repeat`() {
         execute(
             """
-            .noautopagebreak
-
             .function {mylayout}
                 name number:
                 # Hello, .name!

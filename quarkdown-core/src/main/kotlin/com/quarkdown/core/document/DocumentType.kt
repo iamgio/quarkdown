@@ -9,11 +9,14 @@ import com.quarkdown.core.document.numbering.NumberingFormat
 /**
  * Type of produced document, which affects its post-rendering stage.
  * @param preferredOrientation the preferred orientation of the document, to apply if not overridden by the user
+ * @param preferredAutoPageBreakHeadingMaxDepth the preferred maximum heading depth to force a page break, to apply if not overridden by the user.
+ *                                              If `null`, no page break is forced by default
  * @param defaultPageFormat the default page format to apply, if not overridden by the user
  * @param defaultNumbering the default numbering formats to apply, if not overridden by the user
  */
 enum class DocumentType(
     val preferredOrientation: PageOrientation,
+    val preferredAutoPageBreakHeadingMaxDepth: Int?,
     val defaultPageFormat: PageFormatInfo? = null,
     val defaultNumbering: DocumentNumbering? = null,
 ) {
@@ -23,6 +26,7 @@ enum class DocumentType(
      */
     PLAIN(
         PageOrientation.PORTRAIT,
+        preferredAutoPageBreakHeadingMaxDepth = null,
         defaultNumbering =
             DocumentNumbering(
                 math = NumberingFormat.fromString("(1)"),
@@ -34,6 +38,7 @@ enum class DocumentType(
      */
     PAGED(
         PageOrientation.PORTRAIT,
+        preferredAutoPageBreakHeadingMaxDepth = 1,
         defaultPageFormat =
             with(PageSizeFormat.A4.getBounds(PageOrientation.PORTRAIT)) {
                 PageFormatInfo(
@@ -53,10 +58,16 @@ enum class DocumentType(
     /**
      * A slides-based document for presentations.
      */
-    SLIDES(PageOrientation.LANDSCAPE),
+    SLIDES(
+        PageOrientation.LANDSCAPE,
+        preferredAutoPageBreakHeadingMaxDepth = 2,
+    ),
 
     /**
      * A document optimized for documentation, knowledge bases, and wikis.
      */
-    DOCS(PageOrientation.PORTRAIT),
+    DOCS(
+        PageOrientation.PORTRAIT,
+        preferredAutoPageBreakHeadingMaxDepth = null,
+    ),
 }

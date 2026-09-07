@@ -25,7 +25,7 @@ class UtilitiesTest {
                 "<pre><code class=\"language-markdown\">\n${input.trimIndent()}</code></pre>"
 
         val contentOutput =
-            "<h1 class=\"page-break\">Hello</h1><p>This is <strong>Quarkdown</strong>&hellip; " +
+            "<h1>Hello</h1><p>This is <strong>Quarkdown</strong>&hellip; " +
                 "<span style=\"font-size: var(--qd-size-huge, 1em);\">!</span></p><div class=\"container\">" +
                 "<p>Nice!</p>" +
                 "</div>"
