@@ -2,7 +2,7 @@
 .include {docs}
 
 .css 
-    figure { width: 300px; }
+    figure { width: 200px; }
 
 A theme defines the look and feel of your Quarkdown document. More themes are planned for the future.
 
