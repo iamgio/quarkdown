@@ -31,16 +31,17 @@ You can set a theme via the **`.theme {colortheme} layout:{layouttheme}`** funct
 
 .layoutthemes
 
----
+## Combinations
 
 Some suggested combinations are:
-- `paperwhite+latex`: LaTeX look, great for paged documents
-- `galactic+hyperlegible`: this wiki
-- `paperwhite+focus`: simple, clean look for slides and articles
-- `darko+minimal`
-- `beaver+beamer`: Beamer look, great for academic-style presentations)
+- paperwhite + latex: LaTeX look, great for paged documents;
+- galactic + hyperlegible: this wiki;
+- paperwhite + focus: simple, clean look for slides and articles;
+- darko + minimal;
+- beaver + beamer: Beamer look, great for academic-style presentations.
 
-The table below shows how each combination renders the same page of the .repolink {Mock document} {tree/main/mock#readme}. Click a preview to open the full PDF.
+The following table shows how each combination renders the same page of the .repolink {Mock document} {tree/main/mock#readme} (note: it's scrollable!).
+Click a preview to open the full PDF.
 
 .function {mockpreview}
     color layout:
