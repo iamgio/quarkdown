@@ -9,9 +9,14 @@ on:
       - 'LICENSE'
       - '.github/FUNDING.yml'
   workflow_dispatch:
+  pull_request:
+    types: [ opened, synchronize, reopened, edited ]
 
 jobs:
   build:
+
+    # On pull requests, runs only when the PR title opts in via the "[generate-pdf]" tag.
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.title, '[generate-pdf]')
 
     runs-on: ubuntu-latest
 
@@ -30,7 +35,7 @@ jobs:
     - name: Setup staging directory
       run: |
         rm -rf pdf
-        mkdir -p pdf/mock
+        mkdir -p pdf/mock pdf/mock-jpg
 
     - name: Generate theme combinations
       run: |
@@ -48,13 +53,38 @@ jobs:
         rm -rf pdf/mock/*/
         ls -d $PWD/pdf/*
 
-    - name: Upload artifact
+    # Extracts the "Alerts" page from each generated PDF as a JPG image, for theme previews.
+    # The page is located by its text content, as its page number varies across themes.
+    - name: Extract Alert page as JPG
+      run: |
+        if ! command -v pdftoppm > /dev/null; then
+          sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+        fi
+        for pdf in pdf/mock/*.pdf; do
+          name=$(basename "$pdf" .pdf)
+          page=$(pdftotext "$pdf" - | awk -v RS='\f' '/Alerts/ && /use what happens/ { print NR; exit }')
+          if [ -z "$page" ]; then
+            echo "Could not locate the Alerts page in $pdf"
+            exit 1
+          fi
+          pdftoppm -jpeg -r 150 -f "$page" -l "$page" -singlefile "$pdf" "pdf/mock-jpg/$name"
+        done
+        ls -d $PWD/pdf/mock-jpg/*
+
+    - name: Upload PDF artifact
       uses: actions/upload-artifact@v4
       with:
         name: mock-pdf
         path: pdf/mock
 
-    - name: Push to generated repo
+    - name: Upload JPG artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mock-jpg
+        path: pdf/mock-jpg
+
+    - name: Push PDFs to generated repo
+      if: github.event_name != 'pull_request'
       uses: cpina/github-action-push-to-another-repository@v1.7.2
       env:
         API_TOKEN_GITHUB: ${{ secrets.COMMITTER_TOKEN }}
@@ -64,5 +94,19 @@ jobs:
         destination-repository-name: generated
         target-directory: mock
         commit-message: "Generate Mock PDF files from ${{ github.sha }}"
+        user-name: "github-actions[bot]"
+        user-email: "github-actions[bot]@users.noreply.github.com"
+
+    - name: Push JPGs to generated repo
+      if: github.event_name != 'pull_request'
+      uses: cpina/github-action-push-to-another-repository@v1.7.2
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.COMMITTER_TOKEN }}
+      with:
+        source-directory: pdf/mock-jpg
+        destination-github-username: quarkdown-labs
+        destination-repository-name: generated
+        target-directory: mock-jpg
+        commit-message: "Generate Mock JPG previews from ${{ github.sha }}"
         user-name: "github-actions[bot]"
         user-email: "github-actions[bot]@users.noreply.github.com"
