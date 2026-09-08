@@ -227,6 +227,34 @@ class IterableTest {
     }
 
     @Test
+    fun prepend() {
+        execute("$letters.foreach {.abc::prepended {Z}}\n\t.1") {
+            assertEquals("<p>Z</p><p>A</p><p>B</p><p>C</p>", it)
+        }
+    }
+
+    @Test
+    fun append() {
+        execute("$letters.foreach {.abc::appended {D}}\n\t.1") {
+            assertEquals("<p>A</p><p>B</p><p>C</p><p>D</p>", it)
+        }
+    }
+
+    @Test
+    fun `prepend and append chained`() {
+        execute("$letters.foreach {.abc::prepended {Z}::appended {D}}\n\t.1") {
+            assertEquals("<p>Z</p><p>A</p><p>B</p><p>C</p><p>D</p>", it)
+        }
+    }
+
+    @Test
+    fun `prepend and append do not modify the original collection`() {
+        execute("$letters.abc::prepended {Z}::appended {D}::size\n\n.abc::size") {
+            assertEquals("<p>5</p><p>3</p>", it)
+        }
+    }
+
+    @Test
     fun `handle pairs`() {
         execute(
             """

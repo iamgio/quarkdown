@@ -1,6 +1,9 @@
 .docname {Themes}
 .include {docs}
 
+.css 
+    figure { width: 300px; }
+
 A theme defines the look and feel of your Quarkdown document. More themes are planned for the future.
 
 Themes are split into two groups: *color* themes, which define the color scheme of a document, and *layout* themes, which set the general structural rules of the layout. Combining them allows you to create a document that truly stands out.
@@ -22,13 +25,11 @@ You can set a theme via the **`.theme {colortheme} layout:{layouttheme}`** funct
 
 ### Color themes
 
-.colorthemes::foreach
-    .1::codespan
+.colorthemes
 
 ### Layout themes
 
-.layoutthemes::foreach
-    .1::codespan
+.layoutthemes
 
 ---
 
@@ -49,12 +50,14 @@ The table below shows how each combination renders the same page of the .repolin
         .image url:{https://raw.githubusercontent.com/quarkdown-labs/generated/main/mock-jpg/.name.jpg} \
                label:{.color, .layout}
 
-.tablebyrows headers:{.layoutthemes}
-    .layoutthemes::foreach
-        layouttheme:
-        .colorthemes::foreach
-            colortheme:
-            .mockpreview {.colortheme} {.layouttheme}
+.tablebyrows headers:{.layoutthemes::prepended {.whitespace}}
+    .colorthemes::foreach
+        colortheme:
+        .var {previews}
+            .layoutthemes::foreach
+                layouttheme:
+                .mockpreview {.colortheme} {.layouttheme}
+        .previews::prepended {**.colortheme**}
 
 ## Contributing
 

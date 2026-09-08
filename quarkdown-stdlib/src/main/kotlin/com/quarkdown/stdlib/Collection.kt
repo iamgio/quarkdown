@@ -171,13 +171,16 @@ fun collectionSorted(
         }
 
     return when {
-        sorting != null ->
+        sorting != null -> {
             collection.sortedBy {
                 val selector = sorting.invokeDynamic(it)
                 toComparable(selector)
             }
+        }
 
-        else -> collection.sortedBy { toComparable(it) }
+        else -> {
+            collection.sortedBy { toComparable(it) }
+        }
     }.wrappedAsValue()
 }
 
@@ -204,12 +207,57 @@ fun collectionGroup(
     @Name("from") collection: Iterable<OutputValue<*>>,
 ): IterableValue<IterableValue<OutputValue<*>>> =
     collection
-        .asSequence()
         .groupBy { it }
         .mapValues { it.value.toList() }
         .mapValues { it.value.wrappedAsValue() }
         .values
         .let(::GeneralCollectionValue)
+
+/**
+ * Adds an element at the beginning of a collection. The original collection is not modified.
+ *
+ * ```
+ * .var {letters}
+ *     - B
+ *     - C
+ *
+ * .letters::prepended {A} <!-- A, B, C -->
+ * ```
+ *
+ * @param collection collection to add the element to
+ * @param value element to add at the beginning of the collection
+ * @return a new collection containing [value] followed by the elements of the original collection
+ */
+@QFunction
+@Name("prepended")
+@LikelyChained
+fun collectionPrepend(
+    @Name("to") collection: Iterable<OutputValue<*>>,
+    @Name("value") value: DynamicValue,
+): IterableValue<OutputValue<*>> = GeneralCollectionValue(listOf(value) + collection)
+
+/**
+ * Adds an element at the end of a collection. The original collection is not modified.
+ *
+ * ```
+ * .var {letters}
+ *     - A
+ *     - B
+ *
+ * .letters::appended {C} <!-- A, B, C -->
+ * ```
+ *
+ * @param collection collection to add the element to
+ * @param value element to add at the end of the collection
+ * @return a new collection containing the elements of the original collection followed by [value]
+ */
+@QFunction
+@Name("appended")
+@LikelyChained
+fun collectionAppend(
+    @Name("to") collection: Iterable<OutputValue<*>>,
+    @Name("value") value: DynamicValue,
+): IterableValue<OutputValue<*>> = GeneralCollectionValue(collection + value)
 
 /**
  * Creates a new pair.
