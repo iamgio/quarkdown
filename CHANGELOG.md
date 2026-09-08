@@ -91,6 +91,10 @@ Breaking change: calling `.doclang` without a parameter now returns the *English
 
 ### Fixed
 
+#### Wide tables in `docs` documents scroll horizontally
+
+In `docs` documents, a table wider than the content area now scrolls horizontally within its own area.
+
 #### `slides` PDF export improvements
 
 PDF artifacts generated from `slides` documents now feature a more polished layout. 
@@ -98,7 +102,7 @@ Blank (headerless) slides are now spaced correctly.
 
 #### Block-aware [`.text`](https://quarkdown.com/wiki/text), `.codespan` and `.whitespace`
 
-The `.text` and `.whitespace` functions now adapt to where they are called.
+The `.text`, `.codespan` and `.whitespace` functions now adapt to where they are called.
 This fixes spacing issues when invoked as block-level functions.
 
 #### Layout themes: bold weight and leaner font artifacts

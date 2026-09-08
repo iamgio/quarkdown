@@ -5,6 +5,8 @@
     .navigation role:{pagelist}
         - [Simple](simple.qd)
         - [Long Code](long-code.qd)
+        - [Wide Table](wide-table.qd)
+        - [Regular Table](regular-table.qd)
 
 .pagemargin {righttop}
     .tableofcontents

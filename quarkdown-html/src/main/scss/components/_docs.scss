@@ -93,6 +93,11 @@
     }
   }
 
+  // `ScrollableTables` handler for scrollable tables.
+  .table-scroll-area {
+    overflow-x: auto;
+  }
+
   // Previous/Next page buttons
   #sibling-pages-button-area {
     display: flex;
