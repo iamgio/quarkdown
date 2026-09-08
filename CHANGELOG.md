@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-09-08
+
 The highlights of this release include significant performance improvements, better portability thanks to reduced binary size and less external dependencies, and enhanced `slides` artifacts.
 
 ### Added
@@ -48,7 +50,9 @@ without affecting the original collection.
 .foreach {.letters::prepended {A}::appended {D}}
     .1
 ```
+
 > Output:
+>
 > ```text
 > A
 > B
@@ -87,7 +91,7 @@ Calling a native function no longer involves JVM reflection, improving performan
 
 Locale resolution from `.doclang` was optimized, via a compile-time-generated and efficiently indexed table. Improvements include faster lookups, true platform independence, reduced memory usage, and smaller binary size.
 
-Breaking change: calling `.doclang` without a parameter now returns the *English* name of the current locale, rather than its localized name.
+Breaking change: calling `.doclang` without a parameter now returns the _English_ name of the current locale, rather than its localized name.
 
 ### Fixed
 
@@ -1396,7 +1400,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.5.1...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.6.0...HEAD
+
+[2.6.0]: https://github.com/iamgio/quarkdown/compare/v2.5.1...v2.6.0
 
 [2.5.1]: https://github.com/iamgio/quarkdown/compare/v2.5.0...v2.5.1
 
