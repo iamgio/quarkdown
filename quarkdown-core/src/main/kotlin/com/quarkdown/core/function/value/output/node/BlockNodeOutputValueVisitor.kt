@@ -3,6 +3,7 @@ package com.quarkdown.core.function.value.output.node
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.base.block.Paragraph
+import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Link
 import com.quarkdown.core.ast.quarkdown.inline.TextTransform
 import com.quarkdown.core.ast.quarkdown.inline.Whitespace
@@ -48,7 +49,7 @@ class BlockNodeOutputValueVisitor(
     override fun visit(value: NodeValue) =
         when (val node = value.unwrappedValue) {
             is InlineMarkdownContent -> Paragraph(node.children)
-            is TextTransform, is Link -> node.inParagraph()
+            is TextTransform, is CodeSpan, is Link -> node.inParagraph()
             is Whitespace -> node.diverge(isBlock = true)
             else -> node
         }

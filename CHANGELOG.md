@@ -35,6 +35,27 @@ The new `callouts` argument of the `.code` function attaches numbered markers to
 
 Creating a new `slides` project via `quarkdown create` now generates starter content designed for presentations.
 
+#### [New collection operations: `prepended` and `appended`](https://quarkdown.com/wiki/iterable)
+
+The new `prepended` and `appended` functions add an element at the beginning or end of a collection, respectively,
+without affecting the original collection.
+
+```markdown
+.var {letters}
+    - B
+    - C
+
+.foreach {.letters::prepended {A}::appended {D}}
+    .1
+```
+> Output:
+> ```text
+> A
+> B
+> C
+> D
+> ```
+
 ### Changed
 
 #### PDF export without Node.js [ecosystem breaking change]
@@ -75,7 +96,7 @@ Breaking change: calling `.doclang` without a parameter now returns the *English
 PDF artifacts generated from `slides` documents now feature a more polished layout. 
 Blank (headerless) slides are now spaced correctly.
 
-#### Block-aware [`.text`](https://quarkdown.com/wiki/text) and `.whitespace`
+#### Block-aware [`.text`](https://quarkdown.com/wiki/text), `.codespan` and `.whitespace`
 
 The `.text` and `.whitespace` functions now adapt to where they are called.
 This fixes spacing issues when invoked as block-level functions.
