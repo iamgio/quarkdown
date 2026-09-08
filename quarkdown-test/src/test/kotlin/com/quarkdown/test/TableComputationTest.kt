@@ -308,6 +308,50 @@ class TableComputationTest {
     }
 
     @Test
+    fun `generation by rows, matrix from nested foreach with prepended header column`() {
+        execute(
+            """
+            .var {colors}
+                - red
+                - blue
+
+            .var {styles}
+                - solid
+                - dashed
+
+            .function {preview}
+                color style:
+                .var {name} {{.color}_{.style}}
+
+                .link url:{https://example.com/.name.pdf}
+                    .name
+
+            .tablebyrows headers:{.styles::prepended {.whitespace}}
+                .colors::foreach
+                    color:
+                    .var {previews}
+                        .styles::foreach
+                            style:
+                            .preview {.color} {.style}
+                    .previews::prepended {**.color**}
+            """.trimIndent(),
+        ) {
+            fun cell(
+                color: String,
+                style: String,
+            ) = "<td><p><a href=\"https://example.com/${color}_$style.pdf\">${color}_$style</a></p></td>"
+
+            fun row(color: String) = "<tr><td><strong>$color</strong></td>${cell(color, "solid")}${cell(color, "dashed")}</tr>"
+
+            assertEquals(
+                "<table><thead><tr><th><span class=\"whitespace\">&nbsp;</span></th><th>solid</th><th>dashed</th></tr></thead>" +
+                    "<tbody>${row("red")}${row("blue")}</tbody></table>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `generation by rows, with headers`() {
         execute(
             """
