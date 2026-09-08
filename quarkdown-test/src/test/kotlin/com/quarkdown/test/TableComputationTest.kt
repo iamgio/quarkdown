@@ -329,11 +329,9 @@ class TableComputationTest {
             .tablebyrows headers:{.styles::prepended {.whitespace}}
                 .colors::foreach
                     color:
-                    .var {previews}
-                        .styles::foreach
-                            style:
-                            .preview {.color} {.style}
-                    .previews::prepended {**.color**}
+                    .styles::foreach { style:
+                        .preview {.color} {.style}
+                    }::prepended {**.color**}
             """.trimIndent(),
         ) {
             fun cell(

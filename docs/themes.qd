@@ -54,11 +54,9 @@ Click a preview to open the full PDF.
 .tablebyrows headers:{.layoutthemes::prepended {.whitespace}}
     .colorthemes::foreach
         colortheme:
-        .var {previews}
-            .layoutthemes::foreach
-                layouttheme:
-                .mockpreview {.colortheme} {.layouttheme}
-        .previews::prepended {**.colortheme**}
+        .layoutthemes::foreach { layouttheme:
+            .mockpreview {.colortheme} {.layouttheme}
+        }::prepended {**.colortheme**}
 
 ## Contributing
 
