@@ -15,17 +15,17 @@ dependencies {
     testCompileOnly(project(":quarkdown-native-library-processor"))
     kspTest(project(":quarkdown-native-library-processor"))
     ksp(project(":quarkdown-locale-table-processor"))
-    implementation("com.squareup.okio:okio:3.18.1")
-    implementation("com.squareup.okio:okio-fakefilesystem:3.18.1")
+    implementation("com.squareup.okio:okio:3.18.2")
+    implementation("com.squareup.okio:okio-fakefilesystem:3.18.2")
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.4")
-    implementation("co.touchlab:kermit:2.1.0")
+    implementation("co.touchlab:kermit:2.2.0")
     implementation("com.mohamedrejeb.ksoup:ksoup-entities:0.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation("io.ktor:ktor-http:3.5.2")
-    implementation("com.github.ajalt.colormath:colormath:3.6.1")
+    implementation("com.github.ajalt.colormath:colormath:3.7.0")
     implementation("com.quarkdown.bibliographer:bibliographer:0.3.0")
-    cslStyles("org.citationstyles:styles:26.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
+    cslStyles("org.citationstyles:styles:26.8")
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.2")
 }
 
 // Extracts only the CSL style files listed in csl-styles.txt from the full styles collection, to reduce the bundle size.

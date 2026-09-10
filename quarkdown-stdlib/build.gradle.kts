@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm")
-    id("com.google.devtools.ksp") version "2.3.9"
+    id("com.google.devtools.ksp") version "2.3.12"
 }
 
 dependencies {
@@ -15,7 +15,7 @@ dependencies {
     implementation("se.sawano.java:alphanumeric-comparator:2.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation("com.jsoizo:kotlin-csv-jvm:2.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.9.0")
-    implementation("org.kodein.emoji:emoji-kt:2.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.9.1")
+    implementation("org.kodein.emoji:emoji-kt:2.5.0")
     dokkaPlugin(project(":quarkdown-quarkdoc"))
 }
