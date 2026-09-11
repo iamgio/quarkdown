@@ -57,7 +57,7 @@ private fun cslStyleSource(style: String): String {
  * CSL JSON, YAML, EndNote, and RIS.
  *
  * The bibliography is formatted using a [CSL](https://citationstyles.org) style definition,
- * powered by [citeproc-java](https://github.com/michel-kraemer/citeproc-java).
+ * powered by [kotlin-bibliographer](https://github.com/quarkdown-labs/kotlin-bibliographer).
  * This enables support for a curated selection of citation styles from the
  * [CSL Style Repository](https://github.com/citation-style-language/styles).
  *

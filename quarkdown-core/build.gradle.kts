@@ -23,9 +23,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation("io.ktor:ktor-http:3.5.2")
     implementation("com.github.ajalt.colormath:colormath:3.6.1")
-    implementation("de.undercouch:citeproc-java:3.5.0")
+    implementation("com.quarkdown.bibliographer:bibliographer:0.3.0")
     cslStyles("org.citationstyles:styles:26.2")
-    implementation("org.citationstyles:locales:26.2")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
 }
 

@@ -1,75 +1,54 @@
 package com.quarkdown.core.bibliography.style.csl
 
+import com.quarkdown.bibliographer.Bibliographer
+import com.quarkdown.bibliographer.BibliographyFormat
+import com.quarkdown.bibliographer.BibliographySource
+import com.quarkdown.bibliographer.FormattedEntry
+import com.quarkdown.bibliographer.token.toPlainText
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.bibliography.Bibliography
 import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.localization.Locale
-import com.quarkdown.core.util.node.toPlainText
-import de.undercouch.citeproc.BibliographyFileReader
-import de.undercouch.citeproc.CSL
-import de.undercouch.citeproc.ItemDataProvider
 import java.io.IOException
 import java.io.InputStream
 
 /**
  * A [BibliographyStyle] backed by a [CSL](https://citationstyles.org) style definition,
- * powered by [citeproc-java](https://github.com/michel-kraemer/citeproc-java).
+ * powered by [kotlin-bibliographer](https://github.com/quarkdown-labs/kotlin-bibliographer).
  *
  * This enables support for a curated selection of citation styles from the
  * [CSL Style Repository](https://github.com/citation-style-language/styles),
  * including BibTeX, CSL JSON, YAML, EndNote, and RIS bibliography sources.
  *
- * Citation label and entry content formatting are delegated to citeproc-java,
- * which processes the CSL XML style definition and produces structured output
- * converted to Quarkdown AST nodes via [QuarkdownCslFormat] and [CslTokenConverter].
+ * Citation label and entry content formatting are delegated to the [bibliographer],
+ * whose platform-agnostic token output is converted to Quarkdown AST nodes
+ * via [CslTokenConverter].
  *
  * @param cslStyleName the CSL style name (e.g. `"apa"`, `"ieee"`, `"chicago-author-date"`)
- * @param cslStyleSource the XML content of the CSL style definition
- * @param provider the item data provider supplying bibliography data to citeproc-java
- * @param locale optional [RFC 4646](https://www.rfc-editor.org/rfc/rfc4646) locale tag
- *               (e.g. `"en-US"`, `"de-DE"`). Controls localized terms such as "and"/"und",
- *               month names, and ordinal suffixes. When `null`, the style's default locale is used,
- *               falling back to `"en-US"`.
- * @see QuarkdownCslFormat
+ * @param bibliographer the bibliographer rendering citations and entries
  * @see CslTokenConverter
  */
 class CslBibliographyStyle(
     private val cslStyleName: String,
-    cslStyleSource: String,
-    private val provider: ItemDataProvider,
-    locale: String? = null,
+    private val bibliographer: Bibliographer,
 ) : BibliographyStyle {
-    private val format = QuarkdownCslFormat()
-
-    private val csl =
-        CSL(provider, cslStyleSource, locale).apply {
-            setOutputFormat(format)
-            registerCitationItems(provider.ids)
-        }
-
     /**
-     * The [Bibliography] derived from the provider's entry IDs.
+     * The [Bibliography] derived from the bibliographer's entries,
+     * in the order dictated by the style's sorting rules.
      */
     val bibliography: Bibliography by lazy {
         Bibliography(
-            provider.ids.associateWith(::BibliographyEntry),
+            bibliographer.bibliography().associate { it.citationKey to BibliographyEntry(it.citationKey) },
         )
     }
 
     /**
-     * Lazily formatted bibliography entries, mapping each citation key
-     * to its [FormattedBibliographyEntry] (label + content).
-     *
-     * Triggering this lazy value calls [CSL.makeBibliography], which invokes
-     * [QuarkdownCslFormat.doFormatBibliographyEntry] for each entry sequentially.
-     * The accumulated results are then matched to provider IDs by position.
+     * Formatted bibliography entries, associated with their citation keys.
      */
-    private val formattedEntries: Map<String, FormattedBibliographyEntry> by lazy {
-        format.bibliographyEntries.clear()
-        csl.makeBibliography()
-        provider.ids.zip(format.bibliographyEntries).toMap()
+    private val formattedEntries: Map<String, FormattedEntry> by lazy {
+        bibliographer.bibliography().associateBy { it.citationKey }
     }
 
     override val name: String
@@ -77,18 +56,23 @@ class CslBibliographyStyle(
 
     override val labelProvider =
         object : BibliographyEntryLabelProviderStrategy {
-            override fun getCitationLabel(entries: List<BibliographyEntry>): String {
-                csl.makeCitation(*entries.map { it.citationKey }.toTypedArray())
-                return format.lastCitationResult.toPlainText().ifBlank { "[?]" }
-            }
+            override fun getCitationLabel(entries: List<BibliographyEntry>): String =
+                bibliographer
+                    .citation(entries.map { it.citationKey })
+                    ?.toPlainText()
+                    ?: "[?]"
 
             override fun getListLabel(
                 entry: BibliographyEntry,
                 index: Int,
-            ): String = formattedEntries[entry.citationKey]?.label ?: ""
+            ): String = formattedEntries[entry.citationKey]?.label.orEmpty()
         }
 
-    override fun contentOf(entry: BibliographyEntry): InlineContent = formattedEntries[entry.citationKey]?.content ?: emptyList()
+    override fun contentOf(entry: BibliographyEntry): InlineContent =
+        formattedEntries[entry.citationKey]
+            ?.content
+            ?.let(CslTokenConverter::convert)
+            ?: emptyList()
 
     companion object {
         /**
@@ -109,16 +93,28 @@ class CslBibliographyStyle(
             filename: String,
             locale: Locale? = null,
         ): CslBibliographyStyle {
-            val provider = BibliographyFileReader().readBibliographyFile(input, filename)
-            return try {
-                CslBibliographyStyle(cslStyleName, cslStyleSource, provider, locale?.tag)
-            } catch (e: IOException) {
-                throw IllegalArgumentException(
-                    "Bibliography style '$cslStyleName' failed to load. " +
-                        "See https://quarkdown.com/wiki/bibliography for a list of available styles.",
-                    e,
-                )
-            }
+            val format =
+                requireNotNull(BibliographyFormat.fromFilename(filename)) {
+                    "Unsupported bibliography format for '$filename'. " +
+                        "See https://quarkdown.com/wiki/bibliography for the supported formats."
+                }
+
+            val bibliographer =
+                try {
+                    Bibliographer(
+                        style = cslStyleSource,
+                        source = BibliographySource(input.reader().use { it.readText() }, format),
+                        locale = locale?.tag,
+                    )
+                } catch (e: IOException) {
+                    throw IllegalArgumentException(
+                        "Bibliography style '$cslStyleName' failed to load. " +
+                            "See https://quarkdown.com/wiki/bibliography for a list of available styles.",
+                        e,
+                    )
+                }
+
+            return CslBibliographyStyle(cslStyleName, bibliographer)
         }
     }
 }
