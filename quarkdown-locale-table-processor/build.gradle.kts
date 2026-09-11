@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("com.google.devtools.ksp:symbol-processing-api:2.3.9")
+    implementation("com.google.devtools.ksp:symbol-processing-api:2.3.12")
 }
 
 tasks.test {

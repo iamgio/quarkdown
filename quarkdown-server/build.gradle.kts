@@ -8,11 +8,11 @@ dependencies {
     implementation(project(":quarkdown-template"))
     implementation(project(":quarkdown-interaction"))
 
-    val ktorVersion = "3.5.0"
+    val ktorVersion = "3.5.2"
 
     implementation("io.ktor:ktor-server-cio:$ktorVersion")
     implementation("io.ktor:ktor-server-sse:$ktorVersion")
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("org.slf4j:slf4j-simple:2.0.18")
+    implementation("org.slf4j:slf4j-simple:2.0.19")
 }
