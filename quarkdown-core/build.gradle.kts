@@ -4,7 +4,7 @@ plugins {
     `java-test-fixtures`
 }
 
-val cslStyles: Configuration by configurations.creating
+val cslStyles: Configuration = configurations.create("cslStyles")
 
 dependencies {
     sequenceOf(kotlin("test"), "org.assertj:assertj-core:3.27.6").forEach {
@@ -29,40 +29,41 @@ dependencies {
 }
 
 // Extracts only the CSL style files listed in csl-styles.txt from the full styles collection, to reduce the bundle size.
-val extractCslStyles by tasks.registering {
-    val styleListFile = file("csl-styles.txt")
-    val outputDir = layout.buildDirectory.dir("generated/csl-styles")
+val extractCslStyles =
+    tasks.register("extractCslStyles") {
+        val styleListFile = file("csl-styles.txt")
+        val outputDir = layout.buildDirectory.dir("generated/csl-styles")
 
-    inputs.files(cslStyles)
-    inputs.file(styleListFile)
-    outputs.dir(outputDir)
+        inputs.files(cslStyles)
+        inputs.file(styleListFile)
+        outputs.dir(outputDir)
 
-    doLast {
-        val outDir = outputDir.get().asFile
-        outDir.deleteRecursively()
-        outDir.mkdirs()
+        doLast {
+            val outDir = outputDir.get().asFile
+            outDir.deleteRecursively()
+            outDir.mkdirs()
 
-        val styleNames =
-            styleListFile
-                .readLines()
-                .map { it.trim() }
-                .filter { it.isNotBlank() }
-                .toSet()
+            val styleNames =
+                styleListFile
+                    .readLines()
+                    .map { it.trim() }
+                    .filter { it.isNotBlank() }
+                    .toSet()
 
-        project.copy {
-            from(project.zipTree(cslStyles.singleFile))
-            into(outDir)
-            include(styleNames.map { "$it.csl" })
-        }
+            project.copy {
+                from(project.zipTree(cslStyles.singleFile))
+                into(outDir)
+                include(styleNames.map { "$it.csl" })
+            }
 
-        // Verify all listed styles were found.
-        val extracted = outDir.listFiles()?.map { it.nameWithoutExtension }?.toSet() ?: emptySet()
-        val missing = styleNames - extracted
-        if (missing.isNotEmpty()) {
-            error("CSL styles not found in styles JAR: ${missing.joinToString()}")
+            // Verify all listed styles were found.
+            val extracted = outDir.listFiles()?.map { it.nameWithoutExtension }?.toSet() ?: emptySet()
+            val missing = styleNames - extracted
+            if (missing.isNotEmpty()) {
+                error("CSL styles not found in styles JAR: ${missing.joinToString()}")
+            }
         }
     }
-}
 
 tasks.test {
     // Lets tests read CSL styles from the extraction output.

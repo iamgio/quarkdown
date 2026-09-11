@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.support.serviceOf
+import org.gradle.process.ExecOperations
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
@@ -14,6 +16,8 @@ plugins {
 
 group = "com.quarkdown"
 version = file("version.txt").readText().trim()
+
+val execOps: ExecOperations = serviceOf()
 
 allprojects {
     repositories {
@@ -75,7 +79,7 @@ fun usesQuarkdoc(project: Project): Boolean {
         .asSequence()
         .flatMap { it.dependencies }
         .filterIsInstance<ProjectDependency>()
-        .any { it.dependencyProject == quarkdoc }
+        .any { it.path == quarkdoc.path }
 }
 
 val quarkdocGenerate: TaskProvider<Task> =
@@ -227,7 +231,7 @@ fun resolveRequiredModules(): String {
     val jdepsOutput =
         ByteArrayOutputStream()
             .also { out ->
-                exec {
+                execOps.exec {
                     val jars = configurations.runtimeClasspath.get().filter { it.name.endsWith(".jar") }
                     commandLine(
                         "jdeps",
@@ -251,40 +255,41 @@ fun resolveRequiredModules(): String {
  * Host-platform bundled JRE, used by `installDist` for development and host-only runs.
  * Cross-platform release zips use the per-target `bundleRuntime<Target>` tasks instead.
  */
-val bundleRuntime by tasks.registering {
-    group = "distribution"
-    description = "Creates a minimal JRE via jlink for the host platform (used by installDist)."
+val bundleRuntime =
+    tasks.register("bundleRuntime") {
+        group = "distribution"
+        description = "Creates a minimal JRE via jlink for the host platform (used by installDist)."
 
-    dependsOn(tasks.jar, subprojects.map { it.tasks.named("jar") })
+        dependsOn(tasks.jar, subprojects.map { it.tasks.named("jar") })
 
-    val runtimeDir = layout.buildDirectory.dir("runtime")
-    outputs.dir(runtimeDir)
+        val runtimeDir = layout.buildDirectory.dir("runtime")
+        outputs.dir(runtimeDir)
 
-    doLast {
-        val outputDir = runtimeDir.get().asFile
-        delete(outputDir)
-        exec {
-            commandLine(
-                "jlink",
-                "--add-modules",
-                resolveRequiredModules(),
-                "--strip-debug",
-                "--no-man-pages",
-                "--no-header-files",
-                "--compress",
-                "2",
-                "--output",
-                outputDir.absolutePath,
-            )
+        doLast {
+            val outputDir = runtimeDir.get().asFile
+            delete(outputDir)
+            execOps.exec {
+                commandLine(
+                    "jlink",
+                    "--add-modules",
+                    resolveRequiredModules(),
+                    "--strip-debug",
+                    "--no-man-pages",
+                    "--no-header-files",
+                    "--compress",
+                    "2",
+                    "--output",
+                    outputDir.absolutePath,
+                )
+            }
+
+            // jlink emits read-only legal/ files that cause overwrite errors.
+            outputDir
+                .walk()
+                .filter { it.isFile && !it.canWrite() }
+                .forEach { it.setWritable(true) }
         }
-
-        // jlink emits read-only legal/ files that cause overwrite errors.
-        outputDir
-            .walk()
-            .filter { it.isFile && !it.canWrite() }
-            .forEach { it.setWritable(true) }
     }
-}
 
 // Per-target tasks: download the JDK, build a target-specific JRE via jlink,
 // and assemble a distribution zip with that runtime bundled in.
@@ -310,7 +315,7 @@ jlinkTargets.forEach { target ->
 
                 when {
                     archive.name.endsWith(".tar.gz") -> {
-                        exec {
+                        execOps.exec {
                             commandLine("tar", "-xzf", archive.absolutePath, "-C", rootDir.absolutePath)
                         }
                     }
@@ -344,7 +349,7 @@ jlinkTargets.forEach { target ->
                 val outputDir = runtimeDir.get().asFile
                 delete(outputDir)
 
-                exec {
+                execOps.exec {
                     commandLine(
                         "jlink",
                         "--module-path",
@@ -429,12 +434,13 @@ distributions.main {
 // Assembles a dev-time install `lib/` layout at `<rootProject>/build/dev-lib`, mirroring
 // the distribution layout so that `gradle run` and IntelliJ runs can resolve the install
 // directory at runtime.
-val assembleDevLib by tasks.registering(Sync::class) {
-    dependsOn(":quarkdown-html:bundleThirdParty")
-    dependsOn(":quarkdown-core:extractCslStyles")
-    into(layout.buildDirectory.dir("dev-lib"))
-    installLibLayout()
-}
+val assembleDevLib =
+    tasks.register<Sync>("assembleDevLib") {
+        dependsOn(":quarkdown-html:bundleThirdParty")
+        dependsOn(":quarkdown-core:extractCslStyles")
+        into(layout.buildDirectory.dir("dev-lib"))
+        installLibLayout()
+    }
 
 tasks.installDist {
     dependsOn(quarkdocGenerate, bundleRuntime, ":quarkdown-core:extractCslStyles")
@@ -472,7 +478,7 @@ tasks.named<CreateStartScripts>("startScripts") {
 }
 
 tasks.wrapper {
-    gradleVersion = "8.3"
+    gradleVersion = "9.7.1"
     distributionType = Wrapper.DistributionType.ALL
 }
 
