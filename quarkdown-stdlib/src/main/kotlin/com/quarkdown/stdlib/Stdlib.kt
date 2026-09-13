@@ -6,6 +6,7 @@ import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.pipeline.PipelineHooks
+import com.quarkdown.stdlib.localization.LOCALIZATION_TABLE
 
 /**
  * Fallback value for non-existent elements in collections, dictionaries, and more.
@@ -54,7 +55,7 @@ object Stdlib : LibraryExporter {
                         afterRegisteringLibraries = {
                             includeResource(
                                 this.readOnlyContext,
-                                javaClass.getResourceAsStream("/lib/localization.qd")!!.reader(),
+                                LOCALIZATION_TABLE,
                             )
                         },
                     ),

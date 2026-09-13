@@ -26,21 +26,18 @@ import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.asString
-import java.io.Reader
 
 /**
- * Includes the parsed content of the given raw Quarkdown [code], read by [reader], in the current document.
+ * Includes the parsed content of the given raw Quarkdown [code] in the current document.
  * The context of the main file is shared, allowing for sharing of variables, functions and other declarations.
  * @param context main context to share
- * @param reader reader of the raw Quarkdown source to include
+ * @param code raw Quarkdown source to include
  * @return the content of the file as a node
  */
 internal fun includeResource(
     context: Context,
-    reader: Reader,
+    code: String,
 ): NodeValue {
-    val code = reader.readText()
-
     // Evaluate the Quarkdown source.
     // This automatically converts the source into a value (e.g. a node, a string, a number, etc.)
     // and fills the current context with new declarations (e.g. variables, functions, link definitions, etc.)
@@ -111,7 +108,7 @@ fun include(
             ContextSandbox.SUBDOCUMENT -> SubdocumentContext(context, context.subdocument, newFileSystem)
         }
 
-    return includeResource(newContext, file.readText().reader())
+    return includeResource(newContext, file.readText())
 }
 
 /**
