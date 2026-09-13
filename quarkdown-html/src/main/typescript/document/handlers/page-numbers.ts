@@ -44,10 +44,61 @@ export class PageNumbers extends DocumentHandler<PagedLikeQuarkdownDocument<any>
      * Updates all total page number elements with the total count of pages.
      */
     private updateTotalPageNumbers(pages: QuarkdownPage[]) {
-        const amount = pages.length;
-        this.getTotalPageNumberElements().forEach(total => {
-            total.innerText = amount.toString();
+    const sectionTotals = new Map<QuarkdownPage, number>();
+
+    let currentSection: QuarkdownPage[] = [];
+    let sectionStart = 1;
+
+    const flush = () => {
+        if (currentSection.length === 0) {
+            return;
+        }
+
+        const total = sectionStart + currentSection.length - 1;
+
+        currentSection.forEach(page => {
+            sectionTotals.set(page, total);
         });
+    };
+
+    pages.forEach(page => {
+        const resetMarkers = this.getPageNumberResetMarkers(page);
+
+        if (resetMarkers.length && currentSection.length) {
+            flush();
+            currentSection = [];
+        }
+
+        if (resetMarkers.length) {
+            const lastReset = resetMarkers[resetMarkers.length - 1];
+            const requested = parseInt(lastReset.dataset.start ?? "1", 10);
+
+            if (Number.isFinite(requested) && requested > 0) {
+                sectionStart = requested;
+            } else {
+                sectionStart = 1;
+            }
+        }
+
+        currentSection.push(page);
+    });
+
+    flush();
+
+    this.getTotalPageNumberElements().forEach(element => {
+        const page = this.quarkdownDocument.getPage(element);
+
+        if (!page) {
+            return;
+        }
+
+        const total =
+            element.dataset.scope === "section"
+                ? sectionTotals.get(page) ?? pages.length
+                : pages.length;
+
+        element.innerText = total.toString();
+    });
     }
 
     /**
