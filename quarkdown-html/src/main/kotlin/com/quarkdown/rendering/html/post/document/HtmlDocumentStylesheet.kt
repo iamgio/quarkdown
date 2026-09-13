@@ -111,9 +111,9 @@ class HtmlDocumentStylesheet(
                     "margin" value format.margin
                 }
 
-                rule("body.quarkdown-slides.quarkdown-slides .reveal") {
-                    "width" value format.pageWidth
-                    "height" value format.pageHeight
+                rule("body.quarkdown-slides.quarkdown-slides") {
+                    "--qd-slides-width" value format.pageWidth
+                    "--qd-slides-height" value format.pageHeight
                 }
             }
 

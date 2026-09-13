@@ -33,6 +33,29 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
     }
 
     /**
+     * Resolves a CSS size (injected by Quarkdown's `.pageformat` function) into a value
+     * accepted by Reveal.js as the presentation size: percentages are passed through,
+     * while any other unit is measured and converted to pixels.
+     * @returns The resolved size, or `undefined` if the CSS size is empty,
+     *          letting Reveal.js fall back to its default.
+     */
+    private resolvePresentationSize(cssSize: string): number | string | undefined {
+        const size = cssSize.trim();
+        if (!size) return undefined;
+        if (size.endsWith("%")) return size;
+
+        // Units such as cm or pt are converted to pixels by measuring a probe element.
+        const probe = document.createElement("div");
+        probe.style.position = "absolute";
+        probe.style.visibility = "hidden";
+        probe.style.width = size;
+        document.body.appendChild(probe);
+        const pixels = Math.round(probe.getBoundingClientRect().width);
+        probe.remove();
+        return pixels > 0 ? pixels : undefined;
+    }
+
+    /**
      * @returns The parent slide element of the given element.
      */
     getParentViewport(element: Element): HTMLElement | undefined {
@@ -109,8 +132,16 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
         if (!slidesDiv) return;
         new PageChunker(slidesDiv).chunk();
 
+        // The page size set via `.pageformat` becomes the presentation size,
+        // scaled to fit the screen while preserving the aspect ratio.
+        const bodyStyle = getComputedStyle(document.body);
+        const width = this.resolvePresentationSize(bodyStyle.getPropertyValue("--qd-slides-width"));
+        const height = this.resolvePresentationSize(bodyStyle.getPropertyValue("--qd-slides-height"));
+
         // Initialize Reveal.js with the updated DOM.
         Reveal.initialize({
+            ...(width !== undefined && {width}),
+            ...(height !== undefined && {height}),
             // If the center property is not explicitly set, it defaults to true unless the `--reveal-center-vertically` CSS variable of `:root` is set to `false`.
             center: this.getConfigProperty(
                 "center",

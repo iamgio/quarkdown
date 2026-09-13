@@ -1,5 +1,5 @@
 import {suite} from "../../../quarkdown";
-import {A4_HEIGHT_PX, getPageSizeTarget} from "../../index";
+import {A4_HEIGHT_PX, getPageSizeTarget, getPresentationSizeTarget} from "../../index";
 
 const {testMatrix, expect} = suite(__dirname);
 
@@ -42,9 +42,7 @@ testMatrix(
                 }
                 break;
             case "slides":
-                const slide = await target.boundingBox();
-                expect(slide).not.toBeNull();
-                expect(slide!.width).toBeCloseTo(EXPECTED_WIDTH, 0);
+                await expect(getPresentationSizeTarget(page)).toHaveCSS("width", `${EXPECTED_WIDTH}px`);
         }
     }
 );

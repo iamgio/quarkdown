@@ -233,6 +233,7 @@ class HtmlPostRendererTest {
             )
         val result = postRenderer().wrap("")
         assertTrue("--qd-content-width: 8.5in" in result)
+        assertTrue("--qd-slides-width: 8.5in" in result)
     }
 
     @Test
