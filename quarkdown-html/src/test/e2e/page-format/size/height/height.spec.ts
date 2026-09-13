@@ -1,5 +1,5 @@
 import {suite} from "../../../quarkdown";
-import {A4_WIDTH_PX, getPageSizeTarget} from "../../index";
+import {A4_WIDTH_PX, getPageSizeTarget, getPresentationSizeTarget} from "../../index";
 
 const {testMatrix, expect} = suite(__dirname);
 
@@ -7,7 +7,7 @@ testMatrix(
     "applies page height to correct element",
     ["paged", "slides"],
     async (page, docType) => {
-        const target = getPageSizeTarget(page, docType);
+        const target = docType === "slides" ? getPresentationSizeTarget(page) : getPageSizeTarget(page, docType);
 
         await expect(target).toHaveCSS("height", "100px");
 

@@ -12,6 +12,12 @@ After creating a new project via [`quarkdown create`](https://quarkdown.com/wiki
 
 The *Citation Style Language* processor, bibliography management and style catalog were extracted and offloaded to the new [`kotlin-bibliographer`](https://github.com/quarkdown-labs/kotlin-bibliographer), Quarkdown's own Kotlin Multiplatform open source library.
 
+### Fixed
+
+#### Page size in `slides`
+
+In `slides` documents, the page size set via `.pageformat` now correctly defines the presentation's base resolution.
+
 ## [2.6.0] - 2026-09-08
 
 The highlights of this release include significant performance improvements, better portability thanks to reduced binary size and less external dependencies, and enhanced `slides` artifacts.
