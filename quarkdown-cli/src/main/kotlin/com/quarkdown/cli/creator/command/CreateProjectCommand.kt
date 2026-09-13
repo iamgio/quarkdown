@@ -165,6 +165,7 @@ class CreateProjectCommand : CliktCommand("create") {
         echo("  ${(green + bold)("Project created")} in ${bold(directory.canonicalPath)}")
         echo()
         echo("  ${dim("Compile:")}       ${cyan("quarkdown c $mainFile")}")
-        echo("  ${dim("Live preview:")}  ${cyan("quarkdown c $mainFile -p -w")}")
+        echo("  ${dim("Compile PDF:")}   ${cyan("quarkdown c $mainFile --pdf")}")
+        echo("  ${dim("Live preview:")}  ${cyan("quarkdown c $mainFile -pw")}")
     }
 }
