@@ -152,14 +152,16 @@ fun match(
     return NodeValue(InlineMarkdownContent(children))
 }
 
+private const val LOREM_IPSUM =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquet ut erat nec suscipit. Mauris " +
+        "vitae massa eu leo molestie ullamcorper. Fusce ornare neque quis faucibus laoreet. Pellentesque mauris " +
+        "sapien, pretium sed leo vitae, aliquam suscipit dolor. Aenean egestas congue rutrum. Nunc eget eros eu " +
+        "justo fringilla lobortis efficitur non est. In ultrices lectus ac iaculis cursus. Phasellus at luctus " +
+        "nibh, non porttitor ex. Vestibulum ligula metus, dignissim ac nisi non, tristique hendrerit purus."
+
 /**
  * @return a fixed Lorem Ipsum text.
  */
 @QFunction
 @Name("loremipsum")
-fun loremIpsum() =
-    object {}::class.java
-        .getResourceAsStream("/text/lorem-ipsum.txt")!!
-        .reader()
-        .readText()
-        .wrappedAsValue()
+fun loremIpsum() = LOREM_IPSUM.wrappedAsValue()

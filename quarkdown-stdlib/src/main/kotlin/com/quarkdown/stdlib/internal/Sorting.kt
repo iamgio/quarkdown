@@ -45,12 +45,3 @@ fun <T, R : Comparable<R>> Sequence<T>.sortedBy(
         }
     return this.sortedWith(finalComparator)
 }
-
-/**
- * A comparator that sorts alphanumeric strings in a human-friendly way.
- * For example, `$120` comes after `$30`, as opposed to the usual lexicographical order.
- *
- * Wrapped around the `alphanumeric-comparator` library.
- */
-object AlphanumericComparator : Comparator<CharSequence> by se.sawano.java.text
-    .AlphanumericComparator()

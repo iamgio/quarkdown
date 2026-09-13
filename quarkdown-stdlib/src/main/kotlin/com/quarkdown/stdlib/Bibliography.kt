@@ -77,7 +77,7 @@ fun bibliography(
     val resolvedStyle =
         CslBibliographyStyle.from(
             cslStyleName = style,
-            input = file.readBytes().inputStream(),
+            source = file.readText(),
             filename = file.name,
             locale = context.documentInfo.locale,
         )

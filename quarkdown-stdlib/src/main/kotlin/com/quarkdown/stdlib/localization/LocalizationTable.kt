@@ -1,5 +1,10 @@
-<!-- stdlib localization table -->
+package com.quarkdown.stdlib.localization
 
+/**
+ * The stdlib's own localization table, in Quarkdown syntax, loaded into the context right after the libraries are registered.
+ */
+internal const val LOCALIZATION_TABLE: String =
+    """
 .localization name:{std}
     - Chinese
       - bibliography: 参考文献
@@ -141,3 +146,4 @@
       - tip: Порада
       - todo: До роботи
       - warning: Попередження
+"""

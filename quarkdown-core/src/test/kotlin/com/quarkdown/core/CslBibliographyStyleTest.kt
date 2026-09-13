@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
  * Tests for CSL-based bibliography styles via [CslBibliographyStyle].
  */
 class CslBibliographyStyleTest {
-    private fun bibResource(name: String) = javaClass.getResourceAsStream("/bib/$name")!!
+    private fun bibResource(name: String) = javaClass.getResourceAsStream("/bib/$name")!!.reader().use { it.readText() }
 
     private fun cslStyle(styleName: String): CslBibliographyStyle =
         CslBibliographyStyle.from(styleName, bibResource("bibliography.bib"), "bibliography.bib")
