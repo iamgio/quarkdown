@@ -46,7 +46,7 @@ export class CodeHighlighter extends DocumentHandler {
         new CodeCopyButton().register();
     }
 
-    async onPostRendering() {
+    async onPreRendering() {
         hljs.highlightAll();
         this.features.forEach(feature => feature.apply());
     }
