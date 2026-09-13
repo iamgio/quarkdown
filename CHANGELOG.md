@@ -4,6 +4,10 @@
 
 ### Changed
 
+#### Tables split across pages repeat their header row
+
+In `paged` documents, when a table is split across two or more pages, each page now repeats the header row.
+
 #### [Log level via `--log-level`](https://quarkdown.com/wiki/cli-options)
 
 The log level is now set through the new `--log-level` option (`debug`, `info`, `warn`, `error`, or `none`) or the `QD_LOG_LEVEL` environment variable, with the option taking precedence. The old `-Dloglevel` JVM property is no longer read.
