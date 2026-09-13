@@ -1,7 +1,6 @@
 package com.quarkdown.cli.creator.content
 
 import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 
@@ -23,7 +22,7 @@ class DefaultProjectCreatorInitialContentSupplier : ProjectCreatorInitialContent
             OutputResourceGroup(
                 IMAGES_GROUP_NAME,
                 setOf(
-                    LazyOutputArtifact.internal(
+                    internalOutputArtifact(
                         RESOURCES_PATH + LOGO,
                         LOGO,
                         ArtifactType.AUTO,

@@ -5,9 +5,9 @@ import com.quarkdown.core.filesystem.FsEntry
 /**
  * Converts this entry to an [OutputResource] for the pipeline to output.
  *
- * Disk-backed entries are wrapped as a [FileReferenceOutputArtifact], so they are efficiently
- * copied (or symlinked) by reference. Virtual entries are materialized into in-memory artifacts,
- * walking directories recursively.
+ * The entry is wrapped by reference as a [FileReferenceOutputArtifact], without loading its content:
+ * at export time, disk-backed entries are efficiently copied (or symlinked),
+ * while virtual entries are materialized by reading them through the file system.
  *
  * @param name the output resource name. Defaults to this entry's [FsEntry.name]
  * @param useChecksumInvalidation whether disk-backed entries should also carry a checksum file,
@@ -19,19 +19,4 @@ fun FsEntry.toOutputResource(
     name: String = this.name,
     useChecksumInvalidation: Boolean = false,
     symlink: Boolean = false,
-): OutputResource =
-    when (val file = toFileOrNull()) {
-        null -> toInMemoryResource(name)
-        else -> FileReferenceOutputArtifact(name, file, useChecksumInvalidation, symlink)
-    }
-
-/**
- * Materializes a virtual entry into an in-memory [OutputResource]:
- * a [BinaryOutputArtifact] for a file, or an [OutputResourceGroup]
- * of recursively materialized children for a directory.
- */
-private fun FsEntry.toInMemoryResource(name: String): OutputResource =
-    when {
-        isDirectory -> OutputResourceGroup(name, children().map { it.toInMemoryResource(it.name) }.toSet())
-        else -> BinaryOutputArtifact(name, readBytes().toList(), ArtifactType.AUTO)
-    }
+): OutputResource = FileReferenceOutputArtifact(name, this, useChecksumInvalidation, symlink)

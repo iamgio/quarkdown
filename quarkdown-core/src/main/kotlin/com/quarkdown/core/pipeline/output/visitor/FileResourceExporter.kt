@@ -1,5 +1,6 @@
 package com.quarkdown.core.pipeline.output.visitor
 
+import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
@@ -89,7 +90,7 @@ class FileResourceExporter(
      * Exports a [FileReferenceOutputArtifact] to the output location.
      * If the source is a directory, it is copied recursively.
      *
-     * Resolution order:
+     * Resolution order for disk-backed sources:
      * 1. If [FileReferenceOutputArtifact.symlink] is set and the platform supports symbolic links,
      *    a link is created instead of copying.
      * 2. Otherwise, if [FileReferenceOutputArtifact.useChecksumInvalidation] is enabled, a sibling
@@ -97,6 +98,9 @@ class FileResourceExporter(
      *    checksum matches the stored value. This avoids redundant I/O for large assets (fonts,
      *    third-party libraries) that rarely change between builds.
      * 3. Otherwise, the source is copied unconditionally.
+     *
+     * A virtual (non-disk-backed) source is materialized by reading it through its file system,
+     * without symlinking or checksum invalidation.
      *
      * @return the copied file or directory
      */
@@ -106,34 +110,35 @@ class FileResourceExporter(
 
             target.parentFile?.mkdirs()
 
-            if (artifact.symlink && IOUtils.trySymlink(target.toPath(), artifact.file.toPath())) return@also
-
-            if (artifact.useChecksumInvalidation) {
-                copyWithChecksumInvalidation(artifact, target)
-            } else {
-                copyFileOrDirectory(artifact.file, target)
+            val source = artifact.file.toFileOrNull()
+            when {
+                source == null -> materialize(artifact.file, target)
+                artifact.symlink && IOUtils.trySymlink(target.toPath(), source.toPath()) -> {}
+                artifact.useChecksumInvalidation -> copyWithChecksumInvalidation(artifact.name, source, target)
+                else -> copyFileOrDirectory(source, target)
             }
         }
 
     private fun copyWithChecksumInvalidation(
-        artifact: FileReferenceOutputArtifact,
+        name: String,
+        source: File,
         target: File,
     ) {
         val checksumFile = target.resolveSibling("${target.name}.checksum")
-        val currentChecksum = IOUtils.computeChecksum(artifact.file)
+        val currentChecksum = IOUtils.computeChecksum(source)
         val storedChecksum = checksumFile.takeIf { it.isFile }?.readText()
 
         if (currentChecksum == storedChecksum && target.exists() && !Files.isSymbolicLink(target.toPath())) {
-            Log.debug { "Skipping '${artifact.name}': checksum unchanged ($currentChecksum)" }
+            Log.debug { "Skipping '$name': checksum unchanged ($currentChecksum)" }
             return
         }
 
         Log.debug {
-            "Copying '${artifact.name}': checksum changed " +
+            "Copying '$name': checksum changed " +
                 "(stored=${storedChecksum ?: "<none>"}, current=$currentChecksum)"
         }
 
-        copyFileOrDirectory(artifact.file, target)
+        copyFileOrDirectory(source, target)
         checksumFile.writeText(currentChecksum)
     }
 
@@ -145,6 +150,22 @@ class FileResourceExporter(
             source.copyRecursively(target, overwrite = true)
         } else {
             source.copyTo(target, overwrite = true)
+        }
+    }
+
+    /**
+     * Writes a virtual (non-disk-backed) [FsEntry] to [target] by reading it through its file system,
+     * recursing into directories.
+     */
+    private fun materialize(
+        entry: FsEntry,
+        target: File,
+    ) {
+        if (entry.isDirectory) {
+            target.mkdirs()
+            entry.children().forEach { materialize(it, File(target, it.name)) }
+        } else {
+            target.writeBytes(entry.readBytes())
         }
     }
 

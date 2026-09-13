@@ -2,6 +2,7 @@ package com.quarkdown.rendering.html.pdf
 
 import com.quarkdown.core.document.sub.getOutputFileName
 import com.quarkdown.core.pipeline.error.IOPipelineException
+import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
@@ -42,7 +43,9 @@ class PdfHtmlPostRendererDecorator(
             // In order to comply with the pipeline's contract, the output PDF is wrapped in an OutputResource.
             // It is deleted along with its temporary directory, and will be recreated in the output directory
             // by the pipeline's final process.
-            return setOf(BinaryOutputArtifact.fromFile(out))
+            return setOf(
+                BinaryOutputArtifact(out.name, out.readBytes().toList(), ArtifactType.AUTO),
+            )
         } finally {
             tempDirectory.deleteRecursively()
         }

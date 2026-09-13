@@ -58,7 +58,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.toc.TableOfContents
 import com.quarkdown.core.rendering.NodeRenderer
-import java.util.concurrent.ConcurrentLinkedQueue
+import com.quarkdown.core.util.ConcurrentQueue
 
 /**
  * Base class for node renderers that produce plain-textual output,
@@ -68,7 +68,7 @@ abstract class TextualNodeRenderer(
     context: Context,
 ) : NodeRenderer(context) {
     // Footnote definitions are queued and rendered as blocks at the end of every AstRoot.
-    private val queuedFootnoteDefinitions = ConcurrentLinkedQueue<FootnoteDefinition>()
+    private val queuedFootnoteDefinitions = ConcurrentQueue<FootnoteDefinition>()
 
     /**
      * Renders all children of this [NestableNode] and joins the results.

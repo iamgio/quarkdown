@@ -1,9 +1,8 @@
 package com.quarkdown.rendering.html
 
 import com.quarkdown.core.filesystem.VirtualFileSystem
-import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
+import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
-import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.rendering.html.post.resources.StaticAssetsPostRendererResource
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,7 +14,7 @@ import kotlin.test.assertTrue
  */
 class StaticAssetsPostRendererResourceTest {
     @Test
-    fun `virtual public directory is emitted as a resource group`() {
+    fun `virtual public directory is emitted by reference`() {
         val fs = VirtualFileSystem("/project")
         fs.write("public/robots.txt", "User-agent: *")
         fs.write("public/nested/CNAME", "example.com")
@@ -23,14 +22,11 @@ class StaticAssetsPostRendererResourceTest {
         val resources = mutableSetOf<OutputResource>()
         StaticAssetsPostRendererResource(fs.workingDirectory!!).includeTo(resources, rendered = "")
 
-        val group = resources.single()
-        assertIs<OutputResourceGroup>(group)
-        assertEquals(".", group.name)
-        val robots = group.resources.filterIsInstance<BinaryOutputArtifact>().single()
-        assertEquals("robots.txt", robots.name)
-        val nested = group.resources.filterIsInstance<OutputResourceGroup>().single()
-        assertEquals("nested", nested.name)
-        assertTrue(nested.resources.filterIsInstance<BinaryOutputArtifact>().any { it.name == "CNAME" })
+        val resource = resources.single()
+        assertIs<FileReferenceOutputArtifact>(resource)
+        assertEquals(".", resource.name)
+        assertEquals("User-agent: *", resource.file.resolve("robots.txt").readText())
+        assertEquals("example.com", resource.file.resolve("nested/CNAME").readText())
     }
 
     @Test

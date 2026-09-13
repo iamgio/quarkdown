@@ -1,7 +1,7 @@
 package com.quarkdown.core.media
 
 import com.quarkdown.core.filesystem.FileSystem
-import com.quarkdown.core.util.toURLOrNull
+import com.quarkdown.core.util.toUrlOrNull
 
 /**
  * A generic media that is yet to be resolved to a [Media] subclass.
@@ -23,7 +23,7 @@ data class ResolvableMedia(
      */
     private fun resolve(): Media {
         // If the path is a URL, it is remote.
-        path.toURLOrNull()?.let { return RemoteMedia(it) }
+        path.toUrlOrNull()?.let { return RemoteMedia(it) }
 
         val file = fileSystem.resolve(path)
 

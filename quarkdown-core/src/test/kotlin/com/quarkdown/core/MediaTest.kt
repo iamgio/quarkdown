@@ -303,13 +303,13 @@ class MediaTest {
     }
 
     @Test
-    fun `virtual local media exports as binary artifact`() {
+    fun `virtual local media exports as file reference artifact`() {
         val fs = VirtualFileSystem("/project")
         fs.writeBytes("icon.png", byteArrayOf(4, 5))
         val media = LocalMedia(fs.resolve("icon.png"))
         val resource = media.accept(MediaOutputResourceConverter("icon.png", UrlRemoteMediaFetcher))
-        assertIs<BinaryOutputArtifact>(resource)
-        assertEquals(listOf<Byte>(4, 5), resource.content)
+        assertIs<FileReferenceOutputArtifact>(resource)
+        assertEquals(listOf<Byte>(4, 5), resource.file.readBytes().toList())
     }
 
     @Test
@@ -321,7 +321,7 @@ class MediaTest {
 
     @Test
     fun `remote media exports through the injected fetcher`() {
-        val media = RemoteMedia(java.net.URL(REMOTE_IMAGE))
+        val media = RemoteMedia(io.ktor.http.Url(REMOTE_IMAGE))
         val fetcher = RemoteMediaFetcher { byteArrayOf(6, 7, 8) }
         val resource = media.accept(MediaOutputResourceConverter("image.jpg", fetcher))
         assertIs<BinaryOutputArtifact>(resource)
@@ -335,7 +335,7 @@ class MediaTest {
                 ReadOnlyMediaStorageOptions(
                     enableLocalMediaStorage = true,
                     enableRemoteMediaStorage = true,
-                    remoteMediaFetcher = { media -> media.url.toExternalForm().toByteArray() },
+                    remoteMediaFetcher = { media -> media.url.toString().toByteArray() },
                 ),
                 permissionHolder = localAndRemotePermissionHolder,
             )
