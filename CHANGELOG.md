@@ -26,6 +26,10 @@ The *Citation Style Language* processor, bibliography management and style catal
 
 ### Fixed
 
+#### Code blocks near page breaks no longer lose content
+
+In `paged` documents, a code block close to a page break could be rendered only partially, or not at all, because syntax highlighting was applied after page breaks were calculated.
+
 #### Page size in `slides`
 
 In `slides` documents, the page size set via `.pageformat` now correctly defines the presentation's base resolution.

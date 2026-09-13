@@ -33,7 +33,7 @@ describe('CodeHighlighter', () => {
     h.init();
     expect(addPlugin).toHaveBeenCalled();
 
-    await h.onPostRendering();
+    await h.onPreRendering();
 
     expect(highlightAll).toHaveBeenCalled();
     expect(lineNumbersBlockSync).toHaveBeenCalled();
