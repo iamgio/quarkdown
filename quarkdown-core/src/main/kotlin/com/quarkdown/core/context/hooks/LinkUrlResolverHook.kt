@@ -10,7 +10,7 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.core.filesystem.FsPaths
 import com.quarkdown.core.media.passthrough.MediaPassthrough
-import com.quarkdown.core.util.isURL
+import com.quarkdown.core.util.isUrl
 
 /**
  * Hook that resolves relative link paths based on their file system.
@@ -38,7 +38,7 @@ class LinkUrlResolverHook(
 
         if (fileSystem == null || fileSystem.isRoot) return // No need to resolve paths.
         if (MediaPassthrough.isPassthroughPath(link.url)) return // No need to resolve passthrough paths.
-        if (link.url.isURL || FsPaths.isAbsolute(link.url)) return // Not a relative path.
+        if (link.url.isUrl || FsPaths.isAbsolute(link.url)) return // Not a relative path.
 
         val resolved: FsEntry? =
             context.fileSystem

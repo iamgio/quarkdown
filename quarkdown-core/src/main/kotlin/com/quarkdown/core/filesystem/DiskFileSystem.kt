@@ -16,3 +16,9 @@ class DiskFileSystem(
         OkioBackend.SYSTEM,
         workingDirectory?.let { FsEntry(it.absoluteFile.toOkioPath(), OkioBackend.SYSTEM) },
     )
+
+/**
+ * Wraps this file as a disk-backed [FsEntry].
+ * The inverse of [FsEntry.toFileOrNull].
+ */
+fun File.toFsEntry(): FsEntry = FsEntry(toOkioPath(), OkioBackend.SYSTEM)

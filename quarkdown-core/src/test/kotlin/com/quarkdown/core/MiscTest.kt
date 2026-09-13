@@ -10,7 +10,6 @@ import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
@@ -49,29 +48,19 @@ class MiscTest {
                 }
         }
 
-        LazyOutputArtifact
-            .internal(
-                resource = "/media/icon.png",
-                name = "artif@ct 4.png",
-                type = ArtifactType.AUTO,
-                referenceClass = this::class,
-            ).run {
-                assertContentEquals(
-                    this::class.java.getResourceAsStream("/media/icon.png")!!.readBytes(),
-                    this
-                        .accept(exporter)
-                        .also { assertEquals("artif@ct-4.png", it.name) }
-                        .readBytes(),
-                )
-            }
-
-        LazyOutputArtifact
-            .internalOrNull(
-                resource = "nonexisting.png",
-                name = "artifact.png",
-                type = ArtifactType.AUTO,
-                referenceClass = this::class,
-            ).let { assertNull(it) }
+        LazyOutputArtifact(
+            name = "artif@ct 4.png",
+            content = { javaClass.getResourceAsStream("/media/icon.png")!!.readBytes().toList() },
+            type = ArtifactType.AUTO,
+        ).run {
+            assertContentEquals(
+                this::class.java.getResourceAsStream("/media/icon.png")!!.readBytes(),
+                this
+                    .accept(exporter)
+                    .also { assertEquals("artif@ct-4.png", it.name) }
+                    .readBytes(),
+            )
+        }
 
         val group =
             OutputResourceGroup(
@@ -87,10 +76,9 @@ class MiscTest {
                             BinaryOutputArtifact("art*fact/9", "Quarkdown".toByteArray().toList(), ArtifactType.JAVASCRIPT),
                         ),
                     ),
-                    LazyOutputArtifact.internal(
-                        referenceClass = this::class,
-                        resource = "/media/banner.png",
+                    LazyOutputArtifact(
                         name = "artif@ct 10.png",
+                        content = { javaClass.getResourceAsStream("/media/banner.png")!!.readBytes().toList() },
                         type = ArtifactType.AUTO,
                     ),
                     BinaryOutputArtifact(

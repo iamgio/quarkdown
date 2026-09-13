@@ -1,12 +1,12 @@
 package com.quarkdown.core.lexer.regex.pattern
 
-import java.util.concurrent.ConcurrentHashMap
+import com.quarkdown.core.util.ConcurrentCache
 
 /**
  * Cache for compiled [Regex] patterns, keyed by their joined string representation.
  * Avoids recompiling the same regex patterns on every lexer instantiation.
  */
-private val groupifyCache = ConcurrentHashMap<String, Regex>()
+private val groupifyCache = ConcurrentCache<String, Regex>()
 
 /**
  * Groups a sequence of patterns into a single [Regex] where every capture group is identified by its token type (name).

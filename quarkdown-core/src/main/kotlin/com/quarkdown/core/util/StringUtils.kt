@@ -146,13 +146,18 @@ fun String.sanitizeAsIdentifier(): String {
 }
 
 /**
- * @return [this] string with line separators replaced with `\n`,
- *         or the string itself if `\n` is already the line separator
+ * @return [this] string with CRLF and CR line separators replaced with LF (`\n`),
+ *         regardless of the underlying platform,
+ *         or the string itself if it contains no CR characters
  */
 fun CharSequence.normalizeLineSeparators(): CharSequence =
-    when (val separator = System.lineSeparator()) {
-        "\n" -> this
-        else -> this.toString().replace(separator, "\n")
+    when {
+        '\r' !in this -> this
+        else ->
+            this
+                .toString()
+                .replace("\r\n", "\n")
+                .replace('\r', '\n')
     }
 
 /**
