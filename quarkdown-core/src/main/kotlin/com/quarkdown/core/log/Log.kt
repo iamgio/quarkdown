@@ -4,8 +4,12 @@ import co.touchlab.kermit.LogWriter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import co.touchlab.kermit.mutableLoggerConfigInit
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Tag that marks success messages, granting them a highlighted format.
@@ -20,7 +24,21 @@ private object QuarkdownLogWriter : LogWriter() {
     private const val ANSI_GREEN = "\u001B[32m"
     private const val ANSI_RESET = "\u001B[0m"
 
-    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    private val timeFormat =
+        LocalTime.Format {
+            hour()
+            char(':')
+            minute()
+        }
+
+    @OptIn(ExperimentalTime::class)
+    private fun currentTime(): String =
+        timeFormat.format(
+            Clock.System
+                .now()
+                .toLocalDateTime(TimeZone.currentSystemDefault())
+                .time,
+        )
 
     override fun log(
         severity: Severity,
@@ -35,8 +53,7 @@ private object QuarkdownLogWriter : LogWriter() {
                 }
 
                 tag == SUCCESS_TAG -> {
-                    val time = LocalTime.now().format(timeFormatter)
-                    println("$ANSI_WHITE[$time]$ANSI_RESET ${ANSI_GREEN}Success$ANSI_RESET $message")
+                    println("$ANSI_WHITE[${currentTime()}]$ANSI_RESET ${ANSI_GREEN}Success$ANSI_RESET $message")
                 }
 
                 severity == Severity.Warn -> {

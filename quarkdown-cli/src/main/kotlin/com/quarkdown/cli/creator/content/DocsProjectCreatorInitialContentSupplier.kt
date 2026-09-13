@@ -1,7 +1,6 @@
 package com.quarkdown.cli.creator.content
 
 import com.quarkdown.core.pipeline.output.ArtifactType
-import com.quarkdown.core.pipeline.output.LazyOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 
 private const val RESOURCES_PATH = "/creator/docs/"
@@ -18,7 +17,7 @@ class DocsProjectCreatorInitialContentSupplier : ProjectCreatorInitialContentSup
     override fun createResources(): Set<OutputResource> =
         RESOURCES
             .map { page ->
-                LazyOutputArtifact.internal(
+                internalOutputArtifact(
                     RESOURCES_PATH + page,
                     page,
                     ArtifactType.AUTO,

@@ -2,9 +2,7 @@ package com.quarkdown.installlayout
 
 import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.filesystem.VirtualFileSystem
-import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
-import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -56,13 +54,13 @@ class InstallLayoutTest {
     }
 
     @Test
-    fun `virtual entry materializes into in-memory resources`() {
+    fun `virtual entry is referenced by entry`() {
         val scripts = virtualLayout().htmlResources.scripts
-        val resource = assertIs<OutputResourceGroup>(scripts.asOutputResource())
+        val resource = assertIs<FileReferenceOutputArtifact>(scripts.asOutputResource())
         assertEquals("script", resource.name)
-        val artifact = assertIs<BinaryOutputArtifact>(resource.resources.single())
-        assertEquals("quarkdown.min.js", artifact.name)
-        assertEquals("// runtime", artifact.content.toByteArray().decodeToString())
+        val script = resource.file.children().single()
+        assertEquals("quarkdown.min.js", script.name)
+        assertEquals("// runtime", script.readText())
     }
 
     @Test
@@ -73,7 +71,7 @@ class InstallLayoutTest {
             val layout = InstallLayout(InstallLayoutDirectory(DiskFileSystem().resolve(directory.absolutePath)))
             assertTrue(layout.quarkdownLibraries.exists())
             val resource = assertIs<FileReferenceOutputArtifact>(layout.quarkdownLibraries.asOutputResource())
-            assertEquals(directory.resolve("qd"), resource.file)
+            assertEquals(directory.resolve("qd"), resource.file.toFileOrNull())
         } finally {
             directory.deleteRecursively()
         }

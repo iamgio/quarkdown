@@ -22,5 +22,5 @@ class SanitizedMediaNameProvider : MediaNameProviderStrategy {
         }.sanitize()
 
     // URLs are already unique, and they don't need an additional identifier.
-    override fun visit(media: RemoteMedia) = media.url.toExternalForm().sanitize()
+    override fun visit(media: RemoteMedia) = media.url.toString().sanitize()
 }

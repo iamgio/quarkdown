@@ -1,5 +1,7 @@
 package com.quarkdown.core
 
+import com.quarkdown.core.filesystem.VirtualFileSystem
+import com.quarkdown.core.filesystem.toFsEntry
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.BinaryOutputArtifact
 import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
@@ -73,7 +75,7 @@ class FileResourceExporterTest {
             val sourceFile = File(source, "style.css").also { it.writeText("body {}") }
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "style.css", file = sourceFile)
+            val artifact = FileReferenceOutputArtifact(name = "style.css", file = sourceFile.toFsEntry())
             val result = artifact.accept(FileResourceExporter(output))
 
             assertEquals("style.css", result.name)
@@ -89,8 +91,35 @@ class FileResourceExporterTest {
             File(source, "sub/b.js").writeText("var b;")
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib", file = source)
+            val artifact = FileReferenceOutputArtifact(name = "lib", file = source.toFsEntry())
             val result = artifact.accept(FileResourceExporter(output))
+
+            assertTrue(result.isDirectory)
+            assertEquals("var a;", File(result, "a.js").readText())
+            assertEquals("var b;", File(result, "sub/b.js").readText())
+        }
+
+    @Test
+    fun `file reference materializes a virtual file`() =
+        withTempDir { dir ->
+            val fs = VirtualFileSystem("/project")
+            fs.write("style.css", "body {}")
+
+            val artifact = FileReferenceOutputArtifact(name = "style.css", file = fs.resolve("style.css"))
+            val result = artifact.accept(FileResourceExporter(dir))
+
+            assertEquals("body {}", result.readText())
+        }
+
+    @Test
+    fun `file reference materializes a virtual directory recursively`() =
+        withTempDir { dir ->
+            val fs = VirtualFileSystem("/project")
+            fs.write("lib/a.js", "var a;")
+            fs.write("lib/sub/b.js", "var b;")
+
+            val artifact = FileReferenceOutputArtifact(name = "lib", file = fs.resolve("lib"))
+            val result = artifact.accept(FileResourceExporter(dir))
 
             assertTrue(result.isDirectory)
             assertEquals("var a;", File(result, "a.js").readText())
@@ -149,7 +178,8 @@ class FileResourceExporterTest {
             File(source, "lib.js").writeText("console.log('v1');")
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = File(source, "lib.js"), useChecksumInvalidation = true)
+            val artifact =
+                FileReferenceOutputArtifact(name = "lib.js", file = File(source, "lib.js").toFsEntry(), useChecksumInvalidation = true)
 
             // First export: file is copied, checksum is written.
             artifact.accept(FileResourceExporter(output))
@@ -175,7 +205,7 @@ class FileResourceExporterTest {
             val sourceFile = File(source, "lib.js").also { it.writeText("v1") }
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile, useChecksumInvalidation = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile.toFsEntry(), useChecksumInvalidation = true)
 
             // First export.
             artifact.accept(FileResourceExporter(output))
@@ -199,7 +229,7 @@ class FileResourceExporterTest {
             File(source, "a.woff2").writeText("font-a")
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "fonts", file = source, useChecksumInvalidation = true)
+            val artifact = FileReferenceOutputArtifact(name = "fonts", file = source.toFsEntry(), useChecksumInvalidation = true)
 
             // First export.
             artifact.accept(FileResourceExporter(output))
@@ -225,7 +255,7 @@ class FileResourceExporterTest {
             val sourceFile = File(source, "lib.js").also { it.writeText("content") }
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile, useChecksumInvalidation = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile.toFsEntry(), useChecksumInvalidation = true)
 
             // First export.
             artifact.accept(FileResourceExporter(output))
@@ -248,7 +278,7 @@ class FileResourceExporterTest {
             File(source, "lib.js").writeText("hello")
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = File(source, "lib.js"))
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = File(source, "lib.js").toFsEntry())
 
             artifact.accept(FileResourceExporter(output))
             assertTrue(File(output, "lib.js").isFile)
@@ -289,7 +319,7 @@ class FileResourceExporterTest {
             val sourceFile = File(source, "lib.js").also { it.writeText("var v = 1;") }
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile.toFsEntry(), symlink = true)
             val result = artifact.accept(FileResourceExporter(output))
 
             assertTrue(Files.isSymbolicLink(result.toPath()))
@@ -307,7 +337,7 @@ class FileResourceExporterTest {
             File(source, "sub/b.js").writeText("var b;")
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib", file = source, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib", file = source.toFsEntry(), symlink = true)
             val result = artifact.accept(FileResourceExporter(output))
 
             assertTrue(Files.isSymbolicLink(result.toPath()))
@@ -325,7 +355,7 @@ class FileResourceExporterTest {
             val sourceFile = File(source, "lib.js").also { it.writeText("v1") }
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile.toFsEntry(), symlink = true)
             val result = artifact.accept(FileResourceExporter(output))
 
             assertEquals("v1", result.readText())
@@ -346,7 +376,7 @@ class FileResourceExporterTest {
             val output = File(dir, "out").also { it.mkdir() }
             File(output, "lib.js").writeText("stale copy")
 
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile.toFsEntry(), symlink = true)
             val result = artifact.accept(FileResourceExporter(output))
 
             assertTrue(Files.isSymbolicLink(result.toPath()))
@@ -368,7 +398,7 @@ class FileResourceExporterTest {
 
             val source = File(dir, "src").also { it.mkdir() }
             val sourceFile = File(source, "lib.js").also { it.writeText("fresh") }
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile.toFsEntry(), symlink = true)
             val result = artifact.accept(FileResourceExporter(output))
 
             assertTrue(Files.isSymbolicLink(result.toPath()))
@@ -392,7 +422,7 @@ class FileResourceExporterTest {
             val source = File(dir, "src").also { it.mkdir() }
             File(source, "a.js").writeText("new-a")
 
-            val artifact = FileReferenceOutputArtifact(name = "lib", file = source, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib", file = source.toFsEntry(), symlink = true)
             val result = artifact.accept(FileResourceExporter(output))
 
             assertTrue(Files.isSymbolicLink(result.toPath()))
@@ -419,7 +449,7 @@ class FileResourceExporterTest {
             assertTrue(Files.isSymbolicLink(link.toPath()))
 
             // Re-run the visitor with the same symlink artifact, simulating a second preview build.
-            val artifact = FileReferenceOutputArtifact(name = "lib", file = protectedSource, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib", file = protectedSource.toFsEntry(), symlink = true)
             val result = artifact.accept(FileResourceExporter(output))
 
             assertTrue(Files.isSymbolicLink(result.toPath()))
@@ -449,7 +479,7 @@ class FileResourceExporterTest {
             val source = File(dir, "src").also { it.mkdir() }
             File(source, "new.js").writeText("new content")
 
-            val artifact = FileReferenceOutputArtifact(name = "lib", file = source, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib", file = source.toFsEntry(), symlink = true)
             artifact.accept(FileResourceExporter(output))
 
             // The protected source must be untouched.
@@ -465,7 +495,7 @@ class FileResourceExporterTest {
             val sourceFile = File(source, "lib.js").also { it.writeText("v1") }
 
             val output = File(dir, "out").also { it.mkdir() }
-            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile, symlink = true)
+            val artifact = FileReferenceOutputArtifact(name = "lib.js", file = sourceFile.toFsEntry(), symlink = true)
 
             // First export creates the link.
             val result = artifact.accept(FileResourceExporter(output))
@@ -502,13 +532,13 @@ class FileResourceExporterTest {
             val output = File(dir, "out").also { it.mkdir() }
 
             // First export points at A.
-            FileReferenceOutputArtifact(name = "lib.js", file = fileA, symlink = true)
+            FileReferenceOutputArtifact(name = "lib.js", file = fileA.toFsEntry(), symlink = true)
                 .accept(FileResourceExporter(output))
             val result = File(output, "lib.js")
             assertEquals("from A", result.readText())
 
             // Second export points at B: the prior link must be replaced, not reused.
-            FileReferenceOutputArtifact(name = "lib.js", file = fileB, symlink = true)
+            FileReferenceOutputArtifact(name = "lib.js", file = fileB.toFsEntry(), symlink = true)
                 .accept(FileResourceExporter(output))
             assertTrue(Files.isSymbolicLink(result.toPath()))
             assertEquals("from B", result.readText())
@@ -526,7 +556,7 @@ class FileResourceExporterTest {
             val artifact =
                 FileReferenceOutputArtifact(
                     name = "lib.js",
-                    file = sourceFile,
+                    file = sourceFile.toFsEntry(),
                     useChecksumInvalidation = true,
                     symlink = true,
                 )

@@ -3,7 +3,6 @@ package com.quarkdown.core.log
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.function.library.Library
-import com.quarkdown.core.lexer.Token
 
 /**
  * Utilities to log prettier debugging data.
@@ -13,25 +12,6 @@ object DebugFormatter {
         replace("\\R".toRegex(), "\\\\n")
             .replace("\t", "\\t")
             .replace("    ", "\\t")
-
-    /**
-     * Pretty-formats a list of tokens.
-     * @param tokens tokens to format
-     * @return formatted string
-     */
-    fun formatTokens(tokens: Iterable<Token>): String {
-        val format = "%-25s %-20s %s" // Columns
-
-        return tokens.joinToString(separator = "\n") { token ->
-            val type = "type: ${token.javaClass.simpleName.removeSuffix("Token")}"
-            val pos = "pos: ${token.data.position}"
-            val content = token.data.text.replaceEscapeCharacters()
-
-            val text = "text: $content"
-
-            format.format(type, pos, text)
-        }
-    }
 
     /**
      * Pretty-formats an AST node.

@@ -1,7 +1,6 @@
 package com.quarkdown.core.property
 
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
+import com.quarkdown.core.util.ConcurrentCache
 
 /**
  * Associations between a key of type [T] and a [PropertyContainer].
@@ -20,7 +19,7 @@ import java.util.concurrent.ConcurrentMap
  * @see Property
  * @see com.quarkdown.core.ast.attributes.AstAttributes.properties for an example of usage
  */
-interface AssociatedProperties<T, V> {
+interface AssociatedProperties<T : Any, V> {
     /**
      * Retrieves the [PropertyContainer] associated with the given key, also registering an empty new one to it if it doesn't exist.
      * @param key the key to retrieve the [PropertyContainer] for
@@ -32,8 +31,8 @@ interface AssociatedProperties<T, V> {
 /**
  * Mutable implementation of [AssociatedProperties].
  */
-class MutableAssociatedProperties<T, V> : AssociatedProperties<T, V> {
-    private val properties: ConcurrentMap<T, MutablePropertyContainer<V>> = ConcurrentHashMap()
+class MutableAssociatedProperties<T : Any, V> : AssociatedProperties<T, V> {
+    private val properties = ConcurrentCache<T, MutablePropertyContainer<V>>()
 
-    override fun of(key: T): MutablePropertyContainer<V> = properties.computeIfAbsent(key) { MutablePropertyContainer() }
+    override fun of(key: T): MutablePropertyContainer<V> = properties.getOrPut(key) { MutablePropertyContainer() }
 }
