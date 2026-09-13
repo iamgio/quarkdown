@@ -52,9 +52,8 @@ including `ieee` (default), `apa`, `chicago-author-date`, `nature`, `modern-lang
 .bibliography {bibliography.bib} style:{apa}
 ```
 
-.collapse {Full list of supported styles}
-    .code lang:{text} linenumbers:{no}
-        .read {../quarkdown-core/csl-styles.txt}
+The full list of supported styles is available in the
+[style catalog](https://github.com/quarkdown-labs/kotlin-bibliographer/tree/main/styles).
 
 ## Title
 

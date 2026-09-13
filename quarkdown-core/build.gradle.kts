@@ -4,8 +4,6 @@ plugins {
     `java-test-fixtures`
 }
 
-val cslStyles: Configuration = configurations.create("cslStyles")
-
 dependencies {
     sequenceOf(kotlin("test"), "org.assertj:assertj-core:3.27.6").forEach {
         testFixturesImplementation(it)
@@ -23,57 +21,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation("io.ktor:ktor-http:3.5.2")
     implementation("com.github.ajalt.colormath:colormath:3.7.0")
-    implementation("com.quarkdown.bibliographer:bibliographer:0.3.0")
-    cslStyles("org.citationstyles:styles:26.8")
+    implementation("com.quarkdown.bibliographer:bibliographer:0.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.2")
-}
-
-// Extracts only the CSL style files listed in csl-styles.txt from the full styles collection, to reduce the bundle size.
-val extractCslStyles =
-    tasks.register("extractCslStyles") {
-        val styleListFile = file("csl-styles.txt")
-        val outputDir = layout.buildDirectory.dir("generated/csl-styles")
-
-        inputs.files(cslStyles)
-        inputs.file(styleListFile)
-        outputs.dir(outputDir)
-
-        doLast {
-            val outDir = outputDir.get().asFile
-            outDir.deleteRecursively()
-            outDir.mkdirs()
-
-            val styleNames =
-                styleListFile
-                    .readLines()
-                    .map { it.trim() }
-                    .filter { it.isNotBlank() }
-                    .toSet()
-
-            project.copy {
-                from(project.zipTree(cslStyles.singleFile))
-                into(outDir)
-                include(styleNames.map { "$it.csl" })
-            }
-
-            // Verify all listed styles were found.
-            val extracted = outDir.listFiles()?.map { it.nameWithoutExtension }?.toSet() ?: emptySet()
-            val missing = styleNames - extracted
-            if (missing.isNotEmpty()) {
-                error("CSL styles not found in styles JAR: ${missing.joinToString()}")
-            }
-        }
-    }
-
-tasks.test {
-    // Lets tests read CSL styles from the extraction output.
-    dependsOn(extractCslStyles)
-    systemProperty(
-        "quarkdown.test.csl.styles.path",
-        layout.buildDirectory
-            .dir("generated/csl-styles")
-            .get()
-            .asFile
-            .absolutePath,
-    )
 }
