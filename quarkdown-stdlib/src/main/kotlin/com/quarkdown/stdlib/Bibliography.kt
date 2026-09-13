@@ -16,7 +16,6 @@ import com.quarkdown.core.function.value.NodeValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.util.trimEntries
-import com.quarkdown.installlayout.InstallLayout
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
@@ -27,38 +26,14 @@ import com.quarkdown.processor.annotation.QModule
 internal const val DEFAULT_CSL_STYLE = "ieee"
 
 /**
- * Pattern of a valid CSL style name: a plain file name with no path separators.
- */
-private val CSL_STYLE_NAME_REGEX = Regex("""[\w.-]+""")
-
-/**
- * Reads the content of the CSL style definition named [style] from the install layout's `csl/` directory.
- * @param style the CSL style name (e.g. `apa`, `ieee`)
- * @return the serialized XML content of the style definition
- * @throws IllegalArgumentException if no style with such name is bundled
- */
-private fun cslStyleSource(style: String): String {
-    fun notFound(): String =
-        "Bibliography style '$style' not found. " +
-            "See https://quarkdown.com/wiki/bibliography for a list of available styles."
-
-    require(CSL_STYLE_NAME_REGEX.matches(style)) { notFound() }
-
-    val styleFile = InstallLayout.get.cslStyles.resolveFile("$style.csl")
-    require(styleFile.exists()) { notFound() }
-
-    return styleFile.file.readText()
-}
-
-/**
  * Generates a bibliography from a bibliography file.
  *
  * Supported formats include [BibTeX](https://www.bibtex.org) (`.bib`),
  * CSL JSON, YAML, EndNote, and RIS.
  *
  * The bibliography is formatted using a [CSL](https://citationstyles.org) style definition,
- * powered by [kotlin-bibliographer](https://github.com/quarkdown-labs/kotlin-bibliographer).
- * This enables support for a curated selection of citation styles from the
+ * powered by [kotlin-bibliographer](https://github.com/quarkdown-labs/kotlin-bibliographer),
+ * which embeds a curated selection of citation styles from the
  * [CSL Style Repository](https://github.com/citation-style-language/styles).
  *
  * Example:
@@ -67,8 +42,9 @@ private fun cslStyleSource(style: String): String {
  * ```
  *
  * @param path path to the bibliography file, with extension
- * @param style CSL (https://citationstyles.org) style identifier (e.g. `apa`, `ieee`, `chicago-author-date`)
- *              from Quarkdown's selection. See the wiki page for a list of supported styles.
+ * @param style CSL (https://citationstyles.org) style identifier (e.g. `apa`, `ieee`, `chicago-author-date`).
+ *              See https://github.com/quarkdown-labs/kotlin-bibliographer/tree/main/styles
+ *              for the available styles.
  * @param title title of the bibliography. If unset, the default localized title is used
  * @param breakPage whether the heading preceding the bibliography triggers an automatic page break.
  *                  Enabled by default.
@@ -101,7 +77,6 @@ fun bibliography(
     val resolvedStyle =
         CslBibliographyStyle.from(
             cslStyleName = style,
-            cslStyleSource = cslStyleSource(style),
             input = file.readBytes().inputStream(),
             filename = file.name,
             locale = context.documentInfo.locale,

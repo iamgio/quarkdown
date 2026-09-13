@@ -11,16 +11,16 @@ import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.localization.Locale
-import java.io.IOException
 import java.io.InputStream
 
 /**
  * A [BibliographyStyle] backed by a [CSL](https://citationstyles.org) style definition,
  * powered by [kotlin-bibliographer](https://github.com/quarkdown-labs/kotlin-bibliographer).
  *
- * This enables support for a curated selection of citation styles from the
- * [CSL Style Repository](https://github.com/citation-style-language/styles),
- * including BibTeX, CSL JSON, YAML, EndNote, and RIS bibliography sources.
+ * This enables support for the bibliographer's
+ * [style catalog](https://github.com/quarkdown-labs/kotlin-bibliographer/tree/main/styles),
+ * a curated selection from the [CSL Style Repository](https://github.com/citation-style-language/styles),
+ * with BibTeX, CSL JSON, YAML, EndNote, and RIS bibliography sources.
  *
  * Citation label and entry content formatting are delegated to the [bibliographer],
  * whose platform-agnostic token output is converted to Quarkdown AST nodes
@@ -78,17 +78,18 @@ class CslBibliographyStyle(
         /**
          * Reads a bibliography file and creates a [CslBibliographyStyle].
          * Supports BibTeX (`.bib`), CSL JSON, YAML, EndNote, and RIS formats.
-         * @param cslStyleName the CSL style name, used for error reporting
-         * @param cslStyleSource the serialized XML content of the CSL style definition
+         * @param cslStyleName the CSL style name, from the bibliographer's
+         *                     [style catalog](https://github.com/quarkdown-labs/kotlin-bibliographer/tree/main/styles)
          * @param input the input stream for the bibliography source
          * @param filename the filename hint for format detection
          * @param locale optional [Locale] for localized terms (e.g. "and"/"und", month names).
          *               When `null`, the style's default locale is used
          * @return a new [CslBibliographyStyle]
+         * @throws IllegalArgumentException if the style name is not in the catalog,
+         *                                  or the bibliography source cannot be loaded
          */
         fun from(
             cslStyleName: String,
-            cslStyleSource: String,
             input: InputStream,
             filename: String,
             locale: Locale? = null,
@@ -102,14 +103,15 @@ class CslBibliographyStyle(
             val bibliographer =
                 try {
                     Bibliographer(
-                        style = cslStyleSource,
+                        style = cslStyleName,
                         source = BibliographySource(input.reader().use { it.readText() }, format),
                         locale = locale?.tag,
                     )
-                } catch (e: IOException) {
+                } catch (e: IllegalArgumentException) {
                     throw IllegalArgumentException(
                         "Bibliography style '$cslStyleName' failed to load. " +
-                            "See https://quarkdown.com/wiki/bibliography for a list of available styles.",
+                            "See https://github.com/quarkdown-labs/kotlin-bibliographer/tree/main/styles " +
+                            "for the available styles.",
                         e,
                     )
                 }

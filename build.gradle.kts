@@ -160,10 +160,6 @@ val installLibLayout: CopySpec.() -> Unit = {
     into("skills") {
         from(rootProject.file("skills"))
     }
-    // CSL citation style definitions for bibliographies, extracted by :quarkdown-core:extractCslStyles.
-    into("csl") {
-        from(project(":quarkdown-core").layout.buildDirectory.dir("generated/csl-styles"))
-    }
 }
 
 // Bundled JVM runtime
@@ -437,22 +433,21 @@ distributions.main {
 val assembleDevLib =
     tasks.register<Sync>("assembleDevLib") {
         dependsOn(":quarkdown-html:bundleThirdParty")
-        dependsOn(":quarkdown-core:extractCslStyles")
         into(layout.buildDirectory.dir("dev-lib"))
         installLibLayout()
     }
 
 tasks.installDist {
-    dependsOn(quarkdocGenerate, bundleRuntime, ":quarkdown-core:extractCslStyles")
+    dependsOn(quarkdocGenerate, bundleRuntime)
 }
 
 tasks.distZip {
-    dependsOn(quarkdocGenerate, bundleRuntime, ":quarkdown-core:extractCslStyles")
+    dependsOn(quarkdocGenerate, bundleRuntime)
     archiveVersion.set("")
 }
 
 tasks.distTar {
-    dependsOn(quarkdocGenerate, bundleRuntime, ":quarkdown-core:extractCslStyles")
+    dependsOn(quarkdocGenerate, bundleRuntime)
     archiveVersion.set("")
 }
 
