@@ -4,6 +4,14 @@
 
 ### Changed
 
+#### [Log level via `--log-level`](https://quarkdown.com/wiki/cli-options)
+
+The log level is now set through the new `--log-level` option (`debug`, `info`, `warn`, `error`, or `none`) or the `QD_LOG_LEVEL` environment variable, with the option taking precedence. The old `-Dloglevel` JVM property is no longer read.
+
+```shell
+quarkdown --log-level debug c main.qd
+```
+
 #### PDF compilation hint in `quarkdown create`
 
 After creating a new project via [`quarkdown create`](https://quarkdown.com/wiki/creating-a-project), the summary now also suggests the command to compile the document to PDF.

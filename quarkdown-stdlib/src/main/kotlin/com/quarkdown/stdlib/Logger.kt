@@ -16,7 +16,7 @@ fun log(message: String) = VoidValue.also { Log.info(message) }
 
 /**
  * Logs a message (debug level) to the standard output.
- * Note that `-Dloglevel=debug` must be enabled to see debug messages.
+ * Note that the `debug` log level must be enabled (via the CLI's `--log-level debug` option) to see debug messages.
  * @param message message to log
  */
 @QFunction

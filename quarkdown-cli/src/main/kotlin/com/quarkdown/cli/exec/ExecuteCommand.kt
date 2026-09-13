@@ -20,6 +20,7 @@ import com.quarkdown.core.document.sub.SubdocumentOutputNaming
 import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.log.Log
+import com.quarkdown.core.log.LogLevel
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
@@ -295,7 +296,7 @@ abstract class ExecuteCommand(
 
         // If pipe mode is enabled, all logging is disabled, so that only the rendered content is printed to stdout.
         if (cliOptions.pipe) {
-            Log.disableLogging()
+            Log.level = LogLevel.NONE
         }
 
         // If file watching is enabled, a file change triggers the pipeline execution again.
