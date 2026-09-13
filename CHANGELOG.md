@@ -4,6 +4,10 @@
 
 ### Changed
 
+#### PDF compilation hint in `quarkdown create`
+
+After creating a new project via [`quarkdown create`](https://quarkdown.com/wiki/creating-a-project), the summary now also suggests the command to compile the document to PDF.
+
 #### [dev] Bibliography management delegated to `kotlin-bibliographer`
 
 The *Citation Style Language* processor, bibliography management and style catalog were extracted and offloaded to the new [`kotlin-bibliographer`](https://github.com/quarkdown-labs/kotlin-bibliographer), Quarkdown's own Kotlin Multiplatform open source library.
