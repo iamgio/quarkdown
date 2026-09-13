@@ -4,27 +4,27 @@ import com.quarkdown.lsp.diagnostics.AbstractFunctionCallDiagnosticsSupplier
 import com.quarkdown.lsp.diagnostics.SimpleDiagnostic
 import com.quarkdown.lsp.diagnostics.cause.DiagnosticCause
 import com.quarkdown.lsp.diagnostics.cause.UnallowedValueDiagnosticCause
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.util.getParameterAtSourceIndex
 import com.quarkdown.quarkdoc.reader.DocsParameter
-import java.io.File
 
 /**
  * A diagnostics supplier that checks function parameter values against their allowed values as specified in the documentation.
- * @param docsDirectory the directory where function documentation files are stored
+ * @param docs the source of the documentation index
  */
 class FunctionParameterValueDiagnosticsSupplier(
-    private val docsDirectory: File,
+    private val docs: DocsIndexSource,
 ) : AbstractFunctionCallDiagnosticsSupplier() {
     override fun getDiagnostics(
         functionName: String,
         tokens: List<FunctionCallToken>,
         call: FunctionCall,
     ): List<SimpleDiagnostic> {
-        val function = getDocumentation(this.docsDirectory, functionName) ?: return emptyList()
+        val function = getDocumentation(this.docs, functionName) ?: return emptyList()
         val valueTokens = call.tokens.filter { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_VALUE }
         val diagnostics = mutableListOf<SimpleDiagnostic>()
 

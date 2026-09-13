@@ -4,22 +4,22 @@ import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.cache.functionCalls
 import com.quarkdown.lsp.completion.CompletionSupplier
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.model.Completion
 import com.quarkdown.lsp.model.CursorPosition
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.util.toOffset
-import java.io.File
 
 /**
  * Provides completion items for function calls by scanning documentation files.
- * @param docsDirectory the directory containing the documentation files to extract function data from
+ * @param docs the source of the documentation index to extract function data from
  * @see com.quarkdown.lsp.completion.function.parameter
  * @see com.quarkdown.lsp.completion.function.name
  */
 abstract class AbstractFunctionCompletionSupplier(
-    protected val docsDirectory: File,
+    protected val docs: DocsIndexSource,
 ) : CompletionSupplier {
     /**
      * Generates completion items based on the provided function data and call context.
@@ -63,7 +63,7 @@ abstract class AbstractFunctionCompletionSupplier(
                 ?: return emptyList()
 
         // Looking up the function data from the documentation to extract available parameters to complete.
-        val function: DocumentedFunction? = call.getDocumentation(docsDirectory)
+        val function: DocumentedFunction? = call.getDocumentation(docs)
 
         return getCompletionItems(call, function, transformedIndex, index)
     }

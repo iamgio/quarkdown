@@ -3,6 +3,8 @@ package com.quarkdown.lsp
 import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
 import com.quarkdown.lsp.completion.CompletionSuppliersFactory
 import com.quarkdown.lsp.diagnostics.DiagnosticsSuppliersFactory
+import com.quarkdown.lsp.documentation.DirectoryDocsIndexSource
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.highlight.SemanticTokensSuppliersFactory
 import com.quarkdown.lsp.highlight.TokenType
 import com.quarkdown.lsp.hover.HoverSuppliersFactory
@@ -75,14 +77,20 @@ class QuarkdownLanguageServer(
      * The directory containing the documentation files, if available.
      * This is located in the Quarkdown distribution.
      */
-    val docsDirectory: File?
+    private val docsDirectory: File?
         get() = quarkdownDirectory?.resolve("docs")?.takeIf { it.isDirectory }
 
     /**
-     * @return the documentation directory, or throws an exception if it's not available
+     * The source of the documentation index, if available, backed by [docsDirectory].
+     */
+    val docsIndexSource: DocsIndexSource?
+        get() = docsDirectory?.let(::DirectoryDocsIndexSource)
+
+    /**
+     * @return the source of the documentation index, or throws an exception if it's not available
      * @throws IllegalStateException if the documentation directory does not exist
      */
-    fun docsDirectoryOrThrow(): File = requireNotNull(docsDirectory) { "Documentation directory is not available" }
+    fun docsIndexSourceOrThrow(): DocsIndexSource = requireNotNull(docsIndexSource) { "Documentation directory is not available" }
 
     override fun initialize(params: InitializeParams?): CompletableFuture<InitializeResult?>? {
         val legend =
@@ -102,8 +110,8 @@ class QuarkdownLanguageServer(
         val response = InitializeResult(serverCaps)
 
         // Caching the available function catalogue for improved performance.
-        docsDirectory?.let { dir ->
-            executor.execute { CacheableFunctionCatalogue.storeCatalogue(dir) }
+        docsIndexSource?.let { docs ->
+            executor.execute { CacheableFunctionCatalogue.storeCatalogue(docs) }
         }
 
         return CompletableFuture.completedFuture(response)

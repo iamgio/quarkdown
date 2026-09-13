@@ -4,25 +4,25 @@ import com.quarkdown.lsp.diagnostics.AbstractFunctionCallDiagnosticsSupplier
 import com.quarkdown.lsp.diagnostics.SimpleDiagnostic
 import com.quarkdown.lsp.diagnostics.cause.DiagnosticCause
 import com.quarkdown.lsp.diagnostics.cause.UnresolvedParameterNameDiagnosticCause
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.quarkdoc.reader.DocsFunction
-import java.io.File
 
 /**
  * A diagnostics supplier that checks the existence of function parameter names that named arguments refer to.
- * @param docsDirectory the directory where function documentation files are stored
+ * @param docs the source of the documentation index
  */
 class FunctionUnresolvedParameterNameDiagnosticsSupplier(
-    private val docsDirectory: File,
+    private val docs: DocsIndexSource,
 ) : AbstractFunctionCallDiagnosticsSupplier() {
     override fun getDiagnostics(
         functionName: String,
         tokens: List<FunctionCallToken>,
         call: FunctionCall,
     ): List<SimpleDiagnostic> {
-        val function = getDocumentation(this.docsDirectory, functionName) ?: return emptyList()
+        val function = getDocumentation(this.docs, functionName) ?: return emptyList()
 
         return tokens
             .asSequence()

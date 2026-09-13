@@ -3,13 +3,13 @@ package com.quarkdown.lsp.completion.function.parameter
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.model.Completion
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.getParameterAtSourceIndex
 import com.quarkdown.quarkdoc.reader.DocsParameter
-import java.io.File
 
 /**
  * Provides completion items for fixed allowed values for a function parameter, if applicable.
@@ -19,8 +19,8 @@ import java.io.File
  * This works for both named and positional arguments.
  */
 class FunctionParameterAllowedValuesCompletionSupplier(
-    docsDirectory: File,
-) : AbstractFunctionCompletionSupplier(docsDirectory) {
+    docs: DocsIndexSource,
+) : AbstractFunctionCompletionSupplier(docs) {
     override fun getCompletionItems(
         call: FunctionCall,
         function: DocumentedFunction?,

@@ -1,5 +1,7 @@
 package com.quarkdown.lsp.cache
 
+import com.quarkdown.lsp.documentation.DirectoryDocsIndexSource
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import java.io.File
 import kotlin.io.path.createTempDirectory
 import kotlin.test.AfterTest
@@ -33,7 +35,7 @@ class DocsIndexCatalogueTest {
 
     @Test
     fun `catalogue loads from the index, keeping markdown as-is`() {
-        val function = CacheableFunctionCatalogue.getCatalogue(docsDir).single()
+        val function = CacheableFunctionCatalogue.getCatalogue(DirectoryDocsIndexSource(docsDir)).single()
         assertEquals("greet", function.name)
         assertEquals("String", function.rawData.moduleName)
         // Index content is already Markdown: no conversion is applied.
@@ -50,6 +52,6 @@ class DocsIndexCatalogueTest {
         val field = CacheableFunctionCatalogue::class.java.getDeclaredField("catalogue")
         field.isAccessible = true
         @Suppress("UNCHECKED_CAST")
-        (field.get(CacheableFunctionCatalogue) as MutableMap<File, Set<DocumentedFunction>>).clear()
+        (field.get(CacheableFunctionCatalogue) as MutableMap<DocsIndexSource, Set<DocumentedFunction>>).clear()
     }
 }

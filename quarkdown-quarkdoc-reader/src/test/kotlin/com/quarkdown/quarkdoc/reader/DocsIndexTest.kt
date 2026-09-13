@@ -2,6 +2,7 @@ package com.quarkdown.quarkdoc.reader
 
 import com.quarkdown.quarkdoc.reader.json.DOCS_INDEX_FILE_NAME
 import com.quarkdown.quarkdoc.reader.json.DocsIndexWalker
+import com.quarkdown.quarkdoc.reader.json.fromDirectoryOrNull
 import java.io.File
 import kotlin.io.path.createTempDirectory
 import kotlin.test.Test

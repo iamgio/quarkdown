@@ -4,6 +4,7 @@ import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.model.Completion
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.lsp.tokenizer.FunctionCall
@@ -11,7 +12,6 @@ import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.findMatchingTokenBeforeIndex
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.remainderUntilIndex
-import java.io.File
 
 /**
  * Provides completion items for chained function names in function calls by scanning documentation files.
@@ -21,11 +21,11 @@ import java.io.File
  * - `.function::func|`
  *
  * This supplier is proxied by [FunctionNameCompletionSupplier].
- * @param docsDirectory the directory containing the documentation files to extract function data from
+ * @param docs the source of the documentation index to extract function data from
  */
 class ChainedFunctionNameCompletionSupplier(
-    docsDirectory: File,
-) : AbstractFunctionCompletionSupplier(docsDirectory) {
+    docs: DocsIndexSource,
+) : AbstractFunctionCompletionSupplier(docs) {
     /**
      * Transforms the cursor index to force it to be part of the function call.
      * so that the returned index is always part of the function call.
@@ -60,7 +60,7 @@ class ChainedFunctionNameCompletionSupplier(
                 ?: ""
 
         return CacheableFunctionCatalogue
-            .searchAll(super.docsDirectory, snippet)
+            .searchAll(super.docs, snippet)
             .map { it.toCompletionItem(chained = true) }
             .toList()
     }

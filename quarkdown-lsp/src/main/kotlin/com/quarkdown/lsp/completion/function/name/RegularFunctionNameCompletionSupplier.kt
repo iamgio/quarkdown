@@ -4,11 +4,11 @@ import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.CacheableFunctionCatalogue
 import com.quarkdown.lsp.completion.CompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.model.Completion
 import com.quarkdown.lsp.model.CursorPosition
 import com.quarkdown.lsp.pattern.QuarkdownPatterns
 import com.quarkdown.lsp.util.getLineUntilPosition
-import java.io.File
 
 /**
  * Provides completion items for regular (non-chained) function names by scanning documentation files.
@@ -18,10 +18,10 @@ import java.io.File
  * - `.func|`
  *
  * This supplier is proxied by [FunctionNameCompletionSupplier].
- * @param docsDirectory the directory containing the documentation files to extract function data from
+ * @param docs the source of the documentation index to extract function data from
  */
 class RegularFunctionNameCompletionSupplier(
-    private val docsDirectory: File,
+    private val docs: DocsIndexSource,
 ) : CompletionSupplier {
     // Pattern to match a function call at cursor position.
     private val callPattern = Regex("${QuarkdownPatterns.FunctionCall.identifierInCall}$")
@@ -37,7 +37,7 @@ class RegularFunctionNameCompletionSupplier(
         val snippet: String = callPattern.find(line)?.value ?: return emptyList()
 
         return CacheableFunctionCatalogue
-            .searchAll(this.docsDirectory, snippet)
+            .searchAll(this.docs, snippet)
             .map { it.toCompletionItem(chained = false) }
             .toList()
     }

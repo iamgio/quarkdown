@@ -1,5 +1,7 @@
 package com.quarkdown.lsp.cache
 
+import com.quarkdown.lsp.documentation.DirectoryDocsIndexSource
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -21,7 +23,7 @@ import kotlin.test.assertTrue
  * before and after running to prevent cross-test contamination.
  */
 class CacheableFunctionCatalogueTest {
-    private val docsDir = File("/nonexistent/docs")
+    private val docs = DirectoryDocsIndexSource(File("/nonexistent/docs"))
 
     @BeforeTest
     fun setup() {
@@ -38,7 +40,7 @@ class CacheableFunctionCatalogueTest {
     @Test
     fun `concurrent storeCatalogue invokes walk exactly once`() {
         val expected = setOf(mockk<DocumentedFunction>())
-        every { CacheableFunctionCatalogue["walk"](docsDir) } returns expected
+        every { CacheableFunctionCatalogue["walk"](docs) } returns expected
 
         val threadCount = 32
         val startGate = CountDownLatch(1)
@@ -47,7 +49,7 @@ class CacheableFunctionCatalogueTest {
             repeat(threadCount) {
                 pool.submit {
                     startGate.await()
-                    CacheableFunctionCatalogue.storeCatalogue(docsDir)
+                    CacheableFunctionCatalogue.storeCatalogue(docs)
                 }
             }
             startGate.countDown()
@@ -57,9 +59,9 @@ class CacheableFunctionCatalogueTest {
             pool.shutdownNow()
         }
 
-        verify(exactly = 1) { CacheableFunctionCatalogue["walk"](docsDir) }
+        verify(exactly = 1) { CacheableFunctionCatalogue["walk"](docs) }
         assertEquals(1, catalogueMap().size)
-        assertEquals(expected, catalogueMap()[docsDir])
+        assertEquals(expected, catalogueMap()[docs])
     }
 
     /**
@@ -71,28 +73,28 @@ class CacheableFunctionCatalogueTest {
         val empty = emptySet<DocumentedFunction>()
         val populated = setOf(mockk<DocumentedFunction>())
 
-        every { CacheableFunctionCatalogue["walk"](docsDir) } returnsMany listOf(empty, empty, populated)
+        every { CacheableFunctionCatalogue["walk"](docs) } returnsMany listOf(empty, empty, populated)
 
-        CacheableFunctionCatalogue.storeCatalogue(docsDir)
+        CacheableFunctionCatalogue.storeCatalogue(docs)
         assertTrue(catalogueMap().isEmpty(), "first empty walk must not populate the cache")
 
-        CacheableFunctionCatalogue.storeCatalogue(docsDir)
+        CacheableFunctionCatalogue.storeCatalogue(docs)
         assertTrue(catalogueMap().isEmpty(), "second empty walk must not populate the cache")
-        verify(exactly = 2) { CacheableFunctionCatalogue["walk"](docsDir) }
+        verify(exactly = 2) { CacheableFunctionCatalogue["walk"](docs) }
 
-        CacheableFunctionCatalogue.storeCatalogue(docsDir)
-        assertEquals(populated, catalogueMap()[docsDir], "non-empty walk must populate the cache")
+        CacheableFunctionCatalogue.storeCatalogue(docs)
+        assertEquals(populated, catalogueMap()[docs], "non-empty walk must populate the cache")
 
         // Once populated, further calls must short-circuit without walking again.
-        CacheableFunctionCatalogue.storeCatalogue(docsDir)
-        verify(exactly = 3) { CacheableFunctionCatalogue["walk"](docsDir) }
+        CacheableFunctionCatalogue.storeCatalogue(docs)
+        verify(exactly = 3) { CacheableFunctionCatalogue["walk"](docs) }
     }
 
-    private fun catalogueMap(): MutableMap<File, Set<DocumentedFunction>> {
+    private fun catalogueMap(): MutableMap<DocsIndexSource, Set<DocumentedFunction>> {
         val field = CacheableFunctionCatalogue::class.java.getDeclaredField("catalogue")
         field.isAccessible = true
         @Suppress("UNCHECKED_CAST")
-        return field.get(CacheableFunctionCatalogue) as MutableMap<File, Set<DocumentedFunction>>
+        return field.get(CacheableFunctionCatalogue) as MutableMap<DocsIndexSource, Set<DocumentedFunction>>
     }
 
     private fun clearCatalogue() {

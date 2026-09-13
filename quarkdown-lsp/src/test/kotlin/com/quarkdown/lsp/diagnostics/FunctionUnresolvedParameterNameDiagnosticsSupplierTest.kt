@@ -3,7 +3,7 @@ package com.quarkdown.lsp.diagnostics
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGNMENT_PARAMETER
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGN_FUNCTION
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.CSV_FUNCTION
-import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS_DIRECTORY
+import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.PATH_PARAMETER
 import com.quarkdown.lsp.diagnostics.function.FunctionUnresolvedParameterNameDiagnosticsSupplier
 import com.quarkdown.lsp.model.Severity
@@ -17,7 +17,7 @@ private const val INVALID_PARAMETER = "invalid"
  * Tests for the diagnostics supplier for unresolved parameter names in function calls.
  */
 class FunctionUnresolvedParameterNameDiagnosticsSupplierTest {
-    private val supplier = FunctionUnresolvedParameterNameDiagnosticsSupplier(DOCS_DIRECTORY)
+    private val supplier = FunctionUnresolvedParameterNameDiagnosticsSupplier(DOCS)
 
     private fun getDiagnostics(text: String): List<SimpleDiagnostic> = DiagnosticsTestUtils.getDiagnostics(text, supplier)
 

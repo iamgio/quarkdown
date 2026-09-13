@@ -14,7 +14,7 @@ object HoverSuppliersFactory {
     fun default(server: QuarkdownLanguageServer) =
         listOf(
             FunctionDocumentationHoverSupplier(
-                docsDirectory = server.docsDirectoryOrThrow(),
+                docs = server.docsIndexSourceOrThrow(),
             ),
         )
 }
