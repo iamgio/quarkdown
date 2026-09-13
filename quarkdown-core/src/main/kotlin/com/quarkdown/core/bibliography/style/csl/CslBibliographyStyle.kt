@@ -11,7 +11,6 @@ import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
 import com.quarkdown.core.localization.Locale
-import java.io.InputStream
 
 /**
  * A [BibliographyStyle] backed by a [CSL](https://citationstyles.org) style definition,
@@ -76,11 +75,11 @@ class CslBibliographyStyle(
 
     companion object {
         /**
-         * Reads a bibliography file and creates a [CslBibliographyStyle].
+         * Reads a bibliography source and creates a [CslBibliographyStyle].
          * Supports BibTeX (`.bib`), CSL JSON, YAML, EndNote, and RIS formats.
          * @param cslStyleName the CSL style name, from the bibliographer's
          *                     [style catalog](https://github.com/quarkdown-labs/kotlin-bibliographer/tree/main/styles)
-         * @param input the input stream for the bibliography source
+         * @param source the content of the bibliography source
          * @param filename the filename hint for format detection
          * @param locale optional [Locale] for localized terms (e.g. "and"/"und", month names).
          *               When `null`, the style's default locale is used
@@ -90,7 +89,7 @@ class CslBibliographyStyle(
          */
         fun from(
             cslStyleName: String,
-            input: InputStream,
+            source: String,
             filename: String,
             locale: Locale? = null,
         ): CslBibliographyStyle {
@@ -104,7 +103,7 @@ class CslBibliographyStyle(
                 try {
                     Bibliographer(
                         style = cslStyleName,
-                        source = BibliographySource(input.reader().use { it.readText() }, format),
+                        source = BibliographySource(source, format),
                         locale = locale?.tag,
                     )
                 } catch (e: IllegalArgumentException) {
