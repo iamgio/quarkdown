@@ -1,6 +1,7 @@
 package com.quarkdown.lsp.diagnostics
 
 import com.quarkdown.lsp.TextDocument
+import com.quarkdown.lsp.documentation.DirectoryDocsIndexSource
 import java.io.File
 
 /**
@@ -13,7 +14,7 @@ object DiagnosticsTestUtils {
     const val CSV_FUNCTION = "csv"
     const val PATH_PARAMETER = "path"
 
-    val DOCS_DIRECTORY = File("src/test/resources/docs")
+    val DOCS = DirectoryDocsIndexSource(File("src/test/resources/docs"))
 
     /**
      * Gets diagnostics from a supplier for the given text.

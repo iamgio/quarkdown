@@ -4,23 +4,25 @@ import com.quarkdown.quarkdoc.reader.DocsContentExtractor
 import com.quarkdown.quarkdoc.reader.DocsFunction
 import com.quarkdown.quarkdoc.reader.DocsWalker
 import kotlinx.serialization.json.Json
-import java.io.File
 
 /**
- * Walker of pre-extracted [DocsIndex] files, the fast path over
+ * Walker of pre-extracted [DocsIndex] payloads, the fast path over
  * [com.quarkdown.quarkdoc.reader.dokka.DokkaHtmlWalker]:
  * content is already in Markdown and requires no HTML processing.
  *
  * A documentation tree may carry multiple [DOCS_INDEX_FILE_NAME] files,
  * one per documentation module, whose entries are merged.
+ *
+ * @param indexes the raw JSON content of each index file
+ * @see fromDirectoryOrNull to discover and read the index files of a local documentation directory
  */
 class DocsIndexWalker(
-    private val indexFiles: List<File>,
+    private val indexes: List<String>,
 ) : DocsWalker<DocsIndexContentExtractor> {
     override fun walk(): Sequence<DocsWalker.Result<DocsIndexContentExtractor>> =
-        indexFiles
+        indexes
             .asSequence()
-            .flatMap { json.decodeFromString<DocsIndex>(it.readText()).functions }
+            .flatMap { json.decodeFromString<DocsIndex>(it).functions }
             .map { function ->
                 DocsWalker.Result(
                     name = function.name,
@@ -31,19 +33,6 @@ class DocsIndexWalker(
 
     companion object {
         private val json = Json { ignoreUnknownKeys = true }
-
-        /**
-         * @param docsRoot the root directory of the documentation
-         * @return a walker over all [DOCS_INDEX_FILE_NAME] index files within [docsRoot],
-         *         or `null` if it carries none
-         */
-        fun fromDirectoryOrNull(docsRoot: File): DocsIndexWalker? =
-            docsRoot
-                .walkTopDown()
-                .filter { it.isFile && it.name == DOCS_INDEX_FILE_NAME }
-                .toList()
-                .takeIf(List<File>::isNotEmpty)
-                ?.let(::DocsIndexWalker)
     }
 }
 

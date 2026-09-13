@@ -1,5 +1,6 @@
 package com.quarkdown.lsp
 
+import com.quarkdown.lsp.documentation.DirectoryDocsIndexSource
 import com.quarkdown.lsp.hover.function.FunctionDocumentationHoverSupplier
 import com.quarkdown.lsp.model.CursorPosition
 import com.quarkdown.lsp.model.HoverInfo
@@ -16,8 +17,8 @@ private const val CSV_FUNCTION = "csv"
  * Tests for [FunctionDocumentationHoverSupplier].
  */
 class FunctionDocumentationHoverSupplierTest {
-    private val testDocsDirectory = File("src/test/resources/docs")
-    private val supplier = FunctionDocumentationHoverSupplier(testDocsDirectory)
+    private val docs = DirectoryDocsIndexSource(File("src/test/resources/docs"))
+    private val supplier = FunctionDocumentationHoverSupplier(docs)
 
     /**
      * Helper function to get hover information for a given text and position.

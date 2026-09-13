@@ -4,7 +4,7 @@ import com.quarkdown.lsp.QuarkdownLanguageServer
 import com.quarkdown.lsp.completion.function.name.FunctionNameCompletionSupplier
 import com.quarkdown.lsp.completion.function.parameter.FunctionParameterAllowedValuesCompletionSupplier
 import com.quarkdown.lsp.completion.function.parameter.FunctionParameterNameCompletionSupplier
-import java.io.File
+import com.quarkdown.lsp.documentation.DocsIndexSource
 
 /**
  * Factory for creating a list of [CompletionSupplier]s.
@@ -19,16 +19,16 @@ object CompletionSuppliersFactory {
      * @param server the Quarkdown language server instance
      * @return the default list of [CompletionSupplier] instances
      */
-    fun default(server: QuarkdownLanguageServer): List<CompletionSupplier> = this.functions(docsDirectory = server.docsDirectoryOrThrow())
+    fun default(server: QuarkdownLanguageServer): List<CompletionSupplier> = this.functions(docs = server.docsIndexSourceOrThrow())
 
     /**
-     * @param docsDirectory the directory containing the documentation files
+     * @param docs the source of the documentation index
      * @return the [CompletionSupplier]s that handle function call completions
      */
-    internal fun functions(docsDirectory: File): List<CompletionSupplier> =
+    internal fun functions(docs: DocsIndexSource): List<CompletionSupplier> =
         listOf(
-            FunctionNameCompletionSupplier(docsDirectory),
-            FunctionParameterAllowedValuesCompletionSupplier(docsDirectory),
-            FunctionParameterNameCompletionSupplier(docsDirectory),
+            FunctionNameCompletionSupplier(docs),
+            FunctionParameterAllowedValuesCompletionSupplier(docs),
+            FunctionParameterNameCompletionSupplier(docs),
         )
 }

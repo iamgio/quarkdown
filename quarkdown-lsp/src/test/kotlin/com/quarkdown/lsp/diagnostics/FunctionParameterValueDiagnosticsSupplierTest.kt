@@ -3,7 +3,7 @@ package com.quarkdown.lsp.diagnostics
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGNMENT_PARAMETER
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.ALIGN_FUNCTION
 import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.CSV_FUNCTION
-import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS_DIRECTORY
+import com.quarkdown.lsp.diagnostics.DiagnosticsTestUtils.DOCS
 import com.quarkdown.lsp.diagnostics.function.FunctionParameterValueDiagnosticsSupplier
 import com.quarkdown.lsp.model.Severity
 import kotlin.test.Test
@@ -14,7 +14,7 @@ import kotlin.test.assertTrue
  * Tests for the diagnostics supplier for function calls.
  */
 class FunctionParameterValueDiagnosticsSupplierTest {
-    private val supplier = FunctionParameterValueDiagnosticsSupplier(DOCS_DIRECTORY)
+    private val supplier = FunctionParameterValueDiagnosticsSupplier(DOCS)
 
     private fun getDiagnostics(text: String): List<SimpleDiagnostic> = DiagnosticsTestUtils.getDiagnostics(text, supplier)
 

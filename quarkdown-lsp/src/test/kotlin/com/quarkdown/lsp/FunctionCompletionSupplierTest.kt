@@ -1,6 +1,7 @@
 package com.quarkdown.lsp
 
 import com.quarkdown.lsp.completion.CompletionSuppliersFactory
+import com.quarkdown.lsp.documentation.DirectoryDocsIndexSource
 import com.quarkdown.lsp.model.Completion
 import com.quarkdown.lsp.model.CursorPosition
 import com.quarkdown.lsp.subservices.CompletionSubservice
@@ -29,8 +30,8 @@ private const val CAPTION_PARAMETER = "caption"
  * Tests for the completion of function calls.
  */
 class FunctionCompletionSupplierTest {
-    private val docsDirectory = File("src/test/resources/docs")
-    private val suppliers = CompletionSuppliersFactory.functions(docsDirectory)
+    private val docs = DirectoryDocsIndexSource(File("src/test/resources/docs"))
+    private val suppliers = CompletionSuppliersFactory.functions(docs)
 
     private fun getCompletions(
         text: String,

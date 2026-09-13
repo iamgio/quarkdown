@@ -3,20 +3,20 @@ package com.quarkdown.lsp.completion.function.parameter
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.completion.function.AbstractFunctionCompletionSupplier
 import com.quarkdown.lsp.completion.toCompletionItem
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.model.Completion
 import com.quarkdown.lsp.tokenizer.FunctionCall
 import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.remainderUntilIndex
-import java.io.File
 
 /**
  * Provides completion items for function parameter names. For example, let `|` be the cursor position in the text,
  * `.function pa|` will provide names for parameters starting with `pa`.
  */
 class FunctionParameterNameCompletionSupplier(
-    docsDirectory: File,
-) : AbstractFunctionCompletionSupplier(docsDirectory) {
+    docs: DocsIndexSource,
+) : AbstractFunctionCompletionSupplier(docs) {
     /**
      * Transforms the cursor index to the index of the last whitespace before the cursor,
      * so that the returned index is always part of the function call.

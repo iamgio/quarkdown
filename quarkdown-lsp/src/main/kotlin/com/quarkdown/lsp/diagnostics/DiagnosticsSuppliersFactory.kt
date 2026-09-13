@@ -14,10 +14,10 @@ object DiagnosticsSuppliersFactory {
      * @return the default list of [DiagnosticsSuppliersFactory] instances
      */
     fun default(server: QuarkdownLanguageServer): List<DiagnosticsSupplier> {
-        val docsDirectory = server.docsDirectoryOrThrow()
+        val docs = server.docsIndexSourceOrThrow()
         return listOf(
-            FunctionParameterValueDiagnosticsSupplier(docsDirectory),
-            FunctionUnresolvedParameterNameDiagnosticsSupplier(docsDirectory),
+            FunctionParameterValueDiagnosticsSupplier(docs),
+            FunctionUnresolvedParameterNameDiagnosticsSupplier(docs),
             FunctionDuplicateParameterNameDiagnosticsSupplier(),
         )
     }

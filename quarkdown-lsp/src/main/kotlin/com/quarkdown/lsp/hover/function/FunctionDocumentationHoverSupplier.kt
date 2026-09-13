@@ -3,6 +3,7 @@ package com.quarkdown.lsp.hover.function
 import com.quarkdown.lsp.TextDocument
 import com.quarkdown.lsp.cache.DocumentedFunction
 import com.quarkdown.lsp.cache.functionCalls
+import com.quarkdown.lsp.documentation.DocsIndexSource
 import com.quarkdown.lsp.documentation.getDocumentation
 import com.quarkdown.lsp.hover.HoverSupplier
 import com.quarkdown.lsp.model.CursorPosition
@@ -12,14 +13,13 @@ import com.quarkdown.lsp.tokenizer.FunctionCallToken
 import com.quarkdown.lsp.tokenizer.getAtSourceIndex
 import com.quarkdown.lsp.tokenizer.getTokenAtSourceIndex
 import com.quarkdown.lsp.util.toOffset
-import java.io.File
 
 /**
  * Provider of documentation on hover for function calls.
- * @property docsDirectory the directory containing the documentation files
+ * @property docs the source of the documentation index
  */
 class FunctionDocumentationHoverSupplier(
-    private val docsDirectory: File,
+    private val docs: DocsIndexSource,
 ) : HoverSupplier {
     override fun getHover(
         position: CursorPosition,
@@ -43,7 +43,7 @@ class FunctionDocumentationHoverSupplier(
 
         // Returns the documentation to display in the hover.
         val function: DocumentedFunction =
-            getDocumentation(docsDirectory, nameToken?.lexeme ?: call.lastChainedName)
+            getDocumentation(docs, nameToken?.lexeme ?: call.lastChainedName)
                 ?: return null
 
         return function.documentationMarkdown?.let(::HoverInfo)
