@@ -4,6 +4,14 @@
 
 ### Changed
 
+#### [Log level via `--log-level`](https://quarkdown.com/wiki/cli-options)
+
+The log level is now set through the new `--log-level` option (`debug`, `info`, `warn`, `error`, or `none`) or the `QD_LOG_LEVEL` environment variable, with the option taking precedence. The old `-Dloglevel` JVM property is no longer read.
+
+```shell
+quarkdown --log-level debug c main.qd
+```
+
 #### [dev] Bibliography management delegated to `kotlin-bibliographer`
 
 The *Citation Style Language* processor, bibliography management and style catalog were extracted and offloaded to the new [`kotlin-bibliographer`](https://github.com/quarkdown-labs/kotlin-bibliographer), Quarkdown's own Kotlin Multiplatform open source library.

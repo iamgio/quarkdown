@@ -75,26 +75,24 @@ private object QuarkdownLogWriter : LogWriter() {
 
 /**
  * Bridge for logging utilities, backed by Kermit.
- * The minimum severity is read from the `loglevel` system property
- * (`debug`, `info`, `warn`, `error`), defaulting to `info`.
+ * The minimum [level] defaults to [LogLevel.INFO] and can be adjusted by the launcher
+ * (e.g. the CLI, which reads it from the `QD_LOG_LEVEL` environment variable).
  */
 object Log {
     private val config =
         mutableLoggerConfigInit(listOf(QuarkdownLogWriter)).apply {
-            minSeverity = severityFromProperty()
+            minSeverity = LogLevel.INFO.severity
         }
 
     private val logger = Logger(config)
 
     /**
-     * @return the minimum severity set via the `loglevel` system property, or [Severity.Info] by default
+     * The minimum level a message must have in order to be logged.
      */
-    private fun severityFromProperty(): Severity =
-        when (System.getProperty("loglevel")?.lowercase()) {
-            "debug" -> Severity.Debug
-            "warn" -> Severity.Warn
-            "error" -> Severity.Error
-            else -> Severity.Info
+    var level: LogLevel = LogLevel.INFO
+        set(value) {
+            field = value
+            config.minSeverity = value.severity
         }
 
     fun debug(message: Any) = logger.d { message.toString() }
@@ -113,11 +111,4 @@ object Log {
     fun warn(message: Any) = logger.w { message.toString() }
 
     fun error(message: Any) = logger.e { message.toString() }
-
-    /**
-     * Disables all logging.
-     */
-    fun disableLogging() {
-        config.minSeverity = Severity.Assert
-    }
 }

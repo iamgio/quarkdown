@@ -88,4 +88,4 @@ Running **`quarkdown c file.qd`** compiles the given file and saves the output t
   - `collision-proof`: appends a hash to `file-name` to minimize name collisions
   - `document-name`: uses the document name set via `.docname`, falling back to `file-name` if unset
 
-- `-Dloglevel=<level>` (JVM property): sets the log level. If set to `warning` or higher, the output content is not printed out.
+- `--log-level <level>` (placed before the subcommand, e.g. `quarkdown --log-level debug c file.qd`): sets the minimum log level. Accepted values are `debug`, `info`, `warn`, `error`, and `none`. Defaults to `info`. It can also be set via the `QD_LOG_LEVEL` environment variable, with the option taking precedence. If set to `warn` or higher, the output content is not printed out.
