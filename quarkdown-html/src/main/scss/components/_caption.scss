@@ -16,16 +16,6 @@
     }
   }
 
-  figure > figcaption {
-    &.caption-top {
-      order: 0;
-    }
-
-    &.caption-bottom {
-      order: 2;
-    }
-  }
-
   table:not(pre table) {
     &:has(> caption.caption-top) {
       caption-side: top;

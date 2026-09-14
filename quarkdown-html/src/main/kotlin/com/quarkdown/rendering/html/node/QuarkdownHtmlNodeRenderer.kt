@@ -66,9 +66,6 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.localization.localizeOrNull
 import com.quarkdown.core.context.options.shouldAutoPageBreak
 import com.quarkdown.core.context.subdocument.subdocumentGraph
-import com.quarkdown.core.document.layout.caption.CaptionPosition
-import com.quarkdown.core.document.layout.caption.CaptionPositionInfo
-import com.quarkdown.core.document.numbering.NumberingFormat
 import com.quarkdown.core.document.sub.Subdocument
 import com.quarkdown.core.rendering.tag.buildMultiTag
 import com.quarkdown.core.rendering.tag.buildTag
@@ -88,6 +85,8 @@ import com.quarkdown.rendering.html.css.textTransform
 class QuarkdownHtmlNodeRenderer(
     context: Context,
 ) : BaseHtmlNodeRenderer(context) {
+    private val helper = HtmlRendererHelper(this, context)
+
     /**
      * A `<div class="styleClass">...</div>` tag.
      */
@@ -106,73 +105,6 @@ class QuarkdownHtmlNodeRenderer(
         children: List<Node>,
     ) = div(styleClass) { +children }
 
-    /**
-     * Adds a `data-location` attribute to the location-trackable node, if its location is available.
-     * The location is formatted according to [format].
-     */
-    private fun HtmlTagBuilder.withLocationLabel(node: LocationTrackableNode) =
-        optionalAttribute(
-            "data-location",
-            node.getLocationLabel(context)?.takeUnless { it.isEmpty() },
-        )
-
-    /**
-     * Adds a `data-localized-kind` attribute to the localizable node.
-     * The kind name is localized according to the current locale.
-     */
-    private fun HtmlTagBuilder.withLocalizedKind(node: LocalizedKind) =
-        optionalAttribute(
-            "data-localized-kind",
-            context.localizeOrNull(key = node.kindLocalizationKey),
-        )
-
-    /**
-     * Retrieves the location-based label of the [node], displays an optional caption preceded by the label, and also applies the label as its ID.
-     * The label is pre-formatted according to the current [NumberingFormat].
-     *
-     * At the end, thanks to injected CSS variables, the visible outcome is `<localized_kind> <label>: <caption>`.
-     *
-     * @param node node to display the caption, and apply the ID, for
-     * @param captionTagName tag name of the caption element. E.g. "figcaption" for figures, "caption" for tables
-     * @param idPrefix prefix for the ID. For instance, the prefix `figure` lets the ID be `figure-X.Y`, where `X.Y` is the label.
-     * @param positionProvider position of the caption relative to the content
-     * @see CaptionableNode
-     * @see getLocationLabel to retrieve the numbered label
-     */
-    private fun <T> HtmlTagBuilder.numberedCaption(
-        node: T,
-        captionTagName: String = "figcaption",
-        idPrefix: String = node.kindLocalizationKey,
-        positionProvider: CaptionPositionInfo.() -> CaptionPosition?,
-    ): HtmlTagBuilder where T : CaptionableNode, T : LocationTrackableNode, T : LocalizedKind =
-        this.apply {
-            val position =
-                context.documentInfo.layout.captionPosition
-                    .getOrDefault(positionProvider)
-
-            // The reference ID or label is set as the ID of the element, allowing cross-references to link to it.
-            val label = node.getLocationLabel(context)
-            val id =
-                (node as? CrossReferenceableNode)
-                    ?.linkableReferenceId
-                    ?.let(::sanitizeId)
-                    ?: label?.let { "$idPrefix-$it" }
-            id?.let { optionalAttribute("id", it) }
-
-            if (node.caption == null && label == null) {
-                // No caption and no label: nothing to show.
-                return@apply
-            }
-
-            +buildTag(captionTagName) {
-                className("caption-${position.asCSS}")
-                withLocationLabel(node)
-                withLocalizedKind(node)
-
-                node.caption?.let { +it }
-            }
-        }
-
     // Quarkdown node rendering
 
     // The function was already expanded by previous stages: its output nodes are stored in its children.
@@ -182,8 +114,9 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: Figure<*>) =
         buildTag("figure") {
-            +node.child
-            numberedCaption(node, positionProvider = { figures })
+            helper.captionedContent(this, node, positionProvider = { figures }) {
+                +node.child
+            }
         }
 
     // An empty div that acts as a page break.
@@ -434,7 +367,7 @@ class QuarkdownHtmlNodeRenderer(
 
                 when (definition) {
                     is LocationTrackableNode if definition.getLocationLabel(context) != null -> {
-                        withLocationLabel(definition)
+                        helper.withLocationLabel(this, definition)
                     }
 
                     // If no label is available, use the caption if possible.
@@ -453,7 +386,7 @@ class QuarkdownHtmlNodeRenderer(
                     }
                 }
                 if (definition is LocalizedKind) {
-                    withLocalizedKind(definition)
+                    helper.withLocalizedKind(this, definition)
                 }
             }
 
@@ -640,7 +573,7 @@ class QuarkdownHtmlNodeRenderer(
                     .takeIf { context.options.enableAutomaticIdentifiers || node.customId != null }
                     ?.getId(node),
             ).optionalAttribute("data-decorative", "".takeIf { node.isDecorative })
-            .withLocationLabel(node)
+            .let { helper.withLocationLabel(it, node) }
             .style(node.style)
             .build()
     }
@@ -680,10 +613,11 @@ class QuarkdownHtmlNodeRenderer(
         super
             .tableBuilder(node)
             .apply {
-                numberedCaption(
+                helper.numberedCaption(
+                    this,
                     node,
+                    position = helper.resolveCaptionPosition { tables },
                     captionTagName = "caption",
-                    positionProvider = { tables },
                 )
             }.build()
 
@@ -720,8 +654,9 @@ class QuarkdownHtmlNodeRenderer(
         val code =
             if (node.requiresFigure) {
                 buildTag("figure") {
-                    +block
-                    numberedCaption(node, positionProvider = { codeBlocks })
+                    helper.captionedContent(this, node, positionProvider = { codeBlocks }) {
+                        +block
+                    }
                 }
             } else {
                 block
@@ -769,7 +704,10 @@ class QuarkdownHtmlNodeRenderer(
             }
         }
 
-    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit = { withLocationLabel(variant.target) }
+    override fun visit(variant: LocationTargetListItemVariant): HtmlTagBuilder.() -> Unit =
+        {
+            helper.withLocationLabel(this, variant.target)
+        }
 
     override fun visit(variant: TableOfContentsItemVariant): HtmlTagBuilder.() -> Unit =
         {
