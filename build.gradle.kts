@@ -9,7 +9,7 @@ plugins {
     kotlin("jvm") version "2.3.21"
     id("org.jetbrains.dokka") version "2.2.0"
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
-    id("com.github.ben-manes.versions") version "0.61.0"
+    id("io.github.ben-manes.versions") version "0.61.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
     application
 }
@@ -28,7 +28,7 @@ allprojects {
 subprojects {
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    apply(plugin = "com.github.ben-manes.versions")
+    apply(plugin = "io.github.ben-manes.versions")
     apply(plugin = "se.patrikerdes.use-latest-versions")
 }
 
@@ -38,11 +38,11 @@ gradle.projectsEvaluated {
         subprojects.forEach {
             when {
                 it.extra.has("noRuntime") && it.extra["noRuntime"] == true -> {
-                    compileOnly(it)
+                    compileOnly(project(it.path))
                 }
 
                 else -> {
-                    implementation(it)
+                    implementation(project(it.path))
                 }
             }
         }
@@ -89,7 +89,7 @@ val quarkdocGenerate: TaskProvider<Task> =
 
         dependencies {
             subprojects.filter(::usesQuarkdoc).forEach {
-                dokka(it)
+                dokka(project(it.path))
             }
         }
 
@@ -102,7 +102,7 @@ tasks.register("quarkdocGenerateAll") {
 
     dependencies {
         subprojects.forEach {
-            dokka(it)
+            dokka(project(it.path))
         }
     }
 
