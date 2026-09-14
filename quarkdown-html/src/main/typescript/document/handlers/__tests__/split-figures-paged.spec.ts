@@ -82,6 +82,56 @@ describe('SplitFiguresPaged', () => {
         expect(figures[2].querySelectorAll('figcaption').length).toBe(1);
     });
 
+    it('moves a top caption to the first portion with content, dropping the empty one', async () => {
+        document.body.innerHTML = `
+      <figure data-ref="f1" data-split-to="f1">
+        <figcaption class="caption-top">My caption</figcaption>
+      </figure>
+      <figure data-ref="f1" data-split-from="f1">
+        <pre><code>A</code></pre>
+      </figure>`;
+
+        await new SplitFiguresPaged(new DummyDocument()).onPostRendering();
+
+        const figures = Array.from(document.querySelectorAll('figure'));
+        expect(figures.length).toBe(1);
+        expect(figures[0].querySelector('pre')).not.toBeNull();
+        expect(figures[0].querySelectorAll('figcaption').length).toBe(1);
+    });
+
+    it('keeps a caption with an image-only portion', async () => {
+        document.body.innerHTML = `
+      <figure data-ref="f1" data-split-to="f1">
+        <img src="image.png" alt="" />
+      </figure>
+      <figure data-ref="f1" data-split-from="f1">
+        <figcaption class="caption-top">My caption</figcaption>
+      </figure>`;
+
+        await new SplitFiguresPaged(new DummyDocument()).onPostRendering();
+
+        const figures = Array.from(document.querySelectorAll('figure'));
+        expect(figures.length).toBe(1);
+        expect(figures[0].querySelector('img')).not.toBeNull();
+        expect(figures[0].querySelectorAll('figcaption').length).toBe(1);
+    });
+
+    it('leaves the caption untouched when no portion has content', async () => {
+        document.body.innerHTML = `
+      <figure data-ref="f1" data-split-to="f1">
+        <figcaption class="caption-top">My caption</figcaption>
+      </figure>
+      <figure data-ref="f1" data-split-from="f1">
+        <pre><code></code></pre>
+      </figure>`;
+
+        await new SplitFiguresPaged(new DummyDocument()).onPostRendering();
+
+        const figures = Array.from(document.querySelectorAll('figure'));
+        expect(figures.length).toBe(2);
+        expect(figures[0].querySelectorAll('figcaption').length).toBe(1);
+    });
+
     it('ignores figures that were not split', async () => {
         document.body.innerHTML = `
       <figure data-ref="f1">
