@@ -32,6 +32,32 @@ jobs:
           job-id: distribution-verify
           arguments: distZipAll
 
+      - name: Verify executable bits in Unix distributions
+        run: |
+          EXECUTABLES=(
+            quarkdown/bin/quarkdown
+            quarkdown/runtime/bin/java
+            quarkdown/runtime/lib/jspawnhelper
+            quarkdown/scripts/install-chrome.sh
+          )
+
+          status=0
+          for zip in build/distributions/quarkdown-linux-*.zip build/distributions/quarkdown-macos-*.zip; do
+            for entry in "${EXECUTABLES[@]}"; do
+              permissions="$(unzip -Z1 -l "$zip" "$entry" 2>/dev/null | awk 'NR==1 {print $1}')"
+              case "$permissions" in
+                *x*) ;;
+                "")  echo "ERROR: $(basename "$zip"): $entry is missing"; status=1 ;;
+                *)   echo "ERROR: $(basename "$zip"): $entry is not executable ($permissions)"; status=1 ;;
+              esac
+            done
+          done
+          if [ $status -ne 0 ]; then
+            echo "The distribution zips lost their executable bits: the launchers and the bundled runtime will not run."
+            exit 1
+          fi
+          echo "OK: all Unix distributions carry their executable bits"
+
       - name: Upload distributions
         uses: actions/upload-artifact@v4
         with:
