@@ -9,7 +9,7 @@ dependencies {
         testFixturesImplementation(it)
         testImplementation(it)
     }
-    testImplementation(testFixtures(project))
+    testImplementation(testFixtures(project(path)))
     testCompileOnly(project(":quarkdown-native-library-processor"))
     kspTest(project(":quarkdown-native-library-processor"))
     ksp(project(":quarkdown-locale-table-processor"))
