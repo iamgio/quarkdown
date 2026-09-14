@@ -30,6 +30,10 @@ The *Citation Style Language* processor, bibliography management and style catal
 
 In `paged` documents, a code block close to a page break could be rendered only partially, or not at all, because syntax highlighting was applied after page breaks were calculated.
 
+#### Caption position of tables split across pages
+
+In `paged` documents, the caption of a table split across two or more pages now respects its [position](https://quarkdown.com/wiki/caption-position): a `top` caption stays above the first portion of the table, and a `bottom` caption follows the last one.
+
 #### Page size in `slides`
 
 In `slides` documents, the page size set via `.pageformat` now correctly defines the presentation's base resolution.
