@@ -97,6 +97,42 @@ describe('SplitTablesPaged', () => {
         expect(document.querySelectorAll('thead').length).toBe(1);
     });
 
+    it('moves a top caption to the first portion', async () => {
+        document.body.innerHTML = `
+      <table data-ref="t1" data-split-to="t1">
+        ${HEADER}
+        <tbody><tr><td>A</td><td>1</td></tr></tbody>
+      </table>
+      <table data-ref="t1" data-split-from="t1">
+        <tbody><tr><td>B</td><td>2</td></tr></tbody>
+        <caption style="caption-side: top">My caption</caption>
+      </table>`;
+
+        await new SplitTablesPaged(new DummyDocument()).onPostRendering();
+
+        const [original, split] = Array.from(document.querySelectorAll('table'));
+        expect(original.querySelectorAll('caption').length).toBe(1);
+        expect(split.querySelectorAll('caption').length).toBe(0);
+    });
+
+    it('keeps a bottom caption on the last portion', async () => {
+        document.body.innerHTML = `
+      <table data-ref="t1" data-split-to="t1">
+        ${HEADER}
+        <tbody><tr><td>A</td><td>1</td></tr></tbody>
+      </table>
+      <table data-ref="t1" data-split-from="t1">
+        <tbody><tr><td>B</td><td>2</td></tr></tbody>
+        <caption style="caption-side: bottom">My caption</caption>
+      </table>`;
+
+        await new SplitTablesPaged(new DummyDocument()).onPostRendering();
+
+        const [original, split] = Array.from(document.querySelectorAll('table'));
+        expect(original.querySelectorAll('caption').length).toBe(0);
+        expect(split.querySelectorAll('caption').length).toBe(1);
+    });
+
     it('ignores split tables whose original has no header row', async () => {
         document.body.innerHTML = `
       <table data-ref="t1" data-split-to="t1">
