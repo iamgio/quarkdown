@@ -11,6 +11,9 @@ import java.io.File
  * determined by Gradle's dependency resolution: consumers see it as the module's JAR
  * (e.g. `quarkdown-install-layout-navigator/build/libs/...`) in dev, or as one of the JARs
  * inside `<install>/lib/` in a distribution.
+ *
+ * `null` where the code was not loaded from a file at all, as in a GraalVM native image.
+ * [InstallDirectoryResolver] falls back to other strategies in that case.
  */
 val thisExecutableFile: File? by lazy {
     object {}
