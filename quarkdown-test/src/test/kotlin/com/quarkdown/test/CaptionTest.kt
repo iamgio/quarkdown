@@ -248,13 +248,13 @@ class CaptionTest {
             """.trimIndent(),
         ) {
             assertEquals(
-                "<figure><img src=\"https://example.com/image.png\" alt=\"\" title=\"Figure caption\" />" +
-                    "<figcaption class=\"caption-top\">Figure caption</figcaption></figure>" +
+                "<figure><figcaption class=\"caption-top\">Figure caption</figcaption>" +
+                    "<img src=\"https://example.com/image.png\" alt=\"\" title=\"Figure caption\" /></figure>" +
                     "<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>" +
                     "<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr></tbody>" +
                     "<caption class=\"caption-top\">Table caption</caption></table>" +
-                    "<figure><pre class=\"mermaid\">graph TD</pre>" +
-                    "<figcaption class=\"caption-top\">Mermaid caption</figcaption></figure>",
+                    "<figure><figcaption class=\"caption-top\">Mermaid caption</figcaption>" +
+                    "<pre class=\"mermaid\">graph TD</pre></figure>",
                 it,
             )
         }

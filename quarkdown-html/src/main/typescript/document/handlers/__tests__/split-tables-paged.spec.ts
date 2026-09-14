@@ -105,7 +105,7 @@ describe('SplitTablesPaged', () => {
       </table>
       <table data-ref="t1" data-split-from="t1">
         <tbody><tr><td>B</td><td>2</td></tr></tbody>
-        <caption style="caption-side: top">My caption</caption>
+        <caption class="caption-top">My caption</caption>
       </table>`;
 
         await new SplitTablesPaged(new DummyDocument()).onPostRendering();
@@ -123,7 +123,7 @@ describe('SplitTablesPaged', () => {
       </table>
       <table data-ref="t1" data-split-from="t1">
         <tbody><tr><td>B</td><td>2</td></tr></tbody>
-        <caption style="caption-side: bottom">My caption</caption>
+        <caption class="caption-bottom">My caption</caption>
       </table>`;
 
         await new SplitTablesPaged(new DummyDocument()).onPostRendering();

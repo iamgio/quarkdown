@@ -9,12 +9,11 @@
   }
 
   figure {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: block;
 
-    > :not(figcaption) {
-      order: 1;
+    > .mermaid {
+      width: fit-content;
+      margin-inline: auto;
     }
 
     &:has(.mermaid, > pre) {
