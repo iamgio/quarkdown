@@ -25,7 +25,7 @@ private val emojiCatalog by lazy { EmojiTemplateCatalog(allEmojis) }
  * - A short-code with one skin tone: `.emoji {waving-hand~medium-dark}` produces 👋🏾
  * - A short-code with two skin tones: `.emoji {people-holding-hands~medium-light,medium-dark}` produces 🧑🏼‍🤝‍🧑🏾
  *
- * A complete list of shortcodes can be found at [quarkdown.com/docs/emoji-list](https://quarkdown.com/docs/emoji-list).
+ * A complete list of shortcodes can be found at [quarkdown.com/tools/emoji](https://quarkdown.com/tools/emoji).
  *
  * Note: the first call to this function initializes the emoji catalog, which may take a moment.
  * Subsequent calls will be faster.
@@ -46,7 +46,7 @@ fun emoji(shortcode: String) = emojiCatalog.replaceShortcodes(":$shortcode:").wr
  * ```
  *
  * > Did you know?
- * > [quarkdown.com/docs/emoji-list](https://quarkdown.com/docs/emoji-list) is generated from this function!
+ * > [quarkdown.com/tools/emoji](https://quarkdown.com/tools/emoji) is generated from this function!
  *
  * @return a dictionary where keys are emoji characters and values are their shortest shortcodes
  * @wiki emojis
