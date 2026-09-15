@@ -30,6 +30,14 @@ The *Citation Style Language* processor, bibliography management and style catal
 
 In `paged` documents, a code block close to a page break could be rendered only partially, or not at all, because syntax highlighting was applied after page breaks were calculated.
 
+#### Content taller than a page after a heading is no longer cut off
+
+In `paged` documents, a code block or table taller than a full page placed right after a heading was not rendered, leaving a blank page and the heading alone. Such content now starts right below its heading and flows across as many pages as needed.
+
+#### Code blocks split in place across pages
+
+In `paged` documents, a code block that does not fit in the remaining space of a page now starts there and continues on the next page, instead of being pushed to a fresh page.
+
 #### Caption position of elements split across pages
 
 In `paged` documents, the caption of a table or code block split across two or more pages now respects its [position](https://quarkdown.com/wiki/caption-position): a `top` caption stays with the first portion of the element, and a `bottom` caption follows the last one. The caption always shares the page with part of the element's content, and is never left alone on a page.

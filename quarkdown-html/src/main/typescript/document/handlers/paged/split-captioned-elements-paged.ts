@@ -70,8 +70,24 @@ export abstract class SplitCaptionedElementsPaged<T extends HTMLElement = HTMLEl
             // Portions left with neither content nor the caption display nothing: drop them.
             parts
                 .filter(part => part !== target && !this.hasContent(part, caption))
-                .forEach(part => part.remove());
+                .forEach(part => this.removePortion(part));
         });
+    }
+
+    /**
+     * Removes the given portion, along with its page if the portion was the page's
+     * only content: for instance, a trailing page that only hosted the element's caption.
+     */
+    private removePortion(portion: T) {
+        // The portion is the page's only content if every ancestor up to the
+        // page content area contains nothing but the chain leading to the portion.
+        let top: Element = portion;
+        while (top.parentElement?.children.length === 1 && !top.classList.contains('pagedjs_page_content')) {
+            top = top.parentElement;
+        }
+
+        const soleContent = top.classList.contains('pagedjs_page_content');
+        (soleContent ? portion.closest('.pagedjs_page') : portion)?.remove();
     }
 
     protected adjust(splitElements: SplitElement<T>[]) {

@@ -18,6 +18,6 @@ test("shows a bottom caption once, on the last portion of a split code block", a
     await expect(caption).toHaveCount(1);
     await expect(caption).toContainText("My caption");
 
-    // A bottom caption belongs to the last portion of the code block.
+    // A bottom caption belongs to the last portion of the code block, along with its content.
     await expect(pages.nth(1).locator("figure > figcaption")).toHaveCount(1);
 });

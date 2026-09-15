@@ -42,11 +42,11 @@ export class CodeHighlighter extends DocumentHandler {
         new CodeCallouts(),
     ];
 
-    init() {
-        new CodeCopyButton().register();
-    }
-
     async onPreRendering() {
+        if (!document.body.classList.contains('quarkdown-paged')) {
+            new CodeCopyButton().register();
+        }
+
         hljs.highlightAll();
         this.features.forEach(feature => feature.apply());
     }

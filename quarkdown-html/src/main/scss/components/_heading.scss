@@ -22,4 +22,9 @@
 #{$headings} {
   // #549: avoid headings as the last line of a page.
   break-after: avoid;
+
+  // See heading-breaks-paged.ts: allow tall blocks to break to accomodate the layout.
+  &.allow-break-after {
+    break-after: auto;
+  }
 }
