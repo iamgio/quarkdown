@@ -116,6 +116,48 @@ describe('SplitFiguresPaged', () => {
         expect(figures[0].querySelectorAll('figcaption').length).toBe(1);
     });
 
+    it('removes the page of a dropped portion that was its only content', async () => {
+        document.body.innerHTML = `
+      <div class="pagedjs_page"><div class="pagedjs_area"><div class="pagedjs_page_content"><div>
+        <figure data-ref="f1" data-split-to="f1">
+          <pre><code>A</code></pre>
+        </figure>
+      </div></div><div class="pagedjs_footnote_area"></div></div></div>
+      <div class="pagedjs_page"><div class="pagedjs_area"><div class="pagedjs_page_content"><div>
+        <figure data-ref="f1" data-split-from="f1">
+          <figcaption class="caption-bottom">My caption</figcaption>
+        </figure>
+      </div></div><div class="pagedjs_footnote_area"></div></div></div>`;
+
+        await new SplitFiguresPaged(new DummyDocument()).onPostRendering();
+
+        // The caption moved to the content portion; the caption-only page is gone.
+        expect(document.querySelectorAll('.pagedjs_page').length).toBe(1);
+        expect(document.querySelectorAll('figcaption').length).toBe(1);
+        expect(document.querySelector('figure')?.querySelector('pre')).not.toBeNull();
+    });
+
+    it('keeps the page of a dropped portion that had sibling content', async () => {
+        document.body.innerHTML = `
+      <div class="pagedjs_page"><div class="pagedjs_area"><div class="pagedjs_page_content"><div>
+        <figure data-ref="f1" data-split-to="f1">
+          <pre><code>A</code></pre>
+        </figure>
+      </div></div></div></div>
+      <div class="pagedjs_page"><div class="pagedjs_area"><div class="pagedjs_page_content"><div>
+        <figure data-ref="f1" data-split-from="f1">
+          <figcaption class="caption-bottom">My caption</figcaption>
+        </figure>
+        <p>Trailing paragraph</p>
+      </div></div></div></div>`;
+
+        await new SplitFiguresPaged(new DummyDocument()).onPostRendering();
+
+        // Only the empty portion is removed: the page keeps its other content.
+        expect(document.querySelectorAll('.pagedjs_page').length).toBe(2);
+        expect(document.querySelector('p')).not.toBeNull();
+    });
+
     it('leaves the caption untouched when no portion has content', async () => {
         document.body.innerHTML = `
       <figure data-ref="f1" data-split-to="f1">

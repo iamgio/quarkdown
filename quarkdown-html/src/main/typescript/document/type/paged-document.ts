@@ -6,6 +6,7 @@ import {FootnotesPaged} from "../handlers/footnotes/footnotes-paged";
 import {SplitCodeBlocksPaged} from "../handlers/paged/split-code-blocks-paged";
 import {SplitTablesPaged} from "../handlers/paged/split-tables-paged";
 import {SplitFiguresPaged} from "../handlers/paged/split-figures-paged";
+import {HeadingBreaksPaged} from "../handlers/paged/heading-breaks-paged";
 import {PageNumbers} from "../handlers/page-numbers";
 import {PagedLikeQuarkdownDocument} from "../paged-like-quarkdown-document";
 import {ShowOnReady} from "../handlers/show-on-ready";
@@ -73,13 +74,14 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
         return [
             new Sidebar(this),
             new ShowOnReady(this),
+            new HeadingBreaksPaged(this),
+            new SplitCodeBlocksPaged(this),
+            new SplitTablesPaged(this),
+            new SplitFiguresPaged(this),
             new PageMarginsPaged(this),
             new PageNumbers(this),
             new PersistentHeadings(this),
             new FootnotesPaged(this),
-            new SplitCodeBlocksPaged(this),
-            new SplitTablesPaged(this),
-            new SplitFiguresPaged(this),
         ];
     }
 }

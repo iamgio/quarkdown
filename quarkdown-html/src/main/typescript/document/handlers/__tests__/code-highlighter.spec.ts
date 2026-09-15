@@ -30,11 +30,9 @@ describe('CodeHighlighter', () => {
       </code></pre>`;
 
     const h = new CodeHighlighter(new DummyDoc() as any);
-    h.init();
-    expect(addPlugin).toHaveBeenCalled();
-
     await h.onPreRendering();
 
+    expect(addPlugin).toHaveBeenCalled();
     expect(highlightAll).toHaveBeenCalled();
     expect(lineNumbersBlockSync).toHaveBeenCalled();
 

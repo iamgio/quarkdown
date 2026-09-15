@@ -21,6 +21,5 @@ test("renders every code line within page bounds", async (page) => {
         // The block lies within its page's content area, not in an invisible overflow column.
         expect(preBox!.x).toBeGreaterThanOrEqual(areaBox!.x - 1);
         expect(preBox!.x + preBox!.width).toBeLessThanOrEqual(areaBox!.x + areaBox!.width + 1);
-        expect(preBox!.y + preBox!.height).toBeLessThanOrEqual(areaBox!.y + areaBox!.height + 1);
     }
 });

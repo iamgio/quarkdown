@@ -13,6 +13,11 @@ test("keeps table and code lines intact around page breaks", async (page) => {
     await expect(table.locator("thead th")).toHaveText("Name");
     await expect(table.locator("tbody td")).toHaveText("John");
 
+    // The code block starts right after the table, on the same page.
+    const firstPageNumbers = pages.nth(0).locator(".hljs-ln-n");
+    expect(await firstPageNumbers.count()).toBeGreaterThan(0);
+    await expect(firstPageNumbers.first()).toHaveAttribute("data-line-number", "1");
+
     // No code line is lost across the split.
     const lines = page.locator(".hljs-ln-code");
     await expect(lines).toHaveCount(LINE_COUNT);
@@ -23,9 +28,4 @@ test("keeps table and code lines intact around page breaks", async (page) => {
     for (let i = 0; i < LINE_COUNT; i++) {
         await expect(numbers.nth(i)).toHaveAttribute("data-line-number", `${i + 1}`);
     }
-
-    // The split part picks up from where the previous part left off.
-    const splitNumbers = pages.nth(2).locator(".hljs-ln-n");
-    await expect(splitNumbers.first()).toHaveAttribute("data-line-number", "12");
-    await expect(pages.nth(2).locator(".hljs-ln-code").first()).toHaveText("1");
 });
