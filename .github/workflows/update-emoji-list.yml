@@ -1,11 +1,10 @@
-# This workflow updates the emoji list on the gh-pages-src branch.
+# This workflow regenerates the emoji list and commits it to the website repository,
+# which serves it at quarkdown.com/tools/emoji.
+# It is run on demand, as the emoji set only changes when the emoji library is updated.
 
 name: Update emoji list
 
 on:
-  schedule:
-    # Runs every Sunday at 00:00 UTC
-    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -14,9 +13,6 @@ jobs:
 
     steps:
       - uses: iamgio/quarkdown/.github/actions/setup-environment@main
-        with:
-          full-checkout: true
-          checkout-token: ${{ secrets.COMMITTER_TOKEN }}
 
       - name: Build distribution
         uses: burrunan/gradle-cache-action@v3
@@ -34,3 +30,4 @@ jobs:
         uses: iamgio/quarkdown/.github/actions/update-emoji-list@main
         with:
           quarkdown-path: ./build/unzipped/quarkdown/bin/quarkdown
+          website-token: ${{ secrets.COMMITTER_TOKEN }}
