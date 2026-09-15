@@ -15,7 +15,7 @@ on:
 
 jobs:
   test:
-    uses: iamgio/quarkdown/.github/workflows/gradle-test.yml@main
+    uses: ./.github/workflows/gradle-test.yml
 
   build:
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
     # release publishing happens after the build in the second simple-release step below.
     - name: Prepare release
       if: github.ref_type == 'tag'
-      uses: iamgio/simple-release@v1
+      uses: iamgio/simple-release@e6ee64b637906f8687d6cc158cab7c3fb745dfef # v1 (v1.3.1)
       with:
         version-file: version.txt
         changelog-file: CHANGELOG.md
@@ -42,7 +42,7 @@ jobs:
         release: 'false'
 
     - name: Build per-platform distributions
-      uses: burrunan/gradle-cache-action@v3
+      uses: burrunan/gradle-cache-action@404534c34a2faa40430357a3183522a845b04f3b # v3.0.3
       with:
         job-id: main
         arguments: distZipAll
@@ -58,13 +58,13 @@ jobs:
 
     - name: Deploy wiki
       if: github.ref_type == 'tag'
-      uses: iamgio/quarkdown/.github/actions/deploy-wiki@main
+      uses: ./.github/actions/deploy-wiki
       with:
         quarkdown-path: ${{ github.workspace }}/build/unzipped/quarkdown/bin/quarkdown
         github-token: ${{ secrets.COMMITTER_TOKEN }}
 
     - name: Distribute artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: quarkdown
         path: build/distributions/quarkdown-*.zip
@@ -72,7 +72,7 @@ jobs:
     # Moves the rolling `latest` tag, publishes a devbuild prerelease,
     # and on tag publishes the tagged release.
     - name: Publish devbuild and release
-      uses: iamgio/simple-release@v1
+      uses: iamgio/simple-release@e6ee64b637906f8687d6cc158cab7c3fb745dfef # v1 (v1.3.1)
       with:
         changelog-file: CHANGELOG.md
         update-changelog: 'false'
@@ -83,13 +83,13 @@ jobs:
         release-files: build/distributions/quarkdown-*.zip
 
     - name: Generate docs
-      uses: burrunan/gradle-cache-action@v3
+      uses: burrunan/gradle-cache-action@404534c34a2faa40430357a3183522a845b04f3b # v3.0.3
       with:
         job-id: main
         arguments: quarkdocGenerateAll
 
     - name: Deploy docs
-      uses: peaceiris/actions-gh-pages@v4
+      uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
       if: github.ref_type == 'tag'
       with:
         personal_token: ${{ secrets.COMMITTER_TOKEN }}
@@ -98,7 +98,7 @@ jobs:
         destination_dir: docs
 
     - name: Deploy devbuild docs
-      uses: peaceiris/actions-gh-pages@v4
+      uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
       with:
         personal_token: ${{ secrets.COMMITTER_TOKEN }}
         external_repository: quarkdown-labs/quarkdown.com
@@ -109,14 +109,14 @@ jobs:
     # A custom action is used instead of mislav/bump-homebrew-formula-action
     # because that action's regex only replaces the first `url "..."` line in
     # the formula, so it can't handle separate on_arm and on_intel blocks.
-    - uses: iamgio/quarkdown/.github/actions/bump-homebrew@main
+    - uses: ./.github/actions/bump-homebrew
       if: github.ref_type == 'tag'
       with:
         version: ${{ github.ref_name }}
         committer_token: ${{ secrets.COMMITTER_TOKEN }}
 
     # Bump Scoop
-    - uses: iamgio/quarkdown/.github/actions/bump-scoop@main
+    - uses: ./.github/actions/bump-scoop
       if: github.ref_type == 'tag'
       with:
         version: ${{ github.ref_name }}
@@ -131,22 +131,22 @@ jobs:
       packages: write
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       with:
         persist-credentials: false
 
     - name: Bump version
-      uses: iamgio/simple-release@v1
+      uses: iamgio/simple-release@e6ee64b637906f8687d6cc158cab7c3fb745dfef # v1 (v1.3.1)
       with:
         version-file: version.txt
         commit: 'false'
         release: 'false'
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v4
+      uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
 
     - name: Login to GitHub Container Registry
-      uses: docker/login-action@v4
+      uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -154,7 +154,7 @@ jobs:
 
     - name: Docker metadata
       id: meta
-      uses: docker/metadata-action@v6
+      uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
       with:
         images: ghcr.io/${{ github.repository }}
         tags: |
@@ -171,7 +171,7 @@ jobs:
         DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@v7
+      uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
       with:
         context: .
         push: true
@@ -187,9 +187,9 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
     - name: Set up JDK 17
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4.9.1
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -197,4 +197,4 @@ jobs:
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
     - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@v4
+      uses: gradle/actions/dependency-submission@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3

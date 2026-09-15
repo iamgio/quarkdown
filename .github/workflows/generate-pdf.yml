@@ -24,7 +24,7 @@ jobs:
     - uses: iamgio/quarkdown/.github/actions/setup-environment@main
 
     - name: Build distribution
-      uses: burrunan/gradle-cache-action@v3
+      uses: burrunan/gradle-cache-action@404534c34a2faa40430357a3183522a845b04f3b # v3.0.3
       with:
         job-id: main
         arguments: distZip
@@ -72,20 +72,20 @@ jobs:
         ls -d $PWD/pdf/mock-jpg/*
 
     - name: Upload PDF artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: mock-pdf
         path: pdf/mock
 
     - name: Upload JPG artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: mock-jpg
         path: pdf/mock-jpg
 
     - name: Push PDFs to generated repo
       if: github.event_name != 'pull_request'
-      uses: cpina/github-action-push-to-another-repository@v1.7.2
+      uses: cpina/github-action-push-to-another-repository@07c4d7b3def0a8ebe788a8f2c843a4e1de4f6900 # v1.7.2
       env:
         API_TOKEN_GITHUB: ${{ secrets.COMMITTER_TOKEN }}
       with:
@@ -99,7 +99,7 @@ jobs:
 
     - name: Push JPGs to generated repo
       if: github.event_name != 'pull_request'
-      uses: cpina/github-action-push-to-another-repository@v1.7.2
+      uses: cpina/github-action-push-to-another-repository@07c4d7b3def0a8ebe788a8f2c843a4e1de4f6900 # v1.7.2
       env:
         API_TOKEN_GITHUB: ${{ secrets.COMMITTER_TOKEN }}
       with:
