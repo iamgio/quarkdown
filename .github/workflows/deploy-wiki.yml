@@ -11,13 +11,13 @@ jobs:
       - uses: iamgio/quarkdown/.github/actions/setup-environment@main
 
       - name: Build distribution
-        uses: burrunan/gradle-cache-action@v3
+        uses: burrunan/gradle-cache-action@404534c34a2faa40430357a3183522a845b04f3b # v3.0.3
         with:
           job-id: main
           arguments: installDist
 
       - name: Deploy wiki
-        uses: iamgio/quarkdown/.github/actions/deploy-wiki@main
+        uses: ./.github/actions/deploy-wiki
         with:
           quarkdown-path: ${{ github.workspace }}/build/install/quarkdown/bin/quarkdown
           github-token: ${{ secrets.COMMITTER_TOKEN }}

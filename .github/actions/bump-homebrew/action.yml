@@ -5,11 +5,9 @@ inputs:
   version:
     description: "Version string to update (e.g. 1.5.0). A leading 'v' is stripped."
     required: true
-    type: string
   committer_token:
     description: "Personal Access Token to push to the tap"
     required: true
-    type: string
 
 runs:
   using: composite
@@ -22,7 +20,7 @@ runs:
       shell: bash
 
     - name: Checkout Homebrew tap repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       with:
         repository: "quarkdown-labs/homebrew-quarkdown"
         token: ${{ inputs.committer_token }}

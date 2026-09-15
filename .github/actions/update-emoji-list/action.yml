@@ -25,7 +25,7 @@ runs:
       shell: bash
 
     - name: Checkout website repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       with:
         repository: ${{ inputs.website-repository }}
         token: ${{ inputs.website-token }}
@@ -39,7 +39,7 @@ runs:
       shell: bash
 
     - name: Commit emoji list to the website repository
-      uses: stefanzweifel/git-auto-commit-action@v7
+      uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
       with:
         repository: build/website
         commit_message: "chore: update emoji list"

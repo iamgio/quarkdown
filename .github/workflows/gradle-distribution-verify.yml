@@ -27,7 +27,7 @@ jobs:
           full-checkout: true
 
       - name: Build per-platform distributions
-        uses: burrunan/gradle-cache-action@v3
+        uses: burrunan/gradle-cache-action@404534c34a2faa40430357a3183522a845b04f3b # v3.0.3
         with:
           job-id: distribution-verify
           arguments: distZipAll
@@ -59,7 +59,7 @@ jobs:
           echo "OK: all Unix distributions carry their executable bits"
 
       - name: Upload distributions
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: quarkdown-distributions
           path: build/distributions/quarkdown-*.zip
@@ -80,7 +80,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Download distributions
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: quarkdown-distributions
 
