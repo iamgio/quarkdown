@@ -7,6 +7,8 @@ import {SplitCodeBlocksPaged} from "../handlers/paged/split-code-blocks-paged";
 import {SplitTablesPaged} from "../handlers/paged/split-tables-paged";
 import {SplitFiguresPaged} from "../handlers/paged/split-figures-paged";
 import {HeadingBreaksPaged} from "../handlers/paged/heading-breaks-paged";
+import {PagedNodeHandler} from "../handlers/paged/node/paged-node-handler";
+import {RepeatTableHeaders} from "../handlers/paged/node/repeat-table-headers";
 import {PageNumbers} from "../handlers/page-numbers";
 import {PagedLikeQuarkdownDocument} from "../paged-like-quarkdown-document";
 import {ShowOnReady} from "../handlers/show-on-ready";
@@ -49,9 +51,23 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
         return page.classList.contains("pagedjs_right_page") ? "right" : "left";
     }
 
-    /** Sets up pre-rendering to execute when DOM content is loaded. */
+    /**
+     * Sets up pre-rendering to execute when DOM content is loaded,
+     * and registers the [node handlers][getNodeHandlers] that take part in pagination.
+     */
     setupPreRenderingHook() {
         document.addEventListener("DOMContentLoaded", async () => await preRenderingExecutionQueue.execute());
+
+        const nodeHandlers = this.getNodeHandlers();
+        class PagedNodeHandlerDispatcher extends Paged.Handler {
+            renderNode(clone: Node, source: Node) {
+                nodeHandlers
+                    .filter(handler => handler.accepts(clone))
+                    .forEach(handler => handler.render(clone, source));
+            }
+        }
+
+        Paged.registerHandlers(PagedNodeHandlerDispatcher);
     }
 
     /** Sets up post-rendering to execute when paged.js is ready. */
@@ -82,6 +98,15 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
             new PageNumbers(this),
             new PersistentHeadings(this),
             new FootnotesPaged(this),
+        ];
+    }
+
+    /**
+     * @returns Handlers of single nodes rendered during pagination.
+     */
+    getNodeHandlers(): PagedNodeHandler[] {
+        return [
+            new RepeatTableHeaders(),
         ];
     }
 }
