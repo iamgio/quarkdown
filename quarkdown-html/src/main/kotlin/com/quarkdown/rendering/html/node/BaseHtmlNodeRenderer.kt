@@ -247,40 +247,42 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: Markdown) = ""
 
     /**
-     * Table tag builder, enhanceable by subclasses.
+     * Appends the content of a table to the builder of a `<table>` tag.
      */
-    protected fun tableBuilder(node: Table): HtmlTagBuilder =
-        tagBuilder("table") {
-            // Tables are stored by columns and here transposed to a row-based structure.
-            val header = tag("thead")
-            val headerRow = header.tag("tr")
-            val body = tag("tbody")
-            val bodyRows = mutableListOf<HtmlTagBuilder>()
+    protected fun HtmlTagBuilder.tableContent(node: Table) {
+        // Tables are stored by columns and here transposed to a row-based structure.
+        val header = tagBuilder("thead")
+        val headerRow = header.tag("tr")
+        val body = tagBuilder("tbody")
+        val bodyRows = mutableListOf<HtmlTagBuilder>()
 
-            node.columns.forEach { column ->
-                // Value to assign to the 'align' attribute for each cell of this column.
-                val alignment = column.alignment.takeUnless { it == Table.Alignment.NONE }?.asCSS
+        node.columns.forEach { column ->
+            // Value to assign to the 'align' attribute for each cell of this column.
+            val alignment = column.alignment.takeUnless { it == Table.Alignment.NONE }?.asCSS
 
-                // Header cell.
-                headerRow
-                    .tag("th", column.header.text)
-                    .optionalAttribute("align", alignment)
+            // Header cell.
+            headerRow
+                .tag("th", column.header.text)
+                .optionalAttribute("align", alignment)
 
-                // Body cells.
-                column.cells.forEachIndexed { index, cell ->
-                    // Adding a new row if needed.
-                    if (index >= bodyRows.size) {
-                        bodyRows += body.tag("tr")
-                    }
-                    // Adding a cell.
-                    bodyRows[index]
-                        .tag("td", cell.text)
-                        .optionalAttribute("align", alignment)
+            // Body cells.
+            column.cells.forEachIndexed { index, cell ->
+                // Adding a new row if needed.
+                if (index >= bodyRows.size) {
+                    bodyRows += body.tag("tr")
                 }
+                // Adding a cell.
+                bodyRows[index]
+                    .tag("td", cell.text)
+                    .optionalAttribute("align", alignment)
             }
         }
 
-    override fun visit(node: Table) = tableBuilder(node).build()
+        +header.build()
+        +body.build()
+    }
+
+    override fun visit(node: Table) = buildTag("table") { tableContent(node) }
 
     override fun visit(node: Paragraph) =
         buildTag("p") {

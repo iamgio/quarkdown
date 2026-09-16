@@ -1,0 +1,94 @@
+.doctype {paged}
+
+.pageformat size:{a4} margin:{2.54cm 3.18cm 2.54cm 3.18cm}
+
+.numbering merge:{true}
+    - tables: 1.1
+
+.noautopagebreak
+.captionposition tables:{top}
+.paragraphstyle lineheight:{1.5} spacing:{0.6}
+
+This introductory paragraph occupies some space before the table starts, so that the table begins in the middle of the page and splits across the following pages.
+
+
+| Layer type                | Complexity per layer       | Sequential operations | Maximum path length |
+|:--------------------------|:--------------------------:|:---------------------:|:-------------------:|
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |
+| Convolutional             | $ O(k \cdot n \cdot d^2) $ | $ O(1) $              | $ O(\log_k(n)) $    |
+| Restricted self-attention | $ O(r \cdot n \cdot d) $   | $ O(1) $              | $ O(n/r) $          |
+| Self-attention            | $ O(n^2 \cdot d) $         | $ O(1) $              | $ O(1) $            |
+| Recurrent                 | $ O(n \cdot d^2) $         | $ O(n) $              | $ O(n) $            |

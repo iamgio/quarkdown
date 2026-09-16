@@ -610,16 +610,11 @@ class QuarkdownHtmlNodeRenderer(
 
     // Quarkdown introduces table captions, also numerated.
     override fun visit(node: Table) =
-        super
-            .tableBuilder(node)
-            .apply {
-                helper.numberedCaption(
-                    this,
-                    node,
-                    position = helper.resolveCaptionPosition { tables },
-                    captionTagName = "caption",
-                )
-            }.build()
+        buildTag("table") {
+            helper.captionedContent(this, node, positionProvider = { tables }, captionTagName = "caption") {
+                tableContent(node)
+            }
+        }
 
     /**
      * Whether a rendered [Code] block must be wrapped in a `<figure>` tag hosting its caption:

@@ -97,9 +97,6 @@ class HtmlRendererHelper(
                 return@apply
             }
 
-            // The caption is appended as rendered content rather than as a sub-tag,
-            // since sub-tags are rendered before text content, which would break
-            // the position of bottom captions relative to their sibling content.
             +renderer.buildTag(captionTagName) {
                 className("caption-${position.asCSS}")
                 withLocationLabel(this, node)
@@ -112,22 +109,29 @@ class HtmlRendererHelper(
     /**
      * Appends the given [content] along with the numbered caption of [node] (via [numberedCaption]),
      * ordered according to the caption position.
+     *
+     * Matching the displayed order in the DOM lets the caption take part in the layout
+     * where it is shown: in paged documents, a top caption stays with the first portion
+     * of an element split across pages, and a bottom one with the last.
+     *
      * @param builder builder of the tag hosting the captioned content
      * @param node node to display the caption for
      * @param positionProvider position of the caption relative to the content
+     * @param captionTagName tag name of the caption element. E.g. "figcaption" for figures, "caption" for tables
      * @param content builder of the captioned content
      */
     fun <T> captionedContent(
         builder: HtmlTagBuilder,
         node: T,
         positionProvider: CaptionPositionInfo.() -> CaptionPosition?,
+        captionTagName: String = "figcaption",
         content: HtmlTagBuilder.() -> Unit,
     ): HtmlTagBuilder where T : CaptionableNode, T : LocationTrackableNode, T : LocalizedKind =
         builder.apply {
             val position = resolveCaptionPosition(positionProvider)
 
-            if (position == CaptionPosition.TOP) numberedCaption(this, node, position)
+            if (position == CaptionPosition.TOP) numberedCaption(this, node, position, captionTagName)
             content()
-            if (position == CaptionPosition.BOTTOM) numberedCaption(this, node, position)
+            if (position == CaptionPosition.BOTTOM) numberedCaption(this, node, position, captionTagName)
         }
 }
