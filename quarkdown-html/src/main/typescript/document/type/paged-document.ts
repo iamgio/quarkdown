@@ -3,12 +3,12 @@ import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "../../que
 import {Sidebar} from "../handlers/sidebar";
 import {PageMarginsPaged} from "../handlers/page-margins/page-margins-paged";
 import {FootnotesPaged} from "../handlers/footnotes/footnotes-paged";
-import {SplitCodeBlocksPaged} from "../handlers/paged/split-code-blocks-paged";
 import {SplitTablesPaged} from "../handlers/paged/split-tables-paged";
 import {SplitFiguresPaged} from "../handlers/paged/split-figures-paged";
 import {HeadingBreaksPaged} from "../handlers/paged/heading-breaks-paged";
 import {PagedNodeHandler} from "../handlers/paged/node/paged-node-handler";
 import {RepeatTableHeaders} from "../handlers/paged/node/repeat-table-headers";
+import {RestoreCodeIndentation} from "../handlers/paged/node/restore-code-indentation";
 import {PageNumbers} from "../handlers/page-numbers";
 import {PagedLikeQuarkdownDocument} from "../paged-like-quarkdown-document";
 import {ShowOnReady} from "../handlers/show-on-ready";
@@ -91,7 +91,6 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
             new Sidebar(this),
             new ShowOnReady(this),
             new HeadingBreaksPaged(this),
-            new SplitCodeBlocksPaged(this),
             new SplitTablesPaged(this),
             new SplitFiguresPaged(this),
             new PageMarginsPaged(this),
@@ -107,6 +106,7 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
     getNodeHandlers(): PagedNodeHandler[] {
         return [
             new RepeatTableHeaders(),
+            new RestoreCodeIndentation(),
         ];
     }
 }
