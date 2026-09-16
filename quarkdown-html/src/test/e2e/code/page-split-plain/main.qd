@@ -1,6 +1,6 @@
 .doctype {paged}
 
-.pageformat height:{6cm}
+.pageformat height:{6.6cm}
 
 .code linenumbers:{no} lang:{text}
     Line 1

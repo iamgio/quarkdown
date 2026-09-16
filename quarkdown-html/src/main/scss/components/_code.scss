@@ -50,8 +50,13 @@
 
   // Code blocks must be fragmentable for the paged engine to split them across pages.
   @at-root .quarkdown-paged.quarkdown {
+    pre,
     pre code {
+      // Keeps same visual clipping without establishing a scroll container.
       overflow: clip;
+      // Each fragment of a split code block carries its own padding.
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
     }
   }
 
