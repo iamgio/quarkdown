@@ -40,7 +40,7 @@ class QuarkdownBlockTokenRegexPatterns : BaseMarkdownBlockTokenRegexPatterns() {
             name = "MultilineMath",
             wrap = ::MultilineMathToken,
             regex =
-                RegexBuilder("^ {0,3}header((.|\\s)+?)fencesend[ \\t]*$")
+                RegexBuilder("^ {0,3}header([\\s\\S]+?)fencesend[ \\t]*$")
                     .withReference("header", "fencesstart[ \\t]*customid?[ \\t]*$")
                     .withReference("fencesstart", "\\\${3,}")
                     .withReference("fencesend", "\\\${3,}")

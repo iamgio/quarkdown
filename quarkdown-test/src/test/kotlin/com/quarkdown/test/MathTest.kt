@@ -92,6 +92,20 @@ class MathTest {
         }
     }
 
+    // #687: long contents stack overflow.
+    @Test
+    fun `very long multiline block math`() {
+        val line = "PE_{(pos, 2i)} &= \\sin\\!\\left(pos / 10000^{2i/d_{model}}\\right) \\\\"
+        val expression = "\\begin{aligned}\n" + "$line\n".repeat(2000) + "\\end{aligned}"
+
+        execute("$$$ {#long}\n$expression\n$$$") {
+            assertEquals(
+                "<formula data-block=\"\" id=\"long\">$expression</formula>",
+                it,
+            )
+        }
+    }
+
     @Test
     fun `math primitive in inline context defaults to inline`() {
         execute("Hello .math {2 + 2}") {

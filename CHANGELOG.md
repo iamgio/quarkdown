@@ -26,6 +26,10 @@ The *Citation Style Language* processor, bibliography management and style catal
 
 ### Fixed
 
+#### Very long delimited contents no longer crash the compiler
+
+Fixed an issue that caused very long (multi-KB) delimited content, such as emphasized text or LaTeX formulas, to crash the compiler with a stack overflow.
+
 #### Code blocks near page breaks no longer lose content
 
 In `paged` documents, a code block close to a page break could be rendered only partially, or not at all, because syntax highlighting was applied after page breaks were calculated.
