@@ -16,6 +16,8 @@
 .html {.read {assets/analytics.html}}
 .css {.read {assets/style.css}}
 
+.pageformat width:{50%}
+
 .var {repourl} {https://github.com/iamgio/quarkdown}
 
 .function {repolink}
