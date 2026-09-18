@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.6.1] - 2026-09-18
+
 ### Changed
 
 #### Tables split across pages repeat their header row
@@ -22,7 +24,7 @@ After creating a new project via [`quarkdown create`](https://quarkdown.com/wiki
 
 #### [dev] Bibliography management delegated to `kotlin-bibliographer`
 
-The *Citation Style Language* processor, bibliography management and style catalog were extracted and offloaded to the new [`kotlin-bibliographer`](https://github.com/quarkdown-labs/kotlin-bibliographer), Quarkdown's own Kotlin Multiplatform open source library.
+The _Citation Style Language_ processor, bibliography management and style catalog were extracted and offloaded to the new [`kotlin-bibliographer`](https://github.com/quarkdown-labs/kotlin-bibliographer), Quarkdown's own Kotlin Multiplatform open source library.
 
 ### Fixed
 
@@ -1448,7 +1450,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.6.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.6.1...HEAD
+
+[2.6.1]: https://github.com/iamgio/quarkdown/compare/v2.6.0...v2.6.1
 
 [2.6.0]: https://github.com/iamgio/quarkdown/compare/v2.5.1...v2.6.0
 
