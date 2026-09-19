@@ -53,7 +53,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "BlockCode",
             wrap = ::BlockCodeToken,
             regex =
-                "^( {4}[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+",
+                "^( {4}(?=[^\\n]*\\S)[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+",
         )
     }
 

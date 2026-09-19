@@ -190,6 +190,35 @@ class CodeTest {
         }
     }
 
+    @Test
+    fun `whitespace-only line does not begin an indented block`() {
+        execute("Text\n\n     \n") {
+            assertEquals("<p>Text</p>", it)
+            assertFalse(attributes.hasCode)
+        }
+    }
+
+    @Test
+    fun `blank lines within an indented block`() {
+        execute("    line 1\n\n\n    line 2") {
+            assertEquals("<pre><code>line 1\n\n\nline 2</code></pre>", it)
+        }
+    }
+
+    @Test
+    fun `whitespace-only line within an indented block`() {
+        execute("    line 1\n     \n    line 2") {
+            assertEquals("<pre><code>line 1\n \nline 2</code></pre>", it)
+        }
+    }
+
+    @Test
+    fun `blank line of few spaces within an indented block`() {
+        execute("    line 1\n  \n    line 2") {
+            assertEquals("<pre><code>line 1\n\nline 2</code></pre>", it)
+        }
+    }
+
     // #259
     @Test
     fun `indented block`() {
