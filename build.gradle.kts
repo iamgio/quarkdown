@@ -6,7 +6,7 @@ import java.io.ByteArrayOutputStream
 import java.time.Year
 
 plugins {
-    kotlin("jvm") version "2.3.21"
+    alias(libs.plugins.kotlin.jvm)
     id("org.jetbrains.dokka") version "2.2.0"
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
     id("io.github.ben-manes.versions") version "0.61.0"

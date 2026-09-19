@@ -6,11 +6,10 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation(project(":quarkdown-core"))
 
-    val ktorVersion = "3.5.2"
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-websockets:$ktorVersion")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.websockets)
+    api(libs.kotlinx.serialization.json)
 }
 
 tasks.test {

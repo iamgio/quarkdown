@@ -8,7 +8,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-quarkdoc-reader"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    implementation(libs.kotlinx.serialization.json)
     implementation(project(":quarkdown-native-library-processor"))
     implementation(kotlin("reflect"))
 

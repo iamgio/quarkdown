@@ -12,7 +12,7 @@ dependencies {
     testImplementation(testFixtures(project(":quarkdown-core")))
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-install-layout-navigator"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    implementation(libs.kotlinx.serialization.json)
     implementation("com.jsoizo:kotlin-csv:2.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.9.1")
     implementation("org.kodein.emoji:emoji-kt:2.5.0")
