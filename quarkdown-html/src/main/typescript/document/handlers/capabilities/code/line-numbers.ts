@@ -17,7 +17,8 @@ declare const hljs: {
  */
 export class CodeLineNumbers implements CodeFeature {
     apply() {
-        document.querySelectorAll('code.hljs:not(.nohljsln)')
+        Array.from(document.querySelectorAll('code.hljs:not(.nohljsln)'))
+            .filter(codeBlock => codeBlock.textContent !== '')
             .forEach(codeBlock => hljs.lineNumbersBlockSync(codeBlock));
     }
 }

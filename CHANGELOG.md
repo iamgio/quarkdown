@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Fixed
+
+#### Lines of trailing whitespace no longer produce empty code blocks
+
+A line consisting of 4 or more spaces, immediately after content, is no longer tokenized as an indented code block.
+
+#### Empty code blocks no longer error out on the browser
+
+Empty code blocks used to throw a runtime error, which also caused `paged` documents to break. 
+
 ## [2.6.1] - 2026-09-18
 
 ### Changed
