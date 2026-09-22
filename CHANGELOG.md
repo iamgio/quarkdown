@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.6.2] - 2026-09-22
+
 ### Fixed
 
 #### Lines of trailing whitespace no longer produce empty code blocks
@@ -12,7 +14,7 @@ A line consisting of 4 or more spaces, immediately after content, is no longer t
 
 Empty code blocks used to throw a runtime error, which also caused `paged` documents to break. 
 
-#### [Security] [Prevent path traversal (CWE-22)](https://github.com/iamgio/quarkdown/security/advisories/GHSA-w88j-cr92-phcq)
+#### [Security][Prevent path traversal (CWE-22)](<https://github.com/iamgio/quarkdown/security/advisories/GHSA-w88j-cr92-phcq>)
 
 > [!NOTE]
 > The vulnerability was already unexploitable due to existing Ktor (Quarkdown's server library) security measures, and purely theoretical. This patch prevents any future regressions.
@@ -1469,7 +1471,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.6.1...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.6.2...HEAD
+
+[2.6.2]: https://github.com/iamgio/quarkdown/compare/v2.6.1...v2.6.2
 
 [2.6.1]: https://github.com/iamgio/quarkdown/compare/v2.6.0...v2.6.1
 
