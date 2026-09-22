@@ -24,19 +24,21 @@ runs:
       with:
         repository: "quarkdown-labs/homebrew-quarkdown"
         token: ${{ inputs.committer_token }}
+        path: build/homebrew-tap
 
     - name: Download per-platform zips and compute SHAs
       run: |
         BASE_URL="https://github.com/iamgio/quarkdown/releases/download/v$VERSION"
-        curl -fL -o macos-x64.zip     "$BASE_URL/quarkdown-macos-x64.zip"
-        curl -fL -o macos-aarch64.zip "$BASE_URL/quarkdown-macos-aarch64.zip"
-        curl -fL -o linux-x64.zip     "$BASE_URL/quarkdown-linux-x64.zip"
-        echo "SHA_MACOS_X64=$(shasum -a 256 macos-x64.zip         | cut -d ' ' -f 1)" >> $GITHUB_ENV
-        echo "SHA_MACOS_AARCH64=$(shasum -a 256 macos-aarch64.zip | cut -d ' ' -f 1)" >> $GITHUB_ENV
-        echo "SHA_LINUX_X64=$(shasum -a 256 linux-x64.zip         | cut -d ' ' -f 1)" >> $GITHUB_ENV
+        curl -fL -o "$RUNNER_TEMP/macos-x64.zip"     "$BASE_URL/quarkdown-macos-x64.zip"
+        curl -fL -o "$RUNNER_TEMP/macos-aarch64.zip" "$BASE_URL/quarkdown-macos-aarch64.zip"
+        curl -fL -o "$RUNNER_TEMP/linux-x64.zip"     "$BASE_URL/quarkdown-linux-x64.zip"
+        echo "SHA_MACOS_X64=$(shasum -a 256 "$RUNNER_TEMP/macos-x64.zip"         | cut -d ' ' -f 1)" >> $GITHUB_ENV
+        echo "SHA_MACOS_AARCH64=$(shasum -a 256 "$RUNNER_TEMP/macos-aarch64.zip" | cut -d ' ' -f 1)" >> $GITHUB_ENV
+        echo "SHA_LINUX_X64=$(shasum -a 256 "$RUNNER_TEMP/linux-x64.zip"         | cut -d ' ' -f 1)" >> $GITHUB_ENV
       shell: bash
 
     - name: Update formula
+      working-directory: build/homebrew-tap
       run: |
         ruby <<'RUBY'
           path = "Formula/quarkdown.rb"
@@ -68,6 +70,7 @@ runs:
       shell: bash
 
     - name: Verify formula was fully updated
+      working-directory: build/homebrew-tap
       run: |
         ruby <<'RUBY'
           content = File.read("Formula/quarkdown.rb")
@@ -91,6 +94,7 @@ runs:
       shell: bash
 
     - name: Commit and push updated formula
+      working-directory: build/homebrew-tap
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
