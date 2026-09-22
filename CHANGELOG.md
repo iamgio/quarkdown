@@ -12,6 +12,15 @@ A line consisting of 4 or more spaces, immediately after content, is no longer t
 
 Empty code blocks used to throw a runtime error, which also caused `paged` documents to break. 
 
+#### [Security] [Prevent path traversal (CWE-22)](https://github.com/iamgio/quarkdown/security/advisories/GHSA-w88j-cr92-phcq)
+
+> [!NOTE]
+> The vulnerability was already unexploitable due to existing Ktor (Quarkdown's server library) security measures, and purely theoretical. This patch prevents any future regressions.
+
+Prevented path traversal vulnerabilities that could allow attackers to access files outside the intended directory from the live preview endpoint (`/live/`).
+
+Thanks to the GitLab Security team for reporting!
+
 ## [2.6.1] - 2026-09-18
 
 ### Changed
