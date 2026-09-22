@@ -26,11 +26,27 @@ class LivePreviewEndpoint(
      * If no specific file is requested, defaults to [DEFAULT_FILE].
      * @param call the application call
      * @return the resolved file, even if it does not exist
+     * @throws IllegalArgumentException if the resolved path escapes the origin directory
      */
     private fun getTargetFile(call: ApplicationCall): File {
         val segments = call.parameters.getAll("file")?.takeIf { it.isNotEmpty() } ?: listOf(DEFAULT_FILE)
         val path = segments.joinToString("/") // e.g. file.html or subdir/file.html
-        return origin.resolve(path)
+        val candidate = origin.resolve(path)
+
+        // Containment is decided on the canonical paths (which collapse `..` and
+        // symlinks), but the original candidate is returned so that downstream
+        // `relativeTo(origin)` in the HTML wrapper keeps working when `origin`
+        // itself lies under a symlink (e.g. macOS temp dirs).
+        val resolvedCanonical = candidate.canonicalFile
+        val originCanonical = origin.canonicalFile
+
+        if (!resolvedCanonical.path.startsWith(originCanonical.path + File.separator) &&
+            resolvedCanonical != originCanonical
+        ) {
+            throw IllegalArgumentException("Path traversal attempt detected: $path")
+        }
+
+        return candidate
     }
 
     /**
@@ -38,7 +54,13 @@ class LivePreviewEndpoint(
      * @param call the application call
      */
     suspend fun handleRequest(call: ApplicationCall) {
-        val file = getTargetFile(call)
+        val file =
+            try {
+                getTargetFile(call)
+            } catch (e: IllegalArgumentException) {
+                call.respondText("Not Found", status = HttpStatusCode.NotFound)
+                return
+            }
 
         if (!file.exists() || !file.isFile) {
             call.respondText("Not Found", status = HttpStatusCode.NotFound)

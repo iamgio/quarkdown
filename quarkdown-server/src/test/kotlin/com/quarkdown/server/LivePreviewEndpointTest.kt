@@ -129,6 +129,45 @@ class LivePreviewEndpointTest {
             }
         }
 
+    @Test
+    fun `live preview blocks traversal with encoded dot segments`() =
+        runBlocking {
+            val client = HttpClient(CIO)
+            client.use { client ->
+                val response = client.get("http://localhost:$port/live/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd")
+                assertEquals(HttpStatusCode.NotFound, response.status)
+
+                val body = response.bodyAsText()
+                assertEquals("Not Found", body)
+            }
+        }
+
+    @Test
+    fun `live preview blocks traversal with encoded slash separators`() =
+        runBlocking {
+            val client = HttpClient(CIO)
+            client.use { client ->
+                val response = client.get("http://localhost:$port/live/..%2f..%2f..%2f..%2f..%2f..%2fetc%2fpasswd")
+                assertEquals(HttpStatusCode.NotFound, response.status)
+
+                val body = response.bodyAsText()
+                assertEquals("Not Found", body)
+            }
+        }
+
+    @Test
+    fun `live preview blocks traversal with an encoded absolute path`() =
+        runBlocking {
+            val client = HttpClient(CIO)
+            client.use { client ->
+                val response = client.get("http://localhost:$port/live/%2fetc%2fpasswd")
+                assertEquals(HttpStatusCode.NotFound, response.status)
+
+                val body = response.bodyAsText()
+                assertEquals("Not Found", body)
+            }
+        }
+
     /**
      * Finds a free port by using [ServerFreePortScanner] with a no-op server.
      */
