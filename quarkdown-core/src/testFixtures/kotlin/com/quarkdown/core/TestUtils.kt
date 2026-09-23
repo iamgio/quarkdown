@@ -13,7 +13,6 @@ import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.permissions.PermissionHolder
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineOptions
-import com.quarkdown.core.pipeline.Pipelines
 import com.quarkdown.core.visitor.token.TokenVisitor
 import org.assertj.core.api.Assertions.assertThat
 import kotlin.test.assertIs
@@ -106,6 +105,6 @@ fun MutableContext.attachMockPipeline(options: PipelineOptions = PipelineOptions
             libraries = emptySet(),
             renderer = { _, _ -> throw UnsupportedOperationException() },
         )
-    Pipelines.attach(this, pipeline)
+    open(pipeline)
     return pipeline
 }

@@ -13,6 +13,8 @@ import com.quarkdown.core.function.library.LibraryRegistrant
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.localization.MutableLocalizationTables
 import com.quarkdown.core.media.storage.MutableMediaStorage
+import com.quarkdown.core.pipeline.Pipeline
+import com.quarkdown.core.pipeline.Pipelines
 
 /**
  * A mutable [Context] implementation, which allows registering new data to be looked up later.
@@ -28,7 +30,8 @@ open class MutableContext(
     subdocument: Subdocument = Subdocument.Root,
     override val attributes: MutableAstAttributes = MutableAstAttributes(),
     override val options: MutableContextOptions = MutableContextOptions(),
-) : BaseContext(attributes, flavor, libraries, subdocument) {
+) : BaseContext(attributes, flavor, libraries, subdocument),
+    AutoCloseable {
     override val libraries: MutableList<Library> = super.libraries.toMutableList()
 
     override var documentInfo: DocumentInfo = super.documentInfo
@@ -119,4 +122,19 @@ open class MutableContext(
         lockFunctionCallEnqueuing = true
         return block().also { lockFunctionCallEnqueuing = false }
     }
+
+    /**
+     * Opens this context for [pipeline], which becomes its [attachedPipeline].
+     * Opening again for the same pipeline is a no-op.
+     * @param pipeline pipeline to run on this context
+     * @throws IllegalStateException if a different pipeline is already attached
+     * @see Pipelines.attach
+     */
+    fun open(pipeline: Pipeline) = Pipelines.attach(this, pipeline)
+
+    /**
+     * Releases this context and its subdocument contexts from the pipeline registry.
+     * @see Pipelines.detach
+     */
+    override fun close() = Pipelines.detach(this)
 }

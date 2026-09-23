@@ -6,9 +6,12 @@ import com.quarkdown.core.pipeline.output.OutputResource
 
 /**
  * A strategy to execute a [Pipeline] in a continuous REPL (Read-Eval-Print Loop) mode.
- * Note that the context is shared across iterations.
+ * The pipeline's context is shared across iterations, so definitions persist from one input to the next.
+ * @param readLine supplier of the next input line, or `null` when the input is exhausted. Defaults to standard input
  */
-class ReplExecutionStrategy : PipelineExecutionStrategy {
+class ReplExecutionStrategy(
+    private val readLine: () -> String? = ::readlnOrNull,
+) : PipelineExecutionStrategy {
     override fun execute(pipeline: Pipeline): OutputResource? {
         Log.info("== Quarkdown REPL ==")
         Log.info("Type 'exit' to quit.")
@@ -17,7 +20,7 @@ class ReplExecutionStrategy : PipelineExecutionStrategy {
         while (true) {
             print("\n> ")
 
-            when (val input = readlnOrNull()) {
+            when (val input = readLine()) {
                 null, "exit" -> break
                 else -> pipeline.execute(input)
             }

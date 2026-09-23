@@ -1,6 +1,5 @@
 package com.quarkdown.core.pipeline.stages
 
-import com.quarkdown.core.pipeline.Pipelines
 import com.quarkdown.core.pipeline.stage.PipelineStage
 import com.quarkdown.core.pipeline.stage.SharedPipelineData
 
@@ -22,7 +21,7 @@ object AttachmentStage : PipelineStage<Unit, Boolean> {
         data: SharedPipelineData,
     ): Boolean {
         val uninitialized = data.context.attachedPipeline == null
-        Pipelines.attach(data.context, data.pipeline)
+        data.context.open(data.pipeline)
         return uninitialized
     }
 }

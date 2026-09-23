@@ -17,6 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 /**
  * Tests for the programmatic pipeline entry point [runQuarkdown].
@@ -67,6 +68,8 @@ class ExecuteTest : TempDirectory() {
 
         assertNotNull(outcome.resource)
         assertNotNull(outcome.directory)
+        assertEquals("Programmatic entry test", outcome.context.documentInfo.name)
+        assertNull(outcome.context.attachedPipeline)
     }
 
     @Test
