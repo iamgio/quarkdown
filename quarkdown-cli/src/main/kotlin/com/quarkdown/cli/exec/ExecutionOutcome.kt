@@ -1,7 +1,6 @@
 package com.quarkdown.cli.exec
 
 import com.quarkdown.core.context.Context
-import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.output.OutputResource
 import java.io.File
 
@@ -11,17 +10,12 @@ import java.io.File
  * @param directory the directory, child of the configuration's output directory, where the output artifacts are saved.
  *                  If `null`, no output directory was written.
  *                  This can happen in case of errors or, more likely, when running in pipe mode (`--pipe`).
- * @param pipeline the executed pipeline
+ * @param context the context the pipeline ran on, exposing the document information, subdocuments and media it produced.
+ *                It is closed, meaning no pipeline is attached to it anymore
  * @see runQuarkdown
  */
 data class ExecutionOutcome(
     val resource: OutputResource?,
     val directory: File?,
-    val pipeline: Pipeline,
-) {
-    /**
-     * The context of the pipeline.
-     */
-    val context: Context
-        get() = pipeline.readOnlyContext
-}
+    val context: Context,
+)

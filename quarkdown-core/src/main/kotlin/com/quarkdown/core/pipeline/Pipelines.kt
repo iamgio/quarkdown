@@ -19,19 +19,32 @@ object Pipelines {
     fun getAttachedPipeline(context: Context): Pipeline? = pipelines[context]
 
     /**
-     * Attaches a pipeline to a context.
+     * Attaches a pipeline to a context. Attaching the same pipeline again is a no-op,
+     * which lets a pipeline be executed repeatedly on its context.
      * @param context context to attach the pipeline to
      * @param pipeline pipeline to attach
-     * @throws IllegalStateException if [context] already has an attached pipeline
+     * @throws IllegalStateException if [context] already has a different attached pipeline
      */
     fun attach(
         context: Context,
         pipeline: Pipeline,
     ) {
-        if (context in pipelines) {
+        val attached = pipelines[context]
+        if (attached != null && attached !== pipeline) {
             throw IllegalStateException("Context already has an attached pipeline.")
         }
 
         pipelines[context] = pipeline
+    }
+
+    /**
+     * Detaches the pipeline of [context] and of every subdocument context that shares its data,
+     * releasing them from this storage. A context can be attached again afterwards.
+     * @param context root context whose pipelines are no longer active
+     */
+    fun detach(context: Context) {
+        context.sharedSubdocumentsData.withContexts.values
+            .forEach(pipelines::remove)
+        pipelines.remove(context)
     }
 }

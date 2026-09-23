@@ -27,6 +27,7 @@ import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
+import com.quarkdown.core.pipeline.session.QuarkdownSession
 import com.quarkdown.core.util.kebabCaseName
 import com.quarkdown.installlayout.InstallLayout
 import com.quarkdown.interaction.Env
@@ -281,6 +282,7 @@ abstract class ExecuteCommand(
     override fun run() {
         val cliOptions = this.createCliOptions()
         val pipelineOptions = this.createPipelineOptions(cliOptions)
+        val session = createSession(cliOptions, pipelineOptions)
 
         // Prevents `--clean` from deleting sensitive directories.
         if (cliOptions.clean) {
@@ -306,12 +308,12 @@ abstract class ExecuteCommand(
             DirectoryWatcher
                 .create(sourceDirectory, exclude = cliOptions.outputDirectory) { event ->
                     Log.info("File changed: ${event.path()}. Launching.")
-                    execute(cliOptions, pipelineOptions)
+                    execute(session, cliOptions, pipelineOptions)
                 }.watch()
         }
 
         // Executes the Quarkdown pipeline.
-        execute(cliOptions, pipelineOptions)
+        execute(session, cliOptions, pipelineOptions)
     }
 
     /**
@@ -321,6 +323,7 @@ abstract class ExecuteCommand(
      * this boundary only translates the resulting exceptions into CLI exit codes.
      */
     private fun execute(
+        session: QuarkdownSession,
         cliOptions: CliOptions,
         pipelineOptions: PipelineOptions,
     ) {
@@ -330,7 +333,7 @@ abstract class ExecuteCommand(
 
         val outcome: ExecutionOutcome =
             try {
-                runQuarkdown(strategy, cliOptions, pipelineOptions)
+                runQuarkdown(strategy, session, cliOptions)
             } catch (e: ExecutionTimeoutException) {
                 Log.error("Execution timed out (--timeout ${e.timeoutSeconds}).")
                 throw ProgramResult(TIMEOUT_EXIT_CODE)

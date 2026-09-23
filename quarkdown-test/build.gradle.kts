@@ -7,6 +7,7 @@ plugins {
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation(libs.kotlinx.serialization.json)
+    testImplementation(project(":quarkdown-install-layout-navigator"))
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-html"))
     implementation(project(":quarkdown-markdown"))
