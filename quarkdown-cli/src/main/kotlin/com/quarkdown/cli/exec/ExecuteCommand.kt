@@ -282,6 +282,12 @@ abstract class ExecuteCommand(
     override fun run() {
         val cliOptions = this.createCliOptions()
         val pipelineOptions = this.createPipelineOptions(cliOptions)
+
+        // If pipe mode is enabled, all logging is disabled, so that only the rendered content is printed to stdout.
+        if (cliOptions.pipe) {
+            Log.level = LogLevel.NONE
+        }
+
         val session = createSession(cliOptions, pipelineOptions)
 
         // Prevents `--clean` from deleting sensitive directories.
@@ -294,11 +300,6 @@ abstract class ExecuteCommand(
                     )
                 }
             }
-        }
-
-        // If pipe mode is enabled, all logging is disabled, so that only the rendered content is printed to stdout.
-        if (cliOptions.pipe) {
-            Log.level = LogLevel.NONE
         }
 
         // If file watching is enabled, a file change triggers the pipeline execution again.
