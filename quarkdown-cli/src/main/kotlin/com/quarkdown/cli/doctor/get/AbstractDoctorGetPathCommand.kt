@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.CliktError
 import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.installlayout.InstallLayout
+import com.quarkdown.installlayout.getOrNull
 
 /**
  * Base class for `doctor get <name>` subcommands that print the absolute filesystem path of a

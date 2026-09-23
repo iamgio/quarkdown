@@ -3,20 +3,25 @@ import com.github.gradle.node.npm.task.NpxTask
 import groovy.json.JsonSlurper
 
 plugins {
-    kotlin("jvm")
+    id("quarkdown.multiplatform")
     alias(libs.plugins.kotlin.serialization)
     id("com.github.node-gradle.node") version "7.1.0"
     id("io.miret.etienne.sass") version "1.6.0"
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
-    testImplementation(testFixtures(project(":quarkdown-core")))
-    implementation(project(":quarkdown-core"))
-    implementation(project(":quarkdown-plaintext")) // For search index generation
-    implementation(project(":quarkdown-install-layout-navigator"))
-    implementation("org.jetbrains.kotlinx:kotlinx-html:0.12.0")
-    implementation(libs.kotlinx.serialization.json)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":quarkdown-core"))
+            implementation(project(":quarkdown-plaintext")) // For search index generation
+            implementation(project(":quarkdown-install-layout-navigator"))
+            implementation("org.jetbrains.kotlinx:kotlinx-html:0.12.0")
+            implementation(libs.kotlinx.serialization.json)
+        }
+        jvmTest.dependencies {
+            implementation(project(":quarkdown-core-test-fixtures"))
+        }
+    }
 }
 
 tasks.compileSass {
@@ -119,7 +124,7 @@ val bundleTypeScript =
         )
     }
 
-tasks.processResources {
+tasks.named("jvmProcessResources") {
     dependsOn(bundleThirdParty)
 }
 
@@ -131,7 +136,7 @@ val npmUnitTest =
         args.set(listOf("run", "test:run"))
     }
 
-tasks.test {
+tasks.named("jvmTest") {
     dependsOn(npmUnitTest)
     dependsOn(":assembleDevLib")
 }

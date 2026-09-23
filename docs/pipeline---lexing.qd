@@ -1,7 +1,7 @@
 .docname {Pipeline - Lexing}
 .include {docs}
 
-> Main packages: .repolink {`core.lexer`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/lexer}
+> Main packages: .repolink {`core.lexer`} {tree/main/quarkdown-core/src/commonMain/kotlin/com/quarkdown/core/lexer}
 
 Lexing is like breaking down a sentence into its individual words before figuring out the meaning of the sentence. Imagine you are reading a paragraph, and before understanding the message, you first recognize individual words like nouns, verbs, and punctuation.
 

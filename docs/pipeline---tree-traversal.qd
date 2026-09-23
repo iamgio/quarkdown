@@ -1,7 +1,7 @@
 .docname {Pipeline - Tree traversal}
 .include {docs}
 
-> Main packages: .repolink {`core.ast.iterator`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast/iterator}, .repolink {`core.context.hooks`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/context/hooks}
+> Main packages: .repolink {`core.ast.iterator`} {tree/main/quarkdown-core/src/commonMain/kotlin/com/quarkdown/core/ast/iterator}, .repolink {`core.context.hooks`} {tree/main/quarkdown-core/src/commonMain/kotlin/com/quarkdown/core/context/hooks}
 
 After the function calls have been expanded, the AST is traversed depth-first to gather enriched information about the document, such as:
 - Heading hierarchy, used for the [table of contents](table-of-contents.qd)

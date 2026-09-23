@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
         mavenCentral()
@@ -12,7 +13,9 @@ plugins {
 rootProject.name = "quarkdown"
 
 include("quarkdown-core")
+include("quarkdown-core-test-fixtures")
 include("quarkdown-native-library-processor")
+include("quarkdown-native-library-annotations")
 include("quarkdown-locale-table-processor")
 include("quarkdown-html")
 include("quarkdown-html-pdf")

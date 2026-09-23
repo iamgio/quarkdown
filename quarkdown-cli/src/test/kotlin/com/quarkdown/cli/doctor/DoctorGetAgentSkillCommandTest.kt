@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.testing.test
 import com.quarkdown.cli.QuarkdownCommand
 import com.quarkdown.installlayout.InstallLayout
+import com.quarkdown.installlayout.get
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals

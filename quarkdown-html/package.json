@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Browser runtime for quarkdown-html",
   "license": "GPL-3.0",
-  "author": "Giorgio Garofalo & Quarkdown contributors",
+  "author": "Giorgio Garofalo (iamgio)",
   "type": "commonjs",
   "main": "src/main/typescript/index.ts",
   "scripts": {
@@ -34,5 +34,11 @@
     "@types/node": "^25.9.3",
     "@playwright/test": "^1.60.0",
     "romans": "^3.1.0"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "core-js": false,
+    "es5-ext": false,
+    "fsevents": false
   }
 }

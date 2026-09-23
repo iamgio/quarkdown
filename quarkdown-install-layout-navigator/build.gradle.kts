@@ -1,12 +1,16 @@
 plugins {
-    kotlin("jvm")
+    id("quarkdown.multiplatform")
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
-    implementation(project(":quarkdown-core"))
-}
-
-tasks.test {
-    useJUnitPlatform()
+kotlin {
+    jvm {
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":quarkdown-core"))
+        }
+    }
 }

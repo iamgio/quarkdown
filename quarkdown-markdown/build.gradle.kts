@@ -1,10 +1,9 @@
 plugins {
-    kotlin("jvm")
+    id("quarkdown.jvm")
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
-    testImplementation(testFixtures(project(":quarkdown-core")))
+    testImplementation(project(":quarkdown-core-test-fixtures"))
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-html"))
 }
