@@ -4,6 +4,10 @@
 
 ### Fixed
 
+### REPL prints to console
+
+Fixed a regression that caused `quarkdown repl` to write to file rather than to stdout. 
+
 #### Preview runs no longer re-scan libraries
 
 Preview sessions no longer look for available libraries on each run, slightly improving performance.

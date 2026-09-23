@@ -1,6 +1,5 @@
 package com.quarkdown.cli.exec.strategy
 
-import com.quarkdown.core.log.Log
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.output.OutputResource
 
@@ -13,9 +12,8 @@ class ReplExecutionStrategy(
     private val readLine: () -> String? = ::readlnOrNull,
 ) : PipelineExecutionStrategy {
     override fun execute(pipeline: Pipeline): OutputResource? {
-        Log.info("== Quarkdown REPL ==")
-        Log.info("Type 'exit' to quit.")
-        Log.info("Tip: pass the source file path as an argument to execute it instead.")
+        println("== Quarkdown REPL ==")
+        println("Type 'exit' to quit.")
 
         while (true) {
             print("\n> ")
