@@ -1,6 +1,7 @@
 package com.quarkdown.cli
 
 import com.quarkdown.cli.renderer.RendererRetriever
+import com.quarkdown.core.filesystem.FsEntry
 import java.io.File
 
 /**
@@ -21,7 +22,7 @@ import java.io.File
 data class CliOptions(
     val source: File?,
     val outputDirectory: File?,
-    val libraryDirectory: File?,
+    val libraryDirectory: FsEntry?,
     val rendererName: String,
     val clean: Boolean,
     val pipe: Boolean,
