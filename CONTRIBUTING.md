@@ -4,7 +4,7 @@
 [Discussion]: https://github.com/iamgio/quarkdown/discussions
 [wiki]: https://quarkdown.com/wiki
 [documentation]: https://quarkdown.com/docs
-[standard library]: https://github.com/iamgio/quarkdown/tree/main/quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib
+[standard library]: https://github.com/iamgio/quarkdown/tree/main/quarkdown-stdlib/src/commonMain/kotlin/com/quarkdown/stdlib
 
 
 # Contributing to Quarkdown

@@ -1,12 +1,11 @@
 extra["noRuntime"] = true
 
 plugins {
-    kotlin("jvm")
+    id("quarkdown.jvm")
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
-    implementation("com.google.devtools.ksp:symbol-processing-api:2.3.12")
+    implementation(libs.ksp.symbol.processing.api)
 }
 
 tasks.test {

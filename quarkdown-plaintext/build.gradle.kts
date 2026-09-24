@@ -1,8 +1,11 @@
 plugins {
-    kotlin("jvm")
+    id("quarkdown.multiplatform")
 }
 
-dependencies {
-    testImplementation(kotlin("test"))
-    implementation(project(":quarkdown-core"))
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":quarkdown-core"))
+        }
+    }
 }

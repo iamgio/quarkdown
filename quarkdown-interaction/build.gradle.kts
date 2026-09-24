@@ -1,9 +1,8 @@
 plugins {
-    kotlin("jvm")
+    id("quarkdown.jvm")
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
     implementation(project(":quarkdown-core"))
 
     implementation(libs.ktor.client.core)

@@ -1,15 +1,15 @@
 extra["noRuntime"] = true
 
 plugins {
-    kotlin("jvm")
+    id("quarkdown.jvm")
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-quarkdoc-reader"))
     implementation(libs.kotlinx.serialization.json)
     implementation(project(":quarkdown-native-library-processor"))
+    implementation(project(":quarkdown-native-library-annotations"))
     implementation(kotlin("reflect"))
 
     val dokkaVersion = "2.2.0"

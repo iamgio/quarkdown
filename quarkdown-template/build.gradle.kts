@@ -1,11 +1,10 @@
 plugins {
-    kotlin("jvm")
+    id("quarkdown.jvm")
     id("gg.jte.gradle") version "3.2.4"
 }
 
 dependencies {
     implementation("gg.jte:jte:3.2.4")
-    testImplementation(kotlin("test"))
 }
 
 // Production templates: precompile into class files and bundle them into this module's jar so

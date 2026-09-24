@@ -18,7 +18,7 @@ import kotlin.test.BeforeTest
 private const val SOURCE_DIR = "src/main/kotlin"
 private const val SOURCE_ROOT = "$SOURCE_DIR/test/Test.kt"
 
-private val CORE_SOURCE_DIR = File("../quarkdown-core/src/main/kotlin").absolutePath
+private val CORE_SOURCE_DIR = File("../quarkdown-core/src/commonMain/kotlin").absolutePath
 
 /**
  * @return [this] class to a path in the source tree

@@ -1,7 +1,7 @@
 .docname {Pipeline - Parsing}
 .include {docs}
 
-> Main packages: .repolink {`core.parser`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/parser}, .repolink {`core.ast`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/ast}
+> Main packages: .repolink {`core.parser`} {tree/main/quarkdown-core/src/commonMain/kotlin/com/quarkdown/core/parser}, .repolink {`core.ast`} {tree/main/quarkdown-core/src/commonMain/kotlin/com/quarkdown/core/ast}
 
 Continuing with the metaphor introduced in [Lexing](pipeline---lexing.qd), once the nouns, verbs, and adjectives are extracted from a sentence, our brain is responsible for linking them together to build information out of them.
 

@@ -1,10 +1,9 @@
 plugins {
-    kotlin("jvm")
+    id("quarkdown.jvm")
     application
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.apache.pdfbox:pdfbox:3.0.6")
     implementation(project(":quarkdown-core"))
     implementation(project(":quarkdown-template"))

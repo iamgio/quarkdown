@@ -1,7 +1,7 @@
 .docname {Pipeline - Rendering}
 .include {docs}
 
-> Main packages: .repolink {`core.rendering`} {tree/main/quarkdown-core/src/main/kotlin/com/quarkdown/core/rendering}
+> Main packages: .repolink {`core.rendering`} {tree/main/quarkdown-core/src/commonMain/kotlin/com/quarkdown/core/rendering}
 >
 > Rendering modules: .repolink {`quarkdown-html`} {tree/main/quarkdown-html}, .repolink {`quarkdown-plaintext`} {tree/main/quarkdown-plaintext}
 

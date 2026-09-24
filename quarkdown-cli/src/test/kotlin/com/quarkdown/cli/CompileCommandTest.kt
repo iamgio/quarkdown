@@ -7,6 +7,7 @@ import com.quarkdown.cli.exec.CompileCommand
 import com.quarkdown.core.IO_ERROR_EXIT_CODE
 import com.quarkdown.core.TIMEOUT_EXIT_CODE
 import com.quarkdown.core.UNRESOLVED_REFERENCE_EXIT_CODE
+import com.quarkdown.core.filesystem.toFileOrNull
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler

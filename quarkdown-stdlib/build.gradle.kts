@@ -1,20 +1,31 @@
+import com.quarkdown.buildlogic.kspCommonMain
+
 plugins {
-    kotlin("jvm")
-    id("com.google.devtools.ksp") version "2.3.12"
+    id("quarkdown.multiplatform")
+    alias(libs.plugins.ksp)
 }
 
-dependencies {
-    compileOnly(project(":quarkdown-native-library-processor"))
-    ksp(project(":quarkdown-native-library-processor"))
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":quarkdown-core"))
+            implementation(project(":quarkdown-native-library-annotations"))
+            implementation(libs.kotlinx.serialization.json)
+            implementation("org.kodein.emoji:emoji-kt:2.5.0")
+        }
+        jvmMain.dependencies {
+            implementation("com.jsoizo:kotlin-csv:2.0.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.9.1")
+        }
+        jvmTest.dependencies {
+            implementation("org.assertj:assertj-core:3.27.7")
+            implementation(project(":quarkdown-core-test-fixtures"))
+        }
+    }
+}
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.assertj:assertj-core:3.27.7")
-    testImplementation(testFixtures(project(":quarkdown-core")))
-    implementation(project(":quarkdown-core"))
-    implementation(project(":quarkdown-install-layout-navigator"))
-    implementation(libs.kotlinx.serialization.json)
-    implementation("com.jsoizo:kotlin-csv:2.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.9.1")
-    implementation("org.kodein.emoji:emoji-kt:2.5.0")
+kspCommonMain(project(":quarkdown-native-library-processor"))
+
+dependencies {
     dokkaPlugin(project(":quarkdown-quarkdoc"))
 }

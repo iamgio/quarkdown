@@ -1,3 +1,6 @@
+import com.quarkdown.buildlogic.KSP_COMMON_MAIN_TASK
+import com.quarkdown.buildlogic.KSP_JVM_TASK
+import com.quarkdown.buildlogic.hasSharedCommonMain
 import org.gradle.kotlin.dsl.support.serviceOf
 import org.gradle.process.ExecOperations
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -7,6 +10,7 @@ import java.time.Year
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    id("quarkdown.multiplatform") apply false
     id("org.jetbrains.dokka") version "2.2.0"
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
     id("io.github.ben-manes.versions") version "0.61.0"
@@ -76,10 +80,10 @@ dokka {
 fun usesQuarkdoc(project: Project): Boolean {
     val quarkdoc = project(":quarkdown-quarkdoc")
     return project.configurations
-        .asSequence()
-        .flatMap { it.dependencies }
-        .filterIsInstance<ProjectDependency>()
-        .any { it.path == quarkdoc.path }
+        .findByName("dokkaPlugin")
+        ?.dependencies
+        ?.filterIsInstance<ProjectDependency>()
+        ?.any { it.path == quarkdoc.path } == true
 }
 
 val quarkdocGenerate: TaskProvider<Task> =
@@ -124,14 +128,34 @@ allprojects {
     // KSP-generated source files must be included in the Dokka source set.
     afterEvaluate {
         if (usesQuarkdoc(this) && pluginManager.hasPlugin("com.google.devtools.ksp")) {
+            val multiplatform = pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")
+            val documentedSourceSet = if (multiplatform) "commonMain" else "main"
+            val generatedSources =
+                when {
+                    !multiplatform -> "generated/ksp/main/kotlin"
+                    hasSharedCommonMain -> "generated/ksp/metadata/commonMain/kotlin"
+                    else -> "generated/ksp/jvm/jvmMain/kotlin"
+                }
+            val kspTask =
+                when {
+                    !multiplatform -> "kspKotlin"
+                    hasSharedCommonMain -> KSP_COMMON_MAIN_TASK
+                    else -> KSP_JVM_TASK
+                }
+
             dokka {
-                dokkaSourceSets.named("main") {
-                    sourceRoots.from(layout.buildDirectory.dir("generated/ksp/main/kotlin"))
+                dokkaSourceSets.named(documentedSourceSet) {
+                    sourceRoots.from(layout.buildDirectory.dir(generatedSources))
                     suppressGeneratedFiles.set(false)
+                }
+                if (multiplatform) {
+                    dokkaSourceSets.matching { it.name != documentedSourceSet }.configureEach {
+                        suppress.set(true)
+                    }
                 }
             }
             listOf("dokkaGeneratePublicationHtml", "dokkaGenerateModuleHtml").forEach { taskName ->
-                tasks.named(taskName) { dependsOn("kspKotlin") }
+                tasks.named(taskName) { dependsOn(kspTask) }
             }
         }
     }
@@ -161,6 +185,12 @@ val installLibLayout: CopySpec.() -> Unit = {
         from(rootProject.file("skills"))
     }
 }
+
+/**
+ * The tasks producing a subproject's library JAR: `jar` for Kotlin/JVM projects, `jvmJar` for multiplatform ones.
+ */
+val Project.libraryJarTasks: TaskCollection<Task>
+    get() = tasks.matching { it.name == "jar" || it.name == "jvmJar" }
 
 // Bundled JVM runtime
 
@@ -256,7 +286,7 @@ val bundleRuntime =
         group = "distribution"
         description = "Creates a minimal JRE via jlink for the host platform (used by installDist)."
 
-        dependsOn(tasks.jar, subprojects.map { it.tasks.named("jar") })
+        dependsOn(tasks.jar, subprojects.map { it.libraryJarTasks })
 
         val runtimeDir = layout.buildDirectory.dir("runtime")
         outputs.dir(runtimeDir)
@@ -331,7 +361,7 @@ jlinkTargets.forEach { target ->
         tasks.register("bundleRuntime${target.taskSuffix}") {
             group = "distribution"
             description = "Creates a minimal JRE via jlink for ${target.id}, using the target platform's jmods."
-            dependsOn(downloadJdkTask, tasks.jar, subprojects.map { it.tasks.named("jar") })
+            dependsOn(downloadJdkTask, tasks.jar, subprojects.map { it.libraryJarTasks })
             inputs.dir(jdkRoot)
             outputs.dir(runtimeDir)
 

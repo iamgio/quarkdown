@@ -60,6 +60,10 @@ The project is structured as a multi-module Gradle project.
 - To build, always run `./gradlew installDist` or `distZip` from the root folder. Never run `build`.
 - To test, run `./gradlew test`, optionally specifying a module, e.g., `:quarkdown-core:test`.
 - `./gradlew run` is acceptable. 
+- Several `quarkdown-*` modules are Kotlin Multiplatform modules,
+  set up by the `quarkdown.multiplatform` convention plugin.
+  Their Kotlin sources live in `src/commonMain/kotlin` and must only use the common Kotlin API.
+  Tests live in `src/jvmTest/kotlin`, plus `src/commonTest` when they can run everywhere.
 
 ## Compiler
 
@@ -125,12 +129,12 @@ Adding a new primitive-backed node involves two sides:
   - If the node should be user-styleable, make it also implement `StylableNode` with a `style: NodeStyle` property.
     Remember to carry it through any custom `copy(...)` helpers on the node.
 
-- **stdlib primitive** (in [`quarkdown-stdlib/.../Primitives.kt`](quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib/Primitives.kt)).
+- **stdlib primitive** (in [`quarkdown-stdlib/.../Primitives.kt`](quarkdown-stdlib/src/commonMain/kotlin/com/quarkdown/stdlib/Primitives.kt)).
   Declare a `@QFunction` returning the AST node wrapped as a value. Parameter names must match those emitted by `toFunctionCallArguments()`.
   Include a KDoc example that uses `.extend {name}`, following the pattern already used by `.heading`, `.paragraph`, `.figure`, `.pagebreak`, `.math`, and `.link`.
   If the node is styleable, accept `@Spread style: StyleOptions = StyleOptions.DEFAULT` and pass `style.toNodeStyle()` into the node.
 
-- **Renderer** (for each rendering backend, e.g. [`quarkdown-html/.../QuarkdownHtmlNodeRenderer.kt`](quarkdown-html/src/main/kotlin/com/quarkdown/rendering/html/node/QuarkdownHtmlNodeRenderer.kt)).
+- **Renderer** (for each rendering backend, e.g. [`quarkdown-html/.../QuarkdownHtmlNodeRenderer.kt`](quarkdown-html/src/commonMain/kotlin/com/quarkdown/rendering/html/node/QuarkdownHtmlNodeRenderer.kt)).
   If the node is styleable, the renderer's `visit(node)` must actually emit the style. In the HTML backend that means calling `style(node.style)` inside the tag builder block:
 
   ```kotlin
@@ -231,7 +235,7 @@ val Layout: QuarkdownModule =
     )
 ```
 
-The module should then be registered in [Stdlib](quarkdown-stdlib/src/main/kotlin/com/quarkdown/stdlib/Stdlib.kt).
+The module should then be registered in [Stdlib](quarkdown-stdlib/src/commonMain/kotlin/com/quarkdown/stdlib/Stdlib.kt).
 
 By default, a function declared as `fun x(y: Type): ReturnType` in Kotlin
 is exposed to Quarkdown as a function call `.x y:{arg}` that returns a dynamic value.
@@ -338,7 +342,7 @@ A layout or color theme can ship sibling assets (e.g. fonts) that travel with it
 ## Testing
 
 The project has high test coverage, with three types of tests:
-- Regular unit tests, located in each module's `src/test/kotlin` folder for Kotlin, and `__tests__` folders for TypeScript, 
+- Regular unit tests, located in each module's `src/test/kotlin` folder for Kotlin (`src/jvmTest/kotlin` in multiplatform modules), and `__tests__` folders for TypeScript, 
   which test individual components, classes, and functions in isolation.
 - Integration unit tests, located in [quarkdown-test](quarkdown-test/src/test/kotlin),
   which test the compiler as a whole, by compiling Quarkdown source files into different output formats, mainly HTML.

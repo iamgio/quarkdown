@@ -1,10 +1,9 @@
 plugins {
-    kotlin("jvm")
+    id("quarkdown.jvm")
     alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
     implementation(libs.kotlinx.serialization.json)
 }
 
