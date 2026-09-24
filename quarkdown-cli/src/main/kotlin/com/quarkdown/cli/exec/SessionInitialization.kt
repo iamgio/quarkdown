@@ -1,7 +1,6 @@
 package com.quarkdown.cli.exec
 
 import com.quarkdown.cli.CliOptions
-import com.quarkdown.cli.lib.QdLibraries
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.function.library.LibraryExporter
 import com.quarkdown.core.log.DebugFormatter
@@ -11,6 +10,7 @@ import com.quarkdown.core.pipeline.PipelineHooks
 import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.session.QuarkdownSession
 import com.quarkdown.stdlib.Stdlib
+import com.quarkdown.stdlib.external.QdLibraries
 
 /**
  * Creates the session every CLI compilation runs in.
