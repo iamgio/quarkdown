@@ -64,6 +64,8 @@ class CompileCommandTest : TempDirectory() {
                 *additionalArgs,
             )
 
+        assertEquals(0, result.statusCode, result.output)
+
         val cliOptions = command.createCliOptions()
         val pipelineOptions = command.createPipelineOptions(cliOptions)
 
