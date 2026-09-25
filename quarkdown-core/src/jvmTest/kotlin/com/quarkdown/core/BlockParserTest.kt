@@ -178,6 +178,17 @@ class BlockParserTest {
     }
 
     @Test
+    fun `setext heading spanning multiple lines keeps every line`() {
+        val nodes = blocksIterator<Heading>("a\nb\n===")
+
+        with(nodes.next()) {
+            assertEquals("a\nb", rawText)
+            assertEquals(1, depth)
+        }
+        assertFalse(nodes.hasNext())
+    }
+
+    @Test
     fun blockCode() {
         val nodes = blocksIterator<Code>(readSource("/parsing/blockcode.md"))
 

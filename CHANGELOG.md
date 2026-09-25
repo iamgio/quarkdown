@@ -4,6 +4,14 @@
 
 ### Fixed
 
+#### Multi-line setext headings keep all their lines
+
+A heading underlined by `===` or `---` that spans several lines used to keep only the last line. The whole text now becomes the heading.
+
+#### Flat stack usage for block tokenization
+
+Tokenization of Markdown paragraphs, lists, list items, blockquotes, tables, code, footnotes, and setext headings no longer grows the recursion stack linearly, optimizing resource usage and preventing crashes on small stacks. 
+
 ### REPL prints to console
 
 Fixed a regression that caused `quarkdown repl` to write to file rather than to stdout. 

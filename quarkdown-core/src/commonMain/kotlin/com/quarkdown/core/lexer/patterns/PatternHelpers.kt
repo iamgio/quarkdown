@@ -7,6 +7,9 @@ internal object PatternHelpers {
     /** Bullet point for unordered and ordered lists. */
     const val BULLET = "[*+-]|\\d{1,9}[\\.)]"
 
+    /** End of the whole input, regardless of the multiline mode, which makes `$` match the end of each line. */
+    const val END_OF_INPUT = "(?![\\s\\S])"
+
     /**
      * Title enclosed in delimiters.
      * - `"This is a title"`
