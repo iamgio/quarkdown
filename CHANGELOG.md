@@ -12,6 +12,10 @@ Fixed a regression that caused `quarkdown repl` to write to file rather than to 
 
 Preview sessions no longer look for available libraries on each run, slightly improving performance.
 
+#### PDF export no longer fails when its port is busy
+
+Fixed a regression that caused PDF export to fail instead of moving on to the next free port, if the current one was busy.
+
 ## [2.6.2] - 2026-09-22
 
 ### Fixed

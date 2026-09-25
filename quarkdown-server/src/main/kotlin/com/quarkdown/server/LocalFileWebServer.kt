@@ -16,6 +16,7 @@ import io.ktor.server.routing.routing
 import io.ktor.server.sse.SSE
 import io.ktor.server.sse.sse
 import java.io.File
+import java.net.BindException
 
 /**
  * Loopback address used by the server and all clients.
@@ -46,6 +47,7 @@ class LocalFileWebServer(
     /**
      * Starts the server on [port].
      * @throws IllegalArgumentException if [targetFile] does not exist
+     * @throws PortUnavailableException if [port] is already in use
      */
     override fun start(
         port: Int,
@@ -81,7 +83,26 @@ class LocalFileWebServer(
                 }
             }
 
-        server.monitor.subscribe(ServerReady) { onReady(KtorStoppableAdapter(server.application)) }
-        server.start(wait = wait)
+        var ready = false
+        server.monitor.subscribe(ServerReady) {
+            ready = true
+            onReady(KtorStoppableAdapter(server.application))
+        }
+
+        try {
+            server.start(wait = wait)
+        } catch (e: Exception) {
+            if (!ready && e.isCausedByBindFailure()) {
+                throw PortUnavailableException(port, e)
+            }
+            throw e
+        }
     }
 }
+
+/**
+ * @return whether this throwable, or any throwable in its cause chain, is a port binding failure
+ */
+private fun Throwable.isCausedByBindFailure(): Boolean =
+    generateSequence(this) { throwable -> throwable.cause?.takeUnless { it === throwable } }
+        .any { it is BindException }

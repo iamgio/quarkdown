@@ -11,6 +11,7 @@ interface Server {
      * @param port port to start the server on
      * @param wait if true, blocks the current thread until the server is stopped
      * @param onReady callback called when the server is ready to accept requests, with the application as argument
+     * @throws PortUnavailableException if [port] is already in use
      */
     fun start(
         port: Int,

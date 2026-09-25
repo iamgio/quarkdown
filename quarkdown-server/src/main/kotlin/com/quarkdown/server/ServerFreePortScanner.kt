@@ -12,8 +12,12 @@ class ServerFreePortScanner(
 ) {
     /**
      * Attempts to start the server on a free port.
+     * Only a port reported as occupied before [onReady] starts makes the scan advance:
+     * any other failure propagates to the caller instead of being retried on another port.
      * @param startingPort port to start from
-     * @param onReady callback called when the server is ready to accept requests, with the application and port as arguments
+     * @param onReady callback called when the server is ready to accept requests, with the application and port as arguments.
+     *               It is invoked at most once, no matter how many ports the scan goes through
+     * @throws IOException if no port in the `startingPort..65535` range is available
      */
     fun attemptStartUntilPortAvailable(
         startingPort: Int,
@@ -21,12 +25,17 @@ class ServerFreePortScanner(
     ) {
         var port = startingPort
         while (port <= MAX_PORT) {
+            var onReadyStarted = false
             try {
                 server.start(port) { stoppable ->
+                    onReadyStarted = true
                     onReady(stoppable, port)
                 }
                 return
-            } catch (e: IOException) {
+            } catch (e: PortUnavailableException) {
+                if (onReadyStarted) {
+                    throw e
+                }
                 port++
             }
         }
