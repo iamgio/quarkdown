@@ -1,5 +1,6 @@
 package com.quarkdown.core.lexer.patterns
 
+import com.quarkdown.core.lexer.patterns.PatternHelpers.END_OF_INPUT
 import com.quarkdown.core.lexer.patterns.PatternHelpers.customId
 import com.quarkdown.core.lexer.regex.RegexBuilder
 import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
@@ -45,7 +46,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             }.buildRegex()
 
     /**
-     * 4-spaces indented content.
+     * 4-spaces indented content: lines indented by at least 4 spaces, possibly separated by blank lines.
      * @see BlockCodeToken
      */
     val blockCode by lazy {
@@ -53,12 +54,16 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "BlockCode",
             wrap = ::BlockCodeToken,
             regex =
-                "^( {4}(?=[^\\n]*\\S)[^\\n]+(?:\\n(?: *(?:\\n|\$))*)?)+",
+                RegexBuilder(
+                    "^( {4}(?=[^\\n]*\\S)[\\s\\S]*?(?:$END_OF_INPUT|\\n(?!(?:[ \\n]*\\n)?codeline)(?:[ \\n]*\\n)?(?: *$END_OF_INPUT)?))",
+                ).withReference("codeline", " {4}(?=[^\\n]*\\S)")
+                    .build(),
         )
     }
 
     /**
-     * `>`-beginning content.
+     * `>`-beginning content: one or more quote lines, each of which may be followed by lazy continuation lines
+     * (non-empty lines that are not interruptions) when the quote line has content of its own.
      * @see BlockQuoteToken
      */
     val blockQuote by lazy {
@@ -66,8 +71,9 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "BlockQuote",
             wrap = ::BlockQuoteToken,
             regex =
-                RegexBuilder("^( {0,3}> ?(paragraph|[^\\n]*)(?:\\n|$))+")
-                    .withReference("paragraph", paragraph.regex)
+                RegexBuilder(
+                    "^( {0,3}>[\\s\\S]*?(?:$END_OF_INPUT|\\n(?! {0,3}>)(?:(?<=^ {0,3}> ?\\n)|(?![^\\n])|(?=interruption))))",
+                ).withReference("interruption", interruptionRule().pattern)
                     .build(),
         )
     }
@@ -189,7 +195,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
     }
 
     /**
-     * Creation of a referenceable footnote defined by label and content.
+     * Definition of a footnote, whose text follows the same rules as a [paragraph] and may start on the next line.
      * @see FootnoteDefinitionToken
      */
     val footnoteDefinition by lazy {
@@ -200,13 +206,18 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                 definitionPattern(
                     inBrackets = "\\^(label)",
                     content = "",
-                    interruption = "(.+(?:\\n(?!${interruptionRule()})[^\\n]+)*)*",
+                    interruption = "(?:${paragraph.regex})?",
                 ),
         )
     }
 
     /**
-     * Item of a list.
+     * Item of a list, made of its bullet, an optional task marker, and every following line
+     * up to the first one that cannot continue it.
+     *
+     * A blank line, or a line of whitespace, always continues the item if indented content follows it.
+     * Otherwise, a line break ends the item, without being part of it, if a bullet or a line of whitespace follows;
+     * it is the last character of the item if a blank line follows.
      * @see ListItemToken
      */
     val listItem by lazy {
@@ -215,8 +226,11 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             wrap = ::ListItemToken,
             regex =
                 RegexBuilder(
-                    "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t](((.+(\\n(?!(\\s+\\n| {0,3}(bullet))))?)*(\\s*^\\3 {2,})*)*)",
-                ).withReference("bullet", PatternHelpers.BULLET)
+                    "^(( {0,3})(?:bullet))([ \\t]\\[[ xX]\\]|(?:))[ \\t]" +
+                        "(?:(?:(?!\\n)|(?=resumption))[\\s\\S]*?(?:$END_OF_INPUT|(?=blocked)(?!resumption)|(?!blocked)(?!resumption)\\n(?=\\n))|)",
+                ).withReference("resumption", "\\n\\s*^\\3 {2,}")
+                    .withReference("blocked", "\\n(?:\\s+\\n| {0,3}(?:bullet))")
+                    .withReference("bullet", PatternHelpers.BULLET)
                     .build(),
         )
     }
@@ -251,7 +265,7 @@ open class BaseMarkdownBlockTokenRegexPatterns {
     }
 
     /**
-     * Plain text content.
+     * Plain text content: a non-empty line, continued by every following non-empty line that is not an interruption.
      * @see ParagraphToken
      */
     val paragraph by lazy {
@@ -259,14 +273,15 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "Paragraph",
             wrap = ::ParagraphToken,
             regex =
-                RegexBuilder("([^\\n]+(?:\\n(?!interruption)[^\\n]+)*)")
+                RegexBuilder("([^\\n][\\s\\S]*?(?:$END_OF_INPUT|(?=\\n(?:\\n|$END_OF_INPUT|interruption))))")
                     .withReference("interruption", interruptionRule().pattern)
                     .build(),
         )
     }
 
     /**
-     * Text followed by a horizontal rule on a new line.
+     * Heading underlined by `=` or `-`: one or more non-empty lines that do not start with a bullet,
+     * up to the first underline. The heading text spans every line up to the underline (exclusive).
      * @see SetextHeadingToken
      */
     val setextHeading by lazy {
@@ -274,9 +289,14 @@ open class BaseMarkdownBlockTokenRegexPatterns {
             name = "SetextHeading",
             wrap = ::SetextHeadingToken,
             regex =
-                RegexBuilder("^(?:(?:(?! {0,3}(?:bullet))(.+?)customid?\\R)+?)bar *(?:\\R+|$)")
-                    .withReference("bullet", PatternHelpers.BULLET)
+                RegexBuilder(
+                    "^notbullet" +
+                        "((?:(?>[^\\r\\n][\\s\\S]*?(?=\\R(?:\\R|barline|(?: {0,3}(?:bullet))|[^\\n]*\\Rbarline)))\\R)?" +
+                        "notbullet(?!barline).+?)customid?\\Rbar *(?:\\R+|$)",
+                ).withReference("barline", " {0,3}(?:=+|-+) *(?:\\R|$)")
                     .withReference("bar", " {0,3}(=+|-+)")
+                    .withReference("notbullet", "(?! {0,3}(?:bullet))")
+                    .withReference("bullet", PatternHelpers.BULLET)
                     .withReference("customid", customId("setext"))
                     .build(),
             groupNames = listOf("setextcustomid"),
@@ -297,8 +317,8 @@ open class BaseMarkdownBlockTokenRegexPatterns {
                     "^ *([^\\n ].*)\\n" +
                         // Align
                         " {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)" +
-                        // Cells
-                        "(?:\\n((?:(?! *\\n|interruption).*(?:\\n|$))*)\\n*|$)",
+                        // Cells: every following line up to a blank line or an interruption
+                        "(?:\\n((?:(?! *\\n|interruption)[\\s\\S]*?(?:$END_OF_INPUT|\\n(?=$END_OF_INPUT| *\\n|interruption)))?)\\n*|$)",
                 ).withReference("interruption", interruptionRule(includeTable = false).pattern)
                     .withReference("|table", "")
                     .build(),
@@ -322,18 +342,30 @@ open class BaseMarkdownBlockTokenRegexPatterns {
     }
 
     /**
-     * Generates a regex TokenRegexPattern that matches a whole list block.
-     * @param bulletInitialization bullet TokenRegexPattern that begins the block
-     * @param bulletContinuation bullet TokenRegexPattern that continues the block (all the items should ideally share the same bullet type)
+     * Builds the pattern of a list, which begins with a bullet and spans every following line
+     * up to the first one that cannot continue it.
+     *
+     *  A line break ends the list, without being part of it, if the next line is an interruption
+     * (including a bullet of a different kind) that is not resumed by indented content or a bullet of the same kind.
+     * A line break is the last character of the list if two blank lines follow,
+     * or if a blank line follows without being resumed.
+     *
+     * @param bulletInitialization pattern of the bullet that starts the list
+     * @param bulletContinuation pattern of a bullet that continues the list
      */
     private fun listPattern(
         bulletInitialization: String,
         bulletContinuation: String,
     ): String {
-        val initialization = "^(( {0,3}$bulletInitialization)[ \\t]((?!^(\\s*\\n){2})"
-        val continuation = "(.+(\\n|\$)|\\n\\s*^( {2,}| {0,3}$bulletContinuation[ \\t]))"
+        val resumption = "\\s*^(?: {2,}| {0,3}$bulletContinuation[ \\t])"
+        val interrupted = "\\n(?:interruption)"
+        val endBeforeInterruption = "(?=$interrupted)(?!\\n$resumption)"
+        val endAfterBlank = "(?!$interrupted)\\n(?=(?:\\s*\\n){2}|\\n(?!$resumption))"
+        val lines = "[\\s\\S]*?(?:$END_OF_INPUT|$endBeforeInterruption|$endAfterBlank)"
+        // The first line's content may be empty only if the list resumes right after it.
+        val firstLine = "(?:(?!\\n)|(?=\\n$resumption))"
 
-        return RegexBuilder("$initialization$continuation(?!^(interruption)))*)+")
+        return RegexBuilder("^(( {0,3}$bulletInitialization)[ \\t](?:$firstLine$lines|))")
             .withReference("interruption", interruptionRule(includeList = false).pattern)
             .withReference("list", " {0,3}(?:[*+-]|\\d[.)]) ")
             .build()
