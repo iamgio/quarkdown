@@ -1,0 +1,123 @@
+package com.quarkdown.lsp
+
+import com.quarkdown.core.filesystem.toFsEntry
+import com.quarkdown.lsp.documentation.DirectoryDocsIndexSource
+import com.quarkdown.lsp.hover.function.FunctionDocumentationHoverSupplier
+import com.quarkdown.lsp.model.CursorPosition
+import com.quarkdown.lsp.model.HoverInfo
+import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertContains
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+
+private const val ALIGN_FUNCTION = "align"
+private const val CSV_FUNCTION = "csv"
+
+/**
+ * Tests for [FunctionDocumentationHoverSupplier].
+ */
+class FunctionDocumentationHoverSupplierTest {
+    private val docs = DirectoryDocsIndexSource(File("src/jvmTest/resources/docs").toFsEntry())
+    private val supplier = FunctionDocumentationHoverSupplier(docs)
+
+    /**
+     * Helper function to get hover information for a given text and position.
+     */
+    private fun getHover(
+        text: String,
+        position: CursorPosition,
+    ): HoverInfo? {
+        val document = TextDocument(text = text)
+        return supplier.getHover(position, document)
+    }
+
+    @Test
+    fun `hover outside function call returns null`() {
+        val text = "This is a test with a .$ALIGN_FUNCTION call."
+        val position = CursorPosition(0, 5)
+        assertNull(getHover(text, position))
+    }
+
+    @Test
+    fun `hover over function call`() {
+        val text = "This is a test with a .$ALIGN_FUNCTION call."
+        val position = CursorPosition(0, text.indexOf(ALIGN_FUNCTION) + ALIGN_FUNCTION.length / 2)
+
+        val hover = getHover(text, position)
+
+        assertNotNull(hover)
+        assertContains(
+            hover.contentMarkdown,
+            "#### Parameters",
+        )
+    }
+
+    @Test
+    fun `hover over function call argument`() {
+        val text = "This is a test with a .$ALIGN_FUNCTION {center} call."
+        val position = CursorPosition(0, text.indexOf("center"))
+        assertNotNull(getHover(text, position))
+    }
+
+    @Test
+    fun `hover over chained function call`() {
+        val text = "This is a test with a .$ALIGN_FUNCTION::$CSV_FUNCTION {arg}"
+
+        val csvHover = getHover(text, CursorPosition(0, text.length - 1))
+        val alignHover = getHover(text, CursorPosition(0, text.indexOf(ALIGN_FUNCTION) + ALIGN_FUNCTION.length / 2))
+
+        assertNotNull(csvHover)
+        assertContains(
+            csvHover.contentMarkdown,
+            CSV_FUNCTION,
+        )
+
+        assertNotNull(alignHover)
+        assertContains(
+            alignHover.contentMarkdown,
+            ALIGN_FUNCTION,
+        )
+    }
+
+    @Test
+    fun `hover over nested function call`() {
+        val text = "This is a test with a .$ALIGN_FUNCTION {.$CSV_FUNCTION} call."
+        val alignPosition = CursorPosition(0, text.indexOf(ALIGN_FUNCTION))
+        val csvPosition = CursorPosition(0, text.indexOf(CSV_FUNCTION))
+
+        val alignHover = getHover(text, alignPosition)
+        val csvHover = getHover(text, csvPosition)
+
+        assertNotNull(alignHover)
+        assertContains(
+            alignHover.contentMarkdown,
+            ".$ALIGN_FUNCTION",
+        )
+
+        assertNotNull(csvHover)
+        assertContains(
+            csvHover.contentMarkdown,
+            ".$CSV_FUNCTION",
+        )
+    }
+
+    // Wrapped (tight) function calls
+
+    @Test
+    fun `hover over wrapped function call`() {
+        val text = "hello{.$ALIGN_FUNCTION {center}}hello"
+        val position = CursorPosition(0, text.indexOf(ALIGN_FUNCTION) + ALIGN_FUNCTION.length / 2)
+
+        val hover = getHover(text, position)
+        assertNotNull(hover)
+        assertContains(hover.contentMarkdown, ".$ALIGN_FUNCTION")
+    }
+
+    @Test
+    fun `hover outside wrapped function call returns null`() {
+        val text = "hello{.$ALIGN_FUNCTION {center}}hello"
+        // Position on "hello" before the wrap.
+        assertNull(getHover(text, CursorPosition(0, 2)))
+    }
+}

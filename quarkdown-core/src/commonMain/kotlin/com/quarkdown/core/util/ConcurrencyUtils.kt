@@ -36,6 +36,21 @@ expect class ConcurrentCache<K : Any, V : Any>() {
 }
 
 /**
+ * @return an empty mutable map, safe to read and write from concurrent threads under the platform's concurrency model
+ */
+expect fun <K : Any, V : Any> concurrentMapOf(): MutableMap<K, V>
+
+/**
+ * Runs [block] while holding [lock], so that concurrent callers on the same lock run one at a time
+ * under the platform's concurrency model.
+ * @return the result of [block]
+ */
+expect inline fun <R> withLock(
+    lock: Any,
+    block: () -> R,
+): R
+
+/**
  * A FIFO queue, safe to fill from concurrent producers under the platform's concurrency model.
  */
 expect class ConcurrentQueue<T : Any>() {
