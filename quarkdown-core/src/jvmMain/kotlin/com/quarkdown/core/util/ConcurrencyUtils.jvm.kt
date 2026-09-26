@@ -27,6 +27,13 @@ actual class ConcurrentCache<K : Any, V : Any> {
     ): V = map.computeIfAbsent(key) { compute() }
 }
 
+actual fun <K : Any, V : Any> concurrentMapOf(): MutableMap<K, V> = ConcurrentHashMap()
+
+actual inline fun <R> withLock(
+    lock: Any,
+    block: () -> R,
+): R = synchronized(lock, block)
+
 actual class ConcurrentQueue<T : Any> {
     private val queue = ConcurrentLinkedQueue<T>()
 

@@ -1,12 +1,17 @@
 plugins {
-    id("quarkdown.jvm")
+    id("quarkdown.multiplatform")
     alias(libs.plugins.kotlin.serialization)
 }
 
-dependencies {
-    implementation(libs.kotlinx.serialization.json)
-}
-
-tasks.test {
-    useJUnitPlatform()
+kotlin {
+    jvm {
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.kotlinx.serialization.json)
+        }
+    }
 }

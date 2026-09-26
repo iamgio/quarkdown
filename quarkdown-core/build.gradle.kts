@@ -11,7 +11,7 @@ kotlin {
             api(libs.ktor.http)
             implementation("com.squareup.okio:okio:3.18.2")
             implementation("com.squareup.okio:okio-fakefilesystem:3.18.2")
-            implementation("com.quarkdown.better-parse:better-parse:0.4.5")
+            api("com.quarkdown.better-parse:better-parse:0.4.5")
             implementation("co.touchlab:kermit:2.2.0")
             implementation("com.mohamedrejeb.ksoup:ksoup-entities:0.6.0")
             implementation(libs.kotlinx.serialization.json)
