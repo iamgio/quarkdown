@@ -24,4 +24,10 @@ data class TokenRegexPattern(
     override val regex: String,
     val groupNames: List<String> = emptyList(),
     val walker: ((TokenData, CharSequence) -> WalkedToken?)? = null,
-) : NamedRegexPattern
+) : NamedRegexPattern {
+    /**
+     * The number of capturing groups in [regex], which determines the group indices
+     * this pattern occupies within a joined regex.
+     */
+    val capturingGroupCount: Int by lazy { Regex("$regex|").find("")!!.groups.size - 1 }
+}

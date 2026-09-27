@@ -6,6 +6,7 @@ import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.TokenData
 import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
+import com.quarkdown.core.lexer.regex.pattern.groupIndices
 import com.quarkdown.core.lexer.regex.pattern.groupify
 import com.quarkdown.core.util.filterNotNullValues
 import com.quarkdown.core.util.matchRange
@@ -73,12 +74,12 @@ abstract class RegexLexer(
                     .filterNotNullValues()
                     .toMap()
 
-            // Regular groups that are not named.
+            // Regular groups that are not named: the whole match, followed by the groups of this pattern only.
             // They don't contain values from namedGroups.
+            val wholeMatch = 0
             val groups =
-                result.groups
-                    .asSequence()
-                    .filterNotNull()
+                (sequenceOf(wholeMatch) + activePatterns.groupIndices(pattern))
+                    .mapNotNull { result.groups[it] }
                     // Named groups don't appear in regular groups.
                     .filterNot { namedGroups.containsValue(it) }
                     .map { it.value }

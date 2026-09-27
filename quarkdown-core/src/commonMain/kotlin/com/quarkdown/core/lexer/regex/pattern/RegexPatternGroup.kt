@@ -22,3 +22,18 @@ fun Iterable<NamedRegexPattern>.groupify(): Regex {
         joined.toRegex(setOf(RegexOption.MULTILINE, RegexOption.IGNORE_CASE))
     }
 }
+
+/**
+ * @param pattern one of these patterns
+ * @return the indices, within a match of the regex produced by [groupify] on these patterns,
+ *         of the groups that belong to [pattern]: the named group that wraps it, followed by its own capturing groups
+ * @throws IllegalArgumentException if [pattern] is not one of these patterns
+ */
+fun Iterable<TokenRegexPattern>.groupIndices(pattern: TokenRegexPattern): IntRange {
+    var wrappingGroup = 1
+    for (other in this) {
+        if (other === pattern) return wrappingGroup..wrappingGroup + pattern.capturingGroupCount
+        wrappingGroup += 1 + other.capturingGroupCount
+    }
+    throw IllegalArgumentException("Pattern ${pattern.name} is not part of the group")
+}
