@@ -10,7 +10,7 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.lexer.token
 import com.quarkdown.core.function.value.data.LambdaParameter
-import com.quarkdown.core.parser.walker.GrammarUtils.unescapedMatch
+import com.quarkdown.core.lexer.scan.Matchers.unescapedMatch
 
 /**
  * Parsed result of a lambda expression.

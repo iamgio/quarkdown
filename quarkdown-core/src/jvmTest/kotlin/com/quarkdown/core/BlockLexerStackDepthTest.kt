@@ -5,8 +5,13 @@ import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.tokens.BlockCodeToken
 import com.quarkdown.core.lexer.tokens.BlockQuoteToken
+import com.quarkdown.core.lexer.tokens.CommentToken
+import com.quarkdown.core.lexer.tokens.FencesCodeToken
 import com.quarkdown.core.lexer.tokens.FootnoteDefinitionToken
+import com.quarkdown.core.lexer.tokens.HeadingToken
+import com.quarkdown.core.lexer.tokens.LinkDefinitionToken
 import com.quarkdown.core.lexer.tokens.ListItemToken
+import com.quarkdown.core.lexer.tokens.MultilineMathToken
 import com.quarkdown.core.lexer.tokens.OrderedListToken
 import com.quarkdown.core.lexer.tokens.ParagraphToken
 import com.quarkdown.core.lexer.tokens.SetextHeadingToken
@@ -119,5 +124,47 @@ class BlockLexerStackDepthTest {
         val tokens = tokenizeOnSmallStack((1..2000).joinToString("\n") { "- item $it\n  - nested" })
         assertEquals(1, tokens.size)
         assertIs<UnorderedListToken>(tokens.single())
+    }
+
+    @Test
+    fun `long fenced code block`() {
+        val tokens = tokenizeOnSmallStack("```\n" + (1..5000).joinToString("\n") { "code $it" } + "\n```")
+        assertEquals(1, tokens.size)
+        assertIs<FencesCodeToken>(tokens.single())
+    }
+
+    @Test
+    fun `long indented code block without blank lines`() {
+        val tokens = tokenizeOnSmallStack((1..5000).joinToString("\n") { "    code $it" })
+        assertEquals(1, tokens.size)
+        assertIs<BlockCodeToken>(tokens.single())
+    }
+
+    @Test
+    fun `long comment`() {
+        val tokens = tokenizeOnSmallStack("<!--\n" + (1..5000).joinToString("\n") { "line $it" } + "\n-->")
+        assertEquals(1, tokens.size)
+        assertIs<CommentToken>(tokens.single())
+    }
+
+    @Test
+    fun `long multiline math block`() {
+        val tokens = tokenizeOnSmallStack("$$$\n" + (1..5000).joinToString("\n") { "x_$it" } + "\n$$$")
+        assertEquals(1, tokens.size)
+        assertIs<MultilineMathToken>(tokens.single())
+    }
+
+    @Test
+    fun `long run of link definitions`() {
+        val tokens = tokenizeOnSmallStack((1..5000).joinToString("\n") { "[label $it]: /url$it" })
+        assertEquals(5000, tokens.size)
+        assertIs<LinkDefinitionToken>(tokens.first())
+    }
+
+    @Test
+    fun `long run of headings`() {
+        val tokens = tokenizeOnSmallStack((1..5000).joinToString("\n") { "# heading $it" })
+        assertEquals(5000, tokens.size)
+        assertIs<HeadingToken>(tokens.first())
     }
 }

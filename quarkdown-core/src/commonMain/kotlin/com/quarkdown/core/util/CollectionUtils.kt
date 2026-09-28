@@ -7,11 +7,6 @@ package com.quarkdown.core.util
 fun <T> Sequence<T>.iterator(consumeAmount: Int): Iterator<T> = drop(consumeAmount).iterator()
 
 /**
- * @return the next element if it exists, `null` otherwise
- */
-fun <T> Iterator<T>.nextOrNull(): T? = if (hasNext()) next() else null
-
-/**
  * @return [this] sequence where the second element of each pair is not `null`
  */
 @Suppress("UNCHECKED_CAST")

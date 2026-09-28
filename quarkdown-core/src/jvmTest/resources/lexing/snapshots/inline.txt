@@ -1,0 +1,1152 @@
+=== expression :: .f {x}
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== expression :: .f {x} more
+-- NORMAL
+FunctionCall	
+PlainText	 more
+-- LINK_LABEL
+FunctionCall	
+PlainText	 more
+=== expression ::   .f {x}
+-- NORMAL
+PlainText	  
+FunctionCall	
+-- LINK_LABEL
+PlainText	  
+FunctionCall	
+=== expression :: text .f {x}
+-- NORMAL
+PlainText	text 
+FunctionCall	
+-- LINK_LABEL
+PlainText	text 
+FunctionCall	
+=== expression :: \\.f {x}
+-- NORMAL
+Escape	\\.
+PlainText	f {x}
+-- LINK_LABEL
+Escape	\\.
+PlainText	f {x}
+=== expression :: {.f {x}}
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== expression :: .f {x}::g {y}
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== expression :: .f {x}\n    body
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== expression :: plain text
+-- NORMAL
+PlainText	plain text
+-- LINK_LABEL
+PlainText	plain text
+=== expression :: \\* .f {x}
+-- NORMAL
+Escape	\\*
+PlainText	 
+FunctionCall	
+-- LINK_LABEL
+Escape	\\*
+PlainText	 
+FunctionCall	
+=== inlineFunctionCall :: .f {x}
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== inlineFunctionCall :: text .f {x} more
+-- NORMAL
+PlainText	text 
+FunctionCall	
+PlainText	 more
+-- LINK_LABEL
+PlainText	text 
+FunctionCall	
+PlainText	 more
+=== inlineFunctionCall :: a.f {x}
+-- NORMAL
+PlainText	a.f {x}
+-- LINK_LABEL
+PlainText	a.f {x}
+=== inlineFunctionCall :: a..f {x}
+-- NORMAL
+PlainText	a..f {x}
+-- LINK_LABEL
+PlainText	a..f {x}
+=== inlineFunctionCall :: \\.f {x}
+-- NORMAL
+Escape	\\.
+PlainText	f {x}
+-- LINK_LABEL
+Escape	\\.
+PlainText	f {x}
+=== inlineFunctionCall :: {.f {x}}
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== inlineFunctionCall :: {.f {x}
+-- NORMAL
+PlainText	{
+FunctionCall	
+-- LINK_LABEL
+PlainText	{
+FunctionCall	
+=== inlineFunctionCall :: .f {x}::g {y}
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== inlineFunctionCall :: .f {.g {y}}
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== inlineFunctionCall :: .f {x} .g {y}
+-- NORMAL
+FunctionCall	
+PlainText	 
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+PlainText	 
+FunctionCall	
+=== inlineFunctionCall :: *.f {x}*
+-- NORMAL
+Emphasis	*.f {x}*
+-- LINK_LABEL
+Emphasis	*.f {x}*
+=== inlineFunctionCall :: .f
+-- NORMAL
+FunctionCall	
+-- LINK_LABEL
+FunctionCall	
+=== textSymbol :: (C)
+-- NORMAL
+TextSymbol	(C)
+-- LINK_LABEL
+TextSymbol	(C)
+=== textSymbol :: (c)
+-- NORMAL
+TextSymbol	(c)
+-- LINK_LABEL
+TextSymbol	(c)
+=== textSymbol :: (R)
+-- NORMAL
+TextSymbol	(R)
+-- LINK_LABEL
+TextSymbol	(R)
+=== textSymbol :: (r)
+-- NORMAL
+TextSymbol	(r)
+-- LINK_LABEL
+TextSymbol	(r)
+=== textSymbol :: (TM)
+-- NORMAL
+TextSymbol	(TM)
+-- LINK_LABEL
+TextSymbol	(TM)
+=== textSymbol :: (tm)
+-- NORMAL
+TextSymbol	(tm)
+-- LINK_LABEL
+TextSymbol	(tm)
+=== textSymbol :: a -- b
+-- NORMAL
+PlainText	a 
+TextSymbol	--
+PlainText	 b
+-- LINK_LABEL
+PlainText	a 
+TextSymbol	--
+PlainText	 b
+=== textSymbol :: a--b
+-- NORMAL
+PlainText	a
+TextSymbol	--
+PlainText	b
+-- LINK_LABEL
+PlainText	a
+TextSymbol	--
+PlainText	b
+=== textSymbol :: a - b
+-- NORMAL
+PlainText	a 
+TextSymbol	-
+PlainText	 b
+-- LINK_LABEL
+PlainText	a 
+TextSymbol	-
+PlainText	 b
+=== textSymbol :: a-b
+-- NORMAL
+PlainText	a-b
+-- LINK_LABEL
+PlainText	a-b
+=== textSymbol :: a...
+-- NORMAL
+PlainText	a
+TextSymbol	...
+-- LINK_LABEL
+PlainText	a
+TextSymbol	...
+=== textSymbol :: ...a
+-- NORMAL
+TextSymbol	...
+PlainText	a
+-- LINK_LABEL
+TextSymbol	...
+PlainText	a
+=== textSymbol :: a...b
+-- NORMAL
+PlainText	a...b
+-- LINK_LABEL
+PlainText	a...b
+=== textSymbol :: ->
+-- NORMAL
+TextSymbol	->
+-- LINK_LABEL
+TextSymbol	->
+=== textSymbol :: <-
+-- NORMAL
+TextSymbol	<-
+-- LINK_LABEL
+TextSymbol	<-
+=== textSymbol :: =>
+-- NORMAL
+TextSymbol	=>
+-- LINK_LABEL
+TextSymbol	=>
+=== textSymbol :: <==
+-- NORMAL
+TextSymbol	<==
+-- LINK_LABEL
+TextSymbol	<==
+=== textSymbol :: >=
+-- NORMAL
+TextSymbol	>=
+-- LINK_LABEL
+TextSymbol	>=
+=== textSymbol :: <=
+-- NORMAL
+TextSymbol	<=
+-- LINK_LABEL
+TextSymbol	<=
+=== textSymbol :: !=
+-- NORMAL
+TextSymbol	!=
+-- LINK_LABEL
+TextSymbol	!=
+=== textSymbol :: +-
+-- NORMAL
+TextSymbol	+-
+-- LINK_LABEL
+TextSymbol	+-
+=== textSymbol :: don't
+-- NORMAL
+PlainText	don
+TextSymbol	'
+PlainText	t
+-- LINK_LABEL
+PlainText	don
+TextSymbol	'
+PlainText	t
+=== textSymbol :: 'a'
+-- NORMAL
+TextSymbol	'
+PlainText	a
+TextSymbol	'
+-- LINK_LABEL
+TextSymbol	'
+PlainText	a
+TextSymbol	'
+=== textSymbol :: "q"
+-- NORMAL
+TextSymbol	"
+PlainText	q
+TextSymbol	"
+-- LINK_LABEL
+TextSymbol	"
+PlainText	q
+TextSymbol	"
+=== textSymbol :: a "q" b
+-- NORMAL
+PlainText	a 
+TextSymbol	"
+PlainText	q
+TextSymbol	"
+PlainText	 b
+-- LINK_LABEL
+PlainText	a 
+TextSymbol	"
+PlainText	q
+TextSymbol	"
+PlainText	 b
+=== textSymbol :: a 'q' b
+-- NORMAL
+PlainText	a 
+TextSymbol	'
+PlainText	q
+TextSymbol	'
+PlainText	 b
+-- LINK_LABEL
+PlainText	a 
+TextSymbol	'
+PlainText	q
+TextSymbol	'
+PlainText	 b
+=== inlineMath :: $ x $
+-- NORMAL
+InlineMath	$ x $
+-- LINK_LABEL
+InlineMath	$ x $
+=== inlineMath :: a $ x $ b
+-- NORMAL
+PlainText	a 
+InlineMath	$ x $
+PlainText	 b
+-- LINK_LABEL
+PlainText	a 
+InlineMath	$ x $
+PlainText	 b
+=== inlineMath :: a$ x $
+-- NORMAL
+PlainText	a$ x $
+-- LINK_LABEL
+PlainText	a$ x $
+=== inlineMath :: $ x $b
+-- NORMAL
+PlainText	$ x $b
+-- LINK_LABEL
+PlainText	$ x $b
+=== inlineMath :: $x$
+-- NORMAL
+PlainText	$x$
+-- LINK_LABEL
+PlainText	$x$
+=== inlineMath :: $ a$b $
+-- NORMAL
+InlineMath	$ a$b $
+-- LINK_LABEL
+InlineMath	$ a$b $
+=== inlineMath :: $ a $ b $
+-- NORMAL
+InlineMath	$ a $
+PlainText	 b $
+-- LINK_LABEL
+InlineMath	$ a $
+PlainText	 b $
+=== inlineMath :: $ x $ and $ y $
+-- NORMAL
+InlineMath	$ x $
+PlainText	 and 
+InlineMath	$ y $
+-- LINK_LABEL
+InlineMath	$ x $
+PlainText	 and 
+InlineMath	$ y $
+=== inlineMath :: $ x
+-- NORMAL
+PlainText	$ x
+-- LINK_LABEL
+PlainText	$ x
+=== image :: ![i](u)
+-- NORMAL
+Image	![i](u)
+-- LINK_LABEL
+Image	![i](u)
+=== image :: !(2x3)[i](u)
+-- NORMAL
+Image	!(2x3)[i](u)
+-- LINK_LABEL
+Image	!(2x3)[i](u)
+=== image :: !(2*3)[i](u)
+-- NORMAL
+Image	!(2*3)[i](u)
+-- LINK_LABEL
+Image	!(2*3)[i](u)
+=== image :: !(2 3)[i](u)
+-- NORMAL
+Image	!(2 3)[i](u)
+-- LINK_LABEL
+Image	!(2 3)[i](u)
+=== image :: !(2)[i](u)
+-- NORMAL
+Image	!(2)[i](u)
+-- LINK_LABEL
+Image	!(2)[i](u)
+=== image :: !(1cm*2cm)[i](u)
+-- NORMAL
+Image	!(1cm*2cm)[i](u)
+-- LINK_LABEL
+Image	!(1cm*2cm)[i](u)
+=== image :: !(2X3)[i](u)
+-- NORMAL
+Image	!(2X3)[i](u)
+-- LINK_LABEL
+Image	!(2X3)[i](u)
+=== image :: !(1cmx1cm)[i](u)
+-- NORMAL
+Image	!(1cmx1cm)[i](u)
+-- LINK_LABEL
+Image	!(1cmx1cm)[i](u)
+=== image :: ![i](u){#id}
+-- NORMAL
+Image	![i](u){#id}
+-- LINK_LABEL
+Image	![i](u){#id}
+=== image :: ![i]
+-- NORMAL
+ReferenceImage	![i]
+-- LINK_LABEL
+ReferenceImage	![i]
+=== image :: ![i][]
+-- NORMAL
+ReferenceImage	![i][]
+-- LINK_LABEL
+ReferenceImage	![i][]
+=== image :: ![i][r]
+-- NORMAL
+ReferenceImage	![i][r]
+-- LINK_LABEL
+ReferenceImage	![i][r]
+=== image :: !(2x3)[i][r]
+-- NORMAL
+ReferenceImage	!(2x3)[i][r]
+-- LINK_LABEL
+ReferenceImage	!(2x3)[i][r]
+=== image :: [![i](u)](u2)
+-- NORMAL
+Link	[![i](u)](u2)
+-- LINK_LABEL
+PlainText	[
+Image	![i](u)
+PlainText	](u2)
+=== image :: !(x)[i](u)
+-- NORMAL
+Image	!(x)[i](u)
+-- LINK_LABEL
+Image	!(x)[i](u)
+=== inlineComment :: a <!-- c --> b
+-- NORMAL
+PlainText	a 
+Comment	<!-- c -->
+PlainText	 b
+-- LINK_LABEL
+PlainText	a 
+Comment	<!-- c -->
+PlainText	 b
+=== inlineComment :: <!-- c -->
+-- NORMAL
+Comment	<!-- c -->
+-- LINK_LABEL
+Comment	<!-- c -->
+=== inlineComment :: <!-->
+-- NORMAL
+Comment	<!-->
+-- LINK_LABEL
+Comment	<!-->
+=== inlineComment :: <!--->
+-- NORMAL
+Comment	<!--->
+-- LINK_LABEL
+Comment	<!--->
+=== inlineComment :: <!-- unterminated
+-- NORMAL
+CriticalContent	<
+PlainText	!
+TextSymbol	--
+PlainText	 unterminated
+-- LINK_LABEL
+CriticalContent	<
+PlainText	!
+TextSymbol	--
+PlainText	 unterminated
+=== inlineComment :: a <!-- c
+-- NORMAL
+PlainText	a 
+CriticalContent	<
+PlainText	!
+TextSymbol	--
+PlainText	 c
+-- LINK_LABEL
+PlainText	a 
+CriticalContent	<
+PlainText	!
+TextSymbol	--
+PlainText	 c
+=== reference :: [l]
+-- NORMAL
+ReferenceLink	[l]
+-- LINK_LABEL
+PlainText	[l]
+=== reference :: [l][]
+-- NORMAL
+ReferenceLink	[l][]
+-- LINK_LABEL
+PlainText	[l][]
+=== reference :: [l][r]
+-- NORMAL
+ReferenceLink	[l][r]
+-- LINK_LABEL
+PlainText	[l][r]
+=== reference :: [l][ ]
+-- NORMAL
+ReferenceLink	[l]
+ReferenceLink	[ ]
+-- LINK_LABEL
+PlainText	[l][ ]
+=== reference :: [^f]
+-- NORMAL
+ReferenceFootnote	[^f]
+-- LINK_LABEL
+PlainText	[^f]
+=== reference :: [^f: d]
+-- NORMAL
+ReferenceFootnote	[^f: d]
+-- LINK_LABEL
+PlainText	[^f: d]
+=== reference :: [^: d]
+-- NORMAL
+ReferenceFootnote	[^: d]
+-- LINK_LABEL
+PlainText	[^: d]
+=== reference :: [^f:]
+-- NORMAL
+ReferenceFootnote	[^f:]
+-- LINK_LABEL
+PlainText	[^f:]
+=== reference :: [^f: `code`]
+-- NORMAL
+ReferenceFootnote	[^f: `code`]
+-- LINK_LABEL
+PlainText	[^f: 
+CodeSpan	`code`
+PlainText	]
+=== reference :: [^f: a\\]b]
+-- NORMAL
+ReferenceFootnote	[^f: a\\]b]
+-- LINK_LABEL
+PlainText	[^f: a
+Escape	\\]
+PlainText	b]
+=== reference :: [a [b] c][r]
+-- NORMAL
+ReferenceLink	[a [b] c][r]
+-- LINK_LABEL
+PlainText	[a [b] c][r]
+=== reference :: [f]
+-- NORMAL
+ReferenceLink	[f]
+-- LINK_LABEL
+PlainText	[f]
+=== reference :: [l](u
+-- NORMAL
+ReferenceLink	[l]
+PlainText	(u
+-- LINK_LABEL
+PlainText	[l](u
+=== link :: [l](u)
+-- NORMAL
+Link	[l](u)
+-- LINK_LABEL
+PlainText	[l](u)
+=== link :: [l](u "t")
+-- NORMAL
+Link	[l](u "t")
+-- LINK_LABEL
+PlainText	[l](u 
+TextSymbol	"
+PlainText	t
+TextSymbol	"
+PlainText	)
+=== link :: [l](<u)
+-- NORMAL
+ReferenceLink	[l]
+PlainText	(
+CriticalContent	<
+PlainText	u)
+-- LINK_LABEL
+PlainText	[l](
+CriticalContent	<
+PlainText	u)
+=== link :: [l](a\\ b)
+-- NORMAL
+ReferenceLink	[l]
+PlainText	(a\\ b)
+-- LINK_LABEL
+PlainText	[l](a\\ b)
+=== link :: [l](u 't')
+-- NORMAL
+Link	[l](u 't')
+-- LINK_LABEL
+PlainText	[l](u 
+TextSymbol	'
+PlainText	t
+TextSymbol	'
+PlainText	)
+=== link :: [l](u (t))
+-- NORMAL
+Link	[l](u (t))
+-- LINK_LABEL
+PlainText	[l](u (t))
+=== link :: [l](<u v>)
+-- NORMAL
+Link	[l](<u v>)
+-- LINK_LABEL
+PlainText	[l](
+CriticalContent	<
+PlainText	u v
+CriticalContent	>
+PlainText	)
+=== link :: [l]()
+-- NORMAL
+Link	[l]()
+-- LINK_LABEL
+PlainText	[l]()
+=== link :: [l](a(b)c)
+-- NORMAL
+Link	[l](a(b)c)
+-- LINK_LABEL
+PlainText	[l](a(b)c)
+=== link :: [l](a\\(b)
+-- NORMAL
+Link	[l](a\\(b)
+-- LINK_LABEL
+PlainText	[l](a
+Escape	\\(
+PlainText	b)
+=== link :: [a [b] c](u)
+-- NORMAL
+Link	[a [b] c](u)
+-- LINK_LABEL
+PlainText	[a [b] c](u)
+=== link :: [a `b` c](u)
+-- NORMAL
+Link	[a `b` c](u)
+-- LINK_LABEL
+PlainText	[a 
+CodeSpan	`b`
+PlainText	 c](u)
+=== link :: [a \\] b](u)
+-- NORMAL
+Link	[a \\] b](u)
+-- LINK_LABEL
+PlainText	[a 
+Escape	\\]
+PlainText	 b](u)
+=== link :: [l
+-- NORMAL
+PlainText	[l
+-- LINK_LABEL
+PlainText	[l
+=== link :: [l](u
+-- NORMAL
+ReferenceLink	[l]
+PlainText	(u
+-- LINK_LABEL
+PlainText	[l](u
+=== link :: *[l](u)*
+-- NORMAL
+Emphasis	*[l](u)*
+-- LINK_LABEL
+Emphasis	*[l](u)*
+=== link :: [*l*](u)
+-- NORMAL
+Link	[*l*](u)
+-- LINK_LABEL
+PlainText	[
+Emphasis	*l*
+PlainText	](u)
+=== autolink :: <http://x.com>
+-- NORMAL
+DiamondAutolink	<http://x.com>
+-- LINK_LABEL
+CriticalContent	<
+PlainText	http://x.com
+CriticalContent	>
+=== autolink :: <a@b.com>
+-- NORMAL
+DiamondAutolink	<a@b.com>
+-- LINK_LABEL
+CriticalContent	<
+PlainText	a@b.com
+CriticalContent	>
+=== autolink :: <mailto:>
+-- NORMAL
+DiamondAutolink	<mailto:>
+-- LINK_LABEL
+CriticalContent	<
+PlainText	mailto:
+CriticalContent	>
+=== autolink :: http://x.com
+-- NORMAL
+UrlAutolink	http://x.com
+-- LINK_LABEL
+PlainText	http://x.com
+=== autolink :: HTTP://x.com
+-- NORMAL
+UrlAutolink	HTTP://x.com
+-- LINK_LABEL
+PlainText	HTTP://x.com
+=== autolink :: www.x.com
+-- NORMAL
+UrlAutolink	www.x.com
+-- LINK_LABEL
+PlainText	www.x.com
+=== autolink :: a@b.com
+-- NORMAL
+UrlAutolink	a@b.com
+-- LINK_LABEL
+PlainText	a@b.com
+=== autolink :: a@b-.com
+-- NORMAL
+UrlAutolink	a@b-.com
+-- LINK_LABEL
+PlainText	a@b-
+FunctionCall	
+=== autolink :: http://x.com<y
+-- NORMAL
+UrlAutolink	http://x.com
+CriticalContent	<
+PlainText	y
+-- LINK_LABEL
+PlainText	http://x.com
+CriticalContent	<
+PlainText	y
+=== autolink :: http://xn--ls8h.la
+-- NORMAL
+UrlAutolink	http://xn--ls8h.la
+-- LINK_LABEL
+PlainText	http://xn
+TextSymbol	--
+PlainText	ls8h.la
+=== autolink :: http://é.com
+-- NORMAL
+PlainText	http://é
+FunctionCall	
+-- LINK_LABEL
+PlainText	http://é
+FunctionCall	
+=== escape :: \\#
+-- NORMAL
+Escape	\\#
+-- LINK_LABEL
+Escape	\\#
+=== escape :: \\*
+-- NORMAL
+Escape	\\*
+-- LINK_LABEL
+Escape	\\*
+=== escape :: \\\\
+-- NORMAL
+Escape	\\\\
+-- LINK_LABEL
+Escape	\\\\
+=== escape :: \\_
+-- NORMAL
+Escape	\\_
+-- LINK_LABEL
+Escape	\\_
+=== escape :: \\`
+-- NORMAL
+Escape	\\`
+-- LINK_LABEL
+Escape	\\`
+=== escape :: \\[
+-- NORMAL
+Escape	\\[
+-- LINK_LABEL
+Escape	\\[
+=== escape :: \\a
+-- NORMAL
+PlainText	\\a
+-- LINK_LABEL
+PlainText	\\a
+=== escape :: \\
+-- NORMAL
+PlainText	\\
+-- LINK_LABEL
+PlainText	\\
+=== escape :: a\\-b
+-- NORMAL
+PlainText	a
+Escape	\\-
+PlainText	b
+-- LINK_LABEL
+PlainText	a
+Escape	\\-
+PlainText	b
+=== entity :: &copy;
+-- NORMAL
+Entity	&copy;
+-- LINK_LABEL
+Entity	&copy;
+=== entity :: &copy
+-- NORMAL
+Entity	&copy
+-- LINK_LABEL
+Entity	&copy
+=== entity :: &#35;
+-- NORMAL
+Entity	&#35;
+-- LINK_LABEL
+Entity	&#35;
+=== entity :: &#x22;
+-- NORMAL
+Entity	&#x22;
+-- LINK_LABEL
+Entity	&#x22;
+=== entity :: &#X22;
+-- NORMAL
+Entity	&#X22;
+-- LINK_LABEL
+Entity	&#X22;
+=== entity :: &unknownname;
+-- NORMAL
+Entity	&unknownname;
+-- LINK_LABEL
+Entity	&unknownname;
+=== entity :: &
+-- NORMAL
+CriticalContent	&
+-- LINK_LABEL
+CriticalContent	&
+=== entity :: &#;
+-- NORMAL
+CriticalContent	&
+PlainText	#;
+-- LINK_LABEL
+CriticalContent	&
+PlainText	#;
+=== entity :: &#xZZ;
+-- NORMAL
+CriticalContent	&
+PlainText	#xZZ;
+-- LINK_LABEL
+CriticalContent	&
+PlainText	#xZZ;
+=== entity :: &colon;
+-- NORMAL
+Entity	&colon;
+-- LINK_LABEL
+Entity	&colon;
+=== lineBreak :: a\nb
+-- NORMAL
+PlainText	a
+LineBreak	\n
+PlainText	b
+-- LINK_LABEL
+PlainText	a
+LineBreak	\n
+PlainText	b
+=== lineBreak :: a  \nb
+-- NORMAL
+PlainText	a
+LineBreak	  \n
+PlainText	b
+-- LINK_LABEL
+PlainText	a
+LineBreak	  \n
+PlainText	b
+=== lineBreak :: a   \nb
+-- NORMAL
+PlainText	a
+LineBreak	   \n
+PlainText	b
+-- LINK_LABEL
+PlainText	a
+LineBreak	   \n
+PlainText	b
+=== lineBreak :: a\\\nb
+-- NORMAL
+PlainText	a
+LineBreak	\\\n
+PlainText	b
+-- LINK_LABEL
+PlainText	a
+LineBreak	\\\n
+PlainText	b
+=== lineBreak :: a\n
+-- NORMAL
+PlainText	a\n
+-- LINK_LABEL
+PlainText	a\n
+=== lineBreak :: a\n\n
+-- NORMAL
+PlainText	a\n\n
+-- LINK_LABEL
+PlainText	a\n\n
+=== lineBreak :: a  \n\nb
+-- NORMAL
+PlainText	a  \n
+LineBreak	\n
+PlainText	b
+-- LINK_LABEL
+PlainText	a  \n
+LineBreak	\n
+PlainText	b
+=== lineBreak :: a \nb
+-- NORMAL
+PlainText	a 
+LineBreak	\n
+PlainText	b
+-- LINK_LABEL
+PlainText	a 
+LineBreak	\n
+PlainText	b
+=== lineBreak :: a b
+-- NORMAL
+PlainText	a b
+-- LINK_LABEL
+PlainText	a b
+=== codeSpan :: `x`
+-- NORMAL
+CodeSpan	`x`
+-- LINK_LABEL
+CodeSpan	`x`
+=== codeSpan :: ``x``
+-- NORMAL
+CodeSpan	``x``
+-- LINK_LABEL
+CodeSpan	``x``
+=== codeSpan :: ` x `
+-- NORMAL
+CodeSpan	` x `
+-- LINK_LABEL
+CodeSpan	` x `
+=== codeSpan :: ``a`b``
+-- NORMAL
+CodeSpan	``a`b``
+-- LINK_LABEL
+CodeSpan	``a`b``
+=== codeSpan :: `x
+-- NORMAL
+PlainText	`x
+-- LINK_LABEL
+PlainText	`x
+=== codeSpan :: ``
+-- NORMAL
+PlainText	``
+-- LINK_LABEL
+PlainText	``
+=== codeSpan :: `x``
+-- NORMAL
+PlainText	`x``
+-- LINK_LABEL
+PlainText	`x``
+=== codeSpan :: `a\nb`
+-- NORMAL
+CodeSpan	`a\nb`
+-- LINK_LABEL
+CodeSpan	`a\nb`
+=== codeSpan :: `#FF0000`
+-- NORMAL
+CodeSpan	`#FF0000`
+-- LINK_LABEL
+CodeSpan	`#FF0000`
+=== codeSpan :: a``b`
+-- NORMAL
+PlainText	a``b`
+-- LINK_LABEL
+PlainText	a``b`
+=== emphasis :: **text**
+-- NORMAL
+Strong	**text**
+-- LINK_LABEL
+Strong	**text**
+=== emphasis :: __text__
+-- NORMAL
+Strong	__text__
+-- LINK_LABEL
+Strong	__text__
+=== emphasis :: *text*
+-- NORMAL
+Emphasis	*text*
+-- LINK_LABEL
+Emphasis	*text*
+=== emphasis :: _text_
+-- NORMAL
+Emphasis	_text_
+-- LINK_LABEL
+Emphasis	_text_
+=== emphasis :: (__text)__
+-- NORMAL
+PlainText	(
+Strong	__text)__
+-- LINK_LABEL
+PlainText	(
+Strong	__text)__
+=== emphasis :: abc **strong abc** text **test** aaaa *emphasis*
+-- NORMAL
+PlainText	abc 
+Strong	**strong abc**
+PlainText	 text 
+Strong	**test**
+PlainText	 aaaa 
+Emphasis	*emphasis*
+-- LINK_LABEL
+PlainText	abc 
+Strong	**strong abc**
+PlainText	 text 
+Strong	**test**
+PlainText	 aaaa 
+Emphasis	*emphasis*
+=== emphasis :: abc __strong abc__ text __test__ aaaa _emphasis_
+-- NORMAL
+PlainText	abc 
+Strong	__strong abc__
+PlainText	 text 
+Strong	__test__
+PlainText	 aaaa 
+Emphasis	_emphasis_
+-- LINK_LABEL
+PlainText	abc 
+Strong	__strong abc__
+PlainText	 text 
+Strong	__test__
+PlainText	 aaaa 
+Emphasis	_emphasis_
+=== emphasis :: text **strong*x*m** text**strong**  ** not strong**
+-- NORMAL
+PlainText	text 
+Strong	**strong*x*m**
+PlainText	 text
+Strong	**strong**
+PlainText	  ** not strong**
+-- LINK_LABEL
+PlainText	text 
+Strong	**strong*x*m**
+PlainText	 text
+Strong	**strong**
+PlainText	  ** not strong**
+=== emphasis :: text __strong_x_m__ text__not strong__  __ not strong__
+-- NORMAL
+PlainText	text 
+Strong	__strong_x_m__
+PlainText	 text__not strong__  __ not strong__
+-- LINK_LABEL
+PlainText	text 
+Strong	__strong_x_m__
+PlainText	 text__not strong__  __ not strong__
+=== emphasis :: **strong *strongemphasis***
+-- NORMAL
+Strong	**strong *strongemphasis***
+-- LINK_LABEL
+Strong	**strong *strongemphasis***
+=== emphasis :: ***strongemphasis***
+-- NORMAL
+StrongEmphasis	***strongemphasis***
+-- LINK_LABEL
+StrongEmphasis	***strongemphasis***
+=== emphasis :: foo***bar***baz
+-- NORMAL
+PlainText	foo
+StrongEmphasis	***bar***
+PlainText	baz
+-- LINK_LABEL
+PlainText	foo
+StrongEmphasis	***bar***
+PlainText	baz
+=== emphasis :: **foo__
+-- NORMAL
+PlainText	**foo__
+-- LINK_LABEL
+PlainText	**foo__
+=== emphasis :: *foo _bar* baz_
+-- NORMAL
+Emphasis	*foo _bar*
+PlainText	 baz_
+-- LINK_LABEL
+Emphasis	*foo _bar*
+PlainText	 baz_
+=== emphasis :: abc **def*g __h__ i*jkl** mno
+-- NORMAL
+PlainText	abc 
+Strong	**def*g __h__ i*jkl**
+PlainText	 mno
+-- LINK_LABEL
+PlainText	abc 
+Strong	**def*g __h__ i*jkl**
+PlainText	 mno
+=== emphasis :: ~~del~~
+-- NORMAL
+Strikethrough	~~del~~
+-- LINK_LABEL
+Strikethrough	~~del~~
+=== emphasis :: ~one~
+-- NORMAL
+PlainText	~one~
+-- LINK_LABEL
+PlainText	~one~
+=== emphasis :: ~~~three~~~
+-- NORMAL
+PlainText	~~~three~~~
+-- LINK_LABEL
+PlainText	~~~three~~~
+=== emphasis :: *foo
+-- NORMAL
+PlainText	*foo
+-- LINK_LABEL
+PlainText	*foo
+=== emphasis :: a_b_c
+-- NORMAL
+PlainText	a_b_c
+-- LINK_LABEL
+PlainText	a_b_c
+=== emphasis :: **
+-- NORMAL
+PlainText	**
+-- LINK_LABEL
+PlainText	**
+=== emphasis :: ***foo** bar*
+-- NORMAL
+Emphasis	***foo** bar*
+-- LINK_LABEL
+Emphasis	***foo** bar*
+=== emphasis :: *foo **bar** baz*
+-- NORMAL
+Emphasis	*foo **bar** baz*
+-- LINK_LABEL
+Emphasis	*foo **bar** baz*
+=== emphasis :: *foo **bar* baz**
+-- NORMAL
+Emphasis	*foo **bar* baz**
+-- LINK_LABEL
+Emphasis	*foo **bar* baz**
+=== emphasis :: *__foo__*
+-- NORMAL
+Emphasis	*__foo__*
+-- LINK_LABEL
+Emphasis	*__foo__*
+=== empty and blank :: 
+-- NORMAL
+
+-- LINK_LABEL
+
+=== empty and blank :: \n
+-- NORMAL
+PlainText	\n
+-- LINK_LABEL
+PlainText	\n
+=== empty and blank ::  
+-- NORMAL
+PlainText	 
+-- LINK_LABEL
+PlainText	 
+=== empty and blank ::   \n
+-- NORMAL
+PlainText	  \n
+-- LINK_LABEL
+PlainText	  \n

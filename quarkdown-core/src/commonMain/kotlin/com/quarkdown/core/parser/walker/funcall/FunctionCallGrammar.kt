@@ -12,9 +12,9 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.lexer.token
 import com.quarkdown.core.function.call.FunctionCall
+import com.quarkdown.core.lexer.scan.Matchers.balancedDelimiters
+import com.quarkdown.core.lexer.scan.Matchers.unescapedMatch
 import com.quarkdown.core.parser.BlockTokenParser
-import com.quarkdown.core.parser.walker.GrammarUtils.balancedDelimitersMatch
-import com.quarkdown.core.parser.walker.GrammarUtils.unescapedMatch
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar.Companion.ARGUMENT_BEGIN
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar.Companion.ARGUMENT_END
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar.Companion.IDENTIFIER_PATTERN
@@ -98,7 +98,7 @@ class FunctionCallGrammar(
         if (!inArg) return@token 0
 
         val length =
-            balancedDelimitersMatch(
+            balancedDelimiters(
                 string,
                 position,
                 ARGUMENT_BEGIN,

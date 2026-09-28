@@ -49,7 +49,7 @@ import com.quarkdown.core.function.value.factory.ValueFactory.safeExpression
 import com.quarkdown.core.function.value.factory.ValueFactory.size
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.Token
-import com.quarkdown.core.lexer.patterns.PatternHelpers
+import com.quarkdown.core.lexer.scan.withoutComments
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.color.decoder.decode
 import com.quarkdown.core.parser.walker.lambda.LambdaParser
@@ -70,11 +70,6 @@ import kotlin.collections.map
  * @see ValueFactory.expression
  */
 private const val EXPRESSION_FORCE_LAMBDA_PREFIX = "@lambda "
-
-/**
- * Pre-compiled regex for stripping comments from expressions.
- */
-private val COMMENT_REGEX = PatternHelpers.COMMENT.toRegex()
 
 /**
  * Pre-compiled regex for splitting whitespace-separated size values.
@@ -555,8 +550,7 @@ object ValueFactory {
             is Expression -> return raw
         }
 
-        // Strip comments.
-        val rawCode = raw.toString().replace(COMMENT_REGEX, "")
+        val rawCode = raw.toString().withoutComments()
 
         if (rawCode.isEmpty()) return DynamicValue("")
 

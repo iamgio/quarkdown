@@ -7,7 +7,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * A text-based symbol, such as `©`, `…`, `≥`.
  * This is usually the result of a combination of multiple characters (e.g. `(C)` -> `©`).
  * @param symbol processed symbol (e.g. `©`)
- * @see com.quarkdown.core.lexer.patterns.TextSymbolReplacement
+ * @see com.quarkdown.core.lexer.scan.inline.quarkdown.TextSymbolReplacement
  */
 class TextSymbol(
     private val symbol: Char,
