@@ -63,7 +63,6 @@ import com.quarkdown.core.bibliography.Bibliography
 import com.quarkdown.core.bibliography.BibliographyEntry
 import com.quarkdown.core.bibliography.style.BibliographyEntryLabelProviderStrategy
 import com.quarkdown.core.bibliography.style.BibliographyStyle
-import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.options.MutableContextOptions
 import com.quarkdown.core.document.size.Sizes
@@ -78,7 +77,6 @@ import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.color.decoder.HexColorDecoder
 import com.quarkdown.core.pipeline.PipelineOptions
-import com.quarkdown.core.pipeline.Pipelines
 import com.quarkdown.core.readSource
 import com.quarkdown.core.rendering.NodeRenderer
 import com.quarkdown.core.util.node.toPlainText
@@ -98,14 +96,9 @@ class HtmlNodeRendererTest {
             .map { it.trim() }
             .iterator()
 
-    private fun renderer(context: Context = MutableContext(QuarkdownFlavor)): NodeRenderer {
+    private fun renderer(context: MutableContext = MutableContext(QuarkdownFlavor)): NodeRenderer {
         if (context.attachedPipeline == null) {
-            // Attach a mock pipeline to the context, allowing to render pretty output
-            // (since its value is retrieved from the attached pipeline)
-            Pipelines.attach(
-                context,
-                MutableContext(context.flavor).attachMockPipeline(PipelineOptions(prettyOutput = true)),
-            )
+            context.attachMockPipeline(PipelineOptions(prettyOutput = true))
         }
 
         return context.flavor.rendererFactory
@@ -113,7 +106,7 @@ class HtmlNodeRendererTest {
             .nodeRenderer
     }
 
-    private fun Node.render(context: Context = MutableContext(QuarkdownFlavor)) = this.accept(renderer(context))
+    private fun Node.render(context: MutableContext = MutableContext(QuarkdownFlavor)) = this.accept(renderer(context))
 
     // Inline
     @Test

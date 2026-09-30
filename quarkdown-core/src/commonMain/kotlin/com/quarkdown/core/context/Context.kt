@@ -32,9 +32,7 @@ interface Context : PermissionHolder {
 
     /**
      * The pipeline this context is attached to, if it exists.
-     * A context can have up to 1 attached pipeline.
-     * @see com.quarkdown.core.pipeline.Pipelines.getAttachedPipeline
-     * @see com.quarkdown.core.pipeline.Pipelines.attach
+     * A context can have up to one attached pipeline.
      */
     val attachedPipeline: Pipeline?
 

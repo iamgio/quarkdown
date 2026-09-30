@@ -2,6 +2,7 @@ package com.quarkdown.core.context
 
 import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.function.Function
+import com.quarkdown.core.pipeline.Pipeline
 
 /**
  * A context that shares all of its properties with its parent [MutableContext].
@@ -18,7 +19,12 @@ open class SharedContext(
         subdocument = parent.subdocument,
     ),
     ChildContext<MutableContext> {
-    override val attachedPipeline by parent::attachedPipeline
+    override var attachedPipeline: Pipeline?
+        get() = parent.attachedPipeline
+        protected set(value) {
+            super.attachedPipeline = value
+        }
+
     override var documentInfo by parent::documentInfo
     override val libraries by parent::libraries
     override val options by parent::options

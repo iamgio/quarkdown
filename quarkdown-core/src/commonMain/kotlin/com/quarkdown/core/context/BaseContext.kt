@@ -28,7 +28,6 @@ import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.Pipeline
-import com.quarkdown.core.pipeline.Pipelines
 
 /**
  * An immutable [Context] implementation.
@@ -44,8 +43,7 @@ open class BaseContext(
     override val libraries: List<Library> = emptyList(),
     override val subdocument: Subdocument = Subdocument.Root,
 ) : Context {
-    override val attachedPipeline: Pipeline?
-        get() = Pipelines.getAttachedPipeline(this)
+    override val attachedPipeline: Pipeline? = null
 
     override val documentInfo = DocumentInfo()
 

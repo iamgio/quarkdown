@@ -14,7 +14,6 @@ import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.localization.MutableLocalizationTables
 import com.quarkdown.core.media.storage.MutableMediaStorage
 import com.quarkdown.core.pipeline.Pipeline
-import com.quarkdown.core.pipeline.Pipelines
 
 /**
  * A mutable [Context] implementation, which allows registering new data to be looked up later.
@@ -44,6 +43,18 @@ open class MutableContext(
         get() = super.mediaStorage as MutableMediaStorage
 
     override var sharedSubdocumentsData = super.sharedSubdocumentsData
+
+    /**
+     * The pipeline this context is opened for, if any.
+     * @throws IllegalStateException on set, if a different pipeline is already attached
+     * @see open
+     * @see close
+     */
+    override var attachedPipeline: Pipeline? = null
+        protected set(value) {
+            check(value == null || field == null || field === value) { "Context already has an attached pipeline." }
+            field = value
+        }
 
     // Prevents function calls from being enqueued.
     private var lockFunctionCallEnqueuing = false
@@ -128,13 +139,19 @@ open class MutableContext(
      * Opening again for the same pipeline is a no-op.
      * @param pipeline pipeline to run on this context
      * @throws IllegalStateException if a different pipeline is already attached
-     * @see Pipelines.attach
      */
-    fun open(pipeline: Pipeline) = Pipelines.attach(this, pipeline)
+    fun open(pipeline: Pipeline) {
+        attachedPipeline = pipeline
+    }
 
     /**
-     * Releases this context and its subdocument contexts from the pipeline registry.
-     * @see Pipelines.detach
+     * Detaches the pipeline of this context and of every subdocument context that shares its data.
+     * A context can be opened again afterward.
      */
-    override fun close() = Pipelines.detach(this)
+    override fun close() {
+        sharedSubdocumentsData.withContexts.values
+            .filterIsInstance<MutableContext>()
+            .forEach { it.attachedPipeline = null }
+        attachedPipeline = null
+    }
 }
