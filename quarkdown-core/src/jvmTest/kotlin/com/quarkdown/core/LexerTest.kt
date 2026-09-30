@@ -4,11 +4,7 @@ import com.quarkdown.core.flavor.MarkdownFlavor
 import com.quarkdown.core.flavor.base.BaseMarkdownFlavor
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.lexer.Lexer
-import com.quarkdown.core.lexer.Token
-import com.quarkdown.core.lexer.TokenData
-import com.quarkdown.core.lexer.patterns.TextSymbolReplacement
-import com.quarkdown.core.lexer.regex.StandardRegexLexer
-import com.quarkdown.core.lexer.regex.pattern.TokenRegexPattern
+import com.quarkdown.core.lexer.scan.inline.quarkdown.TextSymbolReplacement
 import com.quarkdown.core.lexer.tokens.BlockCodeToken
 import com.quarkdown.core.lexer.tokens.BlockQuoteToken
 import com.quarkdown.core.lexer.tokens.CodeSpanToken
@@ -68,48 +64,6 @@ class LexerTest {
             .tokenize()
             .filter { it !is NewlineToken }
             .iterator()
-
-    @Test
-    fun regex() {
-        val wrap: (TokenData) -> Token = { ParagraphToken(it) }
-
-        val lexer =
-            StandardRegexLexer(
-                "ABC\nABB\nDEF\nGHI\nDE",
-                listOf(
-                    TokenRegexPattern(
-                        name = "FIRST",
-                        wrap = wrap,
-                        regex = "AB.",
-                    ),
-                    TokenRegexPattern(
-                        name = "SECOND",
-                        wrap = wrap,
-                        regex = "DE.?",
-                    ),
-                    TokenRegexPattern(
-                        name = "NEWLINE",
-                        wrap = wrap,
-                        regex = "\\R",
-                    ),
-                ),
-                fillTokenType = wrap,
-            )
-
-        val tokens = lexer.tokenize().iterator()
-
-        fun nextText() = tokens.next().data.text
-
-        assertEquals("ABC", nextText())
-        assertEquals("\n", nextText())
-        assertEquals("ABB", nextText())
-        assertEquals("\n", nextText())
-        assertEquals("DEF", nextText())
-        assertEquals("\n", nextText())
-        assertEquals("GHI", nextText())
-        assertEquals("\n", nextText())
-        assertEquals("DE", nextText())
-    }
 
     @Test
     fun blocks() {
@@ -961,7 +915,7 @@ class LexerTest {
 
     /**
      * Verifies that multiple consecutive block function calls are all tokenized correctly,
-     * validating the iterative regex loop handles walker-driven position advances.
+     * so the scan resumes where each walker stopped.
      */
     @Test
     fun multipleBlockFunctionCalls() {

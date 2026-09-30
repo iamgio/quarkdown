@@ -160,9 +160,9 @@ class ValueFactoryTest {
         @Suppress("UNCHECKED_CAST")
         val values = Size.Unit.entries.toTypedArray() as Array<Enum<*>>
 
-        assertEquals(Size.Unit.PIXELS, ValueFactory.enum("pixels", values)!!.unwrappedValue)
-        assertEquals(Size.Unit.CENTIMETERS, ValueFactory.enum("centimeters", values)!!.unwrappedValue)
-        assertEquals(Size.Unit.MILLIMETERS, ValueFactory.enum("milliMeTers", values)!!.unwrappedValue)
+        assertEquals(Size.Unit.PIXELS, ValueFactory.enum("pixels", values).unwrappedValue)
+        assertEquals(Size.Unit.CENTIMETERS, ValueFactory.enum("centimeters", values).unwrappedValue)
+        assertEquals(Size.Unit.MILLIMETERS, ValueFactory.enum("milliMeTers", values).unwrappedValue)
         assertNull(ValueFactory.tryOrNull { enum("abc", values) })
     }
 

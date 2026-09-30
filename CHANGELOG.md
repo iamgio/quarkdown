@@ -2,7 +2,37 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### Faster source tokenization
+
+Source tokenization is now implemented via scanner rather than regex, making the first stage of compilation up to 5x faster.
+
 ### Fixed
+
+#### CommonMark emphasis correctness
+
+`***bold italic** still italic*` now renders correctly.
+
+#### Numbered lists past nine items
+
+A line such as `10. item` now correctly starts a new item.
+
+#### A decorative heading interrupts paragraphs
+
+`#! Heading` now closes the preceding paragraph, like regular headings do.
+
+#### A bare `###` line under a heading is its own heading
+
+A line of hashes with nothing after them used to be absorbed by the heading above it, so it disappeared.
+
+#### A line of tabs separates paragraphs
+
+A line containing only tabs now separates paragraphs, as a line containing only spaces always did.
+
+#### Deeply nested link destinations
+
+Parentheses in a link destination now balance correctly at any depth.
 
 #### Multi-line setext headings keep all their lines
 
@@ -12,7 +42,7 @@ A heading underlined by `===` or `---` that spans several lines used to keep onl
 
 Tokenization of Markdown paragraphs, lists, list items, blockquotes, tables, code, footnotes, and setext headings no longer grows the recursion stack linearly, optimizing resource usage and preventing crashes on small stacks. 
 
-### REPL prints to console
+#### REPL prints to console
 
 Fixed a regression that caused `quarkdown repl` to write to file rather than to stdout. 
 

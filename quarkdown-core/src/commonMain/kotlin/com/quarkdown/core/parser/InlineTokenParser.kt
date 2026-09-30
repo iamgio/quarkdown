@@ -30,7 +30,6 @@ import com.quarkdown.core.function.value.factory.IllegalRawValueException
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.Token
-import com.quarkdown.core.lexer.TokenData
 import com.quarkdown.core.lexer.acceptAll
 import com.quarkdown.core.lexer.tokens.CodeSpanToken
 import com.quarkdown.core.lexer.tokens.CommentToken
@@ -59,10 +58,9 @@ import com.quarkdown.core.misc.color.decoder.RgbColorDecoder
 import com.quarkdown.core.misc.color.decoder.RgbaColorDecoder
 import com.quarkdown.core.misc.color.decoder.decode
 import com.quarkdown.core.util.Escape
-import com.quarkdown.core.util.iterator
-import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.InlineTokenVisitor
+import com.quarkdown.core.visitor.token.TokenVisitor
 
 /**
  * ASCII of the character that replaces null characters,
@@ -77,6 +75,12 @@ private const val NULL_CHAR_REPLACEMENT_ASCII = 65533
 class InlineTokenParser(
     private val context: MutableContext,
 ) : InlineTokenVisitor<Node> {
+    /**
+     * Parser the resolved children of an emphasis token are mapped through. The scanner nests tokens, so a
+     * child may be any inline token, which this visitor covers and [InlineTokenVisitor] does not.
+     */
+    private val tokenParser: TokenVisitor<Node> by lazy { context.flavor.parserFactory.newParser(context) }
+
     /**
      * @return the parsed content of the tokenization from [this] lexer
      */
@@ -106,14 +110,10 @@ class InlineTokenParser(
             .newInlineLexer(source, variant = InlineLexerVariant.LINK_LABEL)
             .tokenizeAndParse()
 
-    override fun visit(token: EscapeToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        return Text(text = groups.next())
-    }
+    override fun visit(token: EscapeToken): Node = Text(text = token.character)
 
     override fun visit(token: EntityToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val entity = groups.next().trim().lowercase()
+        val entity = token.body.trim().lowercase()
 
         /**
          * @param radix radix to decode the numeric value for (`radix = 10` for decimal, `radix = 16` for hexadecimal)
@@ -135,10 +135,10 @@ class InlineTokenParser(
                 entity == "colon" -> ":"
 
                 // Hexadecimal (e.g. &#xD06)
-                entity.startsWith("#x") -> groups.next().decodeToContent(radix = 16)
+                entity.startsWith("#x") -> token.numeric.orEmpty().decodeToContent(radix = 16)
 
                 // Decimal (e.g. &#35)
-                entity.startsWith("#") -> groups.next().decodeToContent(radix = 10)
+                entity.startsWith("#") -> token.numeric.orEmpty().decodeToContent(radix = 10)
 
                 // HTML entity (e.g. &nbsp;)
                 else -> Escape.Html.unescape(token.data.text)
@@ -159,24 +159,26 @@ class InlineTokenParser(
         return Comment
     }
 
-    override fun visit(token: LineBreakToken): Node {
-        val text = token.data.text
-        return if (text.first() == ' ' || text.first() == '\\') LineBreak else SoftBreak
-    }
+    override fun visit(token: LineBreakToken): Node = if (token.isHard) LineBreak else SoftBreak
 
-    override fun visit(token: LinkToken): LinkNode {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
+    /**
+     * Builds a link node, resolving it to a subdocument link when its URL points at a subdocument.
+     * @param label raw label, parsed as link-label inline content
+     * @param url raw destination
+     * @param title raw title including its delimiters, if any
+     * @return the link node
+     */
+    private fun linkNode(
+        label: String,
+        url: String,
+        title: String?,
+    ): LinkNode {
         val link =
             Link(
-                label = parseLinkLabelSubContent(groups.next()),
-                url = groups.next().trim(),
+                label = parseLinkLabelSubContent(label),
+                url = url.trim(),
                 // Removes leading and trailing delimiters.
-                title =
-                    groups
-                        .nextOrNull()
-                        ?.trimDelimiters()
-                        ?.trim()
-                        ?.let(::parseSubContent),
+                title = title?.trimDelimiters()?.trim()?.let(::parseSubContent),
                 fileSystem = context.fileSystem,
             )
 
@@ -192,21 +194,45 @@ class InlineTokenParser(
         }
     }
 
-    override fun visit(token: ReferenceLinkToken): ReferenceLink {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val label = parseLinkLabelSubContent(groups.next())
+    /**
+     * @param url the autolinked URL
+     * @return a link whose label is its own URL
+     */
+    private fun autolinkNode(url: String): Node =
+        Link(
+            label = listOf(Text(url)),
+            url = url,
+            title = null,
+        )
+
+    override fun visit(token: LinkToken): LinkNode = linkNode(token.label, token.url, token.title)
+
+    /**
+     * Builds a reference link node, whose reference falls back to its own label when collapsed.
+     * @param token token the node falls back to the text of
+     * @param label raw label
+     * @param reference raw reference, if the second bracket pair declared one
+     * @return the reference link node
+     */
+    private fun referenceLinkNode(
+        token: Token,
+        label: String,
+        reference: String?,
+    ): ReferenceLink {
+        val labelContent = parseLinkLabelSubContent(label)
         // When the reference is collapsed, the label is the same as the reference label.
         return ReferenceLink(
-            label = label,
-            referenceLabel = groups.nextOrNull()?.let { parseLinkLabelSubContent(it) } ?: label,
+            label = labelContent,
+            referenceLabel = reference?.let { parseLinkLabelSubContent(it) } ?: labelContent,
             fallback = { Text(token.data.text) },
         )
     }
 
+    override fun visit(token: ReferenceLinkToken): ReferenceLink = referenceLinkNode(token, token.label, token.reference)
+
     override fun visit(token: ReferenceFootnoteToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val label = groups.next()
-        val definition = groups.nextOrNull()
+        val label = token.label
+        val definition = token.definition
 
         return when {
             // All-in-one case:
@@ -229,35 +255,20 @@ class InlineTokenParser(
         }
     }
 
-    override fun visit(token: DiamondAutolinkToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val url = groups.next().trim()
-        return visit(UrlAutolinkToken(token.data.copy(text = url)))
-    }
+    override fun visit(token: DiamondAutolinkToken): Node = autolinkNode(token.url.trim())
 
-    override fun visit(token: UrlAutolinkToken): Node {
-        val url = token.data.text.trim()
-        return Link(
-            label = listOf(Text(url)),
-            url = url,
-            title = null,
-        )
-    }
+    override fun visit(token: UrlAutolinkToken): Node = autolinkNode(token.data.text.trim())
 
     /**
-     * Given an image token, extracts its width and height, if they are set.
-     * They are stored in the named groups `width` and `height`, both prefixed by [namedGroupPrefix].
-     * @param namedGroupPrefix prefix of the named groups
-     * @param data token data to extract the size from
-     * @return pair of width and height, or `null` if they are either unset or invalid
+     * Parses an image's raw size into sizes.
+     * @param width raw width, if any
+     * @param height raw height, if any
+     * @return pair of width and height, each `null` when unset or invalid
      */
-    private fun extractImageSize(
-        namedGroupPrefix: String,
-        data: TokenData,
+    private fun imageSize(
+        width: String?,
+        height: String?,
     ): Pair<Size?, Size?> {
-        val width = data.namedGroups["${namedGroupPrefix}width"]
-        val height = data.namedGroups["${namedGroupPrefix}height"]
-
         fun toSize(raw: String?): Size? =
             try {
                 raw?.let(ValueFactory::size)?.unwrappedValue // Parses the value.
@@ -269,24 +280,18 @@ class InlineTokenParser(
     }
 
     override fun visit(token: ImageToken): Node {
-        val link = visit(LinkToken(token.data))
-        val (width, height) = extractImageSize("img", token.data)
-        val referenceId = token.data.namedGroups["imgcustomid"]?.trim()
-
-        return Image(link, width, height, referenceId)
+        val (width, height) = imageSize(token.width, token.height)
+        return Image(linkNode(token.label, token.url, token.title), width, height, token.customId?.trim())
     }
 
     override fun visit(token: ReferenceImageToken): Node {
-        val link = visit(ReferenceLinkToken(token.data))
-        val (width, height) = extractImageSize("refimg", token.data)
-        val referenceId = token.data.namedGroups["refimgcustomid"]?.trim()
-
-        return ReferenceImage(link, width, height, referenceId)
+        val (width, height) = imageSize(token.width, token.height)
+        val link = referenceLinkNode(token, token.label, token.reference)
+        return ReferenceImage(link, width, height, token.customId?.trim())
     }
 
     override fun visit(token: CodeSpanToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 3)
-        val rawText = groups.next().replace("\n", " ")
+        val rawText = token.content.replace("\n", " ")
 
         // If the text start and ends by a space, and does contain non-space characters,
         // the leading and trailing spaces are trimmed (according to CommonMark).
@@ -315,28 +320,20 @@ class InlineTokenParser(
     override fun visit(token: PlainTextToken): Node = Text(token.data.text)
 
     /**
-     * @param token emphasis token to parse the content for
-     * @return parsed content of an emphasis token
+     * Emphasis is the one kind whose inner content is *not* re-lexed: the inline scanner resolves its nesting
+     * with a delimiter stack and hands the resolved tokens over, which is what makes the nesting correct.
+     * @param children the emphasis token's resolved children
+     * @return the emphasis' inner content
      */
-    private fun emphasisContent(token: Token): InlineContent {
-        // The raw string content, without the delimiters.
-        val text =
-            token.data.groups
-                .iterator(consumeAmount = 3)
-                .next()
-        return parseSubContent(text)
-    }
+    private fun emphasisContent(children: List<Token>): InlineContent = children.map { it.accept(tokenParser) }
 
-    override fun visit(token: EmphasisToken): Node = Emphasis(emphasisContent(token))
+    override fun visit(token: EmphasisToken): Node = Emphasis(emphasisContent(token.children))
 
-    override fun visit(token: StrongToken): Node = Strong(emphasisContent(token))
+    override fun visit(token: StrongToken): Node = Strong(emphasisContent(token.children))
 
-    override fun visit(token: StrongEmphasisToken): Node = StrongEmphasis(emphasisContent(token))
+    override fun visit(token: StrongEmphasisToken): Node = StrongEmphasis(emphasisContent(token.children))
 
-    override fun visit(token: StrikethroughToken): Node = Strikethrough(emphasisContent(token))
+    override fun visit(token: StrikethroughToken): Node = Strikethrough(emphasisContent(token.children))
 
-    override fun visit(token: InlineMathToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        return MathSpan(expression = groups.next().trim())
-    }
+    override fun visit(token: InlineMathToken): Node = MathSpan(expression = token.expression.trim())
 }

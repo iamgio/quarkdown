@@ -11,6 +11,11 @@ Quarkdown introduces code captions, which you can set by adding a caption direct
         return fibonacci(n - 1) + fibonacci(n - 2)
     ```
 
+.examplemirror
+    ``` "A block with no language"
+    plain text
+    ```
+
 Equivalently, via the [`.code`](code.qd) function:
 
 .examplemirror

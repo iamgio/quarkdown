@@ -1,3 +1,5 @@
 # Gradle wrapper scripts: enforce platform-appropriate line endings.
 gradlew text eol=lf
 gradlew.bat text eol=crlf
+
+quarkdown-core/src/jvmTest/resources/lexing/snapshots/*.txt text eol=lf

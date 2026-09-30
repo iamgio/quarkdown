@@ -28,7 +28,9 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.lexer.Lexer
 import com.quarkdown.core.lexer.Token
 import com.quarkdown.core.lexer.acceptAll
-import com.quarkdown.core.lexer.patterns.PatternHelpers
+import com.quarkdown.core.lexer.scan.Scanner
+import com.quarkdown.core.lexer.scan.takeCustomId
+import com.quarkdown.core.lexer.scan.takeDelimitedTitle
 import com.quarkdown.core.lexer.tokens.BlockCodeToken
 import com.quarkdown.core.lexer.tokens.BlockQuoteToken
 import com.quarkdown.core.lexer.tokens.BlockTextToken
@@ -49,8 +51,6 @@ import com.quarkdown.core.lexer.tokens.ParagraphToken
 import com.quarkdown.core.lexer.tokens.SetextHeadingToken
 import com.quarkdown.core.lexer.tokens.TableToken
 import com.quarkdown.core.lexer.tokens.UnorderedListToken
-import com.quarkdown.core.util.iterator
-import com.quarkdown.core.util.nextOrNull
 import com.quarkdown.core.util.removeOptionalPrefix
 import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.core.visitor.token.BlockTokenVisitor
@@ -90,127 +90,84 @@ class BlockTokenParser(
     override fun visit(token: BlockCodeToken): Node =
         Code(
             language = null,
-            // Removes first indentation.
-            content =
-                token.data.text
-                    .replace("^ {1,4}".toRegex(RegexOption.MULTILINE), "")
-                    .trim(),
+            content = token.content.trim(),
         )
 
     override fun visit(token: FencesCodeToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val initialSpaces = groups.next().length // Amount of spaces before the fence.
-        val language = token.data.namedGroups["fencescodelang"]
-        val caption = token.data.namedGroups["fencescodecaption"]?.trim()
-        val referenceId = token.data.namedGroups["fencescodecustomid"]?.trim()
-
         // Removes, at most, the initial spaces from each line (GFM #101).
         val content =
-            groups
-                .next()
+            token.content
                 .lineSequence()
-                .joinToString(separator = "\n") { it.replace("^ {0,$initialSpaces}".toRegex(), "") }
+                .joinToString(separator = "\n") { line -> line.drop(line.takeWhile { it == ' ' }.length.coerceAtMost(token.indent)) }
                 .removePrefix("\n")
                 .removeSuffix("\n")
 
         return Code(
-            language = language?.takeIf { it.isNotBlank() }?.trim(),
-            caption = caption?.trimDelimiters()?.toInline(),
-            referenceId = referenceId,
+            language = token.language?.takeIf { it.isNotBlank() }?.trim(),
+            caption =
+                token.caption
+                    ?.trim()
+                    ?.trimDelimiters()
+                    ?.toInline(),
+            referenceId = token.customId?.trim(),
             content = content,
         )
     }
 
-    override fun visit(token: MultilineMathToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val customId = token.data.namedGroups["multilinemathcustomid"]?.trim()
-
-        return Math(
-            expression = groups.next().trim(),
-            referenceId = customId,
+    override fun visit(token: MultilineMathToken): Node =
+        Math(
+            expression = token.expression.trim(),
+            referenceId = token.customId?.trim(),
         )
-    }
 
-    override fun visit(token: OnelineMathToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val customId = token.data.namedGroups["onelinemathcustomid"]?.trim()
-
-        return Math(
-            expression = groups.next().trim(),
-            referenceId = customId,
+    override fun visit(token: OnelineMathToken): Node =
+        Math(
+            expression = token.expression.trim(),
+            referenceId = token.customId?.trim(),
         )
-    }
 
     override fun visit(token: HorizontalRuleToken): Node = HorizontalRule
 
-    override fun visit(token: HeadingToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-
-        val depth = groups.next().length // Amount of # characters.
-
-        // e.g. ###! Heading => the heading is decorative, meaning it's not part of the document structure.
-        val isDecorative = groups.next() == "!"
-
-        val text = groups.next().trim()
-        val customId = token.data.namedGroups["headingcustomid"]?.trim()
-
-        return Heading(
-            depth,
-            text.toInline(),
-            customId = customId,
-            canBreakPage = !isDecorative,
-            canTrackLocation = !isDecorative,
-            excludeFromTableOfContents = isDecorative,
+    override fun visit(token: HeadingToken): Node =
+        Heading(
+            token.depth,
+            token.content.trim().toInline(),
+            customId = token.customId?.trim(),
+            canBreakPage = !token.isDecorative,
+            canTrackLocation = !token.isDecorative,
+            excludeFromTableOfContents = token.isDecorative,
         )
-    }
 
-    override fun visit(token: SetextHeadingToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-
-        val text = groups.next().trim()
-        val customId = token.data.namedGroups["setextcustomid"]?.trim()
-
-        return Heading(
-            text = text.toInline(),
+    override fun visit(token: SetextHeadingToken): Node =
+        Heading(
+            text = token.content.trim().toInline(),
             depth =
-                when (groups.next().firstOrNull()) {
+                when (token.underline.firstOrNull()) {
                     '=' -> 1
                     '-' -> 2
                     else -> throw IllegalStateException("Invalid setext heading characters") // Should not happen
                 },
-            customId = customId,
+            customId = token.customId?.trim(),
         )
-    }
 
-    override fun visit(token: LinkDefinitionToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-
-        return LinkDefinition(
-            label = groups.next().trim().toInline(),
-            url = groups.next().trim(),
+    override fun visit(token: LinkDefinitionToken): Node =
+        LinkDefinition(
+            label = token.label.trim().toInline(),
+            url = token.url.trim(),
             // Remove first and last character
             title =
-                groups
-                    .nextOrNull()
+                token.title
                     ?.trimDelimiters()
                     ?.trim()
                     ?.toInline(),
             fileSystem = context.fileSystem,
         )
-    }
 
-    override fun visit(token: FootnoteDefinitionToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-
-        return FootnoteDefinition(
-            label = groups.next().trim(),
-            text =
-                groups
-                    .next()
-                    .trim()
-                    .toInline(),
+    override fun visit(token: FootnoteDefinitionToken): Node =
+        FootnoteDefinition(
+            label = token.label.trim(),
+            text = token.content.trim().toInline(),
         )
-    }
 
     /**
      * Parses list items from a list [token].
@@ -246,10 +203,9 @@ class BlockTokenParser(
 
     override fun visit(token: OrderedListToken): Node {
         val children = extractListItems(token)
-        val groups = token.data.groups.iterator(consumeAmount = 3)
 
         // e.g. "1."
-        val marker = groups.next().trim()
+        val marker = token.marker.trim()
 
         return OrderedList(
             startIndex = marker.dropLast(1).toIntOrNull() ?: 1,
@@ -285,10 +241,8 @@ class BlockTokenParser(
     }
 
     override fun visit(token: ListItemToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
-        val marker = groups.next() // Bullet/number
-        groups.next() // Consume
-        val task = groups.next() // Optional GFM task
+        val marker = token.marker // Bullet/number
+        val task = token.task // Optional GFM task
 
         val content =
             token.data.text
@@ -323,8 +277,33 @@ class BlockTokenParser(
         return ListItem(variants, children, rawContent = trimmedContent)
     }
 
+    /**
+     * A table's trailing metadata row.
+     * @param caption raw caption including its delimiters, if any
+     * @param customId raw cross-reference identifier, if any
+     */
+    private class TableMetadata(
+        val caption: String?,
+        val customId: String?,
+    )
+
+    /**
+     * Quarkdown extension: a table may have metadata on its last row, a caption wrapped by a delimiter the
+     * same way as a link or image title, and a custom ID for cross-referencing. The row holds nothing else.
+     * @param row raw row to inspect
+     * @return the metadata, or `null` when the row is an ordinary cell row
+     */
+    private fun tableMetadataOf(row: String): TableMetadata? =
+        Scanner(row).run {
+            takeSpacesAndTabs()
+            val caption = takeDelimitedTitle()
+            takeSpacesAndTabs()
+            val customId = takeCustomId()
+            takeSpacesAndTabs()
+            if (isAtEnd && (caption != null || customId != null)) TableMetadata(caption, customId) else null
+        }
+
     override fun visit(token: TableToken): Node {
-        val groups = token.data.groups.iterator(consumeAmount = 2)
         val columns = mutableListOf<Table.MutableColumn>()
         val separator = "|"
 
@@ -347,12 +326,12 @@ class BlockTokenParser(
         fun parseRow(row: String): Sequence<Table.Cell> = splitRow(row).map { Table.Cell(it.toInline()) }
 
         // Header row.
-        parseRow(groups.next()).forEach {
+        parseRow(token.header).forEach {
             columns += Table.MutableColumn(Table.Alignment.NONE, it, mutableListOf())
         }
 
         // Delimiter row (defines alignment).
-        splitRow(groups.next()).forEachIndexed { index, delimiter ->
+        splitRow(token.alignment).forEachIndexed { index, delimiter ->
             columns.getOrNull(index)?.alignment =
                 when {
                     // :---:
@@ -370,38 +349,21 @@ class BlockTokenParser(
                 }
         }
 
-        // Quarkdown extension: a table may have metadata.
-        // A caption is located at the end of the table, after a line break, wrapped by a delimiter, the same way as a link/image title.
-        // "This is a caption", 'This is a caption', (This is a caption)
-        // A custom ID, e.g. {#custom-id}, can be set for cross-referencing.
-        val titlePattern = PatternHelpers.DELIMITED_TITLE
-        val customIdPattern = PatternHelpers.customId("table")
-        val metadataRegex = Regex("^[ \\t]*($titlePattern)?[ \\t]*$customIdPattern?[ \\t]*$")
-
         // The found caption and custom ID (reference ID) of the table, if any.
         var metadataFound = false
         var caption: String? = null
         var customId: String? = null
 
         // Other rows.
-        groups
-            .next()
+        token.rows
             .lineSequence()
             .filterNot { it.isBlank() }
             .onEach { row ->
                 // Extract the metadata if this is the metadata row.
-                metadataRegex.find(row)?.let { metadataMatch ->
+                tableMetadataOf(row)?.let { metadata ->
                     metadataFound = true
-                    caption =
-                        metadataMatch.groupValues
-                            .getOrNull(1)
-                            ?.takeIf { it.isNotBlank() }
-                            ?.trimDelimiters()
-                    customId =
-                        metadataMatch.groupValues
-                            .getOrNull(2)
-                            ?.takeIf { it.isNotBlank() }
-                            ?.trim()
+                    caption = metadata.caption?.trimDelimiters()
+                    customId = metadata.customId?.trim()
                 }
             }.filterNot { metadataFound } // The metadata row is at the end of the table and not part of the table itself.
             .forEach { row ->
@@ -446,11 +408,7 @@ class BlockTokenParser(
     }
 
     override fun visit(token: BlockQuoteToken): Node {
-        // Remove leading >
-        var text =
-            token.data.text
-                .replace("^ *>[ \\t]?".toRegex(RegexOption.MULTILINE), "")
-                .trim()
+        var text = token.content.trim()
 
         // Blockquote type, if any. e.g. Tip, note, warning.
         val type: BlockQuote.Type? =

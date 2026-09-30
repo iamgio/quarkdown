@@ -1,0 +1,132 @@
+*foo bar*\n	<p><em>foo bar</em></p>\n	350
+a * foo bar*\n	<p>a * foo bar*</p>\n	351
+a*"foo"*\n	<p>a*&quot;foo&quot;*</p>\n	352
+* a *\n	<p>* a *</p>\n	353
+*$*alpha.\n\n*£*bravo.\n\n*€*charlie.\n	<p>*$*alpha.</p>\n<p>*£*bravo.</p>\n<p>*€*charlie.</p>\n	354
+foo*bar*\n	<p>foo<em>bar</em></p>\n	355
+5*6*78\n	<p>5<em>6</em>78</p>\n	356
+_foo bar_\n	<p><em>foo bar</em></p>\n	357
+_ foo bar_\n	<p>_ foo bar_</p>\n	358
+a_"foo"_\n	<p>a_&quot;foo&quot;_</p>\n	359
+foo_bar_\n	<p>foo_bar_</p>\n	360
+5_6_78\n	<p>5_6_78</p>\n	361
+пристаням_стремятся_\n	<p>пристаням_стремятся_</p>\n	362
+aa_"bb"_cc\n	<p>aa_&quot;bb&quot;_cc</p>\n	363
+foo-_(bar)_\n	<p>foo-<em>(bar)</em></p>\n	364
+_foo*\n	<p>_foo*</p>\n	365
+*foo bar *\n	<p>*foo bar *</p>\n	366
+*foo bar\n*\n	<p>*foo bar\n*</p>\n	367
+*(*foo)\n	<p>*(*foo)</p>\n	368
+*(*foo*)*\n	<p><em>(<em>foo</em>)</em></p>\n	369
+*foo*bar\n	<p><em>foo</em>bar</p>\n	370
+_foo bar _\n	<p>_foo bar _</p>\n	371
+_(_foo)\n	<p>_(_foo)</p>\n	372
+_(_foo_)_\n	<p><em>(<em>foo</em>)</em></p>\n	373
+_foo_bar\n	<p>_foo_bar</p>\n	374
+_пристаням_стремятся\n	<p>_пристаням_стремятся</p>\n	375
+_foo_bar_baz_\n	<p><em>foo_bar_baz</em></p>\n	376
+_(bar)_.\n	<p><em>(bar)</em>.</p>\n	377
+**foo bar**\n	<p><strong>foo bar</strong></p>\n	378
+** foo bar**\n	<p>** foo bar**</p>\n	379
+a**"foo"**\n	<p>a**&quot;foo&quot;**</p>\n	380
+foo**bar**\n	<p>foo<strong>bar</strong></p>\n	381
+__foo bar__\n	<p><strong>foo bar</strong></p>\n	382
+__ foo bar__\n	<p>__ foo bar__</p>\n	383
+__\nfoo bar__\n	<p>__\nfoo bar__</p>\n	384
+a__"foo"__\n	<p>a__&quot;foo&quot;__</p>\n	385
+foo__bar__\n	<p>foo__bar__</p>\n	386
+5__6__78\n	<p>5__6__78</p>\n	387
+пристаням__стремятся__\n	<p>пристаням__стремятся__</p>\n	388
+__foo, __bar__, baz__\n	<p><strong>foo, <strong>bar</strong>, baz</strong></p>\n	389
+foo-__(bar)__\n	<p>foo-<strong>(bar)</strong></p>\n	390
+**foo bar **\n	<p>**foo bar **</p>\n	391
+**(**foo)\n	<p>**(**foo)</p>\n	392
+*(**foo**)*\n	<p><em>(<strong>foo</strong>)</em></p>\n	393
+**Gomphocarpus (*Gomphocarpus physocarpus*, syn.\n*Asclepias physocarpa*)**\n	<p><strong>Gomphocarpus (<em>Gomphocarpus physocarpus</em>, syn.\n<em>Asclepias physocarpa</em>)</strong></p>\n	394
+**foo "*bar*" foo**\n	<p><strong>foo &quot;<em>bar</em>&quot; foo</strong></p>\n	395
+**foo**bar\n	<p><strong>foo</strong>bar</p>\n	396
+__foo bar __\n	<p>__foo bar __</p>\n	397
+__(__foo)\n	<p>__(__foo)</p>\n	398
+_(__foo__)_\n	<p><em>(<strong>foo</strong>)</em></p>\n	399
+__foo__bar\n	<p>__foo__bar</p>\n	400
+__пристаням__стремятся\n	<p>__пристаням__стремятся</p>\n	401
+__foo__bar__baz__\n	<p><strong>foo__bar__baz</strong></p>\n	402
+__(bar)__.\n	<p><strong>(bar)</strong>.</p>\n	403
+*foo [bar](/url)*\n	<p><em>foo <a href="/url">bar</a></em></p>\n	404
+*foo\nbar*\n	<p><em>foo\nbar</em></p>\n	405
+_foo __bar__ baz_\n	<p><em>foo <strong>bar</strong> baz</em></p>\n	406
+_foo _bar_ baz_\n	<p><em>foo <em>bar</em> baz</em></p>\n	407
+__foo_ bar_\n	<p><em><em>foo</em> bar</em></p>\n	408
+*foo *bar**\n	<p><em>foo <em>bar</em></em></p>\n	409
+*foo **bar** baz*\n	<p><em>foo <strong>bar</strong> baz</em></p>\n	410
+*foo**bar**baz*\n	<p><em>foo<strong>bar</strong>baz</em></p>\n	411
+*foo**bar*\n	<p><em>foo**bar</em></p>\n	412
+***foo** bar*\n	<p><em><strong>foo</strong> bar</em></p>\n	413
+*foo **bar***\n	<p><em>foo <strong>bar</strong></em></p>\n	414
+*foo**bar***\n	<p><em>foo<strong>bar</strong></em></p>\n	415
+foo***bar***baz\n	<p>foo<em><strong>bar</strong></em>baz</p>\n	416
+foo******bar*********baz\n	<p>foo<strong><strong><strong>bar</strong></strong></strong>***baz</p>\n	417
+*foo **bar *baz* bim** bop*\n	<p><em>foo <strong>bar <em>baz</em> bim</strong> bop</em></p>\n	418
+*foo [*bar*](/url)*\n	<p><em>foo <a href="/url"><em>bar</em></a></em></p>\n	419
+** is not an empty emphasis\n	<p>** is not an empty emphasis</p>\n	420
+**** is not an empty strong emphasis\n	<p>**** is not an empty strong emphasis</p>\n	421
+**foo [bar](/url)**\n	<p><strong>foo <a href="/url">bar</a></strong></p>\n	422
+**foo\nbar**\n	<p><strong>foo\nbar</strong></p>\n	423
+__foo _bar_ baz__\n	<p><strong>foo <em>bar</em> baz</strong></p>\n	424
+__foo __bar__ baz__\n	<p><strong>foo <strong>bar</strong> baz</strong></p>\n	425
+____foo__ bar__\n	<p><strong><strong>foo</strong> bar</strong></p>\n	426
+**foo **bar****\n	<p><strong>foo <strong>bar</strong></strong></p>\n	427
+**foo *bar* baz**\n	<p><strong>foo <em>bar</em> baz</strong></p>\n	428
+**foo*bar*baz**\n	<p><strong>foo<em>bar</em>baz</strong></p>\n	429
+***foo* bar**\n	<p><strong><em>foo</em> bar</strong></p>\n	430
+**foo *bar***\n	<p><strong>foo <em>bar</em></strong></p>\n	431
+**foo *bar **baz**\nbim* bop**\n	<p><strong>foo <em>bar <strong>baz</strong>\nbim</em> bop</strong></p>\n	432
+**foo [*bar*](/url)**\n	<p><strong>foo <a href="/url"><em>bar</em></a></strong></p>\n	433
+__ is not an empty emphasis\n	<p>__ is not an empty emphasis</p>\n	434
+____ is not an empty strong emphasis\n	<p>____ is not an empty strong emphasis</p>\n	435
+foo ***\n	<p>foo ***</p>\n	436
+foo *\\**\n	<p>foo <em>*</em></p>\n	437
+foo *_*\n	<p>foo <em>_</em></p>\n	438
+foo *****\n	<p>foo *****</p>\n	439
+foo **\\***\n	<p>foo <strong>*</strong></p>\n	440
+foo **_**\n	<p>foo <strong>_</strong></p>\n	441
+**foo*\n	<p>*<em>foo</em></p>\n	442
+*foo**\n	<p><em>foo</em>*</p>\n	443
+***foo**\n	<p>*<strong>foo</strong></p>\n	444
+****foo*\n	<p>***<em>foo</em></p>\n	445
+**foo***\n	<p><strong>foo</strong>*</p>\n	446
+*foo****\n	<p><em>foo</em>***</p>\n	447
+foo ___\n	<p>foo ___</p>\n	448
+foo _\\__\n	<p>foo <em>_</em></p>\n	449
+foo _*_\n	<p>foo <em>*</em></p>\n	450
+foo _____\n	<p>foo _____</p>\n	451
+foo __\\___\n	<p>foo <strong>_</strong></p>\n	452
+foo __*__\n	<p>foo <strong>*</strong></p>\n	453
+__foo_\n	<p>_<em>foo</em></p>\n	454
+_foo__\n	<p><em>foo</em>_</p>\n	455
+___foo__\n	<p>_<strong>foo</strong></p>\n	456
+____foo_\n	<p>___<em>foo</em></p>\n	457
+__foo___\n	<p><strong>foo</strong>_</p>\n	458
+_foo____\n	<p><em>foo</em>___</p>\n	459
+**foo**\n	<p><strong>foo</strong></p>\n	460
+*_foo_*\n	<p><em><em>foo</em></em></p>\n	461
+__foo__\n	<p><strong>foo</strong></p>\n	462
+_*foo*_\n	<p><em><em>foo</em></em></p>\n	463
+****foo****\n	<p><strong><strong>foo</strong></strong></p>\n	464
+____foo____\n	<p><strong><strong>foo</strong></strong></p>\n	465
+******foo******\n	<p><strong><strong><strong>foo</strong></strong></strong></p>\n	466
+***foo***\n	<p><em><strong>foo</strong></em></p>\n	467
+_____foo_____\n	<p><em><strong><strong>foo</strong></strong></em></p>\n	468
+*foo _bar* baz_\n	<p><em>foo _bar</em> baz_</p>\n	469
+*foo __bar *baz bim__ bam*\n	<p><em>foo <strong>bar *baz bim</strong> bam</em></p>\n	470
+**foo **bar baz**\n	<p>**foo <strong>bar baz</strong></p>\n	471
+*foo *bar baz*\n	<p>*foo <em>bar baz</em></p>\n	472
+*[bar*](/url)\n	<p>*<a href="/url">bar*</a></p>\n	473
+_foo [bar_](/url)\n	<p>_foo <a href="/url">bar_</a></p>\n	474
+*<img src="foo" title="*"/>\n	<p>*<img src="foo" title="*"/></p>\n	475
+**<a href="**">\n	<p>**<a href="**"></p>\n	476
+__<a href="__">\n	<p>__<a href="__"></p>\n	477
+*a `*`*\n	<p><em>a <code>*</code></em></p>\n	478
+_a `_`_\n	<p><em>a <code>_</code></em></p>\n	479
+**a<https://foo.bar/?q=**>\n	<p>**a<a href="https://foo.bar/?q=**">https://foo.bar/?q=**</a></p>\n	480
+__a<https://foo.bar/?q=__>\n	<p>__a<a href="https://foo.bar/?q=__">https://foo.bar/?q=__</a></p>\n	481

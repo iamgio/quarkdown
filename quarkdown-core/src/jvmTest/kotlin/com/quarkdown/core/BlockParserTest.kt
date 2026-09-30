@@ -257,10 +257,11 @@ class BlockParserTest {
                 assertEquals("custom-id", referenceId)
             }
         }
+        // A lone custom ID with no language is a custom ID, not a language.
         with(nodes.next()) {
             assertEquals("Code line 1\nCode line 2", content)
-            assertEquals("{#custom-id}", language)
-            assertNull(referenceId)
+            assertNull(language)
+            assertEquals("custom-id", referenceId)
         }
         with(nodes.next()) {
             assertEquals("Code line 1\nCode line 2", content)

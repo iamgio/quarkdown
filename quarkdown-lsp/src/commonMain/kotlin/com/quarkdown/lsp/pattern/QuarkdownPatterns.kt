@@ -1,7 +1,6 @@
 package com.quarkdown.lsp.pattern
 
-import com.quarkdown.core.lexer.patterns.FUNCTION_CALL_PATTERN_BEFORE
-import com.quarkdown.core.lexer.regex.RegexBuilder
+import com.quarkdown.core.lexer.scan.FUNCTION_CALL_PATTERN_BEFORE
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
 import com.quarkdown.lsp.pattern.QuarkdownPatterns.FunctionCall.BEGIN
 
@@ -52,11 +51,9 @@ object QuarkdownPatterns {
          * The pattern that matches an optional identifier in a function call, preceded by [BEGIN] (unmatched).
          */
         val identifierInCall: Regex =
-            RegexBuilder("(?<=(before)(begin))(identifier)?")
-                .withReference("before", FUNCTION_CALL_PATTERN_BEFORE)
-                .withReference("begin", Regex.escape(BEGIN))
-                .withReference("chain", Regex.escape(CHAIN_SEPARATOR))
-                .withReference("identifier", IDENTIFIER.pattern)
-                .buildRegex()
+            Regex(
+                "(?<=($FUNCTION_CALL_PATTERN_BEFORE)(${Regex.escape(BEGIN)}))(${IDENTIFIER.pattern})?",
+                RegexOption.MULTILINE,
+            )
     }
 }
