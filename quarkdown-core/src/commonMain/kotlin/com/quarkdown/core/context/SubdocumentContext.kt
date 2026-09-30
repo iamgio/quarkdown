@@ -29,8 +29,11 @@ open class SubdocumentContext(
         subdocument = subdocument,
     ),
     ChildContext<MutableContext> {
-    override val attachedPipeline: Pipeline?
+    override var attachedPipeline: Pipeline?
         get() = super.attachedPipeline ?: parent.attachedPipeline
+        protected set(value) {
+            super.attachedPipeline = value
+        }
 
     // A subdocument inherits the parent's document info, but changes to it are local to this subdocument.
     override var documentInfo: DocumentInfo = parent.documentInfo
@@ -61,4 +64,11 @@ open class SubdocumentContext(
     override fun isFunctionExtended(name: String): Boolean = super.isFunctionExtended(name) || parent.isFunctionExtended(name)
 
     override fun hasFunctionsExtended(): Boolean = super.hasFunctionsExtended() || parent.hasFunctionsExtended()
+
+    /**
+     * Detaches only this context's own pipeline.
+     */
+    override fun close() {
+        attachedPipeline = null
+    }
 }
