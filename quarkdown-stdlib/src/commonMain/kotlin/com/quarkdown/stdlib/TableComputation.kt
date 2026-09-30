@@ -342,6 +342,35 @@ fun tableColumns(
 }
 
 /**
+ * Adapts a row value to an iterable of cell values.
+ *
+ * Iterable rows are kept as-is, while any other value is converted via [ValueFactory.iterable].
+ * A row written as a nested Markdown list (e.g. `- - A` followed by an indented `- B`) is
+ * converted to a single-element collection which wraps the actual cells, hence that extra
+ * level is unwrapped.
+ *
+ * @param row the row value to adapt
+ * @param context the current context, used for the conversion
+ * @return the row as an iterable of cell values
+ * @throws IllegalArgumentException if the row's value is null
+ */
+private fun toRowIterable(
+    row: OutputValue<*>,
+    context: Context,
+): IterableValue<out OutputValue<*>> {
+    if (row is IterableValue<*>) return row
+
+    val converted =
+        ValueFactory.iterable(
+            requireNotNull(row.unwrappedValue) { "A row value cannot be null." },
+            context,
+        )
+
+    val single = converted.unwrappedValue.toList().singleOrNull()
+    return if (single is IterableValue<*>) single else converted
+}
+
+/**
  * Generates a table from a list of rows, where each row is a list of cell values.
  * Optionally, headers can be provided for the columns.
  *
@@ -377,6 +406,8 @@ fun tableColumns(
  * @param headers optional list of headers for the columns. If not provided, no headers are used.
  * @param rows list of rows, where each row is an iterable of cell values.
  * Rows can have varying lengths; missing cells will be filled with empty content.
+ * Each row is dynamically adapted to an iterable, hence rows produced by functions
+ * such as `.repeat`, or stored in variables, are accepted as well.
  * @return the generated [Table] node
  * @wiki table-generation
  */
@@ -385,9 +416,11 @@ fun tableColumns(
 fun generateTableByRows(
     @Injected context: Context,
     headers: List<OutputValue<*>> = emptyList(),
-    rows: List<IterableValue<out OutputValue<*>>>,
+    rows: List<OutputValue<*>>,
 ): NodeValue {
     if (rows.isEmpty()) return Table(emptyList()).wrappedAsValue()
+
+    val iterableRows = rows.map { toRowIterable(it, context) }
 
     fun valueToInlineContent(value: OutputValue<*>?): InlineContent =
         value
@@ -395,7 +428,7 @@ fun generateTableByRows(
             ?.let { ValueFactory.inlineMarkdown(it, context).unwrappedValue.children }
             ?: emptyList()
 
-    val columnCount = rows.maxOf { it.unwrappedValue.toList().size }
+    val columnCount = iterableRows.maxOf { it.unwrappedValue.toList().size }
     val columns =
         List(columnCount) {
             val header = headers.getOrNull(it)
@@ -406,7 +439,7 @@ fun generateTableByRows(
             )
         }
 
-    for (row in rows) {
+    for (row in iterableRows) {
         repeat(columnCount) { i ->
             val row = row.unwrappedValue.toList().getOrNull(i)
             columns[i].cells += Table.Cell(valueToInlineContent(row))

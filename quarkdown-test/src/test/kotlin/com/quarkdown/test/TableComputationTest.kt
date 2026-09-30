@@ -376,4 +376,29 @@ class TableComputationTest {
             )
         }
     }
+
+    // #598
+    @Test
+    fun `generation by rows, dynamically typed row elements`() {
+        execute(
+            """
+            .var {rows}
+                .repeat {3}
+                    index:
+                    - - Cell .index:A
+                      - Cell .index:B
+
+            .tablebyrows rows:{.rows}
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<table><thead><tr><th></th><th></th></tr></thead><tbody>" +
+                    "<tr><td>Cell 1:A</td><td>Cell 1:B</td></tr>" +
+                    "<tr><td>Cell 2:A</td><td>Cell 2:B</td></tr>" +
+                    "<tr><td>Cell 3:A</td><td>Cell 3:B</td></tr>" +
+                    "</tbody></table>",
+                it,
+            )
+        }
+    }
 }

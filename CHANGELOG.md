@@ -10,6 +10,20 @@ Source tokenization is now implemented via scanner rather than regex, making the
 
 ### Fixed
 
+#### `.tablebyrows` accepts dynamically typed rows
+
+Rows generated dynamically, such as the output of `.repeat` stored in a variable, can now be used as table rows. Previously, this failed with a type cast error.
+
+```text
+.var {rows}
+    .repeat {3}
+        index:
+        - - Cell .index:A
+          - Cell .index:B
+
+.tablebyrows rows:{.rows}
+```
+
 #### CommonMark emphasis correctness
 
 `***bold italic** still italic*` now renders correctly.
