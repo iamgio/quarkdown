@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.6.3] - 2026-10-01
+
 ### Changed
 
 #### Faster source tokenization
@@ -1537,7 +1539,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.6.2...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.6.3...HEAD
+
+[2.6.3]: https://github.com/iamgio/quarkdown/compare/v2.6.2...v2.6.3
 
 [2.6.2]: https://github.com/iamgio/quarkdown/compare/v2.6.1...v2.6.2
 
