@@ -160,6 +160,33 @@ class LocalizationTest {
     }
 
     @Test
+    fun `stdlib localization table merge does not leak into other documents`() {
+        execute(
+            """
+            .doclang {en}
+
+            .localization {std} merge:{yes}
+                - English
+                    - warning: Careful
+
+            .localize {std:warning}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Careful</p>", it)
+        }
+
+        execute(
+            """
+            .doclang {en}
+
+            .localize {std:warning}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Warning</p>", it)
+        }
+    }
+
+    @Test
     fun `soft line break renders differently in CJK locales`() {
         execute(
             """

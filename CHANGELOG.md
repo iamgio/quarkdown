@@ -18,6 +18,10 @@ Tokenization of a block-level function call was optimized to be linear rather th
 
 Loops like `.repeat` and `.foreach`, and custom functions defined via `.function`, run up to four times faster when their body calls other functions.
 
+#### Pre-compiled localization
+
+Every compilation is now a few milliseconds faster, as the built-in stdlib [localization table](https://quarkdown.com/wiki/localization) is no longer processed from scratch each time.
+
 ## [2.6.3] - 2026-10-01
 
 ### Changed

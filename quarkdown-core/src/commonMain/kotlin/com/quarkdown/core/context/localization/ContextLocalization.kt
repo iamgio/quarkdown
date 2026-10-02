@@ -7,11 +7,11 @@ import com.quarkdown.core.localization.LocalizationException
 
 /**
  * Name of the stdlib localization table.
- * Not that the library might not always be present,
+ * Note that the library might not always be present,
  * hence it is suggested to use it with [localizeOrNull].
  * @see [com.quarkdown.core.context.Context.localize]
  */
-private const val STDLIB_LOCALIZATION_TABLE_NAME = "std"
+const val STDLIB_LOCALIZATION_TABLE_NAME = "std"
 
 /**
  * Default locale to use as fallback via [localizeOrDefault] if a localization key is not found.
