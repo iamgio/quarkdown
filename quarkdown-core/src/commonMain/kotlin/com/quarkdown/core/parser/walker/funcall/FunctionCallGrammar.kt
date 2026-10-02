@@ -87,6 +87,16 @@ class FunctionCallGrammar(
          * The character that, at the end of a line, continues parsing arguments on the next line.
          */
         const val LINE_CONTINUATION = '\\'
+
+        /**
+         * Matcher of [IDENTIFIER_PATTERN], compiled once and shared by all grammar instances.
+         */
+        private val identifierMatcher = regexToken(IDENTIFIER_PATTERN)
+
+        /**
+         * Matcher of whitespace, compiled once and shared by all grammar instances.
+         */
+        private val whitespaceMatcher = regexToken("[ \\t]+")
     }
 
     /**
@@ -124,7 +134,7 @@ class FunctionCallGrammar(
     /**
      * Token that matches whitespace, ignored between arguments
      */
-    private val whitespace by regexToken("[ \\t]+")
+    private val whitespace by token { string, position -> whitespaceMatcher.match(string, position) }
 
     /**
      * Token that matches a line continuation: a backslash followed by a newline,
@@ -204,7 +214,7 @@ class FunctionCallGrammar(
      */
     private val identifier by token { string, position ->
         if (inArg) return@token 0
-        regexToken(IDENTIFIER_PATTERN).match(string, position)
+        identifierMatcher.match(string, position)
     }
 
     /**

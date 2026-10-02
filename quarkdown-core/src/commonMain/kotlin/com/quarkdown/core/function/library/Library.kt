@@ -19,6 +19,19 @@ data class Library(
     val hooks: PipelineHooks? = null,
 ) {
     /**
+     * [functions] indexed by name. On duplicate names, the first declared function is kept.
+     */
+    private val functionsByName: Map<String, Function<*>> by lazy {
+        functions.distinctBy { it.name }.associateBy { it.name }
+    }
+
+    /**
+     * @param name name of the function to find
+     * @return the function of this library named [name], if any
+     */
+    fun findFunction(name: String): Function<*>? = functionsByName[name]
+
+    /**
      * @return a copy of this library with the given pipeline hooks attached
      */
     fun withHooks(hooks: PipelineHooks) = copy(hooks = hooks)

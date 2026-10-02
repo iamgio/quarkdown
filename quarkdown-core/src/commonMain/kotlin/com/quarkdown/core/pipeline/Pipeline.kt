@@ -4,6 +4,7 @@ import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.function.library.Library
+import com.quarkdown.core.lexer.TokenCache
 import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.stage.SharedPipelineData
@@ -36,6 +37,13 @@ class Pipeline(
      */
     val readOnlyContext: Context
         get() = context
+
+    /**
+     * Tokens of the expressions evaluated by this pipeline, such as function call arguments and lambda bodies,
+     * memoized so that expressions evaluated repeatedly are lexed only once.
+     * Copies of this pipeline do not share it.
+     */
+    internal val expressionTokens = TokenCache()
 
     fun copy(context: MutableContext = this.context): Pipeline =
         Pipeline(
