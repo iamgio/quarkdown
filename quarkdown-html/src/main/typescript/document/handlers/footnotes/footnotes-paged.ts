@@ -17,9 +17,13 @@ export class FootnotesPaged extends FootnotesDocumentHandler {
      */
     async onPreRendering() {
         await super.onPreRendering();
-        this.footnotes.forEach(({reference, definition}) =>{
+
+        // Pre-calculating heights to avoid reflows.
+        const heights = this.footnotes.map(({definition}) => definition.scrollHeight);
+
+        this.footnotes.forEach(({reference, definition}, index) => {
             reference.style.display = 'block';
-            reference.style.height = definition.scrollHeight + 'px';
+            reference.style.height = heights[index] + 'px';
 
             // Moves the footnote definition out of the page, to keep the layout intact.
             definition.remove();
@@ -37,7 +41,6 @@ export class FootnotesPaged extends FootnotesDocumentHandler {
         await super.onPreRendering(); // Reloads footnotes pairs, since the DOM changed due to paged.js processing.
         this.footnotes.forEach(({reference, definition}) => {
             const pageArea = this.quarkdownDocument.getParentViewport(reference);
-            console.log(document)
             if (!pageArea) return;
             const footnoteArea = pageArea.querySelector<HTMLElement>('.pagedjs_footnote_area > .pagedjs_footnote_content');
             if (!footnoteArea) return;

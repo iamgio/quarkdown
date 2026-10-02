@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### Faster paged document rendering
+
+Paged documents now render up to 6x faster in the browser, live preview, and PDF export.
+
 ## [2.6.3] - 2026-10-01
 
 ### Changed
