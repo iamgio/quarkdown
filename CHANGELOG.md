@@ -8,6 +8,12 @@
 
 Paged documents now render up to 6x faster in the browser, live preview, and PDF export.
 
+### Fixed
+
+#### Documents with many block function calls compile in linear time
+
+Tokenization of a block-level function call was optimized to be linear rather than quadratic, and more memory-efficient.
+
 ## [2.6.3] - 2026-10-01
 
 ### Changed
