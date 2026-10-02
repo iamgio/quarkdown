@@ -1,12 +1,14 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.context.MutableContext
+import com.quarkdown.core.context.localization.STDLIB_LOCALIZATION_TABLE_NAME
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.library.LibraryExporter
 import com.quarkdown.core.function.library.loader.MultiFunctionLibraryLoader
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.pipeline.PipelineHooks
-import com.quarkdown.stdlib.localization.LOCALIZATION_TABLE
+import com.quarkdown.stdlib.localization.STDLIB_LOCALIZATION_TABLE
 
 /**
  * Fallback value for non-existent elements in collections, dictionaries, and more.
@@ -53,10 +55,10 @@ object Stdlib : LibraryExporter {
                     PipelineHooks(
                         // Localization data is loaded before any function is called.
                         afterRegisteringLibraries = {
-                            includeResource(
-                                this.readOnlyContext,
-                                LOCALIZATION_TABLE,
-                            )
+                            (readOnlyContext as? MutableContext)
+                                ?.localizationTables
+                                ?.set(STDLIB_LOCALIZATION_TABLE_NAME, STDLIB_LOCALIZATION_TABLE)
+                                ?: error("Cannot load stdlib localization table.")
                         },
                     ),
                 )
