@@ -5,6 +5,7 @@ import com.quarkdown.core.parser.walker.WalkerParsingResult
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar
 import com.quarkdown.core.parser.walker.funcall.FunctionCallWalkerParser
 import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
+import com.quarkdown.core.util.view
 
 /**
  * What may precede a function call, as an alternation: the start of a line, whitespace, or a character that
@@ -78,5 +79,5 @@ internal fun walkFunctionCallAt(
  */
 internal fun CharSequence.walkerSlice(from: Int): CharSequence {
     val end = if (endsWith('\n')) length - 1 else length
-    return subSequence(from, maxOf(from, end))
+    return view(from, maxOf(from, end))
 }

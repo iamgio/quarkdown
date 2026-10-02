@@ -1,6 +1,7 @@
 package com.quarkdown.core.parser.walker
 
 import com.github.h0tk3y.betterParse.grammar.Grammar
+import com.github.h0tk3y.betterParse.lexer.DefaultTokenizer
 import com.github.h0tk3y.betterParse.parser.toParsedOrThrow
 
 /**
@@ -22,13 +23,17 @@ open class WalkerParser<T>(
      * @return the result of the parsing operation
      */
     fun parse(): WalkerParsingResult<T> {
-        val tokens = grammar.tokenizer.tokenize(source.toString())
+        val tokens =
+            when (val tokenizer = grammar.tokenizer) {
+                is DefaultTokenizer -> tokenizer.tokenize(source)
+
+                // Efficient view.
+                else -> tokenizer.tokenize(source.toString())
+            }
         val result = grammar.tryParse(tokens, fromPosition = 0)
         val parsed = result.toParsedOrThrow()
 
         val endIndex = tokens[parsed.nextPosition]?.offset ?: source.length
-        val sourceText = source.substring(0, endIndex)
-        val remainder = source.substring(endIndex)
-        return WalkerParsingResult(parsed.value, endIndex, tokens, sourceText, remainder)
+        return WalkerParsingResult(parsed.value, endIndex, tokens, source)
     }
 }
