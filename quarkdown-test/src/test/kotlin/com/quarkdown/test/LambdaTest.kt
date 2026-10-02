@@ -111,4 +111,28 @@ class LambdaTest {
             assertEquals("<p>3</p>", it)
         }
     }
+
+    @Test
+    fun `same expression resolves against the scope it is evaluated in`() {
+        execute(
+            """
+            .var {n} {outer}
+            .uppercase {.n}
+
+            .let {inner}
+                n:
+                .let {innermost}
+                    n:
+                    .uppercase {.n}
+
+            .foreach {1..3}
+                n:
+                .uppercase {.n}
+
+            .uppercase {.n}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>OUTER</p><p>INNERMOST</p><p>1</p><p>2</p><p>3</p><p>OUTER</p>", it)
+        }
+    }
 }

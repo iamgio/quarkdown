@@ -79,12 +79,7 @@ open class BaseContext(
         this.getRootFileSystem(granularity = RootGranularity.PROJECT)
     }
 
-    override fun getFunctionByName(name: String): Function<*>? =
-        libraries
-            .asReversed()
-            .asSequence()
-            .flatMap { it.functions }
-            .find { it.name == name }
+    override fun getFunctionByName(name: String): Function<*>? = libraries.asReversed().firstNotNullOfOrNull { it.findFunction(name) }
 
     override fun isFunctionExtended(name: String): Boolean = false
 

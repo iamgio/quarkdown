@@ -53,6 +53,7 @@ import com.quarkdown.core.lexer.scan.withoutComments
 import com.quarkdown.core.misc.color.Color
 import com.quarkdown.core.misc.color.decoder.decode
 import com.quarkdown.core.parser.walker.lambda.LambdaParser
+import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.error.PipelineException
 import com.quarkdown.core.pipeline.error.UnattachedPipelineException
 import com.quarkdown.core.pipeline.stage.PipelineStage
@@ -321,6 +322,18 @@ object ValueFactory {
         lexer: Lexer,
         context: Context,
         expandFunctionCalls: Boolean,
+    ): MarkdownContentValue = markdown(context, expandFunctionCalls) { lexer.tokenize() }
+
+    /**
+     * @param context context to retrieve the pipeline from, which allows parsing and function expansion
+     * @param expandFunctionCalls whether enqueued function calls should be expanded instantly
+     * @param tokens supplier of the tokens to parse, given the pipeline linked to [context]
+     * @return a new value that wraps the root of the produced AST
+     */
+    private fun markdown(
+        context: Context,
+        expandFunctionCalls: Boolean,
+        tokens: (Pipeline) -> Sequence<Token>,
     ): MarkdownContentValue {
         // Retrieving the pipeline linked to the context.
         val pipeline = context.attachedPipeline ?: throw UnattachedPipelineException()
@@ -332,7 +345,7 @@ object ValueFactory {
         val parsing: PipelineStage<Sequence<Token>, AstRoot> =
             ParsingStage thenOptionally FunctionCallExpansionStage.takeIf { expandFunctionCalls }
 
-        val root: AstRoot = parsing.execute(lexer.tokenize(), sharedData)
+        val root: AstRoot = parsing.execute(tokens(pipeline), sharedData)
 
         return MarkdownContentValue(MarkdownContent(root.children))
     }
@@ -562,12 +575,13 @@ object ValueFactory {
 
         // The content of the argument is tokenized to distinguish static values (string/number/...)
         // from nested function calls, which are also expressions.
+        // Tokens are memoized, as the same expression may be evaluated many times, e.g. in a loop.
         val components =
-            markdown(
-                lexer = context.flavor.lexerFactory.newExpressionLexer(rawCode, allowBlockFunctionCalls = true),
-                context,
-                expandFunctionCalls = false,
-            ).unwrappedValue.children
+            markdown(context, expandFunctionCalls = false) { pipeline ->
+                pipeline.expressionTokens.getOrLex(rawCode) {
+                    context.flavor.lexerFactory.newExpressionLexer(it, allowBlockFunctionCalls = true)
+                }
+            }.unwrappedValue.children
 
         if (components.isEmpty()) return null
 
