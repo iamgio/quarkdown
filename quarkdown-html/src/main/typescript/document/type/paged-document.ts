@@ -13,6 +13,7 @@ import {PageNumbers} from "../handlers/page-numbers";
 import {PagedLikeQuarkdownDocument} from "../paged-like-quarkdown-document";
 import {ShowOnReady} from "../handlers/show-on-ready";
 import {PersistentHeadings} from "../handlers/persistent-headings";
+import {createTimeSlicedTick} from "../../queue/time-sliced-tick";
 
 declare const Paged: typeof import("pagedjs"); // global Paged at runtime
 
@@ -81,9 +82,18 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
         Paged.registerHandlers(PagedAfterReadyHandler);
     }
 
-    /** Initializes paged.js rendering. */
+    /**
+     * Initializes paged.js rendering.
+     */
     initializeRendering(): void {
-        (window as any).PagedPolyfill?.preview().then();
+        const previewer = (window as any).PagedPolyfill;
+        if (!previewer) return;
+
+
+        // paged.js lays out one page per animation frame by default, idling until the next frame after each page.
+        // Its queue is given a time-sliced tick instead, which lays out pages back-to-back and yields to rendering periodically.
+        previewer.chunker.q.tick = createTimeSlicedTick();
+        previewer.preview().then();
     }
 
     getHandlers(): DocumentHandler[] {

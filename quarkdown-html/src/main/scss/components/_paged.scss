@@ -1,4 +1,4 @@
-:root:has(.quarkdown-paged) {
+:root:has(> body.quarkdown-paged) {
   color-scheme: light;
 }
 
