@@ -1,0 +1,280 @@
+<!-- Port of LaTeX's siunitx package, as a set of TeX macros available in formulas. -->
+
+<!-- Commands -->
+
+.texmacro {\num}
+    #1
+
+.texmacro {\unit}
+    \mathrm{\!#1}
+
+.texmacro {\si}
+    \unit{#1}
+
+.texmacro {\qty}
+    {#1\,\unit{#2}}
+
+.texmacro {\SI}
+    \qty{#1}{#2}
+
+.texmacro {\ang}
+    #1^{\circ}
+
+.texmacro {\numrange}
+    #1\text{--}#2
+
+.texmacro {\qtyrange}
+    \qty{#1}{#3}\text{--}\qty{#2}{#3}
+
+.texmacro {\SIrange}
+    \qtyrange{#1}{#2}{#3}
+
+<!-- Powers and qualifiers -->
+
+.texmacro {\per}
+    /\!
+
+.texmacro {\squared}
+    ^{2}
+
+.texmacro {\cubed}
+    ^{3}
+
+.texmacro {\tothe}
+    ^{#1}
+
+.texmacro {\raiseto}
+    #2^{#1}
+
+.texmacro {\of}
+    _{\mathrm{#1}}
+
+<!-- Prefixes -->
+
+.texmacro {\quecto}
+    \,\mathrm{q}\!
+
+.texmacro {\ronto}
+    \,\mathrm{r}\!
+
+.texmacro {\yocto}
+    \,\mathrm{y}\!
+
+.texmacro {\zepto}
+    \,\mathrm{z}\!
+
+.texmacro {\atto}
+    \,\mathrm{a}\!
+
+.texmacro {\femto}
+    \,\mathrm{f}\!
+
+.texmacro {\pico}
+    \,\mathrm{p}\!
+
+.texmacro {\nano}
+    \,\mathrm{n}\!
+
+.texmacro {\micro}
+    \,\mathrm{\mu}\!
+
+.texmacro {\milli}
+    \,\mathrm{m}\!
+
+.texmacro {\centi}
+    \,\mathrm{c}\!
+
+.texmacro {\deci}
+    \,\mathrm{d}\!
+
+.texmacro {\deca}
+    \,\mathrm{da}\!
+
+.texmacro {\deka}
+    \deca
+
+.texmacro {\hecto}
+    \,\mathrm{h}\!
+
+.texmacro {\kilo}
+    \,\mathrm{k}\!
+
+.texmacro {\mega}
+    \,\mathrm{M}\!
+
+.texmacro {\giga}
+    \,\mathrm{G}\!
+
+.texmacro {\tera}
+    \,\mathrm{T}\!
+
+.texmacro {\peta}
+    \,\mathrm{P}\!
+
+.texmacro {\exa}
+    \,\mathrm{E}\!
+
+.texmacro {\zetta}
+    \,\mathrm{Z}\!
+
+.texmacro {\yotta}
+    \,\mathrm{Y}\!
+
+.texmacro {\ronna}
+    \,\mathrm{R}\!
+
+.texmacro {\quetta}
+    \,\mathrm{Q}\!
+
+<!-- SI base units -->
+
+.texmacro {\ampere}
+    \,\mathrm{A}
+
+.texmacro {\candela}
+    \,\mathrm{cd}
+
+.texmacro {\kelvin}
+    \,\mathrm{K}
+
+.texmacro {\gram}
+    \,\mathrm{g}
+
+.texmacro {\kilogram}
+    \,\mathrm{kg}
+
+.texmacro {\metre}
+    \,\mathrm{m}
+
+.texmacro {\meter}
+    \metre
+
+.texmacro {\mole}
+    \,\mathrm{mol}
+
+.texmacro {\mol}
+    \mole
+
+.texmacro {\second}
+    \,\mathrm{s}
+
+<!-- SI derived units -->
+
+.texmacro {\becquerel}
+    \,\mathrm{Bq}
+
+.texmacro {\degreeCelsius}
+    \,{}^{\circ}\mathrm{C}
+
+.texmacro {\celsius}
+    \degreeCelsius
+
+.texmacro {\coulomb}
+    \,\mathrm{C}
+
+.texmacro {\farad}
+    \,\mathrm{F}
+
+.texmacro {\gray}
+    \,\mathrm{Gy}
+
+.texmacro {\hertz}
+    \,\mathrm{Hz}
+
+.texmacro {\henry}
+    \,\mathrm{H}
+
+.texmacro {\joule}
+    \,\mathrm{J}
+
+.texmacro {\katal}
+    \,\mathrm{kat}
+
+.texmacro {\lumen}
+    \,\mathrm{lm}
+
+.texmacro {\lux}
+    \,\mathrm{lx}
+
+.texmacro {\newton}
+    \,\mathrm{N}
+
+.texmacro {\ohm}
+    \,\mathrm{\Omega}
+
+.texmacro {\pascal}
+    \,\mathrm{Pa}
+
+.texmacro {\radian}
+    \,\mathrm{rad}
+
+.texmacro {\siemens}
+    \,\mathrm{S}
+
+.texmacro {\sievert}
+    \,\mathrm{Sv}
+
+.texmacro {\steradian}
+    \,\mathrm{sr}
+
+.texmacro {\tesla}
+    \,\mathrm{T}
+
+.texmacro {\volt}
+    \,\mathrm{V}
+
+.texmacro {\watt}
+    \,\mathrm{W}
+
+.texmacro {\weber}
+    \,\mathrm{Wb}
+
+<!-- Non-SI units accepted for use with the SI -->
+
+.texmacro {\arcminute}
+    '
+
+.texmacro {\arcsecond}
+    ''
+
+.texmacro {\astronomicalunit}
+    \,\mathrm{au}
+
+.texmacro {\bel}
+    \,\mathrm{B}
+
+.texmacro {\dalton}
+    \,\mathrm{Da}
+
+.texmacro {\day}
+    \,\mathrm{d}
+
+.texmacro {\decibel}
+    \,\mathrm{dB}
+
+.texmacro {\electronvolt}
+    \,\mathrm{eV}
+
+.texmacro {\hectare}
+    \,\mathrm{ha}
+
+.texmacro {\hour}
+    \,\mathrm{h}
+
+.texmacro {\litre}
+    \,\mathrm{L}
+
+.texmacro {\liter}
+    \litre
+
+.texmacro {\minute}
+    \,\mathrm{min}
+
+.texmacro {\neper}
+    \,\mathrm{Np}
+
+.texmacro {\tonne}
+    \,\mathrm{t}
+
+.texmacro {\percent}
+    \,\%

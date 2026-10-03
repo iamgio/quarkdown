@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [SI units in TeX formulas](https://quarkdown.com/wiki/tex-formulae#extensions)
+
+The new built-in `latex-siunitx` library brings the commands of LaTeX's `siunitx` package to TeX formulae.
+
+```
+.include {latex-siunitx}
+
+$ \qty{9.81}{\meter\per\second\squared} $
+```
+
 ### Changed
 
 #### Faster paged document rendering
