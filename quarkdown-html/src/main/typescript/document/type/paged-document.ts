@@ -8,6 +8,7 @@ import {SplitFiguresPaged} from "../handlers/paged/split-figures-paged";
 import {HeadingBreaksPaged} from "../handlers/paged/heading-breaks-paged";
 import {PagedNodeHandler} from "../handlers/paged/node/paged-node-handler";
 import {RepeatTableHeaders} from "../handlers/paged/node/repeat-table-headers";
+import {SplitOversizedTableRows} from "../handlers/paged/node/split-oversized-table-rows";
 import {RestoreCodeIndentation} from "../handlers/paged/node/restore-code-indentation";
 import {PageNumbers} from "../handlers/page-numbers";
 import {PagedLikeQuarkdownDocument} from "../paged-like-quarkdown-document";
@@ -116,6 +117,7 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
     getNodeHandlers(): PagedNodeHandler[] {
         return [
             new RepeatTableHeaders(),
+            new SplitOversizedTableRows(),
             new RestoreCodeIndentation(),
         ];
     }

@@ -1,0 +1,14 @@
+.doctype {paged}
+
+.css
+    tr { break-inside: avoid; }
+
+| Name | Description |
+| --- | --- |
+| Row 1 | Short row. |
+| Row 2 | Short row. |
+| Row 3 (taller than a page) | .loremipsum .loremipsum .loremipsum .loremipsum .loremipsum .loremipsum .loremipsum .loremipsum .loremipsum .loremipsum |
+| Row 4 | Short row. |
+| Row 5 | Short row. |
+
+This paragraph after the table is missing too.
