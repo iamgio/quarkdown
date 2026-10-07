@@ -1,8 +1,5 @@
 .doctype {paged}
 
-.css
-    tr { break-inside: avoid; }
-
 | Name | Description |
 | --- | --- |
 | Row 1 | Short row. |

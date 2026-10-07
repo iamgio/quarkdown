@@ -1,4 +1,8 @@
 .quarkdown table:not(pre table) {
+  tr {
+    break-inside: avoid;
+  }
+
   th:not([align]) {
     text-align: var(--qd-table-default-header-alignment);
   }

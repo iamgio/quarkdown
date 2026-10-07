@@ -24,7 +24,7 @@ Paged documents now render up to 6x faster in the browser, live preview, and PDF
 
 #### Oversized table rows preserve following content
 
-In paged documents, table rows that cannot fit on one page now split across pages even when styled with `break-inside: avoid`. The row's full content, following rows, and text after the table are preserved. Rows that fit on a page remain unbroken.
+Table rows now avoid page breaks by default. In paged documents, rows that cannot fit on one page can still split across pages. The row's full content, following rows, and text after the table are preserved, including when a row spans multiple pages.
 
 #### Documents with many block function calls compile in linear time
 
