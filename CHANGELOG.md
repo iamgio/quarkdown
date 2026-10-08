@@ -38,6 +38,10 @@ Loops like `.repeat` and `.foreach`, and custom functions defined via `.function
 
 Every compilation is now a few milliseconds faster, as the built-in stdlib [localization table](https://quarkdown.com/wiki/localization) is no longer processed from scratch each time.
 
+#### [Positional page size](https://quarkdown.com/wiki/page-format)
+
+`.pageformat {A4}` sets the page size again, as it did before page sides and ranges were introduced.
+
 ## [2.6.3] - 2026-10-01
 
 ### Changed

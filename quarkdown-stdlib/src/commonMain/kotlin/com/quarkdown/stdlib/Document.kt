@@ -677,13 +677,13 @@ fun texMacro(
  * If only [borderColor] is set, the border will be applied with a default width to each side.
  * Border is not supported in plain documents.
  *
+ * @param format standard size format of each page (overridden by [width] and [height])
  * @param side the page side this format applies to: `left` (verso) or `right` (recto).
  *             If unset, the format applies to all pages. Combinable with [range].
  *             Only supported in `paged` documents
  * @param range 1-based inclusive range of page indices to restrict this format to (e.g. `2..5`).
  *              If unset, the format applies to all pages. Combinable with [side].
  *              Only supported in `paged` documents
- * @param format standard size format of each page (overridden by [width] and [height])
  * @param orientation orientation of each page.
  *                    If not specified, the preferred orientation of the document type is used.
  *                    Does not take effect if [format] is not specified.
@@ -706,9 +706,9 @@ fun texMacro(
 @Name("pageformat")
 fun pageFormat(
     @Injected context: MutableContext,
+    @Name("size") format: PageSizeFormat? = null,
     @LikelyNamed side: PageSide? = null,
     @Name("pages") range: Range? = null,
-    @Name("size") format: PageSizeFormat? = null,
     @LikelyNamed orientation: PageOrientation = context.documentInfo.type.preferredOrientation,
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
