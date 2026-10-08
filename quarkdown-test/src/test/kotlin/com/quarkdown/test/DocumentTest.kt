@@ -116,6 +116,17 @@ class DocumentTest {
     }
 
     @Test
+    fun `positional page size format`() {
+        execute(".pageformat {A4}") {
+            val pageFormat = documentInfo.layout.pageFormats.last()
+            PageSizeFormat.A4.getBounds(PageOrientation.PORTRAIT).let { bounds ->
+                assertEquals(bounds.width, pageFormat.pageWidth)
+                assertEquals(bounds.height, pageFormat.pageHeight)
+            }
+        }
+    }
+
+    @Test
     fun `document cannot have blank name`() {
         assertFails {
             execute(".docname { }") {}
