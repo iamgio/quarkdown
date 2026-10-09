@@ -24,6 +24,7 @@ Please make sure to read the relevant section before making your contribution, a
 ## Table of Contents
 
 - [Questions](#questions)
+- [AI-assisted contributions](#ai-assisted-contributions)
 - [Contributing via issues](#contributing-via-issues)
   - [Reporting Bugs](#reporting-bugs)
   - [Suggesting Enhancements](#suggesting-enhancements)
@@ -46,6 +47,73 @@ If you then still feel the need to ask a question and need clarification, we rec
 
 We will then take care of the issue as soon as possible.
 
+
+
+## AI-assisted contributions
+
+You are free to use AI tools to help you write code, tests, documentation, issues, or PR bodies.
+However, a human must be evidently involved in the loop: you are expected to understand, review, and take responsibility for everything you submit.
+
+> [!WARNING]
+> Issues and PRs that appear to be entirely AI-written, without evident human involvement, will be closed without further review.
+
+Common signs include generic or verbose descriptions that don't match the project's templates, code that ignores the project's architecture and conventions, and unverified claims about tests or behavior.
+
+It is mandatory to avoid overly verbose method documentation and needless inline comments. Prime examples are:
+
+- `X rather than Y`, `X would do Y, so we do Z`: we appreciate the thought process, but code speaks for itself.
+- `X is used by Y` on `X`'s declaration: avoid it if it doesn't add anything meaningful. If it does, prefer `Y uses X` on `Y`'s specific function site.
+
+Bad example:
+
+```kotlin
+/**
+ * A calculator that performs arithmetic operations.
+ * This class is used by [ExpressionEvaluator] to evaluate binary expressions.
+ */
+class Calculator {
+    /**
+     * Divides [a] by [b].
+     * We check for zero explicitly rather than relying on the JVM's ArithmeticException,
+     * since catching exceptions would be slower and less readable, so we throw our own error instead.
+     * @param a the dividend
+     * @param b the divisor
+     * @return the result of the division
+     */
+    fun divide(a: Int, b: Int): Int {
+        // Make sure b is not zero, otherwise the division would fail
+        if (b == 0) {
+            // Throw an error since division by zero is not allowed
+            throw DivisionByZeroException()
+        }
+        // Return the result of the division
+        return a / b
+    }
+}
+```
+
+Good example:
+
+```kotlin
+/**
+ * Performs arithmetic operations.
+ */
+class Calculator {
+    /**
+     * Divides [a] by [b].
+     * @param a dividend
+     * @param b divisor
+     * @return the integer quotient of [a] and [b]
+     * @throws DivisionByZeroException if [b] is zero
+     */
+    fun divide(a: Int, b: Int): Int {
+        if (b == 0) {
+            throw DivisionByZeroException()
+        }
+        return a / b
+    }
+}
+```
 
 
 ## Contributing via issues
