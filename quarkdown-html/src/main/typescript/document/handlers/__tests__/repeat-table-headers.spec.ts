@@ -77,14 +77,17 @@ describe('RepeatTableHeaders', () => {
         expect(document.querySelectorAll('#page thead').length).toBe(0);
     });
 
-    it('accepts table rows only', () => {
-        const {clone} = setup(`
+    it.each(['tr', 'td', 'p', 'img', 'text'])('repeats the header when a %s continuation renders', kind => {
+        const {source} = setup(`
       <table data-ref="t1" data-split-from="t1">
-        <tbody><tr><td>B</td></tr></tbody>
+        <tbody><tr><td><p>B</p><img src="image.png"></td></tr></tbody>
       </table>`);
-
+        const clone = kind === 'text'
+            ? document.querySelector('#page p')!.firstChild!
+            : document.querySelector(`#page ${kind}`)!;
         const handler = new RepeatTableHeaders();
         expect(handler.accepts(clone)).toBe(true);
-        expect(handler.accepts(document.querySelector('#page td')!)).toBe(false);
+        if (handler.accepts(clone)) handler.render(clone, source);
+        expect(document.querySelectorAll('#page thead').length).toBe(1);
     });
 });
