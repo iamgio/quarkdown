@@ -20,11 +20,13 @@ $ \qty{9.81}{\meter\per\second\squared} $
 
 Paged documents now render up to 6x faster in the browser, live preview, and PDF export.
 
+#### Avoid breaking page inside table rows
+
+Table rows now avoid page breaks by in paged documents, as long as they fit on one page.
+
+Thanks @Ethereal49!
+
 ### Fixed
-
-#### Oversized table rows preserve following content
-
-Table rows now avoid page breaks by default. In paged documents, rows that cannot fit on one page can still split across pages. The row's full content, following rows, and text after the table are preserved, including when a row spans multiple pages.
 
 #### Documents with many block function calls compile in linear time
 
