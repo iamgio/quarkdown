@@ -73,6 +73,8 @@ jobs:
         include:
           - target: linux-x64
             os: ubuntu-latest
+          - target: linux-aarch64
+            os: ubuntu-24.04-arm
           - target: macos-aarch64
             os: macos-latest
           - target: windows-x64

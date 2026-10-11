@@ -35,7 +35,7 @@ fi
 
 # Chrome for Testing platform identifier.
 case "$(uname -s)-$(uname -m)" in
-  Linux-x86_64|Linux-amd64)    PLATFORM="linux64" ;;
+  Linux-x86_64|Linux-amd64|Linux-aarch64)    PLATFORM="linux64" ;;
   Darwin-arm64|Darwin-aarch64) PLATFORM="mac-arm64" ;;
   Darwin-x86_64)               PLATFORM="mac-x64" ;;
   *) echo "Error: unsupported platform: $(uname -s) $(uname -m)" >&2; exit 1 ;;
