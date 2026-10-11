@@ -18,11 +18,25 @@ interface PackageRepository {
  * A file belonging to a package.
  * @param path path of the file relative to the package root, with `/` separators, e.g. `assets/logo.png`
  * @param content loader of the file's bytes. Invoking it may perform network access
+ * @throws IllegalArgumentException if [path] is empty, absolute, uses backslashes or contains a `..` segment
  */
 data class PackageFile(
     val path: String,
     val content: () -> ByteArray,
-)
+) {
+    init {
+        require(path.isNotEmpty() && !path.startsWith('/') && '\\' !in path && !path.matches(DRIVE_PREFIX)) {
+            "Invalid package file path '$path': must be relative to the package root and use '/' as separator."
+        }
+        require(path.split('/').none { it == ".." }) {
+            "Invalid package file path '$path': must not contain '..'."
+        }
+    }
+
+    private companion object {
+        val DRIVE_PREFIX = Regex("""^[A-Za-z]:.*""")
+    }
+}
 
 /**
  * A package resolved from a [PackageRepository].

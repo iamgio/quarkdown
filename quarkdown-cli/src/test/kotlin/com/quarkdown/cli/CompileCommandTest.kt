@@ -228,7 +228,7 @@ class CompileCommandTest : TempDirectory() {
     @Test
     fun `deny native content`() {
         val (_, pipelineOptions) = test("--deny", "native-content")
-        assertEquals(setOf(Permission.ProjectRead), pipelineOptions.permissions)
+        assertEquals(Permission.DEFAULT_SET - Permission.NativeContent, pipelineOptions.permissions)
     }
 
     @Test

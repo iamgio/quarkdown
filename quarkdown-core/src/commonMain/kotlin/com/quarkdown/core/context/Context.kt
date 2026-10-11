@@ -17,6 +17,7 @@ import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleNotSetException
 import com.quarkdown.core.localization.LocalizationTables
 import com.quarkdown.core.media.storage.ReadOnlyMediaStorage
+import com.quarkdown.core.packages.PackageResolver
 import com.quarkdown.core.permissions.PermissionHolder
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
@@ -170,3 +171,9 @@ interface Context : PermissionHolder {
  */
 val Context.errorHandler: PipelineErrorHandler?
     get() = attachedPipeline?.options?.errorHandler
+
+/**
+ * The package resolver of the attached pipeline, or [PackageResolver.Unsupported] if no pipeline is attached.
+ */
+val Context.packageResolver: PackageResolver
+    get() = attachedPipeline?.options?.packageResolver ?: PackageResolver.Unsupported

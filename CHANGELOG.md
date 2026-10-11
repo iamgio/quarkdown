@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [Packages](https://quarkdown.com/wiki/packages)
+
+Documents can now include packages, called atoms, from the official package repository with a single line:
+
+    .include {@atoms/cv:1.0.0}
+
+The first compilation downloads the package into your project's `@atoms/cv/` directory; later ones, including live preview, find it there instantly. Downloads are covered by the new `package-install` permission, granted by default and revocable with `--deny package-install` for offline or reproducible builds.
+
 ## [2.6.4] - 2026-10-09
 
 ### Added

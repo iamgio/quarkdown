@@ -10,6 +10,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIsNot
+import kotlin.test.assertTrue
 
 /**
  * Tests for the JVM [DefaultRemoteFetcher].
@@ -45,6 +46,16 @@ class DefaultRemoteFetcherTest {
     }
 
     @Test
+    fun `stalled response fails within the read timeout`() =
+        withHttpServer { baseUrl ->
+            val fetcher = UrlRemoteFetcher(connectTimeoutMillis = 1_000, readTimeoutMillis = 200)
+            val started = System.nanoTime()
+            val failure = assertFailsWith<RemoteFetchException> { fetcher.fetchBytes(Url("$baseUrl/stalled")) }
+            assertIsNot<RemoteFetchException.NotFound>(failure)
+            assertTrue((System.nanoTime() - started) / 1_000_000 < 900, "timed out too late")
+        }
+
+    @Test
     fun `http 404 raises not found and other errors do not`() =
         withHttpServer { baseUrl ->
             assertFailsWith<RemoteFetchException.NotFound> { DefaultRemoteFetcher.fetchBytes(Url("$baseUrl/missing")) }
@@ -58,6 +69,10 @@ class DefaultRemoteFetcherTest {
         server.createContext("/") { exchange ->
             val (status, body) =
                 when (exchange.requestURI.path) {
+                    "/stalled" -> {
+                        Thread.sleep(1_000)
+                        200 to "late"
+                    }
                     "/present" -> 200 to "ok"
                     "/broken" -> 500 to "boom"
                     else -> 404 to "nope"
