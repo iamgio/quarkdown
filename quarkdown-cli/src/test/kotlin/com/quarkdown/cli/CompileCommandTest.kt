@@ -13,6 +13,7 @@ import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.interaction.executable.ChromiumWrapper
+import com.quarkdown.pm.resolve.LocalPackageResolver
 import org.apache.pdfbox.Loader
 import org.junit.Assume.assumeTrue
 import java.io.File
@@ -226,9 +227,15 @@ class CompileCommandTest : TempDirectory() {
     }
 
     @Test
+    fun `packages resolve through the disk resolver`() {
+        val (_, pipelineOptions) = test()
+        assertIs<LocalPackageResolver>(pipelineOptions.packageResolver)
+    }
+
+    @Test
     fun `deny native content`() {
         val (_, pipelineOptions) = test("--deny", "native-content")
-        assertEquals(setOf(Permission.ProjectRead), pipelineOptions.permissions)
+        assertEquals(Permission.DEFAULT_SET - Permission.NativeContent, pipelineOptions.permissions)
     }
 
     @Test

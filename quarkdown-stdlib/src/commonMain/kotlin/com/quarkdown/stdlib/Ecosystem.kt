@@ -10,7 +10,9 @@ import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.context.SharedContext
 import com.quarkdown.core.context.SubdocumentContext
+import com.quarkdown.core.context.packageResolver
 import com.quarkdown.core.filesystem.FileSystem
+import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
@@ -22,6 +24,12 @@ import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.VoidValue
 import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
+import com.quarkdown.core.packages.PackageReferenceSyntax
+import com.quarkdown.core.packages.PackageResolutionException
+import com.quarkdown.core.packages.ResolvedPackage
+import com.quarkdown.core.permissions.Permission
+import com.quarkdown.core.permissions.requirePermission
+import com.quarkdown.core.permissions.requireReadPermission
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
@@ -60,12 +68,14 @@ enum class ContextSandbox {
 }
 
 /**
- * This function has two behaviors:
+ * This function has three behaviors:
  * - Reads a Quarkdown file and includes its parsed content in the current document,
  *   using the specified [sandbox] strategy to determine what information is shared between the main context and the included file's context.
  * - Loads a library into the current context and includes its parsed content in the current document.
  *   Loadable libraries are fetched from the library folder (`--libs` CLI option).
  *   [sandbox] is ignored in this case.
+ * - Resolves a package reference in the `@scope/name:version` form (e.g. `@atoms/simple-cv:1.0.0`), installing the package on first use, and includes its entry point.
+ *   The included file's working directory is the package root. [sandbox] applies as for files.
  *
  * The context of the included file is always inherited from the main file, with an updated working directory that matches the included file's location.
  * [sandbox] defines, instead, what information is shared back to the main file's context, and how. The following modes are listed in ascending order of isolation:
@@ -80,11 +90,19 @@ enum class ContextSandbox {
  * - `subdocument`: no information is shared back to the main file's context, only inherited from it. This also applies to the document info (metadata, title, etc.),
  *                  This is the behavior used for subdocuments, and is represented by [SubdocumentContext].
  *
- * @param path either a path (relative or absolute with extension) to the file to include, or the name of a loadable library
+ * @param path either a path (relative or absolute with extension) to the file to include, the name of a loadable library,
+ *             or a package reference
  * @param sandbox relationship between the main context and the included file's context
  *
  * @return the content of the file as a node if a file is included, or nothing if a library is loaded
- * @throws IllegalArgumentException if the loaded Quarkdown source cannot be evaluated
+ * @throws IllegalArgumentException if the file does not exist or the loaded Quarkdown source cannot be evaluated
+ * @throws com.quarkdown.core.packages.PackageResolutionException if a package reference is malformed,
+ *                                                                 or the package cannot be retrieved or installed
+ * @throws com.quarkdown.core.packages.UnsupportedPackageResolutionException if a package reference is used
+ *                                                                            in an environment without package support
+ * @permission [Permission.ProjectRead] to include files located in the project directory, including installed packages
+ * @permission [Permission.GlobalRead] to include files located outside the project directory
+ * @permission [Permission.PackageInstall] to download a referenced package that is not installed yet
  * @wiki including-other-quarkdown-files
  */
 @QFunction
@@ -96,19 +114,61 @@ fun include(
     // Load library by name if it exists.
     context.loadLibrary(path)?.let { (_, value) -> return value ?: VoidValue }
 
-    // File lookup
-    val file = file(context, path)
+    if (PackageReferenceSyntax.isReference(path)) {
+        val resolved = resolvePackage(context, path)
+        return includeFile(context, resolved.entrypoint, workingDirectory = resolved.root, sandbox)
+    }
 
-    // Context initialization with updated working directory.
-    val newFileSystem: FileSystem = context.fileSystem.branch(workingDirectory = file.parent)
+    val file = file(context, path)
+    return includeFile(context, file, workingDirectory = file.parent, sandbox)
+}
+
+/**
+ * Includes [file] after forking the context with the given [workingDirectory] and [sandbox].
+ */
+private fun includeFile(
+    context: MutableContext,
+    file: FsEntry,
+    workingDirectory: FsEntry?,
+    sandbox: ContextSandbox,
+): OutputValue<*> {
+    val newFileSystem: FileSystem = context.fileSystem.branch(workingDirectory)
     val newContext: Context =
         when (sandbox) {
             ContextSandbox.SHARE -> SharedContext(context, newFileSystem)
             ContextSandbox.SCOPE -> ScopeContext(context, newFileSystem)
             ContextSandbox.SUBDOCUMENT -> SubdocumentContext(context, context.subdocument, newFileSystem)
         }
-
     return includeResource(newContext, file.readText())
+}
+
+/**
+ * Resolves a package reference through the host's resolver: a local lookup first, then an installation
+ * if the package is missing and the pipeline is allowed to install packages.
+ * @param context context whose attached pipeline provides the resolver, the project root and the permissions
+ * @param reference package reference as written in the document, e.g. `@atoms/cv:1.0.0`
+ * @return the resolved package, whose entry point is readable
+ * @throws PackageResolutionException if there is no project directory or the resolver fails
+ * @throws com.quarkdown.core.permissions.MissingPermissionException if installation is needed but not permitted
+ */
+internal fun resolvePackage(
+    context: Context,
+    reference: String,
+): ResolvedPackage {
+    val projectRoot =
+        context.rootFileSystem?.workingDirectory
+            ?: throw PackageResolutionException(reference, "package references require a project directory")
+
+    val resolver = context.packageResolver
+    val resolved =
+        resolver.locate(reference, projectRoot)
+            ?: run {
+                context.requirePermission(Permission.PackageInstall, "Cannot install package '$reference'")
+                resolver.install(reference, projectRoot)
+            }
+    context.requireReadPermission(resolved.entrypoint)
+
+    return resolved
 }
 
 /**

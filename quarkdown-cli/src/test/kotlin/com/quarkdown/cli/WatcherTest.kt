@@ -8,8 +8,8 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertTrue
 
 /**
  * Tests for directory watching.
@@ -24,11 +24,14 @@ class WatcherTest : TempDirectory() {
     }
 
     /**
-     * Watches the directory and performs an action that should trigger a change.
-     * @param affect action that should trigger a change
+     * Watches the directory and performs an action, then asserts whether a change was observed.
+     * @param exclude directory excluded from watching
+     * @param expectChange whether [affect] is expected to trigger a change
+     * @param affect action performed while watching
      */
     private fun watch(
         exclude: File? = null,
+        expectChange: Boolean = true,
         affect: () -> Unit,
     ) {
         file.createNewFile()
@@ -50,7 +53,7 @@ class WatcherTest : TempDirectory() {
                 delay(500)
                 watcher.stop()
                 delay(400)
-                assertTrue(changed)
+                assertEquals(expectChange, changed)
             }
         }
     }
@@ -72,6 +75,14 @@ class WatcherTest : TempDirectory() {
         watch {
             file.delete()
         }
+
+    @Test
+    fun `writes inside a package directory are ignored`() {
+        val packageDir = File(directory, "@atoms/cv").apply { mkdirs() }
+        watch(expectChange = false) {
+            File(packageDir, "main.qd").writeText("# CV")
+        }
+    }
 
     @Test
     fun exclude() {
