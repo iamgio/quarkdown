@@ -34,6 +34,6 @@ Installing packages is covered by the `package-install` [permission](cli-compile
 
 Whether to gitignore the `@atoms` directory or not is not enforced. Keep it tracked for offline builds, or ignore it for full reproducibility.
 
-## Publishing a package to `@atoms`
+## Publishing a package
 
-Please follow the instructions on [`quarkdown-labs/atoms`](https://github.com/quarkdown-labs/atoms) to publish your own package to the official repository.
+See [*Publishing packages*](publishing-packages.qd) to set up your own package, and follow the instructions on [`quarkdown-labs/atoms`](https://github.com/quarkdown-labs/atoms) to publish it to the official repository.

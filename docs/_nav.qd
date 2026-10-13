@@ -136,6 +136,9 @@
 - [Docs: documentation projects](docs-library.qd)
 - [Paper: abstract, definitions, theorems](paper-library.qd)
 
+###! Packages
+- [Publishing packages (*atoms*)](publishing-packages.qd)
+
 ###! Process
 - [Environment variables](environment.qd)
 
