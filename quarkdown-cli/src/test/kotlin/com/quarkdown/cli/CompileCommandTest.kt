@@ -13,6 +13,7 @@ import com.quarkdown.core.pipeline.PipelineOptions
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.StrictPipelineErrorHandler
 import com.quarkdown.interaction.executable.ChromiumWrapper
+import com.quarkdown.pm.resolve.LocalPackageResolver
 import org.apache.pdfbox.Loader
 import org.junit.Assume.assumeTrue
 import java.io.File
@@ -223,6 +224,12 @@ class CompileCommandTest : TempDirectory() {
     fun `allow all`() {
         val (_, pipelineOptions) = test("--allow", "all")
         assertEquals(Permission.ALL, pipelineOptions.permissions)
+    }
+
+    @Test
+    fun `packages resolve through the disk resolver`() {
+        val (_, pipelineOptions) = test()
+        assertIs<LocalPackageResolver>(pipelineOptions.packageResolver)
     }
 
     @Test
