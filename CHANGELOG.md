@@ -4,13 +4,22 @@
 
 ### Added
 
-#### [Packages](https://quarkdown.com/wiki/packages)
+#### [Packages & package manager](https://quarkdown.com/wiki/packages)
 
-Documents can now include packages, called atoms, from the official package repository with a single line:
+This release comes with Quarkdown's long-awaited package manager!
 
-    .include {@atoms/cv:1.0.0}
+A package, called ***atom***, can be easily included into your document the same way you `.include` any other local Quarkdown file, with the special syntax `@scope/name:version`.
 
-The first compilation downloads the package into your project's `@atoms/cv/` directory; later ones, including live preview, find it there instantly. Downloads are covered by the new `package-install` permission, granted by default and revocable with `--deny package-install` for offline or reproducible builds.
+The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/atoms), is a GitHub-hosted repository anyone can contribute to.
+
+```markdown
+.include {@atoms/kanban:1.0.0}
+
+.kanban
+    .kbcolumn {To do}
+        .kbitem {Update documentation}
+        ...
+```
 
 ## [2.6.4] - 2026-10-09
 
