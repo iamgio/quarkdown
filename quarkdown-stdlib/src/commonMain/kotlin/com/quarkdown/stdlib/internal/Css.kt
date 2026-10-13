@@ -3,7 +3,7 @@ package com.quarkdown.stdlib.internal
 /**
  * Matches CSS property declarations: `: value;` or `: value` before `}`
  */
-private val CSS_PROPERTY_VALUE_PATTERN = Regex("""(:\s*)([^;{}:]+?)(\s*)(;|(?=}))""")
+private val CSS_PROPERTY_VALUE_PATTERN = Regex("""(:\s*)([^;{}:]+?)(\s*)(;|(?=\}))""")
 
 /**
  * Applies `!important` to each CSS property value that doesn't already have it.
