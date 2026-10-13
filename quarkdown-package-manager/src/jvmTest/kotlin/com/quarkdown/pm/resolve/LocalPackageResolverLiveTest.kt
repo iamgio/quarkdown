@@ -3,6 +3,9 @@ package com.quarkdown.pm.resolve
 import com.quarkdown.core.filesystem.FsEntry
 import com.quarkdown.core.filesystem.toFsEntry
 import com.quarkdown.core.packages.PackageResolutionException
+import com.quarkdown.pm.model.PackageFile
+import com.quarkdown.pm.model.PackageReference
+import com.quarkdown.pm.repo.AtomsPackageRepository
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import java.io.File
 import java.net.HttpURLConnection
@@ -54,14 +57,9 @@ class LocalPackageResolverLiveTest {
         val resolved = resolver.install(KANBAN, project.toFsEntry())
         assertEquals(installed, resolved.root.toFile())
         assertEquals(File(installed, "main.qd"), resolved.entrypoint.toFile())
-        assertEquals(
-            setOf("README.md", "atom.toml", "main.qd"),
-            installed
-                .listFiles()
-                .orEmpty()
-                .map { it.name }
-                .toSet(),
-        )
+        assertEquals(publishedFiles(), installedFiles())
+        assertTrue(installedFiles().none { PackageFile.isInternal(it) }, "internal files were installed")
+        assertTrue(File(installed, "atom.toml").exists())
         assertTrue(
             installed.parentFile
                 .listFiles()
@@ -87,4 +85,24 @@ class LocalPackageResolverLiveTest {
     }
 
     private fun FsEntry.toFile(): File = File(fullPath)
+
+    /**
+     * @return paths of the files the repository publishes for the package, relative to the package root
+     */
+    private fun publishedFiles(): Set<String> =
+        AtomsPackageRepository()
+            .getPackage(PackageReference.parse(KANBAN))!!
+            .files
+            .map { it.path }
+            .toSet()
+
+    /**
+     * @return paths of the files installed on disk, relative to the package root
+     */
+    private fun installedFiles(): Set<String> =
+        installed
+            .walkTopDown()
+            .filter { it.isFile }
+            .map { it.relativeTo(installed).invariantSeparatorsPath }
+            .toSet()
 }

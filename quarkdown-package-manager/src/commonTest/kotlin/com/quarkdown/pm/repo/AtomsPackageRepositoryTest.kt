@@ -34,6 +34,9 @@ class AtomsPackageRepositoryTest {
             { "path": "cv/1.0.0/atom.toml", "type": "blob", "size": 1 },
             { "path": "cv/1.0.0/main.qd", "type": "blob", "size": 1 },
             { "path": "cv/1.0.0/assets/logo.png", "type": "blob", "size": 1 },
+            { "path": "cv/1.0.0/__tests/basic/main.qd", "type": "blob", "size": 1 },
+            { "path": "cv/1.0.0/__notes.md", "type": "blob", "size": 1 },
+            { "path": "cv/1.0.0/assets/__draft.png", "type": "blob", "size": 1 },
             { "path": "cv/2.0.0/atom.toml", "type": "blob", "size": 1 },
             { "path": "cv/2.0.0/unpublished.qd", "type": "blob", "size": 1 },
             { "path": "broken/1.0.0/atom.toml", "type": "blob", "size": 1 },
@@ -79,6 +82,12 @@ class AtomsPackageRepositoryTest {
 
     @Test
     fun `lists files relative to the package root`() {
+        val pkg = assertNotNull(repository().getPackage(ref("1.0.0")))
+        assertEquals(listOf("atom.toml", "main.qd", "assets/logo.png"), pkg.files.map { it.path })
+    }
+
+    @Test
+    fun `files and directories starting with a double underscore are not part of the package`() {
         val pkg = assertNotNull(repository().getPackage(ref("1.0.0")))
         assertEquals(listOf("atom.toml", "main.qd", "assets/logo.png"), pkg.files.map { it.path })
     }

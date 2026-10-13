@@ -22,6 +22,7 @@ val ATOMS_COORDINATES = GitHubRepositoryCoordinates(owner = "quarkdown-labs", re
 /**
  * [PackageRepository] backed by a GitHub repository laid out as `<name>/<version>/<files>`,
  * where every version directory is a package root and therefore holds its [PackageManifest.FILE_NAME].
+ * Files under a name starting with [PackageFile.INTERNAL_PREFIX] (e.g. `__tests`) are repository-internal and skipped.
  *
  * The repository listing is fetched through the Git Trees API once per instance, on first use,
  * and files are then read from raw GitHub URLs.
@@ -47,7 +48,10 @@ class AtomsPackageRepository(
         if (manifestPath !in treePaths) return null
 
         val manifest = manifestParser.parse(fetcher.fetchText(coordinates.rawFileUrl(manifestPath)))
-        val files = treePaths.map { treePath -> packageFile(treePath, relativeTo = directory) }
+        val files =
+            treePaths
+                .filterNot(PackageFile::isInternal)
+                .map { treePath -> packageFile(treePath, relativeTo = directory) }
 
         return RepositoryPackage(manifest, files)
     }

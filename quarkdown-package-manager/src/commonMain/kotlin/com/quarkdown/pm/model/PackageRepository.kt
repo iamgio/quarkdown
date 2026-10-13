@@ -1,5 +1,7 @@
 package com.quarkdown.pm.model
 
+import com.quarkdown.pm.model.PackageFile.Companion.INTERNAL_PREFIX
+
 /**
  * A source of packages, such as a remote Git repository.
  */
@@ -33,8 +35,21 @@ data class PackageFile(
         }
     }
 
-    private companion object {
-        val DRIVE_PREFIX = Regex("""^[A-Za-z]:.*""")
+    companion object {
+        private val DRIVE_PREFIX = Regex("""^[A-Za-z]:.*""")
+
+        /**
+         * Prefix of file and directory names that are internal to the repository (tests, scratch material)
+         * and not part of the package.
+         */
+        const val INTERNAL_PREFIX = "__"
+
+        /**
+         * @param path path relative to the package root, with `/` separators
+         * @return whether any segment of [path] starts with [INTERNAL_PREFIX], making the file internal and
+         *         excluded from installation
+         */
+        fun isInternal(path: String): Boolean = path.split('/').any { it.startsWith(INTERNAL_PREFIX) }
     }
 }
 

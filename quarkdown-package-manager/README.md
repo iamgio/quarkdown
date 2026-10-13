@@ -15,6 +15,8 @@ The official repository is [`quarkdown-labs/atoms`](https://github.com/quarkdown
     ...            any other text or binary file
 ```
 
+Files and directories whose name starts with `__` (such as `__tests`) are internal to the repository and are not installed.
+
 ## Resolving from `.include`
 
 `LocalPackageResolver` implements core's `PackageResolver`, which the compiler consults when a document includes a
