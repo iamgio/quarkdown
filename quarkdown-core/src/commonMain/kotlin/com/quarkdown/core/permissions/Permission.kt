@@ -48,16 +48,24 @@ sealed interface Permission {
         override val name = "process"
     }
 
+    /**
+     * Allows downloading packages referenced by the document (e.g. `.include {@atoms/package:1.0.0}`)
+     * into the project directory.
+     */
+    data object PackageInstall : Permission {
+        override val name = "package-install"
+    }
+
     companion object {
         /**
          * The default set of permissions granted to a pipeline when no explicit permissions are specified.
          */
-        val DEFAULT_SET = setOf(ProjectRead, NativeContent)
+        val DEFAULT_SET = setOf(ProjectRead, NativeContent, PackageInstall)
 
         /**
          * The complete set of all available permissions.
          */
-        val ALL = setOf(ProjectRead, GlobalRead, NetworkAccess, NativeContent, ProcessAccess)
+        val ALL = setOf(ProjectRead, GlobalRead, NetworkAccess, NativeContent, ProcessAccess, PackageInstall)
     }
 }
 

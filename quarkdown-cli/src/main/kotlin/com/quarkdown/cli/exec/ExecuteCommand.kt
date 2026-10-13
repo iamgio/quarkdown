@@ -34,6 +34,8 @@ import com.quarkdown.installlayout.InstallLayout
 import com.quarkdown.installlayout.get
 import com.quarkdown.interaction.Env
 import com.quarkdown.interaction.executable.ChromiumWrapper
+import com.quarkdown.pm.resolve.LocalPackageResolver
+import com.quarkdown.pm.resolve.disk
 import java.io.File
 
 /**
@@ -274,6 +276,7 @@ abstract class ExecuteCommand(
                     strict -> StrictPipelineErrorHandler()
                     else -> BasePipelineErrorHandler()
                 },
+            packageResolver = LocalPackageResolver.disk(),
         )
 
     override fun run() {

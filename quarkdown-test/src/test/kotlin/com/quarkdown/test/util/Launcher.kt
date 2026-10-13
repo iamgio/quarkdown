@@ -11,6 +11,7 @@ import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.flavor.RendererFactory
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
 import com.quarkdown.core.graph.VisitableOnceGraph
+import com.quarkdown.core.packages.PackageResolver
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.Pipeline
 import com.quarkdown.core.pipeline.PipelineHooks
@@ -56,6 +57,7 @@ val DEFAULT_OPTIONS =
  * @param forbidFunctionOverwriting whether defining a function with an existing name should raise an error
  * @param subdocumentNaming the strategy used to determine subdocument output file names
  * @param previewMode whether to simulate preview mode, which suppresses certain resources from being generated
+ * @param packageResolver host strategy that resolves package references
  * @param outputResourceHook action run after the pipeline execution, with the output resource as a parameter
  * @param afterPostRenderingHook action run after post-rendering. Parameters are the pipeline context and the post-rendered result
  * @param afterRenderingHook action run after rendering. Parameters are the pipeline context and the rendered result
@@ -75,6 +77,7 @@ fun execute(
     forbidFunctionOverwriting: Boolean = false,
     subdocumentNaming: SubdocumentOutputNaming = SubdocumentOutputNaming.FILE_NAME,
     previewMode: Boolean = false,
+    packageResolver: PackageResolver = PackageResolver.Unsupported,
     outputResourceHook: Context.(OutputResource?) -> Unit = {},
     afterPostRenderingHook: Context.(CharSequence) -> Unit = {},
     afterRenderingHook: Context.(CharSequence) -> Unit,
@@ -118,6 +121,7 @@ fun execute(
                 subdocumentNaming = subdocumentNaming,
                 forbidFunctionOverwriting = forbidFunctionOverwriting,
                 isPreview = previewMode,
+                packageResolver = packageResolver,
             ),
             libraries = setOf(Stdlib.library),
             renderer = renderer,

@@ -73,6 +73,7 @@
 - [Referencing other Quarkdown files](subdocuments.qd)
   - [Including vs. referencing](inclusion-vs-subdocuments.qd)
 - [Importing external libraries](importing-external-libraries.qd)
+- [Installing and importing packages](packages.qd)
 
 ###! Variables & scripting
 - [Variables](variables.qd)
@@ -134,6 +135,9 @@
 ###! Built-in libraries
 - [Docs: documentation projects](docs-library.qd)
 - [Paper: abstract, definitions, theorems](paper-library.qd)
+
+###! Packages
+- [Publishing packages (*atoms*)](publishing-packages.qd)
 
 ###! Process
 - [Environment variables](environment.qd)

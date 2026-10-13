@@ -1,5 +1,7 @@
 package com.quarkdown.cli.watcher
 
+import com.quarkdown.core.filesystem.toFsEntry
+import com.quarkdown.pm.layout.PackageLayout
 import io.methvin.watcher.DirectoryChangeEvent
 import java.io.File
 import java.nio.file.Path
@@ -40,6 +42,16 @@ class DirectoryWatcher(
 
     companion object {
         /**
+         * @return whether the given [path] should be excluded from watching
+         */
+        private fun isExcluded(
+            path: Path,
+            directory: File,
+        ): Boolean =
+            path.extension.endsWith("~") ||
+                PackageLayout.isPackagePath(directory.toFsEntry(), path.toFile().toFsEntry())
+
+        /**
          * Creates a new [DirectoryWatcher].
          * @param directory directory to watch
          * @param excludeFiles files or directories to exclude from watching
@@ -49,7 +61,7 @@ class DirectoryWatcher(
         private fun create(
             directory: File,
             excludeFiles: List<File> = emptyList(),
-            exclude: (Path) -> Boolean = { it.extension.endsWith("~") },
+            exclude: (Path) -> Boolean = { isExcluded(it, directory) },
             onChange: (DirectoryChangeEvent) -> Unit,
         ) = JDirectoryWatcher
             .builder()
@@ -67,7 +79,8 @@ class DirectoryWatcher(
         /**
          * Creates a new [DirectoryWatcher].
          * @param directory directory to watch
-         * @param exclude file or directory to exclude from watching. If `null`, no files are excluded
+         * @param exclude file or directory to exclude from watching. If `null`, no files are excluded.
+         *                Package directories (`@<scope>/`) under [directory] are always excluded
          * @param onChange function to call when a change is detected
          */
         fun create(

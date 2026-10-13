@@ -5,6 +5,7 @@ import com.quarkdown.core.filesystem.FileSystem
 import com.quarkdown.core.filesystem.defaultFileSystem
 import com.quarkdown.core.media.storage.options.MediaStorageOptions
 import com.quarkdown.core.media.storage.options.ReadOnlyMediaStorageOptions
+import com.quarkdown.core.packages.PackageResolver
 import com.quarkdown.core.permissions.Permission
 import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.core.pipeline.error.PipelineErrorHandler
@@ -35,6 +36,7 @@ import com.quarkdown.core.pipeline.error.PipelineErrorHandler
  * @param errorHandler the error handler strategy to use when an error occurs in the pipeline, during the processing of a Quarkdown file
  * @param serverPort port to communicate with the local server on. If not set, no server communication is performed. In a practical scenario,
  *                   this is injected into JavaScript to communicate with the server, for example to enable dynamic reloading.
+ * @param packageResolver host-provided strategy that resolves package references, in the form of `@scope/package:version`, to files
  */
 data class PipelineOptions(
     val resourceName: String? = null,
@@ -49,6 +51,7 @@ data class PipelineOptions(
     val permissions: Set<Permission> = Permission.DEFAULT_SET,
     val mediaStorageOptionsOverrides: MediaStorageOptions = ReadOnlyMediaStorageOptions(),
     val errorHandler: PipelineErrorHandler = BasePipelineErrorHandler(),
+    val packageResolver: PackageResolver = PackageResolver.Unsupported,
 ) {
     /**
      * Whether to symlink or copy dependency files from the installation layout,
