@@ -21,6 +21,12 @@ The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/at
         ...
 ```
 
+### Fixed
+
+#### CSS styles on Android
+
+Injecting `!important` into CSS rules used a regex containing an unescaped `}`, which Android's ICU-based `Pattern` rejects as a syntax error. OpenJDK tolerates a lone `}`, so the issue only occurred when running Quarkdown on Android.
+
 ## [2.6.4] - 2026-10-09
 
 ### Added
