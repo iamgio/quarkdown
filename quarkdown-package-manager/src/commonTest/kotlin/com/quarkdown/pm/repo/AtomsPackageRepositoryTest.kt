@@ -25,26 +25,26 @@ class AtomsPackageRepositoryTest {
         name: String = cv.name,
     ) = PackageReference(cv.copy(name = name), version)
 
-    private val treeJson =
+    private val cvTree =
         """
         {
           "sha": "abc",
           "tree": [
-            { "path": "cv", "type": "tree" },
-            { "path": "cv/1.0.0/atom.toml", "type": "blob", "size": 1 },
-            { "path": "cv/1.0.0/main.qd", "type": "blob", "size": 1 },
-            { "path": "cv/1.0.0/assets/logo.png", "type": "blob", "size": 1 },
-            { "path": "cv/1.0.0/__tests/basic/main.qd", "type": "blob", "size": 1 },
-            { "path": "cv/1.0.0/__notes.md", "type": "blob", "size": 1 },
-            { "path": "cv/1.0.0/assets/__draft.png", "type": "blob", "size": 1 },
-            { "path": "cv/2.0.0/atom.toml", "type": "blob", "size": 1 },
-            { "path": "cv/2.0.0/unpublished.qd", "type": "blob", "size": 1 },
-            { "path": "broken/1.0.0/atom.toml", "type": "blob", "size": 1 },
-            { "path": "nomanifest/1.0.0/main.qd", "type": "blob", "size": 1 }
+            { "path": "1.0.0", "type": "tree" },
+            { "path": "1.0.0/atom.toml", "type": "blob", "size": 1 },
+            { "path": "1.0.0/main.qd", "type": "blob", "size": 1 },
+            { "path": "1.0.0/assets/logo.png", "type": "blob", "size": 1 },
+            { "path": "1.0.0/__tests/basic/main.qd", "type": "blob", "size": 1 },
+            { "path": "1.0.0/__notes.md", "type": "blob", "size": 1 },
+            { "path": "1.0.0/assets/__draft.png", "type": "blob", "size": 1 },
+            { "path": "2.0.0/atom.toml", "type": "blob", "size": 1 },
+            { "path": "2.0.0/unpublished.qd", "type": "blob", "size": 1 }
           ],
           "truncated": false
         }
         """.trimIndent()
+
+    private fun singleFileTree(path: String) = """{ "sha": "x", "tree": [ { "path": "$path", "type": "blob", "size": 1 } ] }"""
 
     private val manifestToml =
         """
@@ -62,7 +62,9 @@ class AtomsPackageRepositoryTest {
     private fun fetcher() =
         FakeRemoteFetcher(
             mapOf(
-                coordinates.treeUrl.toString() to treeJson.encodeToByteArray(),
+                coordinates.subtreeUrl("cv").toString() to cvTree.encodeToByteArray(),
+                coordinates.subtreeUrl("broken").toString() to singleFileTree("1.0.0/atom.toml").encodeToByteArray(),
+                coordinates.subtreeUrl("nomanifest").toString() to singleFileTree("1.0.0/main.qd").encodeToByteArray(),
                 raw("cv/1.0.0/atom.toml") to manifestToml.encodeToByteArray(),
                 raw("cv/1.0.0/main.qd") to "# CV".encodeToByteArray(),
                 raw("cv/1.0.0/assets/logo.png") to png,
@@ -117,7 +119,7 @@ class AtomsPackageRepositoryTest {
         val fetcher = fetcher()
         val pkg = assertNotNull(repository(fetcher).getPackage(ref("1.0.0")))
         assertEquals(
-            listOf(coordinates.treeUrl.toString(), raw("cv/1.0.0/atom.toml")),
+            listOf(coordinates.subtreeUrl("cv").toString(), raw("cv/1.0.0/atom.toml")),
             fetcher.requested.map { it.toString() },
         )
         val main = pkg.files.single { it.path == "main.qd" }
@@ -135,13 +137,22 @@ class AtomsPackageRepositoryTest {
     }
 
     @Test
-    fun `tree is fetched once across lookups`() {
+    fun `a package listing is fetched once across its lookups`() {
         val fetcher = fetcher()
         val repo = repository(fetcher)
         repo.getPackage(ref("1.0.0"))
         repo.getPackage(ref("2.0.0"))
-        repo.getPackage(ref("1.0.0", name = "missing"))
-        assertEquals(1, fetcher.requested.count { it == coordinates.treeUrl })
+        repo.versionsOf(cv)
+        assertEquals(1, fetcher.requested.count { it == coordinates.subtreeUrl("cv") })
+    }
+
+    @Test
+    fun `an unknown package is looked up once and never fetched again`() {
+        val fetcher = fetcher()
+        val repo = repository(fetcher)
+        assertNull(repo.getPackage(ref("1.0.0", name = "missing")))
+        assertNull(repo.getPackage(ref("2.0.0", name = "missing")))
+        assertEquals(1, fetcher.requested.count { it == coordinates.subtreeUrl("missing") })
     }
 
     @Test
@@ -151,8 +162,8 @@ class AtomsPackageRepositoryTest {
     }
 
     @Test
-    fun `unreachable tree propagates fetch failure`() {
-        val repo = AtomsPackageRepository(coordinates, FakeRemoteFetcher(emptyMap()))
+    fun `unreachable listing propagates fetch failure`() {
+        val repo = AtomsPackageRepository(coordinates, { url -> throw RemoteFetchException(url, "connection refused") })
         assertFailsWith<RemoteFetchException> { repo.getPackage(ref("1.0.0")) }
     }
 

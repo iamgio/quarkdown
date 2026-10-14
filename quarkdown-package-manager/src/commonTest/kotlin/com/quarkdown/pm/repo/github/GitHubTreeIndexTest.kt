@@ -54,6 +54,12 @@ class GitHubTreeIndexTest {
     }
 
     @Test
+    fun `the root lists top-level directories and every file`() {
+        assertEquals(setOf("cv", "cvx"), index.childDirectoriesOf(""))
+        assertEquals(7, index.filesUnder("").size)
+    }
+
+    @Test
     fun `child directories exclude direct files`() {
         assertEquals(setOf("1.0.0", "1.1.0"), index.childDirectoriesOf("cv"))
     }

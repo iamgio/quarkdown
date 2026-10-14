@@ -10,10 +10,10 @@ class GitHubRepositoryCoordinatesTest {
     private val coordinates = GitHubRepositoryCoordinates(owner = "quarkdown-labs", repository = "atoms")
 
     @Test
-    fun `tree url targets the recursive tree api on the ref`() {
+    fun `subtree url lists one directory of the ref recursively`() {
         assertEquals(
-            "https://api.github.com/repos/quarkdown-labs/atoms/git/trees/main?recursive=1",
-            coordinates.treeUrl.toString(),
+            "https://api.github.com/repos/quarkdown-labs/atoms/git/trees/main:cv?recursive=1",
+            coordinates.subtreeUrl("cv").toString(),
         )
     }
 
@@ -44,7 +44,7 @@ class GitHubRepositoryCoordinatesTest {
     @Test
     fun `custom ref is used in both urls`() {
         val dev = coordinates.copy(ref = "dev")
-        assertEquals("https://api.github.com/repos/quarkdown-labs/atoms/git/trees/dev?recursive=1", dev.treeUrl.toString())
+        assertEquals("https://api.github.com/repos/quarkdown-labs/atoms/git/trees/dev:cv?recursive=1", dev.subtreeUrl("cv").toString())
         assertEquals("https://raw.githubusercontent.com/quarkdown-labs/atoms/dev/x", dev.rawFileUrl("x").toString())
     }
 }
