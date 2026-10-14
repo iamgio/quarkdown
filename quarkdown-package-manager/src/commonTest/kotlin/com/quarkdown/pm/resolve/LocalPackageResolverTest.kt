@@ -30,11 +30,11 @@ class LocalPackageResolverTest {
         {
           "sha": "abc",
           "tree": [
-            { "path": "cv/1.0.0/atom.toml", "type": "blob" },
-            { "path": "cv/1.0.0/main.qd", "type": "blob" },
-            { "path": "cv/1.0.0/assets/logo.png", "type": "blob" },
-            { "path": "cv/2.0.0/atom.toml", "type": "blob" },
-            { "path": "cv/2.0.0/index.qd", "type": "blob" }
+            { "path": "1.0.0/atom.toml", "type": "blob" },
+            { "path": "1.0.0/main.qd", "type": "blob" },
+            { "path": "1.0.0/assets/logo.png", "type": "blob" },
+            { "path": "2.0.0/atom.toml", "type": "blob" },
+            { "path": "2.0.0/index.qd", "type": "blob" }
           ],
           "truncated": false
         }
@@ -55,7 +55,7 @@ class LocalPackageResolverTest {
     private fun fetcher() =
         FakeRemoteFetcher.ofText(
             mapOf(
-                coordinates.treeUrl.toString() to treeJson,
+                coordinates.subtreeUrl("cv").toString() to treeJson,
                 raw("cv/1.0.0/atom.toml") to manifest("1.0.0", "main.qd"),
                 raw("cv/1.0.0/main.qd") to "# CV 1",
                 raw("cv/1.0.0/assets/logo.png") to "png",
@@ -154,7 +154,7 @@ class LocalPackageResolverTest {
 
     @Test
     fun `non-json tree response is a resolution error carrying its cause`() {
-        val fetcher = FakeRemoteFetcher.ofText(mapOf(coordinates.treeUrl.toString() to "<html>rate limited</html>"))
+        val fetcher = FakeRemoteFetcher.ofText(mapOf(coordinates.subtreeUrl("cv").toString() to "<html>rate limited</html>"))
         val exception = assertFailsWith<PackageResolutionException> { resolver(fetcher).install(cv1, root) }
         assertContains(exception.message.orEmpty(), cv1)
         assertNotNull(exception.cause)
@@ -165,11 +165,11 @@ class LocalPackageResolverTest {
         val fetcher =
             FakeRemoteFetcher.ofText(
                 mapOf(
-                    coordinates.treeUrl.toString() to
+                    coordinates.subtreeUrl("cv").toString() to
                         """
                         { "sha": "x", "tree": [
-                          { "path": "cv/1.0.0/atom.toml", "type": "blob" },
-                          { "path": "cv/1.0.0/a\\..\\x.qd", "type": "blob" }
+                          { "path": "1.0.0/atom.toml", "type": "blob" },
+                          { "path": "1.0.0/a\\..\\x.qd", "type": "blob" }
                         ] }
                         """.trimIndent(),
                     raw("cv/1.0.0/atom.toml") to manifest("1.0.0", "main.qd"),
