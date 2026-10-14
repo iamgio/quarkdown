@@ -5,7 +5,7 @@ import io.ktor.http.Url
 import io.ktor.http.appendPathSegments
 
 /**
- * Location of a GitHub repository at a given ref, and the URLs needed to read it anonymously.
+ * Location of a GitHub repository at a given ref, and the URLs needed to read parts of it anonymously.
  * Path components are percent-encoded, so file names with spaces or reserved characters resolve correctly.
  * @param owner user or organization that owns the repository
  * @param repository repository name
@@ -17,14 +17,15 @@ data class GitHubRepositoryCoordinates(
     val ref: String = DEFAULT_REF,
 ) {
     /**
-     * URL of the Git Trees API listing every file reachable from [ref].
+     * @param path path of a directory within the repository, with `/` separators
+     * @return URL of the Git Trees API listing every file under that directory at [ref],
+     *         answering 404 when the directory does not exist
      */
-    val treeUrl: Url
-        get() =
-            URLBuilder(API_BASE)
-                .appendPathSegments("repos", owner, repository, "git", "trees", ref)
-                .apply { parameters.append("recursive", "1") }
-                .build()
+    fun subtreeUrl(path: String): Url =
+        URLBuilder(API_BASE)
+            .appendPathSegments("repos", owner, repository, "git", "trees", "$ref:$path")
+            .apply { parameters.append("recursive", "1") }
+            .build()
 
     /**
      * @param path path of a file within the repository, with `/` separators
