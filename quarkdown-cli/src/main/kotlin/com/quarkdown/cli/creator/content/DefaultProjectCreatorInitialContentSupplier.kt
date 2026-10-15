@@ -3,6 +3,7 @@ package com.quarkdown.cli.creator.content
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
+import com.quarkdown.template.TemplateProcessor
 
 private const val RESOURCES_PATH = "/creator/"
 private const val CODE_TEMPLATE_NAME = "creator/initialcontent.qd.jte"
@@ -15,7 +16,7 @@ private const val IMAGES_GROUP_NAME = "image"
  * - An image of the Quarkdown logo
  */
 class DefaultProjectCreatorInitialContentSupplier : ProjectCreatorInitialContentSupplier {
-    override val templateName: String = CODE_TEMPLATE_NAME
+    override fun createInitialContent(template: TemplateProcessor) = template.renderInitialContent(CODE_TEMPLATE_NAME)
 
     private val imageGroup: OutputResource
         get() =

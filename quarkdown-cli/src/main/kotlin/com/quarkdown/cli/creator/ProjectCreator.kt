@@ -12,7 +12,7 @@ import com.quarkdown.template.TemplateProcessor
  * Generator of resources for a new Quarkdown project via [createResources].
  * Based on different properties, the resources and their content may vary.
  * @param templateProcessorFactory factory that generates the template for the main file
- * @param initialContentSupplier supplier of the initial content (code content and assets)
+ * @param initialContentSupplier supplier of the initial content (main file content and assets)
  * @param mainFileName name of the main file, without extension
  * @see com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
  * @see com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
@@ -24,28 +24,17 @@ class ProjectCreator(
     private val mainFileName: String,
 ) {
     /**
-     * Finalizes the template processor by injecting into it:
-     * - The main file name
-     * - The initial example content, processed via a sibling template processor
-     *   that inherits the same placeholder values
+     * Finalizes the template processor by injecting into it the main file name, first,
+     * so that the initial content can reference it, and then the initial content itself.
      * @param template the template processor to finalize
      * @return the finalized template processor
      */
     private fun finalizeTemplateProcessor(template: TemplateProcessor): TemplateProcessor {
-        // The main file name is injected before copying,
-        // so that the initial content template can reference it.
         template.optionalValue(ProjectCreatorTemplatePlaceholders.MAIN_FILE, mainFileName)
-
-        // Initial content is rendered through a copy of the same template processor,
-        // pointed at the supplier-provided template name. The copy inherits all values
-        // already set on `template`, including MAIN_FILE.
-        val initialContentCode =
-            initialContentSupplier.templateName
-                ?.let { template.copy(name = it).process().trim() }
-
-        // Processed initial content is injected into the main template.
-        template.optionalValue(ProjectCreatorTemplatePlaceholders.INITIAL_CONTENT, initialContentCode)
-
+        template.optionalValue(
+            ProjectCreatorTemplatePlaceholders.INITIAL_CONTENT,
+            initialContentSupplier.createInitialContent(template)?.trim(),
+        )
         return template
     }
 

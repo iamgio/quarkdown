@@ -68,6 +68,29 @@ When the atom is included via `.include`, the entry point is included like any o
 
     .myfunction
 
+## Templates
+
+A package can also act as a **project template** for `quarkdown create`, so that users scaffold a new project from it with a single command:
+
+```
+quarkdown create --template @atoms/my-atom:1.0.0
+```
+
+To make a package a template, add a `[template]` table to its manifest:
+
+```toml
+[template]
+doctype = "paged"
+content = "template.qd"
+additional-files = ["sections/experience.qd", "references.bib"]
+```
+
+| Key                | Required | Meaning                                                                                                                      |
+|--------------------|----------|------------------------------------------------------------------------------------------------------------------------------|
+| `content`          | yes      | Quarkdown file whose text becomes the initial content of the new project's main file, copied as-is                           |
+| `doctype`          | no       | Document type of the new project (`plain`, `paged`, `slides`, `docs`). If set, the wizard skips the question                 |
+| `additional-files` | no       | Files copied into the new project at the same relative path, as-is                                                           |
+
 ## Internal files
 
 Files and directories whose name starts with `__` (double underscore), are internal to the source files and are not installed into users' projects.

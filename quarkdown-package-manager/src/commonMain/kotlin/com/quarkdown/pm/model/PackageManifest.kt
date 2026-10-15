@@ -8,10 +8,12 @@ import kotlinx.serialization.Serializable
  *
  * Every package, wherever it is stored, carries its manifest as a file named [FILE_NAME] at its root.
  * @param atom metadata of the package, declared in the `[atom]` table
+ * @param template project-template declaration from the `[template]` table, or `null` if the package is not a template
  */
 @Serializable
 data class PackageManifest(
     val atom: AtomManifest,
+    val template: TemplateManifest? = null,
 ) {
     companion object {
         /**
@@ -44,4 +46,20 @@ data class AtomManifest(
     val categories: List<String> = emptyList(),
     val repository: String? = null,
     val license: String? = null,
+)
+
+/**
+ * Declaration that makes a package usable as a project template, as declared in the `template` table of its manifest.
+ * @param doctype document type of projects created from this template, as a Quarkdown document type name
+ *                (`plain`, `paged`, `slides`, `docs`), or `null` to let the user choose
+ * @param content path, relative to the package root, of the Quarkdown file whose text becomes the initial content
+ *                of the new project's main file
+ * @param additionalFiles paths, relative to the package root, of files copied as-is into the new project at the same
+ *                        relative path, declared as `additional-files`
+ */
+@Serializable
+data class TemplateManifest(
+    val doctype: String? = null,
+    val content: String,
+    @SerialName("additional-files") val additionalFiles: List<String> = emptyList(),
 )

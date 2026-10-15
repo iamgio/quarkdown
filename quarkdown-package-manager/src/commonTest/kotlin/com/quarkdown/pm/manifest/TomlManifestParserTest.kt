@@ -119,4 +119,78 @@ class TomlManifestParserTest {
             parser.parse("name = \"cv\"")
         }
     }
+
+    @Test
+    fun `parses template table`() {
+        val template =
+            parser
+                .parse(
+                    """
+                    [atom]
+                    name = "cv"
+                    version = "1.0.0"
+                    entrypoint = "main.qd"
+
+                    [template]
+                    doctype = "paged"
+                    content = "template.qd"
+                    additional-files = ["assets/photo.png", "sections/experience.qd"]
+                    """.trimIndent(),
+                ).template
+        assertEquals("paged", template?.doctype)
+        assertEquals("template.qd", template?.content)
+        assertEquals(listOf("assets/photo.png", "sections/experience.qd"), template?.additionalFiles)
+    }
+
+    @Test
+    fun `template table defaults to content only`() {
+        val template =
+            parser
+                .parse(
+                    """
+                    [atom]
+                    name = "cv"
+                    version = "1.0.0"
+                    entrypoint = "main.qd"
+
+                    [template]
+                    content = "template.qd"
+                    """.trimIndent(),
+                ).template
+        assertEquals("template.qd", template?.content)
+        assertNull(template?.doctype)
+        assertEquals(emptyList(), template?.additionalFiles)
+    }
+
+    @Test
+    fun `manifest without template table has no template`() {
+        assertNull(
+            parser
+                .parse(
+                    """
+                    [atom]
+                    name = "cv"
+                    version = "1.0.0"
+                    entrypoint = "main.qd"
+                    """.trimIndent(),
+                ).template,
+        )
+    }
+
+    @Test
+    fun `template table without content is rejected`() {
+        assertFailsWith<ManifestParseException> {
+            parser.parse(
+                """
+                [atom]
+                name = "cv"
+                version = "1.0.0"
+                entrypoint = "main.qd"
+
+                [template]
+                doctype = "paged"
+                """.trimIndent(),
+            )
+        }
+    }
 }

@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.default
 import com.github.ajalt.clikt.parameters.options.check
+import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
@@ -18,9 +19,12 @@ import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupp
 import com.quarkdown.cli.creator.content.DefaultTheme
 import com.quarkdown.cli.creator.content.DocsProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
+import com.quarkdown.cli.creator.content.PackageTemplate
+import com.quarkdown.cli.creator.content.PackageTemplateInitialContentSupplier
 import com.quarkdown.cli.creator.content.SlidesProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
 import com.quarkdown.cli.creator.template.DocsProjectCreatorTemplateProcessorFactory
+import com.quarkdown.cli.util.promptUnless
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
@@ -28,7 +32,9 @@ import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.function.quarkdownName
 import com.quarkdown.core.localization.Locale
 import com.quarkdown.core.localization.LocaleLoader
+import com.quarkdown.core.packages.PackageResolutionException
 import com.quarkdown.core.pipeline.output.visitor.saveTo
+import com.quarkdown.pm.repo.PackageRepositories
 import java.io.File
 
 /**
@@ -51,9 +57,13 @@ private fun styledPrompt(
 ): String = if (hint != null) "${bold(label)} ${dim(hint)}" else bold(label)
 
 /**
- * Command to create a new Quarkdown project with a default template.
+ * Command to create a new Quarkdown project, either from the built-in starter content
+ * or from a package that declares itself a project template (`--template`).
+ * @param repositories package repositories templates are fetched from
  */
-class CreateProjectCommand : CliktCommand("create") {
+class CreateProjectCommand(
+    private val repositories: PackageRepositories = PackageRepositories.default(),
+) : CliktCommand("create") {
     private val directory: File by argument(help = "Project directory")
         .file(
             canBeFile = false,
@@ -76,12 +86,23 @@ class CreateProjectCommand : CliktCommand("create") {
             .map { DocumentAuthor(it.trim()) }
     }
 
+    private val template: PackageTemplate? by option(
+        "--template",
+        help = "Package to use as a project template, e.g. @atoms/simple-cv:1.0.0",
+    ).convert { reference ->
+        try {
+            PackageTemplate.resolve(repositories, reference)
+        } catch (e: PackageResolutionException) {
+            fail(e.message.orEmpty())
+        }
+    }
+
     private val type: DocumentType by option("--type", help = "Document type")
         .enum<DocumentType> { it.quarkdownName }
-        .prompt(
+        .promptUnless(
             styledPrompt("Document type", "(${DocumentType.entries.joinToString(", ") { it.quarkdownName }})"),
-            default = DocumentType.PLAIN,
-        )
+            default = DocumentType.PLAIN.quarkdownName,
+        ) { template?.doctype }
 
     private val description: String by option("--description", help = "Document description")
         .prompt(styledPrompt("Description"))
@@ -116,6 +137,24 @@ class CreateProjectCommand : CliktCommand("create") {
     private val noInitialContent: Boolean by option("-e", "--empty", help = "Do not include initial content")
         .flag()
 
+    /**
+     * @return the theme to generate: explicit options win, the template's own theme is left alone otherwise,
+     *         and projects without a template get the defaults for their type
+     */
+    private fun createTheme(): DocumentTheme? =
+        when {
+            colorTheme == null && layoutTheme == null && template != null -> {
+                null
+            }
+
+            else -> {
+                DocumentTheme(
+                    colorTheme ?: DefaultTheme.getColorTheme(type),
+                    layoutTheme ?: DefaultTheme.getLayoutTheme(type),
+                )
+            }
+        }
+
     private fun createDocumentInfo() =
         DocumentInfo(
             name = name?.takeUnless { it.isBlank() } ?: directory.name,
@@ -124,30 +163,43 @@ class CreateProjectCommand : CliktCommand("create") {
             keywords = keywords,
             type = type,
             locale = language,
-            theme =
-                DocumentTheme(
-                    colorTheme ?: DefaultTheme.getColorTheme(type),
-                    layoutTheme ?: DefaultTheme.getLayoutTheme(type),
-                ),
+            theme = createTheme(),
         )
 
     private fun createProjectCreator(): ProjectCreator {
+        val template = this.template
         val mainFileName = this.mainFileName ?: DEFAULT_MAIN_FILE_NAME
         val documentInfo = this.createDocumentInfo()
+        val includes = listOfNotNull(template?.reference)
         val isSlides = documentInfo.type == DocumentType.SLIDES
         val isDocs = documentInfo.type == DocumentType.DOCS
         return ProjectCreator(
             templateProcessorFactory =
                 when {
-                    isDocs -> DocsProjectCreatorTemplateProcessorFactory(documentInfo)
-                    else -> DefaultProjectCreatorTemplateProcessorFactory(documentInfo)
+                    isDocs -> DocsProjectCreatorTemplateProcessorFactory(documentInfo, includes)
+                    else -> DefaultProjectCreatorTemplateProcessorFactory(documentInfo, includes = includes)
                 },
             initialContentSupplier =
                 when {
-                    noInitialContent -> EmptyProjectCreatorInitialContentSupplier()
-                    isSlides -> SlidesProjectCreatorInitialContentSupplier()
-                    isDocs -> DocsProjectCreatorInitialContentSupplier()
-                    else -> DefaultProjectCreatorInitialContentSupplier()
+                    noInitialContent -> {
+                        EmptyProjectCreatorInitialContentSupplier()
+                    }
+
+                    template != null -> {
+                        PackageTemplateInitialContentSupplier(template)
+                    }
+
+                    isSlides -> {
+                        SlidesProjectCreatorInitialContentSupplier()
+                    }
+
+                    isDocs -> {
+                        DocsProjectCreatorInitialContentSupplier()
+                    }
+
+                    else -> {
+                        DefaultProjectCreatorInitialContentSupplier()
+                    }
                 },
             mainFileName,
         )

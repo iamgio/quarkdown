@@ -10,11 +10,13 @@ private const val TEMPLATE = "creator/docs/main.qd.jte"
  * which relies on [DefaultProjectCreatorTemplateProcessorFactory], but saved to `_setup.qd`,
  * plus an additional mapping for the main file that uses some example content.
  * @param info document information to inject into the template
+ * @param includes references the setup file includes, one `.include` call each, so that every page receives them
  * @see DefaultProjectCreatorTemplateProcessorFactory
  */
 class DocsProjectCreatorTemplateProcessorFactory(
     private val info: DocumentInfo,
-) : ProjectCreatorTemplateProcessorFactory by DefaultProjectCreatorTemplateProcessorFactory(info) {
+    private val includes: List<String> = emptyList(),
+) : ProjectCreatorTemplateProcessorFactory by DefaultProjectCreatorTemplateProcessorFactory(info, includes = includes) {
     override fun createFilenameMappings(): Map<String?, TemplateProcessor> =
         mapOf(
             "_setup" to create(),

@@ -61,4 +61,10 @@ data class PackageFile(
 data class RepositoryPackage(
     val manifest: PackageManifest,
     val files: List<PackageFile>,
-)
+) {
+    /**
+     * @param path path relative to the package root, with `/` separators
+     * @return the file at [path], or `null` if the package has no such file
+     */
+    fun file(path: String): PackageFile? = files.firstOrNull { it.path == path }
+}
