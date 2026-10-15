@@ -4,6 +4,9 @@ import com.quarkdown.cli.creator.ProjectCreator
 import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.DocsProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
+import com.quarkdown.cli.creator.content.PackageTemplate
+import com.quarkdown.cli.creator.content.PackageTemplateInitialContentSupplier
+import com.quarkdown.cli.creator.content.ProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.SlidesProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
 import com.quarkdown.cli.creator.template.DocsProjectCreatorTemplateProcessorFactory
@@ -11,11 +14,14 @@ import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
 import com.quarkdown.core.document.DocumentTheme
 import com.quarkdown.core.document.DocumentType
+import com.quarkdown.core.filesystem.VirtualFileSystem
 import com.quarkdown.core.localization.LocaleLoader
+import com.quarkdown.core.pipeline.output.FileReferenceOutputArtifact
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.template.TemplateProcessor
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -162,10 +168,32 @@ class ProjectCreatorTest {
         val creator = projectCreator(DocumentInfo(name = "Document", type = DocumentType.PAGED))
         val resources = creator.createResources()
         assertEquals(1, resources.size)
-        resources.first().textContent.let {
-            assertContains(it, ".doctype {paged}")
-            assertContains(it, ".pagemargin {bottomcenter}")
-        }
+        assertEquals(".docname {Document}\n.doctype {paged}", resources.first().textContent)
+    }
+
+    @Test
+    fun `paged initial content starts with the page counter`() {
+        val creator = projectCreator(DocumentInfo(name = "Document", type = DocumentType.PAGED), includeInitialContent = true)
+        val source = creator.createResources().first { it is TextOutputArtifact }.textContent
+        assertTrue(
+            source.startsWith(
+                """
+                .docname {Document}
+                .doctype {paged}
+
+                .pagemargin {bottomcenter}
+                    .currentpage
+
+                # Document
+                """.trimIndent(),
+            ),
+        )
+    }
+
+    @Test
+    fun `plain initial content has no page counter`() {
+        val creator = projectCreator(DocumentInfo(name = "Document"), includeInitialContent = true)
+        assertFalse(".pagemargin" in creator.createResources().first { it is TextOutputArtifact }.textContent)
     }
 
     @Test
@@ -437,5 +465,104 @@ class ProjectCreatorTest {
         // No docs sections or heading with raw name.
         assertFalse("## Compiling" in content)
         assertFalse("# Test" in content)
+    }
+
+    @Test
+    fun `supplier content is injected verbatim`() {
+        val supplier =
+            object : ProjectCreatorInitialContentSupplier {
+                override fun createInitialContent(template: TemplateProcessor): CharSequence = "# Hello\n\nFrom a supplier.\n"
+
+                override fun createResources(): Set<OutputResource> = emptySet()
+            }
+        val creator = ProjectCreator(DefaultProjectCreatorTemplateProcessorFactory(DocumentInfo(name = "Doc")), supplier, "main")
+        assertEquals(".docname {Doc}\n.doctype {plain}\n\n# Hello\n\nFrom a supplier.", creator.createResources().single().textContent)
+    }
+
+    @Test
+    fun `includes render after the theme and before authors`() {
+        val creator =
+            ProjectCreator(
+                DefaultProjectCreatorTemplateProcessorFactory(
+                    DocumentInfo(theme = DocumentTheme(color = "dark", layout = "minimal"), authors = singleAuthor),
+                    includes = listOf("@atoms/cv:1.0.0", "@atoms/extra:2.0.0"),
+                ),
+                EmptyProjectCreatorInitialContentSupplier(),
+                mainFileName = "main",
+            )
+        assertEquals(
+            """
+            .doctype {plain}
+            .theme {dark} layout:{minimal}
+            .include {@atoms/cv:1.0.0}
+            .include {@atoms/extra:2.0.0}
+
+            .docauthors
+              - Giorgio
+            """.trimIndent(),
+            creator.createResources().single().textContent,
+        )
+    }
+
+    @Test
+    fun `docs includes render in the setup file`() {
+        val creator =
+            ProjectCreator(
+                DocsProjectCreatorTemplateProcessorFactory(
+                    DocumentInfo(name = "Test", type = DocumentType.DOCS),
+                    includes = listOf("@atoms/cv:1.0.0"),
+                ),
+                EmptyProjectCreatorInitialContentSupplier(),
+                mainFileName = "main",
+            )
+        val resources = creator.createResources()
+        assertContains(resources.first { it.name == "_setup" }.textContent, ".include {@atoms/cv:1.0.0}")
+        assertFalse("@atoms" in resources.first { it.name == "main" }.textContent)
+    }
+
+    private fun packageTemplateCreator(
+        content: String,
+        additionalFiles: Map<String, String> = emptyMap(),
+    ): ProjectCreator {
+        val files = VirtualFileSystem().apply { additionalFiles.forEach { (path, text) -> writeBytes(path, text.encodeToByteArray()) } }
+        val template = PackageTemplate("@atoms/cv:1.0.0", doctype = null, content = content, additionalFiles = files.resolve("/"))
+        return ProjectCreator(
+            DefaultProjectCreatorTemplateProcessorFactory(DocumentInfo(name = "CV"), includes = listOf(template.reference)),
+            PackageTemplateInitialContentSupplier(template),
+            mainFileName = "main",
+        )
+    }
+
+    @Test
+    fun `package template content is injected verbatim`() {
+        val resources = packageTemplateCreator("# .docname\n\n.cv {${'$'}{name}}\n").createResources()
+        assertEquals(
+            ".docname {CV}\n.doctype {plain}\n.include {@atoms/cv:1.0.0}\n\n# .docname\n\n.cv {${'$'}{name}}",
+            resources.single().textContent,
+        )
+    }
+
+    @Test
+    fun `empty content yields no initial content`() {
+        val resources = packageTemplateCreator("").createResources()
+        assertEquals(".docname {CV}\n.doctype {plain}\n.include {@atoms/cv:1.0.0}", resources.single().textContent)
+    }
+
+    @Test
+    fun `additional files become file references at their paths`() {
+        val resources =
+            packageTemplateCreator(
+                "# CV",
+                mapOf(
+                    "sections/experience.qd" to "# Experience",
+                    "sections/assets/My Photo.png" to "png",
+                    ".gitignore" to "output/",
+                ),
+            ).createResources()
+
+        val files = resources.filterIsInstance<FileReferenceOutputArtifact>()
+        assertEquals(setOf("sections/experience.qd", "sections/assets/My Photo.png", ".gitignore"), files.map { it.name }.toSet())
+        assertEquals("output/", files.first { it.name == ".gitignore" }.file.readText())
+        assertEquals("# Experience", files.first { it.name == "sections/experience.qd" }.file.readText())
     }
 }

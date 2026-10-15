@@ -2,6 +2,7 @@ package com.quarkdown.cli.creator.content
 
 import com.quarkdown.core.pipeline.output.ArtifactType
 import com.quarkdown.core.pipeline.output.OutputResource
+import com.quarkdown.template.TemplateProcessor
 
 private const val RESOURCES_PATH = "/creator/docs/"
 private val RESOURCES = arrayOf("_nav.qd", "page-1.qd", "page-2.qd", "page-3.qd")
@@ -11,8 +12,8 @@ private val RESOURCES = arrayOf("_nav.qd", "page-1.qd", "page-2.qd", "page-3.qd"
  * The template includes a navigation file and three page files, with some example content.
  */
 class DocsProjectCreatorInitialContentSupplier : ProjectCreatorInitialContentSupplier {
-    override val templateName: String
-        get() = DefaultProjectCreatorInitialContentSupplier().templateName
+    override fun createInitialContent(template: TemplateProcessor) =
+        DefaultProjectCreatorInitialContentSupplier().createInitialContent(template)
 
     override fun createResources(): Set<OutputResource> =
         RESOURCES

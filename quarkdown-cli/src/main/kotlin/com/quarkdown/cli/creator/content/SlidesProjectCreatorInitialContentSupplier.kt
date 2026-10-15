@@ -1,5 +1,7 @@
 package com.quarkdown.cli.creator.content
 
+import com.quarkdown.template.TemplateProcessor
+
 private const val CODE_TEMPLATE_NAME = "creator/slides/initialcontent.qd.jte"
 
 /**
@@ -9,5 +11,5 @@ private const val CODE_TEMPLATE_NAME = "creator/slides/initialcontent.qd.jte"
  */
 class SlidesProjectCreatorInitialContentSupplier :
     ProjectCreatorInitialContentSupplier by DefaultProjectCreatorInitialContentSupplier() {
-    override val templateName: String = CODE_TEMPLATE_NAME
+    override fun createInitialContent(template: TemplateProcessor) = template.renderInitialContent(CODE_TEMPLATE_NAME)
 }

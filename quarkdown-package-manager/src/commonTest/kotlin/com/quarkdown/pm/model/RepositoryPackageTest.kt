@@ -2,10 +2,11 @@ package com.quarkdown.pm.model
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
- * Tests for [RepositoryPackage.download].
+ * Tests for [RepositoryPackage].
  */
 class RepositoryPackageTest {
     private val manifest = PackageManifest(AtomManifest(name = "cv", version = "1.0.0", entrypoint = "main.qd"))
@@ -40,5 +41,36 @@ class RepositoryPackageTest {
     fun `download of empty package yields empty root`() {
         val fs = RepositoryPackage(manifest, emptyList()).download()
         assertEquals(emptyList(), fs.resolve("/").children())
+    }
+
+    @Test
+    fun `file finds a file by its package-relative path`() {
+        val pkg =
+            RepositoryPackage(
+                manifest,
+                listOf(
+                    file("atom.toml", "[atom]".encodeToByteArray()),
+                    file("sections/experience.qd", "# Experience".encodeToByteArray()),
+                ),
+            )
+        assertEquals("# Experience", pkg.file("sections/experience.qd")?.content()?.decodeToString())
+    }
+
+    @Test
+    fun `file is null for an unknown path`() {
+        val pkg = RepositoryPackage(manifest, listOf(file("main.qd", "# CV".encodeToByteArray())))
+        assertNull(pkg.file("missing.qd"))
+        assertNull(pkg.file("main"))
+    }
+
+    @Test
+    fun `a list of files downloads into a file system at their paths`() {
+        val fs =
+            listOf(
+                file("sections/experience.qd", "# Experience".encodeToByteArray()),
+                file(".gitignore", "output/".encodeToByteArray()),
+            ).download()
+        assertEquals("# Experience", fs.resolve("sections/experience.qd").readText())
+        assertEquals("output/", fs.resolve(".gitignore").readText())
     }
 }

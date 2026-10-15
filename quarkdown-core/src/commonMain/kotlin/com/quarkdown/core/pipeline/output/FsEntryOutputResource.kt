@@ -20,3 +20,13 @@ fun FsEntry.toOutputResource(
     useChecksumInvalidation: Boolean = false,
     symlink: Boolean = false,
 ): OutputResource = FileReferenceOutputArtifact(name, this, useChecksumInvalidation, symlink)
+
+/**
+ * Converts every file under this directory, recursively, into an [OutputResource] saved at the same relative path.
+ * @return one resource per file, named by its path relative to this directory with `/` separators
+ */
+fun FsEntry.toOutputResources(): Set<OutputResource> =
+    descendants()
+        .filter { it.isFile }
+        .map { file -> file.toOutputResource(name = file.relativeTo(this)?.invariantSeparatorsPath ?: file.name) }
+        .toSet()

@@ -28,7 +28,7 @@ class LocalPackageResolver(
         reference: String,
         projectRoot: FsEntry,
     ): ResolvedPackage? =
-        resolving(reference) { parsed ->
+        resolvingPackage(reference) { parsed ->
             installedPackage(projectRoot, parsed).resolve(parsed)
         }
 
@@ -36,17 +36,10 @@ class LocalPackageResolver(
         reference: String,
         projectRoot: FsEntry,
     ): ResolvedPackage =
-        resolving(reference) { parsed ->
-            val scope = parsed.identifier.scope
-            val repository =
-                repositories.forScope(scope)
-                    ?: throw PackageResolutionException(reference, "no package repository is registered for scope '$scope'")
-
+        resolvingPackage(reference) { parsed ->
             Log.info("Installing $reference...")
 
-            val pkg =
-                repository.getPackage(parsed)
-                    ?: throw PackageResolutionException(reference, "not found in repository '$scope'")
+            val pkg = repositories.fetch(parsed)
 
             val installed = installedPackage(projectRoot, parsed)
             writer.write(pkg, installed.directory)
@@ -64,23 +57,6 @@ class LocalPackageResolver(
         projectRoot: FsEntry,
         reference: PackageReference,
     ) = InstalledPackage(PackageLayout.directoryOf(projectRoot, reference.identifier), manifestParser)
-
-    /**
-     * Parses [reference] and runs [action] on it, translating any failure raised along the way
-     * (malformed reference, network, manifest, writer) into a [PackageResolutionException]
-     * that names the reference and keeps the original cause.
-     */
-    private inline fun <T> resolving(
-        reference: String,
-        action: (PackageReference) -> T,
-    ): T =
-        try {
-            action(PackageReference.parse(reference))
-        } catch (e: PackageResolutionException) {
-            throw e
-        } catch (e: Exception) {
-            throw PackageResolutionException(reference, e.message ?: e::class.simpleName.orEmpty(), e)
-        }
 
     companion object
 }

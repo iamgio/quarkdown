@@ -21,11 +21,21 @@ The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/at
         ...
 ```
 
+#### [Project templates from packages](https://quarkdown.com/wiki/publishing-packages#templates)
+
+`quarkdown create` can now scaffold a project from a package that declares itself a template, via the new `--template` option:
+
+```
+quarkdown create --template @atoms/simple-cv:1.0.0
+```
+
 ### Fixed
 
 #### CSS styles on Android
 
-Injecting `!important` into CSS rules used a regex containing an unescaped `}`, which Android's ICU-based `Pattern` rejects as a syntax error. OpenJDK tolerates a lone `}`, so the issue only occurred when running Quarkdown on Android.
+Injecting `!important` into CSS rules used to raise syntax errors on Android's ICU-based `Pattern`.
+
+Thanks @YoannDev90!
 
 ## [2.6.4] - 2026-10-09
 

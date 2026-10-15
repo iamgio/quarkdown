@@ -2,7 +2,13 @@
 @param boolean docs = false
 @param String initialContent = null
 @param String mainFile = null
+@param boolean pageCounter = false
 
+@if(pageCounter)
+.pagemargin {bottomcenter}
+    .currentpage
+
+@endif
 @if(!docs && name != null)
 # ${name}
 

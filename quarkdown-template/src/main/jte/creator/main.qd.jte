@@ -8,7 +8,7 @@
 @param boolean theme = false
 @param String colorTheme = null
 @param String layoutTheme = null
-@param boolean pageCounter = false
+@param java.util.List<String> includes = java.util.Collections.emptyList()
 @param String initialContent = null
 
 @if(!docs && name != null)
@@ -26,6 +26,9 @@
 @if(theme)
 .theme@if(colorTheme != null) {${colorTheme}}@endif@if(layoutTheme != null) layout:{${layoutTheme}}@endif
 @endif
+@for(String item : includes)
+.include {${item}}
+@endfor
 @if(!keywords.isEmpty())
 ${""}
 .dockeywords
@@ -43,11 +46,6 @@ ${"  "}- ${item}
 @if(docs)
 ${""}
 .htmloptions baseurl:{https://example.com/docs}
-@endif
-@if(pageCounter)
-${""}
-.pagemargin {bottomcenter}
-    .currentpage
 @endif
 @if(docs && name != null)
 ${""}
