@@ -19,7 +19,6 @@ import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupp
 import com.quarkdown.cli.creator.content.DefaultTheme
 import com.quarkdown.cli.creator.content.DocsProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
-import com.quarkdown.cli.creator.content.PackageTemplate
 import com.quarkdown.cli.creator.content.PackageTemplateInitialContentSupplier
 import com.quarkdown.cli.creator.content.SlidesProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
@@ -35,6 +34,7 @@ import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.packages.PackageResolutionException
 import com.quarkdown.core.pipeline.output.visitor.saveTo
 import com.quarkdown.pm.repo.PackageRepositories
+import com.quarkdown.pm.template.PackageTemplate
 import java.io.File
 
 /**

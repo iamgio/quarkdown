@@ -4,7 +4,6 @@ import com.quarkdown.cli.creator.ProjectCreator
 import com.quarkdown.cli.creator.content.DefaultProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.DocsProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.EmptyProjectCreatorInitialContentSupplier
-import com.quarkdown.cli.creator.content.PackageTemplate
 import com.quarkdown.cli.creator.content.PackageTemplateInitialContentSupplier
 import com.quarkdown.cli.creator.content.ProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.content.SlidesProjectCreatorInitialContentSupplier
@@ -21,6 +20,7 @@ import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.OutputResourceGroup
 import com.quarkdown.core.pipeline.output.TextOutputArtifact
 import com.quarkdown.core.util.normalizeLineSeparators
+import com.quarkdown.pm.template.PackageTemplate
 import com.quarkdown.template.TemplateProcessor
 import kotlin.test.Test
 import kotlin.test.assertContains

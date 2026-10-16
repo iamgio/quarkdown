@@ -1,6 +1,5 @@
-package com.quarkdown.cli.creator
+package com.quarkdown.pm.template
 
-import com.quarkdown.cli.creator.content.PackageTemplate
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.packages.PackageResolutionException
 import com.quarkdown.pm.model.AtomManifest

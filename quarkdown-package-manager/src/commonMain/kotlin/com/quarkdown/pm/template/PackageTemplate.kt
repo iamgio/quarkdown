@@ -1,4 +1,4 @@
-package com.quarkdown.cli.creator.content
+package com.quarkdown.pm.template
 
 import com.quarkdown.core.document.DocumentType
 import com.quarkdown.core.filesystem.FsEntry
@@ -18,7 +18,7 @@ import com.quarkdown.pm.repo.PackageRepositories
  * @param content text that becomes the main file's initial content
  * @param additionalFiles root of an in-memory directory holding the files to copy into the project,
  *                        each at its package-relative path
- * @see PackageTemplateInitialContentSupplier
+ * @see com.quarkdown.pm.repo.PackageRepositories.fetch
  */
 class PackageTemplate(
     val reference: String,

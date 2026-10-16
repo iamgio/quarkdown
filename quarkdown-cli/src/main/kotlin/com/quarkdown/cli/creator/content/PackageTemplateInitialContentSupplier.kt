@@ -2,6 +2,7 @@ package com.quarkdown.cli.creator.content
 
 import com.quarkdown.core.pipeline.output.OutputResource
 import com.quarkdown.core.pipeline.output.toOutputResources
+import com.quarkdown.pm.template.PackageTemplate
 import com.quarkdown.template.TemplateProcessor
 
 /**
