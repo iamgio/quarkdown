@@ -225,6 +225,12 @@ val jlinkTargets =
             jdkHomeRelative = "jdk-$jdkVersion",
         ),
         JlinkTarget(
+            id = "linux-aarch64",
+            taskSuffix = "LinuxAARCH64",
+            jdkArchive = "OpenJDK17U-jdk_aarch64_linux_hotspot_$jdkFileVersion.tar.gz",
+            jdkHomeRelative = "jdk-$jdkVersion",
+        ),
+        JlinkTarget(
             id = "macos-x64",
             taskSuffix = "MacosX64",
             jdkArchive = "OpenJDK17U-jdk_x64_mac_hotspot_$jdkFileVersion.tar.gz",
