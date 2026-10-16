@@ -32,6 +32,7 @@ object Stdlib : LibraryExporter {
                     Math.Module,
                     Logical.Module,
                     Strings.Module,
+                    Color.Module,
                     Icon.Module,
                     Emoji.Module,
                     Collection.Module,

@@ -29,6 +29,16 @@ The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/at
 quarkdown create --template @atoms/simple-cv:1.0.0
 ```
 
+#### [Color building and derivation](https://quarkdown.com/wiki/color)
+
+The new `.color` function builds a color from its red, green, blue and alpha components, each optional, and a base color:
+
+```markdown
+.var {brand} {red}
+
+.container background:{.brand::color alpha:{0.25}}
+```
+
 ### Fixed
 
 #### CSS styles on Android
