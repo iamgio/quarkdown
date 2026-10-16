@@ -16,4 +16,37 @@ You can define a `Color` value in any of the following ways:
 - **Named:** A [CSS3 color](https://www.w3schools.com/cssref/css_colors.php) name, case-insensitive, without dashes
   - `blue`, `darkorange`, `white`
 
+Any of these formats can be used wherever a color is expected, such as the `color` parameter of `.text`. The following all represent red:
+
+.examplemirror
+    .text {Hexadecimal} color:{#FF0000}
+
+    .text {RGB} color:{rgb(255, 0, 0)}
+
+    .text {RGBA} color:{rgba(255, 0, 0, 0.5)}
+
+    .text {HSV} color:{hsv(0, 100, 100)}
+
+    .text {HSL} color:{hsl(0, 100, 50)}
+
+    .text {Named} color:{red}
+
 When you write a color in a code span (wrapped in backticks), Quarkdown automatically displays a small preview box next to it. This works for all color formats except named colors.
+
+.examplemirror
+    The brand color is `#4290F5`, or `rgb(66, 144, 245)`.
+
+## Building and deriving colors
+
+The `.color` .docslink {quarkdown-stdlib/com.quarkdown.stdlib.module.Color/color.html} function builds a color from its `red`, `green`, `blue` and `alpha` components. Each one is optional.
+
+Given a base color as its first argument, it keeps the base's components and replaces only the ones you specify. This is handy to derive a semi-transparent or tinted variant from a named color, without knowing its components. Without a base, unspecified components start from opaque black.
+
+.examplemirror
+    .text {Built} color:{.color red:{66} green:{144} blue:{245}}
+
+    .text {Faded} color:{.color {#4290F5} alpha:{0.5}}
+
+    .text {Tinted} color:{.color {darkorange} blue:{200}}
+
+Red, green and blue range from 0 to 255, and alpha from 0 to 1. A value outside its range is an error.
