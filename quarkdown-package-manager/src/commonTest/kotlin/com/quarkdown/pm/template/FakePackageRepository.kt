@@ -7,6 +7,7 @@ import com.quarkdown.pm.model.PackageReference
 import com.quarkdown.pm.model.PackageRepository
 import com.quarkdown.pm.model.RepositoryPackage
 import com.quarkdown.pm.model.TemplateManifest
+import com.quarkdown.pm.model.latestVersion
 import com.quarkdown.pm.repo.ATOMS_SCOPE
 import com.quarkdown.pm.repo.PackageRepositories
 
@@ -18,6 +19,14 @@ class FakePackageRepository(
     private val packages: Map<String, RepositoryPackage>,
 ) : PackageRepository {
     override fun getPackage(reference: PackageReference): RepositoryPackage? = packages[reference.toString()]
+
+    override fun listPackages(): Set<PackageManifest> =
+        packages.values
+            .map { it.manifest }
+            .groupBy { it.atom.name }
+            .values
+            .map { versions -> versions.first { it.atom.version == latestVersion(versions.map { v -> v.atom.version }) } }
+            .toSet()
 
     /**
      * @return a registry mapping the `atoms` scope to this repository

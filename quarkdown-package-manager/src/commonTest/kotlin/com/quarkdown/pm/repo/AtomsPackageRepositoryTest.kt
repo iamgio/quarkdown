@@ -59,9 +59,33 @@ class AtomsPackageRepositoryTest {
 
     private fun raw(path: String) = coordinates.rawFileUrl(path).toString()
 
+    private val wholeTree =
+        """
+        {
+          "sha": "root",
+          "tree": [
+            { "path": "README.md", "type": "blob", "size": 1 },
+            { "path": "cv", "type": "tree" },
+            { "path": "cv/1.0.0/atom.toml", "type": "blob", "size": 1 },
+            { "path": "cv/1.0.0/main.qd", "type": "blob", "size": 1 },
+            { "path": "cv/1.10.0/atom.toml", "type": "blob", "size": 1 },
+            { "path": "cv/1.9.0/atom.toml", "type": "blob", "size": 1 },
+            { "path": "cv/latest/atom.toml", "type": "blob", "size": 1 },
+            { "path": "cv/notes.txt", "type": "blob", "size": 1 },
+            { "path": "nomanifest/1.0.0/main.qd", "type": "blob", "size": 1 },
+            { "path": "__drafts/1.0.0/atom.toml", "type": "blob", "size": 1 },
+            { "path": "kanban/1.0.0/atom.toml", "type": "blob", "size": 1 }
+          ],
+          "truncated": false
+        }
+        """.trimIndent()
+
     private fun fetcher() =
         FakeRemoteFetcher(
             mapOf(
+                coordinates.treeUrl().toString() to wholeTree.encodeToByteArray(),
+                raw("kanban/1.0.0/atom.toml") to manifestToml.replace("\"cv\"", "\"kanban\"").encodeToByteArray(),
+                raw("cv/1.10.0/atom.toml") to manifestToml.replace("1.0.0", "1.10.0").encodeToByteArray(),
                 coordinates.subtreeUrl("cv").toString() to cvTree.encodeToByteArray(),
                 coordinates.subtreeUrl("broken").toString() to singleFileTree("1.0.0/atom.toml").encodeToByteArray(),
                 coordinates.subtreeUrl("nomanifest").toString() to singleFileTree("1.0.0/main.qd").encodeToByteArray(),
@@ -172,5 +196,37 @@ class AtomsPackageRepositoryTest {
         val pkg = assertNotNull(repository().getPackage(ref("2.0.0")))
         val unpublished = pkg.files.single { it.path == "unpublished.qd" }
         assertFailsWith<RemoteFetchException.NotFound> { unpublished.content() }
+    }
+
+    @Test
+    fun `lists the latest manifest of every package from one repository listing`() {
+        val fetcher = fetcher()
+        val manifests = repository(fetcher).listPackages()
+        assertEquals(
+            listOf("cv" to "1.10.0", "kanban" to "1.0.0"),
+            manifests.map { it.atom.name to it.atom.version }.sortedBy { it.first },
+        )
+        assertEquals(1, fetcher.requested.count { it.toString() == coordinates.treeUrl().toString() })
+        assertEquals(0, fetcher.requested.count { it.toString().contains("trees/main:") })
+    }
+
+    @Test
+    fun `listing reads only the latest version's manifest, chosen by semantic version`() {
+        val fetcher = fetcher()
+        repository(fetcher).listPackages()
+        val manifestsRead = fetcher.requested.map { it.toString() }.filter { it.endsWith("atom.toml") }
+        assertEquals(setOf(raw("cv/1.10.0/atom.toml"), raw("kanban/1.0.0/atom.toml")), manifestsRead.toSet())
+    }
+
+    @Test
+    fun `listing skips internal names, manifest-less versions and non-semantic version directories`() {
+        val names = repository().listPackages().map { it.atom.name }.toSet()
+        assertEquals(setOf("cv", "kanban"), names)
+    }
+
+    @Test
+    fun `listing of an empty repository is empty`() {
+        val fetcher = FakeRemoteFetcher.ofText(mapOf(coordinates.treeUrl().toString() to """{ "sha": "e", "tree": [] }"""))
+        assertEquals(emptySet(), repository(fetcher).listPackages())
     }
 }

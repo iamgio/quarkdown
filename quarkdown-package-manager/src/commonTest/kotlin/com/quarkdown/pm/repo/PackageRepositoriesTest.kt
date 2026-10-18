@@ -31,12 +31,16 @@ class PackageRepositoriesTest {
     private val repository =
         object : PackageRepository {
             override fun getPackage(reference: PackageReference): RepositoryPackage? = cvPackage.takeIf { reference == cv }
+
+            override fun listPackages(): Set<PackageManifest> = setOf(cvPackage.manifest)
         }
 
     private val unreachable =
         object : PackageRepository {
             override fun getPackage(reference: PackageReference): RepositoryPackage =
                 throw RemoteFetchException.NotFound(Url("https://example.com/cv"))
+
+            override fun listPackages(): Set<PackageManifest> = throw RemoteFetchException.NotFound(Url("https://example.com/cv"))
         }
 
     private fun repositories(repository: PackageRepository = this.repository) = PackageRepositories(mapOf(ATOMS_SCOPE to repository))
