@@ -194,12 +194,19 @@ fun float(
 )
 
 /**
+ * The [StyleOptions] component that stack functions leave out, since `alignment` is already
+ * their main-axis alignment parameter.
+ */
+private const val STACK_EXCLUDED_STYLE_OPTION = "alignment"
+
+/**
  * Stacks content together, according to the specified type.
  * @param layout stack type
  * @param mainAxisAlignment content alignment along the main axis
  * @param crossAxisAlignment content alignment along the cross axis
  * @param rowGap blank space between rows. If omitted, the default value is used. Only applicable to [Stacked.Column] and [Stacked.Grid]
  * @param columnGap blank space between columns. If omitted, the default value is used. Only applicable to [Stacked.Row] and [Stacked.Grid]
+ * @param style visual style of the stack
  * @param body content to stack
  * @return the new [Stacked] node
  * @see row
@@ -212,8 +219,17 @@ private fun stack(
     crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     rowGap: Size? = null,
     columnGap: Size? = null,
+    style: StyleOptions,
     body: MarkdownContent,
-) = Stacked(layout, mainAxisAlignment, crossAxisAlignment, rowGap, columnGap, body.children).wrappedAsValue()
+) = Stacked(
+    layout,
+    mainAxisAlignment,
+    crossAxisAlignment,
+    rowGap,
+    columnGap,
+    style.toNodeStyle(),
+    body.children,
+).wrappedAsValue()
 
 /**
  * Stacks content horizontally.
@@ -230,8 +246,9 @@ fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment? = null,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     @LikelyNamed gap: Size? = null,
+    @Spread(exclude = [STACK_EXCLUDED_STYLE_OPTION]) style: StyleOptions = StyleOptions.DEFAULT,
     @Body body: MarkdownContent,
-) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, null, gap, body)
+) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, null, gap, style, body)
 
 /**
  * Stacks content vertically.
@@ -248,8 +265,9 @@ fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment? = null,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     @LikelyNamed gap: Size? = null,
+    @Spread(exclude = [STACK_EXCLUDED_STYLE_OPTION]) style: StyleOptions = StyleOptions.DEFAULT,
     @Body body: MarkdownContent,
-) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, null, body)
+) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, null, style, body)
 
 /**
  * Stacks content in a grid layout.
@@ -275,6 +293,7 @@ fun grid(
     @LikelyNamed gap: Size? = null,
     @Name("vgap") rowGap: Size? = gap,
     @Name("hgap") columnGap: Size? = gap,
+    @Spread(exclude = [STACK_EXCLUDED_STYLE_OPTION]) style: StyleOptions = StyleOptions.DEFAULT,
     @Body body: MarkdownContent,
 ) = when {
     columnCount <= 0 -> {
@@ -288,6 +307,7 @@ fun grid(
             crossAxisAlignment,
             rowGap ?: gap,
             columnGap ?: gap,
+            style,
             body,
         )
     }

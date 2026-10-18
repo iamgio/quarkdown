@@ -1,7 +1,7 @@
 .docname {Element styling properties}
 .include {docs}
 
-Several functions, such as [`.container`](container.qd) and [`.heading`](headings.qd), share a common set of styling parameters to customize colors, spacing, borders, and text appearance of the element they produce.
+Several functions, such as [`.container`](container.qd), the [stack functions](stacks.qd) and [`.heading`](headings.qd), share a common set of styling parameters to customize colors, spacing, borders, and text appearance of the element they produce.
 
 ## Parameters
 

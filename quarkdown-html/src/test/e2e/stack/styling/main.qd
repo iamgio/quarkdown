@@ -1,0 +1,14 @@
+.row gap:{10px} background:{red} padding:{10px} fontvariant:{smallcaps}
+  A
+
+  B
+
+.column border:{blue} borderwidth:{2px} radius:{8px} textalignment:{center}
+  A
+
+  B
+
+.grid columns:{2} alignment:{spaceevenly} foreground:{white} background:{black}
+  A
+
+  B

@@ -113,6 +113,8 @@ sealed class ParameterDescriptor {
      *                          (the processor filters `@Spread` out; anything else is retained but currently not emitted since the outer parameter itself is not part of the wrapper signature)
      * @param dataClassKdoc raw KDoc block text of the spread class (inner content, no `/** */` markers), or `null` when the class is undocumented;
      *                       the wrapper KDoc absorbs its `@param` tags in place of the outer parameter's own documentation
+     * @param excludedComponentNames Kotlin names of the primary-constructor parameters left out of [components] via `@Spread(exclude = [...])`;
+     *                               their `@param` tags are dropped from the wrapper KDoc and the reconstruction relies on their defaults
      */
     data class Spread(
         override val originalName: String,
@@ -120,5 +122,6 @@ sealed class ParameterDescriptor {
         val components: List<Plain>,
         override val sourceAnnotations: String?,
         val dataClassKdoc: String?,
+        val excludedComponentNames: Set<String> = emptySet(),
     ) : ParameterDescriptor()
 }

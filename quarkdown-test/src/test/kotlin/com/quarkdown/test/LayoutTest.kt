@@ -169,6 +169,69 @@ class LayoutTest {
     }
 
     @Test
+    fun `styled stacks`() {
+        execute(
+            """
+            .row gap:{1cm} background:{red} padding:{10px}
+                Hello 1
+                
+                Hello 2
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div" +
+                    " style=\"column-gap: 1.0cm; background-color: rgba(255, 0, 0, 1.0);" +
+                    " padding: 10.0px 10.0px 10.0px 10.0px;\"" +
+                    " class=\"stack stack-row\">" +
+                    "<p>Hello 1</p>" +
+                    "<p>Hello 2</p>" +
+                    "</div>",
+                it,
+            )
+        }
+
+        execute(
+            """
+            .column border:{blue} textalignment:{center}
+                Hello 1
+                
+                Hello 2
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div" +
+                    " style=\"border-color: rgba(0, 0, 255, 1.0); border-style: solid; text-align: center;\"" +
+                    " class=\"stack stack-column\">" +
+                    "<p>Hello 1</p>" +
+                    "<p>Hello 2</p>" +
+                    "</div>",
+                it,
+            )
+        }
+
+        // `alignment` keeps its main-axis meaning and is not shadowed by the style option of the same name.
+        execute(
+            """
+            .grid columns:{2} alignment:{spaceevenly} foreground:{white}
+                Hello 1
+                
+                Hello 2
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div" +
+                    " style=\"grid-template-columns: auto auto; justify-content: space-evenly;" +
+                    " align-items: center; color: rgba(255, 255, 255, 1.0);\"" +
+                    " class=\"stack stack-grid\">" +
+                    "<p>Hello 1</p>" +
+                    "<p>Hello 2</p>" +
+                    "</div>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun `layout function called directly`() {
         execute(
             """

@@ -3,6 +3,8 @@ package com.quarkdown.core.ast.quarkdown.block
 import com.quarkdown.amber.annotations.Diverge
 import com.quarkdown.core.ast.NestableNode
 import com.quarkdown.core.ast.Node
+import com.quarkdown.core.ast.attributes.style.NodeStyle
+import com.quarkdown.core.ast.attributes.style.StylableNode
 import com.quarkdown.core.document.size.Size
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 import com.quarkdown.core.rendering.representable.RenderRepresentableVisitor
@@ -15,6 +17,7 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param crossAxisAlignment content alignment along the cross axis
  * @param rowGap vertical space between rows of nodes
  * @param columnGap horizontal space between columns of nodes
+ * @param style visual style of the block
  */
 class Stacked(
     val layout: Layout,
@@ -22,8 +25,10 @@ class Stacked(
     val crossAxisAlignment: CrossAxisAlignment?,
     val rowGap: Size?,
     val columnGap: Size?,
+    override val style: NodeStyle = NodeStyle.DEFAULT,
     @Diverge override val children: List<Node>,
-) : NestableNode {
+) : NestableNode,
+    StylableNode {
     override fun <T> accept(visitor: NodeVisitor<T>) = visitor.visit(this)
 
     /**
