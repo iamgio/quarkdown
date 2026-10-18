@@ -31,7 +31,21 @@ package com.quarkdown.processor.annotation
  * ): ... =
  *     container(text = text, style = Style(foregroundColor = foreground, backgroundColor = background))
  * ```
+ *
+ * Components listed in [exclude] are left out of the wrapper and take their constructor default
+ * in the reconstruction. This resolves name clashes between a spread component and a parameter
+ * the function declares itself:
+ *
+ * ```
+ * @QFunction
+ * fun row(alignment: Alignment, @Spread(exclude = ["alignment"]) style: Style) = ...
+ * ```
+ *
+ * @param exclude Kotlin names of the spread class's primary-constructor parameters to leave out of the wrapper.
+ *                Each must have a default value.
  */
 @Target(AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.SOURCE)
-annotation class Spread
+annotation class Spread(
+    val exclude: Array<String> = [],
+)

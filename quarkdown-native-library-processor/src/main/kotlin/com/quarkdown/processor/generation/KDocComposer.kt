@@ -46,12 +46,14 @@ internal object KDocComposer {
 
     /**
      * Per-spread `@param` tag list, extracted from each spread's data class KDoc and rewritten
-     * against that spread's own component rename map.
+     * against that spread's own component rename map. Tags of excluded components are dropped,
+     * as they name a symbol that does not exist on the wrapper.
      */
     private fun rewriteSpreadParamTags(spreads: List<ParameterDescriptor.Spread>): List<String> =
         spreads.flatMap { spread ->
             val renames = collectSpreadComponentRenames(spread)
             spread.dataClassKdoc
+                ?.let { KDocRewriter.stripParamTags(it, spread.excludedComponentNames) }
                 ?.let(KDocRewriter::extractParamTags)
                 ?.map { KDocRewriter.rewrite(it, renames) }
                 .orEmpty()

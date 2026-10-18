@@ -175,13 +175,16 @@ internal object ModuleDescriber {
                     "@Spread class '${classDeclaration.qualifiedName?.asString()}' must have a primary constructor",
                 )
 
+        val excluded = excludedComponentsOf(parameter, outerName, primary.parameters, ctx) ?: return null
+        val included = primary.parameters.filter { it.name?.asString() !in excluded }
+
         // Two-pass registration: components may reference each other in default expressions,
         // and the rename map must be complete before any component is described.
-        primary.parameters.forEach { component ->
+        included.forEach { component ->
             val componentOriginal = component.name?.asString() ?: return@forEach
             ctx.mappings.record(component, component.quarkdownName() ?: componentOriginal)
         }
-        val components = primary.parameters.map { describePlainComponent(it, ctx, counter) ?: return null }
+        val components = included.map { describePlainComponent(it, ctx, counter) ?: return null }
 
         return ParameterDescriptor.Spread(
             originalName = outerName,
@@ -191,7 +194,53 @@ internal object ModuleDescriber {
             components = components,
             sourceAnnotations = AnnotationExtractor.ForParameter.extract(parameter, ctx),
             dataClassKdoc = KDocExtractor.extract(classDeclaration, ctx),
+            excludedComponentNames = excluded,
         )
+    }
+
+    /**
+     * Reads the `exclude` list of a `@Spread` annotation and checks every entry against the spread
+     * class's primary constructor: each must name an existing parameter that has a default value,
+     * since the reconstruction omits it.
+     *
+     * Returns `null` after reporting an error when an entry is invalid.
+     */
+    private fun excludedComponentsOf(
+        parameter: KSValueParameter,
+        outerName: String,
+        components: List<KSValueParameter>,
+        ctx: DiscoveryContext,
+    ): Set<String>? {
+        val excluded =
+            parameter
+                .getAnnotation<Spread>()
+                ?.arguments
+                ?.firstOrNull { it.name?.asString() == "exclude" }
+                ?.value
+                ?.let { it as? List<*> }
+                ?.filterIsInstance<String>()
+                ?.toSet()
+                .orEmpty()
+
+        val byName = components.associateBy { it.name?.asString() }
+        excluded.forEach { name ->
+            val component = byName[name]
+            when {
+                component == null -> {
+                    ctx.logger.error("@Spread parameter '$outerName' excludes unknown component '$name'.", parameter)
+                    return null
+                }
+
+                !component.hasDefault -> {
+                    ctx.logger.error(
+                        "@Spread parameter '$outerName' excludes component '$name', which has no default value.",
+                        parameter,
+                    )
+                    return null
+                }
+            }
+        }
+        return excluded
     }
 
     /**

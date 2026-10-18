@@ -54,6 +54,18 @@ It also provides optional `vgap` and `hgap` parameters that override the `gap` s
 
         ***D***
 
+## Styling
+
+Stack functions also accept the [element styling properties](element-styling-properties.qd), to style the block as a whole.
+
+.examplemirror
+    .row gap:{1cm} background:{teal} foreground:{white} padding:{12px} radius:{8px}
+        A
+
+        B
+
+        C
+
 ## Composition
 
 You can compose stack functions to create complex layouts:
