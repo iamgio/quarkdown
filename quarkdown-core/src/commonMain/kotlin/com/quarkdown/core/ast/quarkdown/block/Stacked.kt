@@ -17,6 +17,8 @@ import com.quarkdown.core.visitor.node.NodeVisitor
  * @param crossAxisAlignment content alignment along the cross axis
  * @param rowGap vertical space between rows of nodes
  * @param columnGap horizontal space between columns of nodes
+ * @param width width of the block
+ * @param height height of the block
  * @param style visual style of the block
  */
 class Stacked(
@@ -25,6 +27,8 @@ class Stacked(
     val crossAxisAlignment: CrossAxisAlignment?,
     val rowGap: Size?,
     val columnGap: Size?,
+    val width: Size? = null,
+    val height: Size? = null,
     override val style: NodeStyle = NodeStyle.DEFAULT,
     @Diverge override val children: List<Node>,
 ) : NestableNode,

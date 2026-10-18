@@ -209,6 +209,25 @@ class LayoutTest {
             )
         }
 
+        execute(
+            """
+            .row width:{10cm} height:{200px}
+                Hello 1
+                
+                Hello 2
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<div" +
+                    " style=\"width: 10.0cm; height: 200.0px;\"" +
+                    " class=\"stack stack-row\">" +
+                    "<p>Hello 1</p>" +
+                    "<p>Hello 2</p>" +
+                    "</div>",
+                it,
+            )
+        }
+
         // `alignment` keeps its main-axis meaning and is not shadowed by the style option of the same name.
         execute(
             """

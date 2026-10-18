@@ -1,4 +1,4 @@
-.row gap:{10px} background:{red} padding:{10px} fontvariant:{smallcaps}
+.row gap:{10px} width:{300px} height:{100px} background:{red} padding:{10px} fontvariant:{smallcaps}
   A
 
   B

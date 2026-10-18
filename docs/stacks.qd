@@ -40,6 +40,8 @@ All stack functions accept the following optional arguments:
 | `alignment` | Main axis alignment (CSS `justify-content`). | `start`, `center`, `end`, `spacebetween`, `spacearound`, `spaceevenly` |
 | `cross`     | Cross axis alignment (CSS `align-items`).    | `start`, `center`, `end`, `stretch`                                    |
 | `gap`       | Space between items.                         | [`Size`](sizes.qd)                                                     |
+| `width`     | Width of the stack.                          | [`Size`](sizes.qd)                                                     |
+| `height`    | Height of the stack.                         | [`Size`](sizes.qd)                                                     |
 
 The `grid` function requires a `columns` argument, which must be specified as an integer. .br
 It also provides optional `vgap` and `hgap` parameters that override the `gap` setting, allowing you to control the vertical and horizontal spacing independently.

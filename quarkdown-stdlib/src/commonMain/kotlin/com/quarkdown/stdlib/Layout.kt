@@ -206,6 +206,8 @@ private const val STACK_EXCLUDED_STYLE_OPTION = "alignment"
  * @param crossAxisAlignment content alignment along the cross axis
  * @param rowGap blank space between rows. If omitted, the default value is used. Only applicable to [Stacked.Column] and [Stacked.Grid]
  * @param columnGap blank space between columns. If omitted, the default value is used. Only applicable to [Stacked.Row] and [Stacked.Grid]
+ * @param width width of the stack. No constraint if unset
+ * @param height height of the stack. No constraint if unset
  * @param style visual style of the stack
  * @param body content to stack
  * @return the new [Stacked] node
@@ -219,6 +221,8 @@ private fun stack(
     crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     rowGap: Size? = null,
     columnGap: Size? = null,
+    width: Size?,
+    height: Size?,
     style: StyleOptions,
     body: MarkdownContent,
 ) = Stacked(
@@ -227,6 +231,8 @@ private fun stack(
     crossAxisAlignment,
     rowGap,
     columnGap,
+    width,
+    height,
     style.toNodeStyle(),
     body.children,
 ).wrappedAsValue()
@@ -237,6 +243,8 @@ private fun stack(
  * @param mainAxisAlignment content alignment along the main axis. If unset, it inherits the parent's alignment
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
+ * @param width width of the stack. No constraint if unset
+ * @param height height of the stack. No constraint if unset
  * @param body content to stack
  * @return the new [Stacked] node
  * @wiki stacks
@@ -246,9 +254,11 @@ fun row(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment? = null,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     @LikelyNamed gap: Size? = null,
+    @LikelyNamed width: Size? = null,
+    @LikelyNamed height: Size? = null,
     @Spread(exclude = [STACK_EXCLUDED_STYLE_OPTION]) style: StyleOptions = StyleOptions.DEFAULT,
     @Body body: MarkdownContent,
-) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, null, gap, style, body)
+) = stack(Stacked.Row, mainAxisAlignment, crossAxisAlignment, null, gap, width, height, style, body)
 
 /**
  * Stacks content vertically.
@@ -256,6 +266,8 @@ fun row(
  * @param mainAxisAlignment content alignment along the main axis. If unset, it inherits the parent's alignment
  * @param crossAxisAlignment content alignment along the cross axis
  * @param gap blank space between children. If omitted, the default value is used
+ * @param width width of the stack. No constraint if unset
+ * @param height height of the stack. No constraint if unset
  * @param body content to stack
  * @return the new [Stacked] node
  * @wiki stacks
@@ -265,9 +277,11 @@ fun column(
     @Name("alignment") mainAxisAlignment: Stacked.MainAxisAlignment? = null,
     @Name("cross") crossAxisAlignment: Stacked.CrossAxisAlignment? = null,
     @LikelyNamed gap: Size? = null,
+    @LikelyNamed width: Size? = null,
+    @LikelyNamed height: Size? = null,
     @Spread(exclude = [STACK_EXCLUDED_STYLE_OPTION]) style: StyleOptions = StyleOptions.DEFAULT,
     @Body body: MarkdownContent,
-) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, null, style, body)
+) = stack(Stacked.Column, mainAxisAlignment, crossAxisAlignment, gap, null, width, height, style, body)
 
 /**
  * Stacks content in a grid layout.
@@ -280,6 +294,8 @@ fun column(
  * @param gap blank space between rows and columns. If omitted, the default value is used
  * @param rowGap blank space between rows (overrides [gap] for rows). If omitted, the default value is used
  * @param columnGap blank space between columns (overrides [gap] for columns). If omitted, the default value is used
+ * @param width width of the grid. No constraint if unset
+ * @param height height of the grid. No constraint if unset
  * @param body content to stack
  * @return the new [Stacked] node
  * @throws IllegalArgumentException if [columnCount] is non-positive
@@ -293,6 +309,8 @@ fun grid(
     @LikelyNamed gap: Size? = null,
     @Name("vgap") rowGap: Size? = gap,
     @Name("hgap") columnGap: Size? = gap,
+    @LikelyNamed width: Size? = null,
+    @LikelyNamed height: Size? = null,
     @Spread(exclude = [STACK_EXCLUDED_STYLE_OPTION]) style: StyleOptions = StyleOptions.DEFAULT,
     @Body body: MarkdownContent,
 ) = when {
@@ -307,6 +325,8 @@ fun grid(
             crossAxisAlignment,
             rowGap ?: gap,
             columnGap ?: gap,
+            width,
+            height,
             style,
             body,
         )

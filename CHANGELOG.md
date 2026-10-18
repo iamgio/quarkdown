@@ -31,10 +31,10 @@ quarkdown create --template @atoms/simple-cv:1.0.0
 
 #### [Styling options on `.row`, `.column` and `.grid`](https://quarkdown.com/wiki/stacks)
 
-Stack functions now accept the same styling options as `.container`, such as `background`, `foreground`, `border`, `padding`, `radius` and the font options, without relying on container wrapping.
+Stack functions now accept the same styling options as `.container`, such as `background`, `foreground`, `border`, `padding`, `radius` and the font options, along with `width` and `height`, without relying on container wrapping.
 
 ```markdown
-.row gap:{1cm} background:{teal} foreground:{white} padding:{12px} radius:{8px}
+.row gap:{1cm} width:{12cm} background:{teal} foreground:{white} padding:{12px} radius:{8px}
     A
 
     B

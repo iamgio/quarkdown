@@ -7,6 +7,8 @@ test("applies style options to a row", async (page) => {
     const row = page.locator(".stack.stack-row");
     const red = await getComputedColor(page, "red");
 
+    await expect(row).toHaveCSS("width", "300px");
+    await expect(row).toHaveCSS("height", "100px");
     await expect(row).toHaveCSS("background-color", red);
     await expect(row).toHaveCSS("padding", "10px");
     await expect(row).toHaveCSS("column-gap", "10px");
