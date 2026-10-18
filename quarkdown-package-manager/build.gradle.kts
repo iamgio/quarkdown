@@ -14,6 +14,7 @@ kotlin {
             implementation(project(":quarkdown-core"))
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ktoml.core)
+            implementation(libs.kotlin.semver)
         }
     }
 }

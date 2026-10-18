@@ -8,6 +8,7 @@ import com.quarkdown.pm.model.PackageManifest
 import com.quarkdown.pm.model.PackageReference
 import com.quarkdown.pm.model.PackageRepository
 import com.quarkdown.pm.model.RepositoryPackage
+import com.quarkdown.pm.model.latestVersion
 import com.quarkdown.pm.net.DefaultRemoteFetcher
 import com.quarkdown.pm.net.RemoteFetchException
 import com.quarkdown.pm.net.RemoteFetcher
@@ -27,6 +28,8 @@ val ATOMS_COORDINATES = GitHubRepositoryCoordinates(owner = "quarkdown-labs", re
  *
  * Each package directory is listed through the Git Trees API once per instance, on first use, so the cost grows
  * with the packages a document uses rather than with the whole repository; files are then read from raw GitHub URLs.
+ * [listPackages] instead lists the whole repository in one request, since a catalog needs every package anyway,
+ * and reads one manifest per package: that of its latest version.
  *
  * @param coordinates repository to read from
  * @param fetcher strategy for network access, replaceable on platforms without synchronous networking
@@ -44,10 +47,9 @@ class AtomsPackageRepository(
         val version = reference.version
         val versionPaths = index(name).filesUnder(version)
 
-        val manifestPath = "$version/${PackageManifest.FILE_NAME}"
-        if (manifestPath !in versionPaths) return null
+        if (manifestPath(version) !in versionPaths) return null
 
-        val manifest = manifestParser.parse(fetcher.fetchText(coordinates.rawFileUrl("$name/$manifestPath")))
+        val manifest = readManifest(name, version)
         val files =
             versionPaths
                 .filterNot(PackageFile::isInternal)
@@ -62,16 +64,41 @@ class AtomsPackageRepository(
      */
     fun versionsOf(identifier: PackageIdentifier): Set<String> = index(identifier.name).childDirectoriesOf("")
 
+    override fun listPackages(): Set<PackageManifest> {
+        val index = GitHubTreeIndex(GitHubTree.decode(fetcher.fetchText(coordinates.treeUrl())))
+        val files = index.filesUnder("").toSet()
+        return index
+            .childDirectoriesOf("")
+            .filterNot { name -> name.startsWith(PackageFile.INTERNAL_PREFIX) }
+            .mapNotNull { name ->
+                val published = index.childDirectoriesOf(name).filter { version -> repositoryPath(name, manifestPath(version)) in files }
+                latestVersion(published)?.let { version -> readManifest(name, version) }
+            }.toSet()
+    }
+
+    /** @return the manifest of [version] of the package [name], relative to the package directory */
+    private fun manifestPath(version: String): String = "$version/${PackageManifest.FILE_NAME}"
+
+    /** @return [packagePath], relative to the directory of the package [name], as a path in the repository */
+    private fun repositoryPath(
+        name: String,
+        packagePath: String,
+    ): String = "$name/$packagePath"
+
+    private fun readManifest(
+        name: String,
+        version: String,
+    ): PackageManifest = manifestParser.parse(fetcher.fetchText(coordinates.rawFileUrl(repositoryPath(name, manifestPath(version)))))
+
     /**
-     * Lists the package's directory on first use. A directory GitHub does not know yields an empty listing,
-     * so an unknown package resolves to nothing rather than to a download error.
+     * Lists the package's directory on first use. A directory GitHub does not know yields an empty listing.
      */
     private fun index(name: String): GitHubTreeIndex =
         indexByPackage.getOrPut(name) {
             val tree =
                 try {
                     GitHubTree.decode(fetcher.fetchText(coordinates.subtreeUrl(name)))
-                } catch (e: RemoteFetchException.NotFound) {
+                } catch (_: RemoteFetchException.NotFound) {
                     GitHubTree(sha = "", tree = emptyList())
                 }
             GitHubTreeIndex(tree)
@@ -82,7 +109,7 @@ class AtomsPackageRepository(
         versionPath: String,
         relativeTo: String,
     ): PackageFile {
-        val content by lazy { fetcher.fetchBytes(coordinates.rawFileUrl("$name/$versionPath")) }
+        val content by lazy { fetcher.fetchBytes(coordinates.rawFileUrl(repositoryPath(name, versionPath))) }
         return PackageFile(path = versionPath.removePrefix("$relativeTo/")) { content }
     }
 }

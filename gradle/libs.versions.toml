@@ -5,10 +5,12 @@ amber = "3.0.1"
 kotlinx-serialization = "1.11.0"
 ktor = "3.5.2"
 ktoml = "0.7.1"
+kotlin-semver = "3.1.0"
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 ktoml-core = { module = "com.akuleshov7:ktoml-core", version.ref = "ktoml" }
+kotlin-semver = { module = "io.github.z4kn4fein:semver", version.ref = "kotlin-semver" }
 ktor-http = { module = "io.ktor:ktor-http", version.ref = "ktor" }
 ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
 ktor-server-sse = { module = "io.ktor:ktor-server-sse", version.ref = "ktor" }

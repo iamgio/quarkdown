@@ -14,6 +14,14 @@ interface PackageRepository {
      * @throws com.quarkdown.pm.manifest.ManifestParseException if the package's manifest is malformed
      */
     fun getPackage(reference: PackageReference): RepositoryPackage?
+
+    /**
+     * Lists every published package through the manifest of its latest version.
+     * @return one manifest per package
+     * @throws com.quarkdown.pm.net.RemoteFetchException if the repository cannot be reached
+     * @throws com.quarkdown.pm.manifest.ManifestParseException if a manifest is malformed
+     */
+    fun listPackages(): Set<PackageManifest>
 }
 
 /**

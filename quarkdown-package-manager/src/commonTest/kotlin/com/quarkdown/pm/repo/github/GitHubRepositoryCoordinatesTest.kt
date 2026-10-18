@@ -18,6 +18,14 @@ class GitHubRepositoryCoordinatesTest {
     }
 
     @Test
+    fun `tree url lists the whole ref recursively`() {
+        assertEquals(
+            "https://api.github.com/repos/quarkdown-labs/atoms/git/trees/main?recursive=1",
+            GitHubRepositoryCoordinates("quarkdown-labs", "atoms").treeUrl().toString(),
+        )
+    }
+
+    @Test
     fun `raw file url targets raw githubusercontent`() {
         assertEquals(
             "https://raw.githubusercontent.com/quarkdown-labs/atoms/main/cv/1.0.0/atom.toml",

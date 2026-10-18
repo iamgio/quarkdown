@@ -17,6 +17,15 @@ data class GitHubRepositoryCoordinates(
     val ref: String = DEFAULT_REF,
 ) {
     /**
+     * @return URL of the Git Trees API listing every file of the repository at [ref]
+     */
+    fun treeUrl(): Url =
+        URLBuilder(API_BASE)
+            .appendPathSegments("repos", owner, repository, "git", "trees", ref)
+            .apply { parameters.append("recursive", "1") }
+            .build()
+
+    /**
      * @param path path of a directory within the repository, with `/` separators
      * @return URL of the Git Trees API listing every file under that directory at [ref],
      *         answering 404 when the directory does not exist
