@@ -74,7 +74,7 @@ enum class ContextSandbox {
  * - Loads a library into the current context and includes its parsed content in the current document.
  *   Loadable libraries are fetched from the library folder (`--libs` CLI option).
  *   [sandbox] is ignored in this case.
- * - Resolves a package reference in the `@scope/name:version` form (e.g. `@atoms/simple-cv:1.0.0`), installing the package on first use, and includes its entry point.
+ * - Resolves a package reference in the `@scope/name:version` form (e.g. `@atoms/cowsay:1.0.0`), installing the package on first use, and includes its entry point.
  *   The included file's working directory is the package root. [sandbox] applies as for files.
  *
  * The context of the included file is always inherited from the main file, with an updated working directory that matches the included file's location.
@@ -146,7 +146,7 @@ private fun includeFile(
  * Resolves a package reference through the host's resolver: a local lookup first, then an installation
  * if the package is missing and the pipeline is allowed to install packages.
  * @param context context whose attached pipeline provides the resolver, the project root and the permissions
- * @param reference package reference as written in the document, e.g. `@atoms/cv:1.0.0`
+ * @param reference package reference as written in the document, e.g. `@atoms/cowsay:1.0.0`
  * @return the resolved package, whose entry point is readable
  * @throws PackageResolutionException if there is no project directory or the resolver fails
  * @throws com.quarkdown.core.permissions.MissingPermissionException if installation is needed but not permitted

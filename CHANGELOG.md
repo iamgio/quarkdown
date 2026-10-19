@@ -13,12 +13,9 @@ A package, called ***atom***, can be easily included into your document the same
 The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/atoms), is a GitHub-hosted repository anyone can contribute to.
 
 ```markdown
-.include {@atoms/kanban:1.0.0}
+.include {@atoms/cowsay:1.0.0}
 
-.kanban
-    .kbcolumn {To do}
-        .kbitem {Update documentation}
-        ...
+.cowsay {Hello, Quarkdown!}
 ```
 
 #### [Project templates from packages](https://quarkdown.com/wiki/publishing-packages#templates)

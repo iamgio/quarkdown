@@ -73,7 +73,7 @@ When the atom is included via `.include`, the entry point is included like any o
 A package can also act as a **project template** for `quarkdown create`, so that users scaffold a new project from it with a single command:
 
 ```
-quarkdown create --template @atoms/my-atom:1.0.0
+quarkdown create --template @atoms/simple-cv:1.0.0
 ```
 
 To make a package a template, add a `[template]` table to its manifest:

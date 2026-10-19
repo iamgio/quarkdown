@@ -13,7 +13,7 @@ private const val TEMPLATE = "creator/main.qd.jte"
  * to fill placeholders.
  * @param info document information to inject into the template
  * @param template name of the template resource to use
- * @param includes references the generated file includes, one `.include` call each, e.g. `@atoms/cv:1.0.0`
+ * @param includes references the generated file includes, one `.include` call each, e.g. `@atoms/simple-cv:1.0.0`
  * @see ProjectCreatorTemplatePlaceholders
  */
 class DefaultProjectCreatorTemplateProcessorFactory(
