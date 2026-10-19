@@ -105,6 +105,7 @@ nb-configuration.xml
 ##############################
 /**/quarkdown-output/
 /**/output/preview-*
+/**/@atoms/
 
 ##############################
 ## Miscellaneous
