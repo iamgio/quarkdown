@@ -26,6 +26,17 @@ The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/at
 quarkdown create --template @atoms/simple-cv:1.0.0
 ```
 
+#### [PNG and WebP export](https://quarkdown.com/wiki/pdf-export#image-export)
+
+Documents can now be exported as images, through the same browser-driven process as PDF, via the new `html-png` and `html-webp` renderers.
+
+```
+quarkdown c main.qd -r html-png
+quarkdown c main.qd -r html-webp
+```
+
+The requirements and options of PDF export, such as `--chrome-path` and `--pdf-no-sandbox`, apply to image export as well.
+
 #### [Styling options on `.row`, `.column` and `.grid`](https://quarkdown.com/wiki/stacks)
 
 Stack functions now accept the same styling options as `.container`, such as `background`, `foreground`, `border`, `padding`, `radius` and the font options, along with `width` and `height`, without relying on container wrapping.

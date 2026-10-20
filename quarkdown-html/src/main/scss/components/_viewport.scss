@@ -230,7 +230,7 @@ body.quarkdown {
     .pagedjs_pages {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: safe center;
       gap: 3mm;
     }
 

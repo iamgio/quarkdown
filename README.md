@@ -173,8 +173,8 @@ whether it's an academic paper, book, knowledge base or interactive presentation
   - [X] **Docs**  
     Perfect for wikis, technical documentation and large knowledge bases - check out [Quarkdown's wiki](https://quarkdown.com/wiki).
 
-- **PDF**
-  - [X] All document types and features supported by HTML are also supported when exporting to PDF.
+- **PDF, PNG, WEBP**
+  - [X] All document types and features supported by HTML are also supported when exporting to PDF and images.
 
 - **Markdown**
   - [X] GFM export.
@@ -191,17 +191,17 @@ The desired document type can be set by calling the [`.doctype` function](https:
 
 # Comparison
 
-|                       |     Quarkdown      |       LaTeX        |       Typst        |      AsciiDoc      |        MDX         |
-|-----------------------|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
-| Concise and readable  | :white_check_mark: |        :x:         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| Full document control[^control] | :white_check_mark: | :white_check_mark: | :white_check_mark: |        :x:         |        :x:         |
-| Scripting             | :white_check_mark: |      Partial       | :white_check_mark: |        :x:         | :white_check_mark: |
-| Book/article export   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |    Third-party     |
-| Presentation export   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |    Third-party     |
-| Static site export    | :white_check_mark: |        :x:         |    Experimental    | :white_check_mark: | :white_check_mark: |
-| Docs/wiki export      | :white_check_mark: |        :x:         |        :x:         | :white_check_mark: | :white_check_mark: |
-| Learning curve        |   :green_circle:   |    :red_circle:    |  :orange_circle:   |   :green_circle:   |   :green_circle:   |
-| Targets               | HTML, PDF, MD, TXT |  PDF, PostScript   |     HTML, PDF      |  HTML, PDF, ePub   |        HTML        |
+|                                 |           Quarkdown           |       LaTeX        |        Typst        |      AsciiDoc      |        MDX         |
+|---------------------------------|:-----------------------------:|:------------------:|:-------------------:|:------------------:|:------------------:|
+| Concise and readable            |      :white_check_mark:       |        :x:         | :white_check_mark:  | :white_check_mark: | :white_check_mark: |
+| Full document control[^control] |      :white_check_mark:       | :white_check_mark: | :white_check_mark:  |        :x:         |        :x:         |
+| Scripting                       |      :white_check_mark:       |      Partial       | :white_check_mark:  |        :x:         | :white_check_mark: |
+| Book/article export             |      :white_check_mark:       | :white_check_mark: | :white_check_mark:  | :white_check_mark: |    Third-party     |
+| Presentation export             |      :white_check_mark:       | :white_check_mark: | :white_check_mark:  | :white_check_mark: |    Third-party     |
+| Static site export              |      :white_check_mark:       |        :x:         |    Experimental     | :white_check_mark: | :white_check_mark: |
+| Docs/wiki export                |      :white_check_mark:       |        :x:         |         :x:         | :white_check_mark: | :white_check_mark: |
+| Learning curve                  |        :green_circle:         |    :red_circle:    |   :orange_circle:   |   :green_circle:   |   :green_circle:   |
+| Targets                         | HTML, PDF, PNG, WEBP, MD, TXT |  PDF, PostScript   | HTML, PDF, PNG, SVG |  HTML, PDF, ePub   |        HTML        |
 
 [^control]: The ability to customize the properties of the document and of its output artifact through the language itself.
 
