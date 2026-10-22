@@ -55,6 +55,10 @@ Injecting `!important` into CSS rules used to raise syntax errors on Android's I
 
 Thanks @YoannDev90!
 
+#### Stack traces when the export port is taken
+
+When the port used to serve the document during PDF export was already in use, Quarkdown already moved on to the next free port, but printed a `java.net.BindException` stack trace for every occupied port it went through. The scan is now quiet on `info` and higher log levels.
+
 ## [2.6.4] - 2026-10-09
 
 ### Added

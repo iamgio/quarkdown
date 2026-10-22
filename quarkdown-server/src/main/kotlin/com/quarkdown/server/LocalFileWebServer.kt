@@ -1,5 +1,6 @@
 package com.quarkdown.server
 
+import com.quarkdown.core.log.Log
 import com.quarkdown.interaction.os.OsUtils
 import com.quarkdown.server.endpoints.LivePreviewEndpoint
 import com.quarkdown.server.endpoints.ReloadEndpoint
@@ -15,6 +16,8 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import io.ktor.server.sse.SSE
 import io.ktor.server.sse.sse
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import java.io.File
 import java.net.BindException
 
@@ -58,8 +61,9 @@ class LocalFileWebServer(
             throw IllegalArgumentException("Cannot start web server for non-existing file: $targetFile")
         }
 
+        var ready = false
         val server =
-            embeddedServer(CIO, port) {
+            CoroutineScope(engineExceptionHandler { ready }).embeddedServer(CIO, port) {
                 install(SSE)
 
                 routing {
@@ -83,7 +87,6 @@ class LocalFileWebServer(
                 }
             }
 
-        var ready = false
         server.monitor.subscribe(ServerReady) {
             ready = true
             onReady(KtorStoppableAdapter(server.application))
@@ -92,13 +95,31 @@ class LocalFileWebServer(
         try {
             server.start(wait = wait)
         } catch (e: Exception) {
-            if (!ready && e.isCausedByBindFailure()) {
+            if (e.isPortUnavailable(ready)) {
                 throw PortUnavailableException(port, e)
             }
             throw e
         }
     }
 }
+
+/**
+ * Creates the handler of the exceptions raised by the engine's own coroutines.
+ * @param isReady whether the server has become ready to accept requests
+ */
+private fun engineExceptionHandler(isReady: () -> Boolean) =
+    CoroutineExceptionHandler { _, throwable ->
+        when {
+            throwable.isPortUnavailable(isReady()) -> Log.debug(throwable)
+            else -> Log.error("Unhandled server error", throwable)
+        }
+    }
+
+/**
+ * @param ready whether the server had become ready to accept requests when this throwable was raised
+ * @return whether this throwable is a failure to bind the port the server was starting on
+ */
+private fun Throwable.isPortUnavailable(ready: Boolean): Boolean = !ready && isCausedByBindFailure()
 
 /**
  * @return whether this throwable, or any throwable in its cause chain, is a port binding failure
