@@ -660,8 +660,8 @@ fun texMacro(
  *   Not all effects of this function are supported in plain documents.
  *
  * This function can be called multiple times. Each call appends a new format layer, and later layers
- * take priority over earlier ones. When [side] is specified, the format is scoped only to specific pages of `paged` documents,
- * enabling distinct formatting per side (e.g. mirrored margins):
+ * take priority over earlier ones. When [side] or [range] is specified, the format is scoped only to specific pages
+ * of `paged` documents, or specific slides of `slides` documents, enabling distinct formatting per side (e.g. mirrored margins):
  *
  * ```
  * .pageformat size:{A4}
@@ -679,11 +679,13 @@ fun texMacro(
  *
  * @param format standard size format of each page (overridden by [width] and [height])
  * @param side the page side this format applies to: `left` (verso) or `right` (recto).
+ *             In `slides` documents, `right` matches odd slides and `left` matches even slides.
  *             If unset, the format applies to all pages. Combinable with [range].
- *             Only supported in `paged` documents
+ *             Only supported in `paged` and `slides` documents
  * @param range 1-based inclusive range of page indices to restrict this format to (e.g. `2..5`).
  *              If unset, the format applies to all pages. Combinable with [side].
- *              Only supported in `paged` documents
+ *              Only supported in `paged` and `slides` documents.
+ *              Page size and margin cannot be scoped in `slides` documents
  * @param orientation orientation of each page.
  *                    If not specified, the preferred orientation of the document type is used.
  *                    Does not take effect if [format] is not specified.

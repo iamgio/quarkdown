@@ -205,15 +205,16 @@ body.quarkdown {
     }
   }
 
-  // Slides viewport
+  // Slides viewport.
+  // Background and border are painted on each slide's background element rather than on the viewport,
+  // so that page formats scoped to specific slides apply to those slides only.
   &.quarkdown-slides .reveal {
-    &:not(:has(.pdf-page)) {
+    .slide-background {
       @include content-area-border;
+      background-color: var(--qd-background-color);
     }
 
     .slides > .pdf-page {
-      @include content-area-border;
-
       section {
         padding: 0 var(--qd-slides-horizontal-inset, 0) !important;
         top: 0 !important;

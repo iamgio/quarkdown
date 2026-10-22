@@ -10,8 +10,8 @@ testMatrix(
         let target = getPageSizeTarget(page, docType);
         if (docType === "paged") {
             target = target.locator(".pagedjs_area");
-        } else if (docType === "slides-print") {
-            target = target.locator(".pdf-page").first();
+        } else if (docType === "slides" || docType === "slides-print") {
+            target = target.locator(".slide-background").first();
         }
 
         await expect(target).toHaveCSS("border-top-width", "30px");

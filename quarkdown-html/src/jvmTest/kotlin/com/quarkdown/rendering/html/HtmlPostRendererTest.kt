@@ -11,11 +11,15 @@ import com.quarkdown.core.document.deepCopy
 import com.quarkdown.core.document.layout.DocumentLayoutInfo
 import com.quarkdown.core.document.layout.font.FontInfo
 import com.quarkdown.core.document.layout.page.PageFormatInfo
+import com.quarkdown.core.document.layout.page.PageFormatSelector
 import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
+import com.quarkdown.core.document.size.Sizes
+import com.quarkdown.core.document.size.cm
 import com.quarkdown.core.document.size.inch
 import com.quarkdown.core.document.tex.TexInfo
 import com.quarkdown.core.filesystem.DiskFileSystem
 import com.quarkdown.core.flavor.quarkdown.QuarkdownFlavor
+import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.localization.LocaleLoader
 import com.quarkdown.core.media.ResolvableMedia
 import com.quarkdown.core.misc.color.NamedColor
@@ -247,6 +251,56 @@ class HtmlPostRendererTest {
             )
         val result = postRenderer().wrap("")
         assertTrue("--qd-background-color: rgba(255, 0, 0, 1.0)" in result)
+    }
+
+    @Test
+    fun `wrap with scoped page format in paged document`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.PAGED,
+                layout =
+                    DocumentLayoutInfo(
+                        pageFormats =
+                            listOf(
+                                PageFormatInfo(
+                                    selector = PageFormatSelector(range = Range(2, 3)),
+                                    backgroundColor = NamedColor.RED.color,
+                                    margin = Sizes(3.0.cm),
+                                ),
+                            ),
+                    ),
+            )
+        val result = postRenderer().wrap("")
+        assertContains(result, "@page:nth(2) {\n    --qd-background-color: rgba(255, 0, 0, 1.0);")
+        assertContains(result, "@page:nth(3) {\n    --qd-background-color: rgba(255, 0, 0, 1.0);")
+        assertContains(result, "@page:nth(2) {\n    margin: 3.0cm 3.0cm 3.0cm 3.0cm;")
+        assertFalse(".slide-background" in result)
+    }
+
+    @Test
+    fun `wrap with scoped page format in slides document`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.SLIDES,
+                layout =
+                    DocumentLayoutInfo(
+                        pageFormats =
+                            listOf(
+                                PageFormatInfo(
+                                    selector = PageFormatSelector(range = Range(2, 3)),
+                                    backgroundColor = NamedColor.RED.color,
+                                    margin = Sizes(3.0.cm),
+                                ),
+                            ),
+                    ),
+            )
+        val result = postRenderer().wrap("")
+        val background = "{\n    --qd-background-color: rgba(255, 0, 0, 1.0);"
+        assertContains(result, ".reveal .slides > :is(section, .pdf-page):nth-child(n+2):nth-child(-n+3) $background")
+        assertContains(result, ".reveal .backgrounds > .slide-background:nth-child(n+2):nth-child(-n+3) $background")
+        assertContains(result, ".reveal .slides > .pdf-page:nth-child(n+2):nth-child(-n+3) > .slide-background $background")
+        assertFalse("@page:nth" in result)
+        assertFalse("margin: 3.0cm 3.0cm 3.0cm 3.0cm" in result)
     }
 
     @Test

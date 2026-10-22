@@ -7,6 +7,7 @@ import com.quarkdown.core.document.layout.page.PageFormatInfo
 import com.quarkdown.core.document.layout.paragraph.ParagraphStyleInfo
 import com.quarkdown.core.misc.font.FontFamily
 import com.quarkdown.rendering.html.css.CssPageSelectors
+import com.quarkdown.rendering.html.css.PrintCssPageSelectors
 import com.quarkdown.rendering.html.css.asCSS
 import com.quarkdown.rendering.html.css.stylesheet
 
@@ -68,13 +69,22 @@ class HtmlDocumentStylesheet(
      * Builds the CSS stylesheet for a single [PageFormatInfo], depending on its scope ([PageFormatInfo.selector]) and properties.
      */
     private fun buildPageFormat(format: PageFormatInfo): String {
-        val isScoped = format.selector != null
+        val selectors = CssPageSelectors.forDocumentType(document.type)
 
-        // For scoped selectors, expand into individual @page selectors.
-        val pageSelectors = CssPageSelectors.toCss(format.selector)
+        // Scoped formats target only the pages they apply to, while global formats apply to the whole document.
+        val scopedSelectors = format.selector?.let(selectors::toCss)
+        val isScoped = scopedSelectors != null
+
+        // Some properties, like `size` and `margin`, are page box properties, applied only globally or on `@page`.
+        val pageBoxSelectors =
+            when {
+                scopedSelectors == null -> PrintCssPageSelectors.toCss(null)
+                selectors.isPageBox -> scopedSelectors
+                else -> emptyList()
+            }
 
         return stylesheet {
-            for (selector in if (isScoped) pageSelectors else listOf("body")) {
+            for (selector in scopedSelectors ?: listOf("body")) {
                 rule(selector) {
                     "--qd-content-width" value format.pageWidth
                     "--qd-column-count" value format.columnCount?.toString()
@@ -117,7 +127,7 @@ class HtmlDocumentStylesheet(
                 }
             }
 
-            for (selector in pageSelectors) {
+            for (selector in pageBoxSelectors) {
                 rule(selector) {
                     if (format.pageWidth != null || format.pageHeight != null) {
                         "size" value "${format.pageWidth?.asCSS ?: "auto"} ${format.pageHeight?.asCSS ?: "auto"}"
