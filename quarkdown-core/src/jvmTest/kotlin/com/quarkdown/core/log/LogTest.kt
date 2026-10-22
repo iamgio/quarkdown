@@ -1,7 +1,10 @@
 package com.quarkdown.core.log
 
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 import kotlin.test.AfterTest
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -34,6 +37,19 @@ class LogTest {
             "message"
         }
         assertTrue(evaluated)
+    }
+
+    @Test
+    fun `error with throwable prints its stack trace`() {
+        val previousErr = System.err
+        val err = ByteArrayOutputStream()
+        System.setErr(PrintStream(err))
+        try {
+            Log.error("Something failed", IllegalStateException("broken"))
+        } finally {
+            System.setErr(previousErr)
+        }
+        assertContains(err.toString(), "IllegalStateException: broken")
     }
 
     @Test

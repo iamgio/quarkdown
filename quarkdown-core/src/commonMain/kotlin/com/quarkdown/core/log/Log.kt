@@ -111,4 +111,12 @@ object Log {
     fun warn(message: Any) = logger.w { message.toString() }
 
     fun error(message: Any) = logger.e { message.toString() }
+
+    /**
+     * Logs [message] as an error, followed by the stack trace of [throwable].
+     */
+    fun error(
+        message: Any,
+        throwable: Throwable,
+    ) = logger.e(throwable) { message.toString() }
 }
