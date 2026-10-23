@@ -155,7 +155,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 
 - [VS Code](https://quarkdown.com/vs-code)
 - [IntelliJ IDEA](https://plugins.jetbrains.com/plugin/33459-quarkdown) (unofficial by [@CarmJos](https://github.com/CarmJos))
-- [Vim](https://github.com/Mr-Abyss/vim-quarkdown) (unofficial by @Mr-Abyss)
+- [Vim](https://github.com/Mr-Abyss/vim-quarkdown) (unofficial by [@Mr-Abyss](https://github.com/Mr-Abyss))
 
 &nbsp;
 
