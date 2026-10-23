@@ -55,6 +55,21 @@ The new `.color` function builds a color from its red, green, blue and alpha com
 .container background:{.brand::color alpha:{0.25}}
 ```
 
+#### [New collection operation: `joinstring`](https://quarkdown.com/wiki/iterable)
+
+The new `joinstring` function concatenates the elements of a collection into a single string.
+Elements are separated by `, ` by default, or by a custom `separator`.
+
+```markdown
+.var {letters}
+    - A
+    - B
+    - C
+
+.letters::joinstring 
+```
+> Output: `A, B, C`
+
 ### Fixed
 
 #### [Custom fonts in slides](https://quarkdown.com/wiki/font-configuration)

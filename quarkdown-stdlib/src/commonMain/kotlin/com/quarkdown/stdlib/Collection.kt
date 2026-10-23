@@ -3,12 +3,14 @@
 package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
 import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NumberValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.PairValue
+import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.wrappedAsValue
@@ -16,6 +18,7 @@ import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.asDouble
+import com.quarkdown.stdlib.internal.asJoinedString
 
 /**
  * Index of the first element in a collection.
@@ -258,6 +261,34 @@ fun collectionAppend(
     @Name("to") collection: Iterable<OutputValue<*>>,
     @Name("value") value: DynamicValue,
 ): IterableValue<OutputValue<*>> = GeneralCollectionValue(collection + value)
+
+/**
+ * Joins the elements of a collection into a single string, placing [separator] between adjacent elements.
+ * Nested collections are flattened, and their elements are joined by the same separator.
+ *
+ * ```
+ * .var {letters}
+ *     - A
+ *     - B
+ *     - C
+ *
+ * .letters::joinstring <!-- A, B, C -->
+ *
+ * .letters::joinstring separator:{-} <!-- A-B-C -->
+ * ```
+ *
+ * @param collection collection whose elements to join
+ * @param separator string placed between adjacent elements. Defaults to `, `
+ * @return a string made of the elements of the collection, separated by [separator].
+ *         An empty collection produces an empty string.
+ */
+@QFunction
+@Name("joinstring")
+@LikelyChained
+fun collectionJoinToString(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+    @LikelyNamed separator: String = ", ",
+): StringValue = collection.joinToString(separator) { it.asJoinedString(separator) }.wrappedAsValue()
 
 /**
  * Creates a new pair.
