@@ -7,8 +7,8 @@ Multiple calls to `.pageformat` are layered on top of each other, with later cal
 
 | Parameter                                                | Description                                                                                                                                                             | Accepts                                                                                    | Supported documents                |
 |----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|------------------------------------|
-| `side`                                                   | Restricts the format to left (verso) or right (recto) pages only. See [Scoped formatting](#scoped-formatting).                                                          | `left`, `right`                                                                            | `paged`                            |
-| `pages`                                                  | Restricts the format to specific pages by 1-based inclusive range. See [Scoped formatting](#scoped-formatting). Combinable with `side`.                                 | Range, e.g. `2..5`                                                                         | `paged`                            |
+| `side`                                                   | Restricts the format to left (verso) or right (recto) pages only. See [Scoped formatting](#scoped-formatting).                                                          | `left`, `right`                                                                            | `paged`, `slides`                  |
+| `pages`                                                  | Restricts the format to specific pages by 1-based inclusive range. See [Scoped formatting](#scoped-formatting). Combinable with `side`.                                 | Range, e.g. `2..5`                                                                         | `paged`, `slides`                  |
 | `size`                                                   | Name of the paper format.                                                                                                                                               | `A0`..`A10`, `B0`..`B5`, `letter`, `legal`, `ledger`                                       | `paged`, `slides`                  |
 | `width`                                                  | Page width. If `size` is set too, this value overrides its width.                                                                                                       | [`Size`](sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `plain`, `paged`, `slides`, `docs` |
 | `height`                                                 | Page height. If `size` is set too, this value overrides its height.                                                                                                     | [`Size`](sizes.qd#size-single-size), e.g. `300px`, `15cm`, `5.8in`                         | `paged`, `slides`                  |
@@ -44,7 +44,7 @@ The `bordertop`, `borderright`, `borderbottom`, `borderleft`, and `bordercolor` 
 
 ## Scoped formatting
 
-In `paged` documents, the `side` and `pages` parameters restrict a format to specific pages.
+In `paged` and `slides` documents, the `side` and `pages` parameters restrict a format to specific pages or slides.
 
 ### Per-side formatting
 

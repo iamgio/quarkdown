@@ -1,0 +1,13 @@
+.pageformat bordercolor:{red} bordertop:{4px}
+.pageformat pages:{2..3} background:{blue} bordercolor:{green}
+.pageformat side:{right} pages:{4..5} background:{yellow}
+
+# 1
+
+# 2
+
+# 3
+
+# 4
+
+# 5
