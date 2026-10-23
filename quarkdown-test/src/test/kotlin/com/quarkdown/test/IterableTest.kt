@@ -255,6 +255,52 @@ class IterableTest {
     }
 
     @Test
+    fun `join to string`() {
+        execute("$letters.abc::joinstring") {
+            assertEquals("<p>A, B, C</p>", it)
+        }
+    }
+
+    @Test
+    fun `join to string with custom separator`() {
+        execute("$letters.abc::joinstring separator:{-}") {
+            assertEquals("<p>A-B-C</p>", it)
+        }
+    }
+
+    @Test
+    fun `join to string of numbers`() {
+        execute("$numbers.nums::joinstring separator:{+}") {
+            assertEquals("<p>1+2+3+4</p>", it)
+        }
+    }
+
+    @Test
+    fun `join to string of nested collection`() {
+        execute(
+            """
+            .var {nested}
+              - A
+              - :
+                - B
+                - C
+              - D
+
+            .nested::joinstring separator:{-}
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>A-B-C-D</p>", it)
+        }
+    }
+
+    @Test
+    fun `join to string of empty collection`() {
+        execute(".var {empty} {.range from:{1} to:{0}}\n\n.empty::joinstring") {
+            assertEquals("<p></p>", it)
+        }
+    }
+
+    @Test
     fun `handle pairs`() {
         execute(
             """
