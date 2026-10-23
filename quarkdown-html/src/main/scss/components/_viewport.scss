@@ -221,7 +221,7 @@ body.quarkdown {
       }
     }
 
-    .slides.slides.slides section:not(:has(h1, h2)) {
+    .slides.slides.slides section:not(:has(h1, h2, h3)) {
       padding-top: var(--qd-slides-blank-vertical-inset, 0) !important;
     }
   }
