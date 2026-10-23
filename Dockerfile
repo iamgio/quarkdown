@@ -1,6 +1,6 @@
 # Version of the headless browser bundle used for PDF export.
 # To keep in sync with quarkdown-html-pdf/scripts/chrome.properties, the version shared with the installers.
-ARG HEADLESS_SHELL_VERSION=151.0.7922.109
+ARG HEADLESS_SHELL_VERSION=156.0.8078.12
 
 # Build stage via Gradle
 FROM gradle:8.14.3-jdk17 AS builder
