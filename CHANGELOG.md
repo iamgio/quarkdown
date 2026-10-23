@@ -57,6 +57,10 @@ The new `.color` function builds a color from its red, green, blue and alpha com
 
 ### Fixed
 
+#### [Custom fonts in slides](https://quarkdown.com/wiki/font-configuration)
+
+In `slides` documents, fonts set via `.font` were ignored when the layout theme defined its own fonts.
+
 #### CSS styles on Android
 
 Injecting `!important` into CSS rules used to raise syntax errors on Android's ICU-based `Pattern`.

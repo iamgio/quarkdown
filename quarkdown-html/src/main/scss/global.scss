@@ -34,6 +34,7 @@
 @use "components/page-margin";
 @use "components/landscape";
 @use "components/paged";
+@use "components/slides";
 @use "components/docs";
 @use "components/smooth-scroll";
 @use "components/search.scss";
@@ -211,18 +212,6 @@
   // Do not modify the following properties directly.
 
   color-scheme: var(--qd-color-scheme);
-
-  // Reveal properties.
-  --r-background-color: var(--qd-background-color);
-  --r-main-color: var(--qd-main-color);
-  --r-heading-color: var(--qd-heading-color);
-  --r-link-color: var(--qd-link-color);
-  --r-main-font: var(--qd-main-font);
-  --r-main-font-size: var(--qd-main-font-size);
-  --r-code-font: var(--qd-code-font);
-  --r-heading-font: var(--qd-heading-font);
-  --r-block-margin: var(--qd-block-margin);
-  --r-heading-margin: var(--qd-heading-margin);
 }
 
 .sr-only {

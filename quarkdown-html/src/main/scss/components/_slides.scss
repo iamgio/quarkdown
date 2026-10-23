@@ -1,0 +1,15 @@
+@use "_font";
+
+// Reveal properties, bridged from Quarkdown's.
+body.quarkdown-slides {
+  --r-background-color: var(--qd-background-color);
+  --r-main-color: var(--qd-main-color);
+  --r-heading-color: var(--qd-heading-color);
+  --r-link-color: var(--qd-link-color);
+  --r-main-font: #{font.get-global-font-family-value()};
+  --r-heading-font: #{font.get-global-font-family-value-with-main-fallback("heading")};
+  --r-code-font: #{font.get-global-font-family-value("code", monospace)};
+  --r-main-font-size: var(--qd-main-font-size);
+  --r-block-margin: var(--qd-block-margin);
+  --r-heading-margin: var(--qd-heading-margin);
+}
