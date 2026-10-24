@@ -13,3 +13,9 @@ body.quarkdown-slides {
   --r-block-margin: var(--qd-block-margin);
   --r-heading-margin: var(--qd-heading-margin);
 }
+
+// Printed slides are horizontally inset by default, unless the page format defines its own padding.
+html.reveal-print {
+  --qd-page-content-padding-right: var(--qd-slides-horizontal-inset);
+  --qd-page-content-padding-left: var(--qd-slides-horizontal-inset);
+}

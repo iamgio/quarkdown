@@ -18,7 +18,8 @@ import com.quarkdown.core.misc.color.Color
  * @param selector the scope this format applies to (side, range, or both), or `null` for global (all pages)
  * @param pageWidth width of each page
  * @param pageHeight height of each page
- * @param margin blank space around the content of each page
+ * @param margin blank space around the content area of each page, between the page edge and the content area
+ * @param padding blank space inside the content area of each page, between its border and the content
  * @param contentBorderWidth width of the border around the content area of each page
  * @param contentBorderColor color of the border around the content area of each page
  * @param backgroundColor background color of each page
@@ -31,6 +32,7 @@ data class PageFormatInfo(
     val pageWidth: Size? = null,
     val pageHeight: Size? = null,
     val margin: Sizes? = null,
+    val padding: Sizes? = null,
     val contentBorderWidth: Sizes? = null,
     val contentBorderColor: Color? = null,
     val backgroundColor: Color? = null,

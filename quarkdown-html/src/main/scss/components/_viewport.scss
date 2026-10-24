@@ -9,6 +9,13 @@
   box-sizing: border-box;
 }
 
+// Spacing between the border of the content area and the content itself.
+@mixin content-area-padding($important: false) {
+  padding: var(--qd-page-content-padding-top) var(--qd-page-content-padding-right)
+    var(--qd-page-content-padding-bottom) var(--qd-page-content-padding-left) #{if($important, '!important', '')};
+  box-sizing: border-box;
+}
+
 body.quarkdown {
   color: var(--qd-main-color);
   font-size: var(--qd-main-font-size);
@@ -73,6 +80,7 @@ body.quarkdown {
 
     > main {
       @include content-area-border;
+      @include content-area-padding;
     }
 
     @include media-queries.sm-down($print: true) {
@@ -214,15 +222,18 @@ body.quarkdown {
       background-color: var(--qd-background-color);
     }
 
-    .slides > .pdf-page {
-      section {
-        padding: 0 var(--qd-slides-horizontal-inset, 0) !important;
-        top: 0 !important;
-      }
+    .slides section {
+      @include content-area-padding;
+    }
+
+    // Reveal.js forces zero padding on printed slides, hence the override.
+    .slides > .pdf-page section {
+      @include content-area-padding($important: true);
+      top: 0 !important;
     }
 
     .slides.slides.slides section:not(:has(h1, h2, h3)) {
-      padding-top: var(--qd-slides-blank-vertical-inset, 0) !important;
+      padding-top: calc(var(--qd-page-content-padding-top) + var(--qd-slides-blank-vertical-inset, 0px)) !important;
     }
   }
 
@@ -237,6 +248,7 @@ body.quarkdown {
 
     .pagedjs_area {
       @include content-area-border;
+      @include content-area-padding;
     }
   }
 }

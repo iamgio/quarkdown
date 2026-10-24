@@ -254,6 +254,48 @@ class HtmlPostRendererTest {
     }
 
     @Test
+    fun `wrap with page padding`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.PAGED,
+                layout =
+                    DocumentLayoutInfo(
+                        pageFormats = listOf(PageFormatInfo(padding = Sizes(vertical = 1.0.cm, horizontal = 2.0.cm))),
+                    ),
+            )
+        val result = postRenderer().wrap("")
+        assertContains(result, "--qd-page-content-padding-top: 1.0cm;")
+        assertContains(result, "--qd-page-content-padding-right: 2.0cm;")
+        assertContains(result, "--qd-page-content-padding-bottom: 1.0cm;")
+        assertContains(result, "--qd-page-content-padding-left: 2.0cm;")
+        assertFalse("padding:" in result)
+    }
+
+    @Test
+    fun `wrap with scoped page padding in slides document`() {
+        context.documentInfo =
+            DocumentInfo(
+                type = DocumentType.SLIDES,
+                layout =
+                    DocumentLayoutInfo(
+                        pageFormats =
+                            listOf(
+                                PageFormatInfo(
+                                    selector = PageFormatSelector(range = Range(2, 3)),
+                                    padding = Sizes(1.0.cm),
+                                ),
+                            ),
+                    ),
+            )
+        val result = postRenderer().wrap("")
+        assertContains(
+            result,
+            ".reveal .slides > :is(section, .pdf-page):nth-child(n+2):nth-child(-n+3) {\n    --qd-page-content-padding-top: 1.0cm;",
+        )
+        assertFalse("@page" in result)
+    }
+
+    @Test
     fun `wrap with scoped page format in paged document`() {
         context.documentInfo =
             DocumentInfo(

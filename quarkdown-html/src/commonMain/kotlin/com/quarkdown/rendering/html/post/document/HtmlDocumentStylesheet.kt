@@ -99,6 +99,8 @@ class HtmlDocumentStylesheet(
                         "--qd-horizontal-alignment-local" importantValue format.alignment
                     }
 
+                    "--qd-page-content-padding" sides format.padding
+
                     format.contentBorderWidth?.let {
                         "--qd-page-content-border-width" value it
                         "--qd-page-content-border-style" value "solid"
