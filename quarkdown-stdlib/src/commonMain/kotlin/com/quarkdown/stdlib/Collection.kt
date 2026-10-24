@@ -21,6 +21,7 @@ import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.asDouble
 import com.quarkdown.stdlib.internal.asJoinedString
+import com.quarkdown.stdlib.internal.test
 
 /**
  * Index of the first element in a collection.
@@ -263,6 +264,30 @@ fun collectionAppend(
     @Name("to") collection: Iterable<OutputValue<*>>,
     @Name("value") value: DynamicValue,
 ): IterableValue<OutputValue<*>> = GeneralCollectionValue(collection + value)
+
+/**
+ * Finds the first element of a collection that satisfies a condition.
+ *
+ * ```
+ * .var {numbers}
+ *     - 3
+ *     - 8
+ *     - 12
+ *
+ * .numbers::findfirst {n: .n::isgreater than:{5}} <!-- 8 -->
+ * ```
+ *
+ * @param collection collection to search in
+ * @param condition condition to check, which accepts one argument (the current element) and returns a boolean
+ * @return the first element that satisfies [condition], or [none] if no element does
+ */
+@QFunction
+@Name("findfirst")
+@LikelyChained
+fun collectionFindFirst(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+    condition: Lambda,
+): OutputValue<*> = collection.firstOrNull { condition.test(it) } ?: NOT_FOUND
 
 /**
  * Joins the elements of a collection into a single string, placing [separator] between adjacent elements.

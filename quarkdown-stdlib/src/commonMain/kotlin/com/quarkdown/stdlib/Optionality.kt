@@ -10,11 +10,11 @@ import com.quarkdown.core.function.value.None
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.data.Lambda
-import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
+import com.quarkdown.stdlib.internal.test
 
 /**
  * @return a value which represents nothing
@@ -121,4 +121,4 @@ fun ifPresent(
 fun takeIf(
     value: DynamicValue,
     condition: Lambda,
-): OutputValue<*> = if (condition.invoke<Boolean, BooleanValue>(value) { ValueFactory.boolean(it) }.unwrappedValue) value else NoneValue
+): OutputValue<*> = if (condition.test(value)) value else NoneValue

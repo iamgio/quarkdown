@@ -10,7 +10,6 @@ import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.context.Context
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
-import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.NodeValue
@@ -26,6 +25,7 @@ import com.quarkdown.processor.annotation.QModule
 import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.sortedBy
+import com.quarkdown.stdlib.internal.test
 
 /**
  * Finds a table nested in a given content.
@@ -200,7 +200,7 @@ fun tableFilter(
     val filteredRowIndexes =
         values
             .withIndex()
-            .filter { item -> filter.invoke<Boolean, BooleanValue>(DynamicValue(item.value)) { ValueFactory.boolean(it) }.unwrappedValue }
+            .filter { item -> filter.test(DynamicValue(item.value)) }
             .map { it.index }
 
     return reconstructTable(table, filteredRowIndexes).wrappedAsValue()

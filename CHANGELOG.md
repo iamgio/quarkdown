@@ -82,6 +82,20 @@ This makes numbered iteration straightforward.
 > 1 A
 > 2 B
 
+#### [New collection operation: `findfirst`](https://quarkdown.com/wiki/loops#find-element)
+
+The new `findfirst` function returns the first element of a collection that satisfies a condition, or `none` if there is no such element.
+
+```markdown
+.var {numbers}
+    - 3
+    - 8
+    - 12
+
+.numbers::findfirst {n: .n::isgreater than:{5}}
+```
+> Output: `8`
+
 #### [New collection operation: `joinstring`](https://quarkdown.com/wiki/iterable)
 
 The new `joinstring` function concatenates the elements of a collection into a single string.

@@ -301,6 +301,30 @@ class IterableTest {
     }
 
     @Test
+    fun `find first`() {
+        execute("$letters.abc::findfirst {x: .x::equals {B}}") {
+            assertEquals("<p>B</p>", it)
+        }
+        execute("$numbers.nums::findfirst {n: .n::isgreater than:{2}}") {
+            assertEquals("<p>3</p>", it)
+        }
+    }
+
+    @Test
+    fun `find first without match is none`() {
+        execute("$letters.abc::findfirst {x: .x::equals {Z}}::otherwise {none}") {
+            assertEquals("<p>none</p>", it)
+        }
+    }
+
+    @Test
+    fun `find first index of a value via with indices`() {
+        execute("$letters.abc::withindices::findfirst {index letter: .letter::equals {B}}::first") {
+            assertEquals("<p>2</p>", it)
+        }
+    }
+
+    @Test
     fun `with indices`() {
         execute("$letters.abc::withindices::foreach\n\t.1::first .1::second") {
             assertEquals("<p>1 A</p><p>2 B</p><p>3 C</p>", it)

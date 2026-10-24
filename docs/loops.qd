@@ -61,3 +61,26 @@ The **`.repeat {times}`** function is a shorthand for `.foreach {1..times}`.
 .examplemirror
     .repeat {3}
         .1
+
+## Find element
+
+The **`.findfirst`** function loops over an iterable until an element satisfies a condition, and returns that element.
+Like `.foreach`, it accepts an [`Iterable`](iterable.qd) value and a single-parameter [lambda](lambda.qd) block, which must return a [boolean](boolean.qd).
+
+If no element satisfies the condition, the result is [`none`](none.qd).
+
+.examplemirror
+    .var {numbers}
+      - 3
+      - 8
+      - 12
+
+    .numbers::findfirst {n: .n::isgreater than:{5}}
+
+.examplemirror prelude:{Here, we look up an element's index within a list.}
+    .var {letters}
+      - A
+      - B
+      - C
+
+    .letters::withindices::findfirst {index letter: .letter::equals {B}}::first
