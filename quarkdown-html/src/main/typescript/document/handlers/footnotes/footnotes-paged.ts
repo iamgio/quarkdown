@@ -1,65 +1,25 @@
-import {getOrCreateFootnoteRule} from "../../../footnotes/footnote-dom";
 import {FootnotesDocumentHandler} from "./footnotes-document-handler";
+import {DetachedFootnotes} from "./detached-footnotes";
+import {QuarkdownDocument} from "../../quarkdown-document";
 
 /**
- * Footnote handler for paged documents that renders footnotes in a dedicated footnote area on each page.
+ * Footnote handler for paged documents.
+ *
+ * Definitions are taken out of the content flow before pagination and placed into the footnote area
+ * of the page of their first reference while paged.js lays that page out (see `PlaceFootnotes`),
+ * so that the space they take is exact and accounted for by the pagination itself.
  */
 export class FootnotesPaged extends FootnotesDocumentHandler {
     /**
-     * This is a hacky workaround for the base paged.js behavior:
-     * Any change made after the pagination is done will not be processed by paged.js,
-     * hence adding new content (footnotes) will cause content to overflow.
-     *
-     * This function takes all footnote references and creates a virtual empty space
-     * of the size of the footnote definition, reserving space for it.
-     * After rendering, `handleFootnotes` will remove this space and place
-     * the footnote definition in the footnote area, balancing the layout.
+     * @param quarkdownDocument the document this handler manages
+     * @param detached store the definitions are detached into, shared with the node handler placing them
      */
-    async onPreRendering() {
-        await super.onPreRendering();
-
-        // Pre-calculating heights to avoid reflows.
-        const heights = this.footnotes.map(({definition}) => definition.scrollHeight);
-
-        this.footnotes.forEach(({reference, definition}, index) => {
-            reference.style.display = 'block';
-            reference.style.height = heights[index] + 'px';
-
-            // Moves the footnote definition out of the page, to keep the layout intact.
-            definition.remove();
-            document.body.appendChild(definition);
-        });
+    constructor(quarkdownDocument: QuarkdownDocument, private readonly detached: DetachedFootnotes) {
+        super(quarkdownDocument);
     }
 
-    /**
-     * Moves footnote definitions to their respective footnote areas,
-     * and adjusts the layout accordingly.
-     *
-     * Useful context: https://github.com/pagedjs/pagedjs/issues/292
-     */
-    async onPostRendering() {
-        await super.onPreRendering(); // Reloads footnotes pairs, since the DOM changed due to paged.js processing.
-        this.footnotes.forEach(({reference, definition}) => {
-            const pageArea = this.quarkdownDocument.getParentViewport(reference);
-            if (!pageArea) return;
-            const footnoteArea = pageArea.querySelector<HTMLElement>('.pagedjs_footnote_area > .pagedjs_footnote_content');
-            if (!footnoteArea) return;
-            const footnoteContent = footnoteArea.querySelector<HTMLElement>('.pagedjs_footnote_inner_content');
-            if (!footnoteContent) return;
-
-            // Moves the footnote definition to the footnote area.
-            definition.remove();
-            footnoteContent.appendChild(definition);
-
-            footnoteArea.classList.remove('pagedjs_footnote_empty');
-            footnoteContent.style.columnWidth = 'auto';
-            pageArea.style.setProperty('--pagedjs-footnotes-height', `${footnoteArea.scrollHeight}px`);
-
-            // Resets the temp properties set in pre-rendering.
-            reference.style.height = 'auto';
-            reference.style.display = 'inline';
-
-            getOrCreateFootnoteRule(footnoteContent);
-        });
+    async onPreRendering() {
+        await super.onPreRendering();
+        this.detached.detach(this.footnotes);
     }
 }

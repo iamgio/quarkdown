@@ -1,3 +1,5 @@
+const FOOTNOTE_RULE_CLASS_NAME = 'footnote-rule';
+
 /**
  * Gets an existing footnote rule or creates a new one within the footnote area.
  * The footnote rule is a visual separator that appears at the top of the footnote area.
@@ -5,14 +7,21 @@
  * @returns The existing or newly created footnote rule element
  */
 export function getOrCreateFootnoteRule(footnoteArea: Element) {
-    const footnoteRuleClassName = 'footnote-rule';
-    const existingRule = footnoteArea.querySelector(`.${footnoteRuleClassName}`);
+    const existingRule = footnoteArea.querySelector(`.${FOOTNOTE_RULE_CLASS_NAME}`);
     if (existingRule) return existingRule;
 
     const rule = document.createElement('div');
-    rule.className = footnoteRuleClassName;
+    rule.className = FOOTNOTE_RULE_CLASS_NAME;
     footnoteArea.insertAdjacentElement('afterbegin', rule)
     return rule;
+}
+
+/**
+ * Removes the footnote rule from the footnote area, if present.
+ * @param footnoteArea - The footnote area element holding the rule
+ */
+export function removeFootnoteRule(footnoteArea: Element) {
+    footnoteArea.querySelector(`.${FOOTNOTE_RULE_CLASS_NAME}`)?.remove();
 }
 
 /**
