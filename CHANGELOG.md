@@ -26,6 +26,12 @@ The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/at
 quarkdown create --template @atoms/simple-cv:1.0.0
 ```
 
+#### Linux-ARM support
+
+Quarkdown now runs on Linux-aarch64!
+
+Thanks @maximilianbarg!
+
 #### [Styling options on `.row`, `.column` and `.grid`](https://quarkdown.com/wiki/stacks)
 
 Stack functions now accept the same styling options as `.container`, such as `background`, `foreground`, `border`, `padding`, `radius` and the font options, along with `width` and `height`, without relying on container wrapping.
