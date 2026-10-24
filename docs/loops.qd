@@ -40,6 +40,20 @@ The type of iterated elements is preserved. See [*Typing*](typing.qd) for more i
             n:
             .multiply {.n} by:{.n}
 
+### Indices
+
+To keep track of the position of each element, loop on the result of **`.withindices`**. It pairs each element with its index, starting at 1, as a [dictionary](dictionary.qd), which can be [destructured](destructuring.qd) into the index and the element.
+
+.examplemirror
+    .var {letters}
+      - A
+      - B
+      - C
+
+    .letters::withindices::foreach
+        index letter:
+        .index .letter
+
 ## Repeat
 
 The **`.repeat {times}`** function is a shorthand for `.foreach {1..times}`.
