@@ -96,9 +96,10 @@ This makes numbered iteration straightforward.
 > 1 A
 > 2 B
 
-#### [New collection operation: `findfirst`](https://quarkdown.com/wiki/loops#find-element)
+#### [New collection operations: `findfirst` and `findall`](https://quarkdown.com/wiki/loops#find-elements)
 
 The new `findfirst` function returns the first element of a collection that satisfies a condition, or `none` if there is no such element.
+`findall` returns all of them as a new collection instead, like a filter.
 
 ```markdown
 .var {numbers}

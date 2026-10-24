@@ -287,6 +287,31 @@ fun collectionFindFirst(
 ): OutputValue<*> = collection.firstOrNull { condition.test(it) } ?: NOT_FOUND
 
 /**
+ * Finds all the elements of a collection that satisfy a condition.
+ *
+ * ```
+ * .var {numbers}
+ *     - 3
+ *     - 8
+ *     - 12
+ *
+ * .numbers::findall {n: .n::isgreater than:{5}} <!-- 8, 12 -->
+ * ```
+ *
+ * @param collection collection to search in
+ * @param condition condition to check, which accepts one argument (the current element) and returns a boolean
+ * @return a new collection containing the elements that satisfy [condition], in their original order.
+ *         If no element does, the collection is empty
+ */
+@QFunction
+@Name("findall")
+@LikelyChained
+fun collectionFindAll(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+    condition: Lambda,
+): IterableValue<OutputValue<*>> = collection.filter { condition.test(it) }.wrappedAsValue()
+
+/**
  * Associates each element of a collection with its index, **starting at 1**.
  *
  * ```
