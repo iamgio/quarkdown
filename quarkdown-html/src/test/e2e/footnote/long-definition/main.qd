@@ -1,0 +1,19 @@
+.doclang {en}
+
+.pageformat width:{6in} height:{9in}
+
+.loremipsum
+
+A paragraph with a long footnote.[^: This footnote is intentionally long so that it wraps across many lines at page width while fitting a line or two at viewport width. In the following year, your landlord must give you a detailed statement of all the charges you have paid. It takes time to compile all the measurements and bills, but the landlord is obliged to send you the statement within twelve months of the year in question. See <https://immobilien.sparkasse.de/mieten/musterdokumente/uebergabeprotokoll/vermietung/wohnungsuebergabe/checkliste/langfassung.html> for a sample handover protocol, which is explained there in detail.]
+
+.loremipsum
+
+.loremipsum
+
+.loremipsum
+
+.loremipsum
+
+.loremipsum
+
+.loremipsum

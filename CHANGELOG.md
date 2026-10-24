@@ -135,6 +135,14 @@ Like `foreach`, it also accepts a body that transforms each element before joini
 
 ### Fixed
 
+#### Missing lines at page breaks
+
+In `paged` documents, a page could lose its last lines when either:
+- the last line of a page ended with a word hyphenated by the browser
+- a footnote needed more room at the bottom of its page than Quarkdown had reserved for it
+
+Page breaks no longer split words, footnotes are measured correctly, and long links in footnotes now wrap. 
+
 #### [Custom fonts in slides](https://quarkdown.com/wiki/font-configuration)
 
 In `slides` documents, fonts set via `.font` were ignored when the layout theme defined its own fonts.

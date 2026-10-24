@@ -2,6 +2,12 @@
   .footnote-definition {
     display: flex;
     flex-direction: row;
+    overflow-wrap: anywhere;
+
+    > .footnote-label {
+      // The index must not be squeezed by the wrapping content.
+      flex-shrink: 0;
+    }
   }
 
   .footnote-reference a {
@@ -13,6 +19,12 @@
     width: 40%;
     height: 4px;
   }
+}
+
+// Keeping the footnote container a plain block makes the reserved height match the rendered one (#746).
+.pagedjs_footnote_inner_content {
+  column-width: auto !important;
+  column-gap: normal !important;
 }
 
 .quarkdown-slides .footnote-area {

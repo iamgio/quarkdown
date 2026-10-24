@@ -15,6 +15,9 @@ import {PagedLikeQuarkdownDocument} from "../paged-like-quarkdown-document";
 import {ShowOnReady} from "../handlers/show-on-ready";
 import {PersistentHeadings} from "../handlers/persistent-headings";
 import {createTimeSlicedTick} from "../../queue/time-sliced-tick";
+import {snapOverflowToWordStart} from "../handlers/paged/word-boundary-breaks";
+import {DetachedFootnotes} from "../handlers/footnotes/detached-footnotes";
+import {PlaceFootnotes} from "../handlers/paged/node/place-footnotes";
 
 declare const Paged: typeof import("pagedjs"); // global Paged at runtime
 
@@ -22,6 +25,9 @@ declare const Paged: typeof import("pagedjs"); // global Paged at runtime
  * Paged document implementation for paged.js media.
  */
 export class PagedDocument implements PagedLikeQuarkdownDocument {
+    /** Footnote definitions taken out of the content flow, placed into pages during pagination. */
+    private readonly footnotes = new DetachedFootnotes();
+
     /**
      * @returns The parent page of the given element.
      */
@@ -55,7 +61,8 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
 
     /**
      * Sets up pre-rendering to execute when DOM content is loaded,
-     * and registers the [node handlers][getNodeHandlers] that take part in pagination.
+     * and registers the paged.js handlers that take part in pagination:
+     * the [node handlers][getNodeHandlers] and the snapping of page breaks to word boundaries.
      */
     setupPreRenderingHook() {
         document.addEventListener("DOMContentLoaded", async () => await preRenderingExecutionQueue.execute());
@@ -69,7 +76,13 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
             }
         }
 
-        Paged.registerHandlers(PagedNodeHandlerDispatcher);
+        class WordBoundaryBreaks extends Paged.Handler {
+            onOverflow(overflow: Range | undefined, rendered: Element, bounds: DOMRect) {
+                return overflow && snapOverflowToWordStart(overflow, bounds.right);
+            }
+        }
+
+        Paged.registerHandlers(PagedNodeHandlerDispatcher, WordBoundaryBreaks);
     }
 
     /** Sets up post-rendering to execute when paged.js is ready. */
@@ -107,7 +120,7 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
             new PageMarginsPaged(this),
             new PageNumbers(this),
             new PersistentHeadings(this),
-            new FootnotesPaged(this),
+            new FootnotesPaged(this, this.footnotes),
         ];
     }
 
@@ -119,6 +132,7 @@ export class PagedDocument implements PagedLikeQuarkdownDocument {
             new RepeatTableHeaders(),
             new SplitOversizedTableRows(),
             new RestoreCodeIndentation(),
+            new PlaceFootnotes(this.footnotes),
         ];
     }
 }
