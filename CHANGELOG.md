@@ -110,10 +110,9 @@ The new `findfirst` function returns the first element of a collection that sati
 ```
 > Output: `8`
 
-#### [New collection operation: `joinstring`](https://quarkdown.com/wiki/iterable)
+#### [New loop: `join`](https://quarkdown.com/wiki/loops#join)
 
-The new `joinstring` function concatenates the elements of a collection into a single string.
-Elements are separated by `, ` by default, or by a custom `separator`.
+The new `join` function merges the elements of a collection into a single inline content, separated by `, ` or by a custom `separator`.
 
 ```markdown
 .var {letters}
@@ -121,9 +120,18 @@ Elements are separated by `, ` by default, or by a custom `separator`.
     - B
     - C
 
-.letters::joinstring 
+.letters::join
 ```
-> Output: `A, B, C`
+> Output: A, B, C
+
+Like `foreach`, it also accepts a body that transforms each element before joining.
+
+```markdown
+.letters::withindices::join
+    index letter:
+    .index **.letter**
+```
+> Output: 1 **A**, 2 **B**, 3 **C**
 
 ### Fixed
 

@@ -93,6 +93,72 @@ class LoopTest {
     }
 
     @Test
+    fun `join without body joins the elements themselves`() {
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join") {
+            assertEquals("<p>A, B, C</p>", it)
+        }
+        execute(".var {nums}\n  - 1\n  - 2\n  - 3\n\n.nums::join separator:{+}") {
+            assertEquals("<p>1+2+3</p>", it)
+        }
+    }
+
+    @Test
+    fun `join with default separator`() {
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join\n    x:\n    .x") {
+            assertEquals("<p>A, B, C</p>", it)
+        }
+    }
+
+    @Test
+    fun `join with custom separator and rich output`() {
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join separator:{-}\n    x:\n    **.x**") {
+            assertEquals("<p><strong>A</strong>-<strong>B</strong>-<strong>C</strong></p>", it)
+        }
+    }
+
+    @Test
+    fun `join with rich separator`() {
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join separator:{**|**}\n    x:\n    .x") {
+            assertEquals("<p>A<strong>|</strong>B<strong>|</strong>C</p>", it)
+        }
+    }
+
+    @Test
+    fun `join inline within a paragraph`() {
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\nLetters: .abc::join body:{x: .x}.") {
+            assertEquals("<p>Letters: A, B, C.</p>", it)
+        }
+    }
+
+    @Test
+    fun `join with indices destructured in body`() {
+        execute(
+            """
+            .var {abc}
+              - A
+              - B
+              - C
+
+            .abc::withindices::join
+                index letter:
+                .index::text script:{sup} **.letter**
+            """.trimIndent(),
+        ) {
+            assertEquals(
+                "<p><sup>1</sup> <strong>A</strong>, <sup>2</sup> <strong>B</strong>, <sup>3</sup> <strong>C</strong></p>",
+                it,
+            )
+        }
+    }
+
+    @Test
+    fun `join of empty collection produces nothing`() {
+        execute(".range from:{1} to:{0}::join body:{x: .x}") {
+            assertEquals("", it)
+        }
+    }
+
+    @Test
     fun `repeat is equivalent to foreach over an implicit range`() {
         execute(
             """

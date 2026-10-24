@@ -62,6 +62,30 @@ The **`.repeat {times}`** function is a shorthand for `.foreach {1..times}`.
     .repeat {3}
         .1
 
+## Join
+
+The **`.join`** function merges the elements of an iterable into a single inline content, separated by `, ` or by a custom `separator`.
+
+.examplemirror
+    .var {letters}
+      - A
+      - B
+      - C
+
+    .letters::join
+
+Like `.foreach`, it accepts a [lambda](lambda.qd) block that transforms each element before joining.
+
+.examplemirror
+    .var {letters}
+      - A
+      - B
+      - C
+
+    .letters::withindices::join
+        index letter:
+        .index::text script:{sup} **.letter**
+
 ## Find element
 
 The **`.findfirst`** function loops over an iterable until an element satisfies a condition, and returns that element.
