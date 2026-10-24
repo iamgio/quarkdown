@@ -279,6 +279,41 @@ class IterableTest {
     }
 
     @Test
+    fun `find all`() {
+        execute("$numbers.nums::findall {n: .n::isgreater than:{2}}::join") {
+            assertEquals("<p>3, 4</p>", it)
+        }
+        execute("$numbers.nums::findall {n: .n::isgreater than:{2}}::size") {
+            assertEquals("<p>2</p>", it)
+        }
+    }
+
+    @Test
+    fun `find all without match is an empty collection`() {
+        execute("$numbers.nums::findall {n: .n::isgreater than:{10}}::size") {
+            assertEquals("<p>0</p>", it)
+        }
+    }
+
+    @Test
+    fun `find all indices of matching values via with indices`() {
+        execute(
+            """
+            .var {letters}
+              - A
+              - B
+              - A
+
+            .letters::withindices::findall {index letter: .letter::equals {A}}::join
+                index letter:
+                .index
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>1, 3</p>", it)
+        }
+    }
+
+    @Test
     fun `with indices`() {
         execute("$letters.abc::withindices::foreach\n\t.1::first .1::second") {
             assertEquals("<p>1 A</p><p>2 B</p><p>3 C</p>", it)

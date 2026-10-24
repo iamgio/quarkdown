@@ -86,7 +86,7 @@ Like `.foreach`, it accepts a [lambda](lambda.qd) block that transforms each ele
         index letter:
         .index::text script:{sup} **.letter**
 
-## Find element
+## Find elements
 
 The **`.findfirst`** function loops over an iterable until an element satisfies a condition, and returns that element.
 Like `.foreach`, it accepts an [`Iterable`](iterable.qd) value and a single-parameter [lambda](lambda.qd) block, which must return a [boolean](boolean.qd).
@@ -108,3 +108,13 @@ If no element satisfies the condition, the result is [`none`](none.qd).
       - C
 
     .letters::withindices::findfirst {index letter: .letter::equals {B}}::first
+
+The **`.findall`** function works the same way, but returns a collection of all the elements that satisfy the condition.
+
+.examplemirror
+    .var {numbers}
+      - 3
+      - 8
+      - 12
+
+    .numbers::findall {n: .n::isgreater than:{5}}::join
