@@ -78,3 +78,39 @@ fun equals(
 @QFunction
 @LikelyChained
 fun not(value: Boolean) = BooleanValue(!value)
+
+/**
+ * Logical conjunction of two boolean values.
+ *
+ * ```
+ * .x::islower than:{10}::and {.x::isgreater than:{0}} <!-- true if 0 < x < 10 -->
+ * ```
+ *
+ * @param a first boolean value
+ * @param b second boolean value
+ * @return whether both [a] and [b] are `true`
+ */
+@QFunction
+@LikelyChained
+fun and(
+    a: Boolean,
+    b: Boolean,
+) = BooleanValue(a && b)
+
+/**
+ * Logical disjunction of two boolean values.
+ *
+ * ```
+ * .x::islower than:{0}::or {.x::isgreater than:{10}} <!-- true if x < 0 or x > 10 -->
+ * ```
+ *
+ * @param a first boolean value
+ * @param b second boolean value
+ * @return whether at least one of [a] and [b] is `true`
+ */
+@QFunction
+@LikelyChained
+fun or(
+    a: Boolean,
+    b: Boolean,
+) = BooleanValue(a || b)
