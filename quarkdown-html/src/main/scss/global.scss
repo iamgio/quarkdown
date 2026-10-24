@@ -110,6 +110,12 @@
   --qd-page-content-border-color: var(--qd-main-color);
   --qd-page-content-border-style: unset;
 
+  // Padding of the content area of each page.
+  --qd-page-content-padding-top: 0px;
+  --qd-page-content-padding-right: 0px;
+  --qd-page-content-padding-bottom: 0px;
+  --qd-page-content-padding-left: 0px;
+
   // Text
   --qd-line-height: 1.5;
   --qd-letter-spacing: normal;

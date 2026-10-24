@@ -691,7 +691,10 @@ fun texMacro(
  *                    Does not take effect if [format] is not specified.
  * @param width width of each page
  * @param height height of each page
- * @param margin blank space around the content of each page. Not supported in slides documents
+ * @param margin blank space around the content area of each page, between the page edge and the content area.
+ *               Not supported in slides documents
+ * @param padding blank space inside the content area of each page, between its border and the content.
+ *                Not supported in docs documents
  * @param borderTop border width of the top content area of each page
  * @param borderRight border width of the right content area of each page
  * @param borderBottom border width of the bottom content area of each page
@@ -715,6 +718,7 @@ fun pageFormat(
     @LikelyNamed width: Size? = null,
     @LikelyNamed height: Size? = null,
     @LikelyNamed margin: Sizes? = null,
+    @LikelyNamed padding: Sizes? = null,
     @Name("bordertop") borderTop: Size? = null,
     @Name("borderright") borderRight: Size? = null,
     @Name("borderbottom") borderBottom: Size? = null,
@@ -743,6 +747,7 @@ fun pageFormat(
             pageWidth = width ?: formatBounds?.width,
             pageHeight = height ?: formatBounds?.height,
             margin = margin,
+            padding = padding,
             columnCount = columns?.takeIf { it > 0 },
             alignment = alignment,
             contentBorderWidth =

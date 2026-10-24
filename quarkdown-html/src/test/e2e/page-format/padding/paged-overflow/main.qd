@@ -1,0 +1,5 @@
+.doctype {paged}
+.pageformat padding:{3cm}
+
+.repeat {60}
+    Paragraph .1

@@ -51,6 +51,14 @@ The `pages` and `side` parameters of `.pageformat`, previously available only in
 .pageformat pages:{2..3} background:{navy} alignment:{start}
 ```
 
+#### [Page content padding](https://quarkdown.com/wiki/page-format)
+
+`.pageformat` accepts a new `padding` parameter, which adds blank space inside the content area of each page, between its borders and the content.
+
+```markdown
+.pageformat padding:{1cm} bordercolor:{red}
+```
+
 #### [Color building and derivation](https://quarkdown.com/wiki/color)
 
 The new `.color` function builds a color from its red, green, blue and alpha components, each optional, and a base color:

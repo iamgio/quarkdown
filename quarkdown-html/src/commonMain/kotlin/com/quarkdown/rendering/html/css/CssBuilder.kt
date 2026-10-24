@@ -1,5 +1,6 @@
 package com.quarkdown.rendering.html.css
 
+import com.quarkdown.core.document.size.Sizes
 import com.quarkdown.core.rendering.representable.RenderRepresentable
 
 /**
@@ -62,6 +63,21 @@ class CssBuilder {
      * @see value
      */
     infix fun String.importantValue(value: RenderRepresentable?) = importantValue(value?.asCSS)
+
+    /**
+     * Pushes one entry per side of [sizes], as long as it is not `null`,
+     * suffixing this key with `-top`, `-right`, `-bottom` and `-left`.
+     * @see value
+     */
+    infix fun String.sides(sizes: Sizes?) =
+        apply {
+            sizes?.let {
+                "$this-top" value it.top
+                "$this-right" value it.right
+                "$this-bottom" value it.bottom
+                "$this-left" value it.left
+            }
+        }
 
     /**
      * @return a single-line string representation of the CSS entries, suitable for inline styles
