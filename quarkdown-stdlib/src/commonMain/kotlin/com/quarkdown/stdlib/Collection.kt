@@ -4,6 +4,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
 import com.quarkdown.core.function.reflect.annotation.LikelyNamed
+import com.quarkdown.core.function.value.DictionaryValue
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
 import com.quarkdown.core.function.value.IterableValue
@@ -13,6 +14,7 @@ import com.quarkdown.core.function.value.PairValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.data.Lambda
+import com.quarkdown.core.function.value.dictionaryOf
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
@@ -289,6 +291,34 @@ fun collectionJoinToString(
     @Name("from") collection: Iterable<OutputValue<*>>,
     @LikelyNamed separator: String = ", ",
 ): StringValue = collection.joinToString(separator) { it.asJoinedString(separator) }.wrappedAsValue()
+
+/**
+ * Associates each element of a collection with its index, **starting at 1**.
+ *
+ * ```
+ * .var {letters}
+ *     - A
+ *     - B
+ *
+ * .letters::withindices::foreach
+ *     .1::first .1::second
+ *
+ * <!-- 1 A -->
+ * <!-- 2 B -->
+ * ```
+ *
+ * @param collection collection to index
+ * @return a dictionary whose keys are the indices of the elements, starting at 1, and whose values are the elements themselves
+ */
+@QFunction
+@Name("withindices")
+@LikelyChained
+fun collectionWithIndices(
+    @Name("from") collection: Iterable<OutputValue<*>>,
+): DictionaryValue<OutputValue<*>> =
+    collection
+        .mapIndexed { index, value -> (index + INDEX_STARTS_AT).toString() to value }
+        .let { dictionaryOf(it) }
 
 /**
  * Creates a new pair.

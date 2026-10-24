@@ -301,6 +301,59 @@ class IterableTest {
     }
 
     @Test
+    fun `with indices`() {
+        execute("$letters.abc::withindices::foreach\n\t.1::first .1::second") {
+            assertEquals("<p>1 A</p><p>2 B</p><p>3 C</p>", it)
+        }
+    }
+
+    @Test
+    fun `with indices destructured`() {
+        execute(
+            letters +
+                """
+                .foreach {.abc::withindices}
+                    index letter:
+                    .index .letter
+                """.trimIndent(),
+        ) {
+            assertEquals("<p>1 A</p><p>2 B</p><p>3 C</p>", it)
+        }
+    }
+
+    @Test
+    fun `with indices of a dictionary indexes its entries`() {
+        execute(
+            """
+            .var {dict}
+              .dictionary
+                - a: 1
+                - b: 2
+
+            .foreach {.dict::withindices}
+                index entry:
+                .index .entry::first .entry::second
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>1 a 1</p><p>2 b 2</p>", it)
+        }
+    }
+
+    @Test
+    fun `with indices lookup by index`() {
+        execute("$letters.abc::withindices::get {2}") {
+            assertEquals("<p>B</p>", it)
+        }
+    }
+
+    @Test
+    fun `with indices of empty collection`() {
+        execute(".var {empty} {.range from:{1} to:{0}}\n\n.empty::withindices::size") {
+            assertEquals("<p>0</p>", it)
+        }
+    }
+
+    @Test
     fun `handle pairs`() {
         execute(
             """

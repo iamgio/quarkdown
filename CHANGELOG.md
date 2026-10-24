@@ -64,6 +64,24 @@ The new `and` and `or` functions combine two boolean values, complementing the e
     x is between 0 and 10
 ```
 
+#### [New collection operation: `withindices`](https://quarkdown.com/wiki/loops#indices)
+
+The new `withindices` function turns a collection into a dictionary that maps each element's position, starting at 1, to the element itself.
+This makes numbered iteration straightforward.
+
+```markdown
+.var {letters}
+    - A
+    - B
+
+.letters::withindices::foreach
+    index letter:
+    .index .letter
+```
+> Output:
+> 1 A
+> 2 B
+
 #### [New collection operation: `joinstring`](https://quarkdown.com/wiki/iterable)
 
 The new `joinstring` function concatenates the elements of a collection into a single string.
