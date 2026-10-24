@@ -10,13 +10,11 @@ import com.quarkdown.core.function.call.binding.ArgumentBindings
 import com.quarkdown.core.function.call.executeAs
 import com.quarkdown.core.function.call.validate.FunctionCallValidator
 import com.quarkdown.core.function.signatureAsString
-import com.quarkdown.core.function.value.BooleanValue
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.OutputValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.data.LambdaParameter
-import com.quarkdown.core.function.value.factory.ValueFactory
 import com.quarkdown.stdlib.extend
 
 /**
@@ -71,7 +69,7 @@ private class ExtensionFunction(
 
         when {
             // Condition not met: transparently fall through to the current `.super`.
-            condition != null && !condition.invoke<Boolean, BooleanValue>(args) { ValueFactory.boolean(it) }.unwrappedValue -> {
+            condition != null && !condition.test(args) -> {
                 call.executeAs(superFunction, arguments = emptyList())
             }
 
