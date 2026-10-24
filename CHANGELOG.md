@@ -55,6 +55,15 @@ The new `.color` function builds a color from its red, green, blue and alpha com
 .container background:{.brand::color alpha:{0.25}}
 ```
 
+#### [New boolean operations: `and` and `or`](https://quarkdown.com/wiki/boolean#operators)
+
+The new `and` and `or` functions combine two boolean values, complementing the existing `not`.
+
+```markdown
+.if {.x::islower than:{10}::and {.x::isgreater than:{0}}}
+    x is between 0 and 10
+```
+
 #### [New collection operation: `joinstring`](https://quarkdown.com/wiki/iterable)
 
 The new `joinstring` function concatenates the elements of a collection into a single string.
