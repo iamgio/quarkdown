@@ -2,13 +2,18 @@
 
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.BlankNode
+import com.quarkdown.core.ast.base.inline.Text
+import com.quarkdown.core.context.Context
 import com.quarkdown.core.context.MutableContext
 import com.quarkdown.core.context.ScopeContext
 import com.quarkdown.core.function.library.Library
 import com.quarkdown.core.function.reflect.annotation.Body
 import com.quarkdown.core.function.reflect.annotation.Injected
 import com.quarkdown.core.function.reflect.annotation.LikelyBody
+import com.quarkdown.core.function.reflect.annotation.LikelyChained
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
 import com.quarkdown.core.function.signatureAsString
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.GeneralCollectionValue
@@ -22,6 +27,7 @@ import com.quarkdown.core.function.value.data.Lambda
 import com.quarkdown.core.function.value.data.LambdaParameter
 import com.quarkdown.core.function.value.data.Range
 import com.quarkdown.core.function.value.factory.ValueFactory
+import com.quarkdown.core.function.value.output.node.InlineNodeOutputValueVisitor
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
@@ -179,6 +185,60 @@ fun forEach(
 ): IterableValue<OutputValue<*>> {
     val values = iterable.map { value -> body.invokeDynamic(value) }
     return GeneralCollectionValue(values)
+}
+
+/**
+ * Merges the elements of a collection into a single inline content, placing [separator] between adjacent elements.
+ *
+ * ```
+ * .var {letters}
+ *     - A
+ *     - B
+ *     - C
+ *
+ * .letters::join <!-- A, B, C -->
+ * ```
+ *
+ * Like [forEach], a body can transform each element before joining:
+ *
+ * ```
+ * .letters::withindices::join
+ *     index letter:
+ *     .index **.letter**
+ * ```
+ *
+ * > Output: 1 **A**, 2 **B**, 3 **C**
+ *
+ * @param iterable collection to iterate
+ * @param separator inline content placed between the output of adjacent iterations. Defaults to `, `
+ * @param body the inline output of each iteration. Accepts 1 parameter (the current element).
+ *             If unset, each element is output as is
+ * @return the output of all iterations, joined by [separator]
+ * @wiki loops
+ */
+@QFunction
+@LikelyChained
+fun join(
+    @Injected context: Context,
+    iterable: Iterable<OutputValue<*>>,
+    @LikelyNamed separator: InlineMarkdownContent = InlineMarkdownContent(listOf(Text(", "))),
+    @LikelyBody body: Lambda? = null,
+): NodeValue {
+    // Each output is converted to an inline node.
+    val visitor = InlineNodeOutputValueVisitor(context)
+    val outputs = iterable.map { value -> (body?.invokeDynamic(value) ?: value).accept(visitor) }
+
+    val children =
+        outputs.flatMapIndexed { index, output ->
+            if (index == 0) {
+                listOf(output)
+            } else {
+                separator.children + output
+            }
+        }
+
+    val content = if (children.isEmpty()) BlankNode else InlineMarkdownContent(children)
+    return NodeValue(content)
 }
 
 /**
