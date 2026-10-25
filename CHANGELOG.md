@@ -197,6 +197,10 @@ Thanks @YoannDev90!
 
 When the port used to serve the document during PDF export was already in use, Quarkdown already moved on to the next free port, but printed a `java.net.BindException` stack trace for every occupied port it went through. The scan is now quiet on `info` and higher log levels.
 
+#### Iterating a dictionary stored in a variable
+
+Fixed an issue that caused a dictionary assigned to a variable, such as `.var {x} {.data::dictionary}`, to be rejected by functions that accept a collection, like `.withindices` or `.foreach`.
+
 ## [2.6.4] - 2026-10-09
 
 ### Added
