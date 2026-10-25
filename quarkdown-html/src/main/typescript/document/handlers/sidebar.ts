@@ -1,9 +1,10 @@
 import {DocumentHandler} from "../document-handler";
 import {initNavigationActiveTracking} from "../../navigation/active-tracking";
+import {markWhileSelectingOutside} from "../../navigation/selection-drag";
 
 /**
- * Document handler responsible for relocating the sidebar from the template
- * and initializing active state tracking.
+ * Document handler responsible for relocating the sidebar from the template,
+ * initializing active state tracking, and keeping the sidebar out of the way while the user selects content.
  */
 export class Sidebar extends DocumentHandler {
     async onPostRendering() {
@@ -18,5 +19,6 @@ export class Sidebar extends DocumentHandler {
         template.remove();
 
         initNavigationActiveTracking(sidebar);
+        markWhileSelectingOutside(sidebar);
     }
 }
