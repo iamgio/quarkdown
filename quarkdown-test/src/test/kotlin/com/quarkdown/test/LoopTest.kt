@@ -1,7 +1,9 @@
 package com.quarkdown.test
 
+import com.quarkdown.core.pipeline.error.BasePipelineErrorHandler
 import com.quarkdown.test.util.execute
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 /**
@@ -148,6 +150,78 @@ class LoopTest {
                 "<p><sup>1</sup> <strong>A</strong>, <sup>2</sup> <strong>B</strong>, <sup>3</sup> <strong>C</strong></p>",
                 it,
             )
+        }
+    }
+
+    @Test
+    fun `join of multi-line bodies with declarations stays inline`() {
+        execute(
+            """
+            .var {names}
+              - Gio
+              - Alice
+
+            .var {info}
+                .names::foreach
+                    name:
+                    .var {x} {1}
+
+                    .name .x
+
+            .info::join
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Gio 1, Alice 1</p>", it)
+        }
+    }
+
+    @Test
+    fun `join of multi-line bodies with node results stays inline`() {
+        execute(
+            """
+            .var {names}
+              - Gio
+              - Alice
+
+            .var {meta}
+              .dictionary
+                - Gio: 1
+                - Alice: 2
+
+            .var {info}
+                .names::foreach
+                    name:
+                    .var {entries} {.meta::withindices::findall {index entry: .entry::first::equals {.name}}}
+
+                    .name .entries::join body:{.1::first}
+
+            .info::join
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>Gio 1, Alice 2</p>", it)
+        }
+    }
+
+    @Test
+    fun `join of bodies with a failing call keeps the error`() {
+        execute(
+            """
+            .var {names}
+              - Gio
+
+            .var {info}
+                .names::foreach
+                    name:
+                    .var {x} {1}
+
+                    .name .undefinedfunction
+
+            .info::join
+            """.trimIndent(),
+            errorHandler = BasePipelineErrorHandler(),
+        ) {
+            assertContains(it, "Error")
+            assertContains(it, "undefinedfunction")
         }
     }
 

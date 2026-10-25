@@ -28,4 +28,19 @@ class StringUtilsTest {
         val text: CharSequence = "a\nb\nc"
         assertSame(text, text.normalizeLineSeparators())
     }
+
+    @Test
+    fun `blank lines around content are removed`() {
+        assertEquals("  Hello \n\nWorld", "\n \n  Hello \n\nWorld\n\t\n".trimBlankLines())
+    }
+
+    @Test
+    fun `single line keeps its surrounding spaces`() {
+        assertEquals(" Hello ", " Hello ".trimBlankLines())
+    }
+
+    @Test
+    fun `blank string becomes empty`() {
+        assertEquals("", "\n \n".trimBlankLines())
+    }
 }

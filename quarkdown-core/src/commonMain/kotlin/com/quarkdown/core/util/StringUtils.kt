@@ -152,12 +152,16 @@ fun String.sanitizeAsIdentifier(): String {
  */
 fun CharSequence.normalizeLineSeparators(): CharSequence =
     when {
-        '\r' !in this -> this
-        else ->
+        '\r' !in this -> {
+            this
+        }
+
+        else -> {
             this
                 .toString()
                 .replace("\r\n", "\n")
                 .replace('\r', '\n')
+        }
     }
 
 /**
@@ -167,3 +171,16 @@ fun CharSequence.normalizeLineSeparators(): CharSequence =
 fun List<String>.trimEntries(): List<String> =
     filter { it.isNotBlank() }
         .map { it.trim() }
+
+/**
+ * Removes the leading and trailing blank lines of a string, preserving any other whitespace.
+ *
+ * Example: `"\n\n  Hello \n \n"` -> `"  Hello "`
+ *
+ * @return this string without its leading and trailing blank lines
+ */
+fun String.trimBlankLines(): String =
+    lines()
+        .dropWhile { it.isBlank() }
+        .dropLastWhile { it.isBlank() }
+        .joinToString("\n")
