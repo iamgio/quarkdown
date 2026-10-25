@@ -55,6 +55,39 @@ class LogicalTest {
     }
 
     @Test
+    fun `contains on a string is a case-sensitive substring check`() {
+        execute(".contains {Quarkdown} {ark}") { assertEquals(yes, it) }
+        execute(".contains {Quarkdown} {quark}") { assertEquals(no, it) }
+        execute(".var {text} {Quarkdown}\n\n.text::contains {down}") { assertEquals(yes, it) }
+    }
+
+    @Test
+    fun `contains searches formatted content by its plain text`() {
+        execute(".var {parts}\n  - ark\n\n.contains {Quarkdown} {.parts::join}") { assertEquals(yes, it) }
+        execute(".var {parts}\n  - ark\n\n.var {abc}\n  - A\n  - ark\n\n.abc::contains {.parts::join}") { assertEquals(yes, it) }
+    }
+
+    @Test
+    fun `contains on a collection checks membership`() {
+        val letters = ".var {abc}\n  - A\n  - B\n  - C\n\n"
+        execute("$letters.abc::contains {B}") { assertEquals(yes, it) }
+        execute("$letters.abc::contains {Z}") { assertEquals(no, it) }
+        execute(".var {nums}\n  - 1\n  - 2\n\n.nums::contains {2}") { assertEquals(yes, it) }
+    }
+
+    @Test
+    fun `contains on a dictionary checks its keys`() {
+        val dict = ".var {dict}\n  .dictionary\n    - a: 1\n    - b: 2\n\n"
+        execute("$dict.dict::contains {a}") { assertEquals(yes, it) }
+        execute("$dict.dict::contains {1}") { assertEquals(no, it) }
+    }
+
+    @Test
+    fun `contains drives a conditional`() {
+        execute(".var {abc}\n  - A\n  - B\n\n.if {.abc::contains {A}}\n    found") { assertEquals("<p>found</p>", it) }
+    }
+
+    @Test
     fun `operators drive a conditional`() {
         execute(
             x +
