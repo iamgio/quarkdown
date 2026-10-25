@@ -26,8 +26,8 @@ testMatrix(
         expect(blockBox!.width).toBeGreaterThan(inlineBox!.width);
         expect(blockBox!.y).toBeLessThan(inlineBox!.y);
 
-        const blockBaseBox = await blockFormula.locator(".base").first().boundingBox();
-        const inlineBaseBox = await inlineFormula.locator(".base").first().boundingBox();
+        const blockBaseBox = await blockFormula.locator(".katex-base").first().boundingBox();
+        const inlineBaseBox = await inlineFormula.locator(".katex-base").first().boundingBox();
 
         expect(blockBaseBox!.x).toBeGreaterThan(inlineBaseBox!.x);
 
