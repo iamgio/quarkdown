@@ -16,6 +16,12 @@ $level-width: 9px;
   max-height: 90vh;
   overflow-y: auto;
   transition: background-color 0.3s;
+  user-select: none;
+
+  // While the user drags to select content, the sidebar neither expands on hover nor gets in the way.
+  &.selecting {
+    pointer-events: none;
+  }
 
   @include media-queries.sm-up {
     display: block;

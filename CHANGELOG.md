@@ -145,6 +145,12 @@ The new `split` function breaks a string into a collection of its parts, delimit
 ```
 > Output: `2026`
 
+### Changed
+
+#### Sidebar stays hidden while selecting text
+
+In the HTML view of `plain` and `paged` documents, dragging the mouse to select text across the right edge of the page no longer expands the navigation sidebar.
+
 ### Fixed
 
 #### Missing lines at page breaks

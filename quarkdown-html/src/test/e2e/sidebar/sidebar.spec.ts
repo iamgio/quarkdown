@@ -63,6 +63,31 @@ testMatrix(
 );
 
 testMatrix(
+    "does not expand while the user drags to select text",
+    ["plain"],
+    async (page) => {
+        const sidebar = page.locator(".sidebar");
+        const collapsedBackground = "rgba(0, 0, 0, 0)";
+        const textBox = (await page.locator("h1").first().boundingBox())!;
+        const sidebarBox = (await sidebar.boundingBox())!;
+        const sidebarCenter = {x: sidebarBox.x + sidebarBox.width / 2, y: sidebarBox.y + sidebarBox.height / 2};
+
+        await page.mouse.move(textBox.x + 2, textBox.y + textBox.height / 2);
+        await page.mouse.down();
+        await page.mouse.move(sidebarCenter.x, sidebarCenter.y, {steps: 10});
+
+        await expect(sidebar).toHaveCSS("pointer-events", "none");
+        await expect(sidebar).toHaveCSS("background-color", collapsedBackground);
+
+        await page.mouse.up();
+        await page.mouse.move(sidebarCenter.x + 1, sidebarCenter.y);
+
+        await expect(sidebar).not.toHaveCSS("pointer-events", "none");
+        await expect(sidebar).not.toHaveCSS("background-color", collapsedBackground);
+    }
+);
+
+testMatrix(
     "hides sidebar on mobile in plain doctype",
     ["plain"],
     async (page) => {
