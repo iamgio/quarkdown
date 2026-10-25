@@ -32,6 +32,8 @@ Nested collections can be represented by nested Markdown lists as well.
     .foreach {.letters}
         .1::first
 
+An empty collection can be created via **`.emptycollection`**.
+
 ## Pair
 
 A pair is an iterable of two values.

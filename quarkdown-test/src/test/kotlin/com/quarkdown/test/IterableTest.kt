@@ -255,6 +255,16 @@ class IterableTest {
     }
 
     @Test
+    fun `empty collection`() {
+        execute(".emptycollection::size") {
+            assertEquals("<p>0</p>", it)
+        }
+        execute(".var {items} {.emptycollection}\n\n.items::appended {A}::appended {B}::join") {
+            assertEquals("<p>A, B</p>", it)
+        }
+    }
+
+    @Test
     fun `find first`() {
         execute("$letters.abc::findfirst {x: .x::equals {B}}") {
             assertEquals("<p>B</p>", it)

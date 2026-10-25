@@ -158,6 +158,15 @@ The new `split` function breaks a string into a collection of its parts, delimit
 ```
 > Output: `2026`
 
+#### [New factory functions: `emptycollection` and `emptydictionary`](https://quarkdown.com/wiki/iterable)
+
+The new `emptycollection` and `emptydictionary` functions create an empty collection and an empty dictionary, respectively.
+
+```markdown
+.emptycollection::size
+```
+> Output: `0`
+
 ### Changed
 
 #### Sidebar stays hidden while selecting text
