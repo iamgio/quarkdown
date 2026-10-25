@@ -16,7 +16,7 @@ test("a formula taller than a page wraps across pages", async (page) => {
     await expect(page.locator(".pagedjs_page formula .op-limits")).toHaveCount(LINE_COUNT);
 
     // Every line lies within its page's content area, not in an invisible overflow column.
-    for (const line of await page.locator(".pagedjs_page formula .katex-html > .base").all()) {
+    for (const line of await page.locator(".pagedjs_page formula .katex-html > .katex-base").all()) {
         const lineBox = await line.boundingBox();
         const areaBox = await line.locator("xpath=ancestor::*[contains(@class, 'pagedjs_area')]").boundingBox();
         expect(lineBox).not.toBeNull();
