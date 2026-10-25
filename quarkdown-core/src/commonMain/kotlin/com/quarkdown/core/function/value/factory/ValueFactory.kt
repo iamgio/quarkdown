@@ -450,6 +450,7 @@ object ValueFactory {
             is List<*> -> return OrderedCollectionValue(raw as List<OutputValue<*>>)
             is Set<*> -> return UnorderedCollectionValue(raw as Set<OutputValue<*>>)
             is Iterable<*> -> return GeneralCollectionValue(raw as Iterable<OutputValue<*>>)
+            is Map<*, *> -> return dictionary(raw, context).adapt()
         }
 
         // A range is a suitable numeric iterable value.

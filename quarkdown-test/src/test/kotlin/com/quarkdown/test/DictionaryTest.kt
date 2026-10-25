@@ -165,4 +165,40 @@ class DictionaryTest {
             assertEquals("<p>a, 2</p><p>b, 4</p>", it)
         }
     }
+
+    @Test
+    fun `dictionary stored via inline variable argument is iterable`() {
+        execute(
+            """
+            .var {x}
+                .dictionary
+                    - a: 1
+                    - b: 2
+
+            .x::withindices::foreach
+                .1::first .1::second::first
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>1 a</p><p>2 b</p>", it)
+        }
+    }
+
+    @Test
+    fun `dictionary built from body parameter inside custom function is iterable`() {
+        execute(
+            """
+            .function {test}
+                dict:
+                .var {dict} {.dict::dictionary}
+                .dict::withindices::foreach
+                    .1::first .1::second::first
+
+            .test
+                - abc: def
+                - ghi: jkl
+            """.trimIndent(),
+        ) {
+            assertEquals("<p>1 abc</p><p>2 ghi</p>", it)
+        }
+    }
 }
