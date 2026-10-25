@@ -38,6 +38,21 @@ fun dictionary(
 ): DictionaryValue<*> = DictionaryValue(dictionary.toMutableMap())
 
 /**
+ * Creates a new empty dictionary.
+ *
+ * ```
+ * .var {dict} {.emptydictionary}
+ *
+ * .dict::size <!-- 0 -->
+ * ```
+ *
+ * @return a new dictionary with no entries
+ */
+@QFunction
+@Name("emptydictionary")
+fun emptyDictionary(): DictionaryValue<OutputValue<*>> = DictionaryValue(mutableMapOf())
+
+/**
  * Gets a value from a dictionary by its key.
  *
  * ```

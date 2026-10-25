@@ -340,6 +340,21 @@ fun collectionWithIndices(
         .let { dictionaryOf(it) }
 
 /**
+ * Creates a new empty collection.
+ *
+ * ```
+ * .var {items} {.emptycollection}
+ *
+ * .items::size <!-- 0 -->
+ * ```
+ *
+ * @return a new collection with no elements
+ */
+@QFunction
+@Name("emptycollection")
+fun emptyCollection(): IterableValue<OutputValue<*>> = emptyList<OutputValue<*>>().wrappedAsValue()
+
+/**
  * Creates a new pair.
  * @param first first element of the pair
  * @param second second element of the pair

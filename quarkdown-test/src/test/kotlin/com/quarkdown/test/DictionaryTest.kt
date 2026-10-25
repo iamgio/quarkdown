@@ -112,6 +112,16 @@ class DictionaryTest {
     }
 
     @Test
+    fun `empty dictionary`() {
+        execute(".emptydictionary::size") {
+            assertEquals("<p>0</p>", it)
+        }
+        execute(".emptydictionary::get {a}::otherwise {none}") {
+            assertEquals("<p>none</p>", it)
+        }
+    }
+
+    @Test
     fun `nested dictionary lookup`() {
         execute(
             """
