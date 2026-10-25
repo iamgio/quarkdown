@@ -66,6 +66,44 @@ class StringTest {
     }
 
     @Test
+    fun `split with default separator`() {
+        execute(".split {A, B, C}::size") {
+            assertEquals("<p>3</p>", it)
+        }
+        execute(".split {A, B, C}::second") {
+            assertEquals("<p>B</p>", it)
+        }
+    }
+
+    @Test
+    fun `split with custom separator`() {
+        execute(".var {date} {2026-10-24}\n\n.date::split separator:{-}::first") {
+            assertEquals("<p>2026</p>", it)
+        }
+    }
+
+    @Test
+    fun `split round trips with join`() {
+        execute(".split {A, B, C}::join") {
+            assertEquals("<p>A, B, C</p>", it)
+        }
+    }
+
+    @Test
+    fun `split without separator occurrences is a single part`() {
+        execute(".split {ABC}::size") {
+            assertEquals("<p>1</p>", it)
+        }
+    }
+
+    @Test
+    fun `split of empty string is an empty collection`() {
+        execute(".split {}::size") {
+            assertEquals("<p>0</p>", it)
+        }
+    }
+
+    @Test
     fun `starts with`() {
         execute(".startswith {hello world} {hello}") {
             assertEquals("<p><input disabled=\"\" type=\"checkbox\" checked=\"\" /></p>", it)

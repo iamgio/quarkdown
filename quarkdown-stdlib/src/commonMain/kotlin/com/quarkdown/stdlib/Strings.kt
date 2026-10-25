@@ -4,6 +4,8 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.function.reflect.annotation.LikelyChained
+import com.quarkdown.core.function.reflect.annotation.LikelyNamed
+import com.quarkdown.core.function.value.IterableValue
 import com.quarkdown.core.function.value.StringValue
 import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.StringCase
@@ -137,6 +139,37 @@ fun startsWith(
     prefix: String,
     @Name("ignorecase") ignoreCase: Boolean = false,
 ) = string.startsWith(prefix, ignoreCase).wrappedAsValue()
+
+/**
+ * Splits a string into a collection of its parts, delimited by [separator].
+ *
+ * ```
+ * .split {A, B, C}::foreach
+ *     The part is .1
+ * ```
+ *
+ * ```
+ * .var {date} {2026-10-24}
+ *
+ * .date::split separator:{-}::first <!-- 2026 -->
+ * ```
+ *
+ * @param string string to split
+ * @param separator string that delimits the parts. Defaults to `, `
+ * @return a new collection containing the parts of [string], in order. An empty string produces an empty collection
+ */
+@QFunction
+@LikelyChained
+fun split(
+    string: String,
+    @LikelyNamed separator: String = ", ",
+): IterableValue<StringValue> =
+    string
+        .takeIf { it.isNotEmpty() }
+        ?.split(separator)
+        .orEmpty()
+        .map { it.wrappedAsValue() }
+        .wrappedAsValue()
 
 /**
  * Converts Markdown content to plain text.

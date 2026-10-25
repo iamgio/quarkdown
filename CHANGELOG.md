@@ -134,6 +134,17 @@ Like `foreach`, it also accepts a body that transforms each element before joini
 ```
 > Output: 1 **A**, 2 **B**, 3 **C**
 
+#### New string operation: `split`
+
+The new `split` function breaks a string into a collection of its parts, delimited by `, ` or by a custom `separator`.
+
+```markdown
+.var {date} {2026-10-24}
+
+.date::split separator:{-}::first
+```
+> Output: `2026`
+
 ### Fixed
 
 #### Missing lines at page breaks
