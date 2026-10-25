@@ -78,6 +78,19 @@ The new `and` and `or` functions combine two boolean values, complementing the e
     x is between 0 and 10
 ```
 
+#### [New collection operation: `contains`](https://quarkdown.com/wiki/boolean#operators)
+
+The new `contains` function checks whether a string contains some text, a collection contains an element, or a dictionary contains a key.
+
+```markdown
+.var {letters}
+    - A
+    - B
+
+.if {.letters::contains {B}}
+    B is in the list
+```
+
 #### [New collection operation: `withindices`](https://quarkdown.com/wiki/loops#indices)
 
 The new `withindices` function turns a collection into a dictionary that maps each element's position, starting at 1, to the element itself.

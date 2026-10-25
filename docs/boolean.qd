@@ -17,11 +17,12 @@ Using the `yes` and `no` literals is encouraged because they contribute to a mor
 
 ## Operators
 
-The following operator functions return a `Boolean` value:
+The following operator functions return a `Boolean` value. The [chaining syntax](syntax-of-a-function-call.qd#chaining-calls) is recommended (e.g. `.value::equals {other}`
 
-- `.not {bool}`: Negates a boolean. [Chaining](syntax-of-a-function-call.qd#chaining-calls) is recommended: `.bool::not`
-- `.and {a} {b}`: Returns `true` if both `a` and `b` are `true`. Chaining is recommended: `.a::and {.b}`
-- `.or {a} {b}`: Returns `true` if at least one of `a` and `b` is `true`. Chaining is recommended: `.a::or {.b}`
+- `.not {bool}`: Negates a boolean.
+- `.and {a} {b}`: Returns `true` if both `a` and `b` are `true`.
+- `.or {a} {b}`: Returns `true` if at least one of `a` and `b` is `true`.
 - `.islower {a} {than}`: Returns `true` if `a` is less than `than`
 - `.isgreater {a} {than}`: Returns `true` if `a` is greater than `than`
 - `.isequal {a} {to}`: Returns `true` if `a` equals `to`
+- `.contains {value} {element}`: Returns `true` if the string `value` contains the text `element`, or if the collection `value` contains `element` as an element, or if the dictionary `value` contains `element` as a key

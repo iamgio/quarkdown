@@ -8,7 +8,8 @@ import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
-import com.quarkdown.stdlib.internal.asComparablePlainText
+import com.quarkdown.stdlib.internal.contains
+import com.quarkdown.stdlib.internal.haveEqualContent
 
 /**
  * @param a first number to compare
@@ -64,11 +65,34 @@ fun isGreater(
 fun equals(
     a: DynamicValue,
     @Name("to") b: DynamicValue,
-) = BooleanValue(
-    a == b ||
-        a.unwrappedValue == b.unwrappedValue ||
-        asComparablePlainText(a.unwrappedValue) == asComparablePlainText(b.unwrappedValue),
-)
+) = BooleanValue(a == b || haveEqualContent(a.unwrappedValue, b.unwrappedValue))
+
+/**
+ * Checks whether a value contains another one:
+ * - a collection contains [element] if any of its elements equals it, in the same way as [equals];
+ * - a dictionary contains [element] if it is one of its keys;
+ * - any other value, such as a string, contains [element] if its text contains the text of [element].
+ *
+ * ```
+ * .var {letters}
+ *     - A
+ *     - B
+ *
+ * .letters::contains {B} <!-- true -->
+ *
+ * .contains {Quarkdown} {ark} <!-- true -->
+ * ```
+ *
+ * @param value collection, dictionary or string to search in
+ * @param element element, key or text to search for
+ * @return whether [value] contains [element]
+ */
+@QFunction
+@LikelyChained
+fun contains(
+    value: DynamicValue,
+    element: DynamicValue,
+): BooleanValue = BooleanValue(value.contains(element))
 
 /**
  * Negates a boolean value.
