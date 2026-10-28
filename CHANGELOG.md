@@ -169,6 +169,10 @@ The new `emptycollection` and `emptydictionary` functions create an empty collec
 
 ### Changed
 
+#### Pure black text in printed `paperwhite` documents
+
+The `paperwhite` color theme now uses pure black as its main text color in `paged` documents and when printing, for a crisper result on paper. On screen, other document types keep the softer black.
+
 #### Sidebar stays hidden while selecting text
 
 In the HTML view of `plain` and `paged` documents, dragging the mouse to select text across the right edge of the page no longer expands the navigation sidebar.
