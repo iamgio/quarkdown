@@ -69,6 +69,34 @@ class PromptUnlessTest {
         assertEquals(Size.SMALL, command.chosen)
     }
 
+    private class LabelCommand : CliktCommand() {
+        var label: String? = null
+
+        private val labelOption: String by option("--label")
+            .promptOrDefault("Label")
+
+        override fun run() {
+            label = labelOption
+        }
+    }
+
+    @Test
+    fun `promptOrDefault reads the answer`() {
+        val command = LabelCommand()
+        val result = command.test(emptyList(), stdin = "hello\n")
+        assertEquals("hello", command.label)
+        assertTrue("Label" in result.stdout)
+        assertFalse("()" in result.stdout)
+    }
+
+    @Test
+    fun `promptOrDefault yields a blank value on closed input`() {
+        val command = LabelCommand()
+        val result = command.test(emptyList(), stdin = "")
+        assertEquals(0, result.statusCode, result.stderr)
+        assertEquals("", command.label)
+    }
+
     @Test
     fun `invalid answer is asked again`() {
         val command = SizeCommand(fallback = null)
