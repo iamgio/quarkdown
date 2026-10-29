@@ -18,6 +18,7 @@ import com.quarkdown.pm.repo.PackageRepositories
  * @param content text that becomes the main file's initial content
  * @param additionalFiles root of an in-memory directory holding the files to copy into the project,
  *                        each at its package-relative path
+ * @param enforcesTheme whether the template keeps its own theme, so that the new project must not declare a `.theme`
  * @see com.quarkdown.pm.repo.PackageRepositories.fetch
  */
 class PackageTemplate(
@@ -25,6 +26,7 @@ class PackageTemplate(
     val doctype: DocumentType?,
     val content: String,
     val additionalFiles: FsEntry,
+    val enforcesTheme: Boolean = false,
 ) {
     companion object {
         private fun RepositoryPackage.templateManifest(reference: String): TemplateManifest =
@@ -79,6 +81,7 @@ class PackageTemplate(
                     doctype = template.doctype?.let { documentType(reference, it) },
                     content = content.content().decodeToString(),
                     additionalFiles = additionalFiles.download().resolve("/"),
+                    enforcesTheme = template.enforceTheme,
                 )
             }
         }

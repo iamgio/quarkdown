@@ -83,13 +83,15 @@ To make a package a template, add a `[template]` table to its manifest:
 doctype = "paged"
 content = "template.qd"
 additional-files = ["sections/experience.qd", "references.bib"]
+enforce-theme = true
 ```
 
-| Key                | Required | Meaning                                                                                                                      |
-|--------------------|----------|------------------------------------------------------------------------------------------------------------------------------|
-| `content`          | yes      | Quarkdown file whose text becomes the initial content of the new project's main file, copied as-is                           |
-| `doctype`          | no       | Document type of the new project (`plain`, `paged`, `slides`, `docs`). If set, the wizard skips the question                 |
-| `additional-files` | no       | Files copied into the new project at the same relative path, as-is                                                           |
+| Key                | Required | Meaning                                                                                                                                                   |
+|--------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `content`          | yes      | Quarkdown file whose text becomes the initial content of the new project's main file, copied as-is                                                        |
+| `doctype`          | no       | Document type of the new project (`plain`, `paged`, `slides`, `docs`). If set, the wizard skips the question                                              |
+| `additional-files` | no       | Files copied into the new project at the same relative path, as-is                                                                                        |
+| `enforce-theme`    | no       | Whether the template sets a preferred theme (default `false`). If `true`, new projects never declare a `.theme` |
 
 ## Internal files
 

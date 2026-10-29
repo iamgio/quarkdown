@@ -138,21 +138,17 @@ class CreateProjectCommand(
         .flag()
 
     /**
-     * @return the theme to generate: explicit options win, the template's own theme is left alone otherwise,
-     *         and projects without a template get the defaults for their type
+     * @return the theme to generate: `null` for a template that enforces its own theme,
+     *         otherwise the explicit options, each falling back to the default for the document type
      */
     private fun createTheme(): DocumentTheme? =
         when {
-            colorTheme == null && layoutTheme == null && template != null -> {
-                null
-            }
-
-            else -> {
+            template?.enforcesTheme == true -> null
+            else ->
                 DocumentTheme(
                     colorTheme ?: DefaultTheme.getColorTheme(type),
                     layoutTheme ?: DefaultTheme.getLayoutTheme(type),
                 )
-            }
         }
 
     private fun createDocumentInfo() =

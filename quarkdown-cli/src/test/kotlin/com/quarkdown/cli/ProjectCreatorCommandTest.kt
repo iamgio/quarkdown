@@ -44,6 +44,7 @@ class ProjectCreatorCommandTest : TempDirectory() {
         FakePackageRepository(
             mapOf(
                 "@atoms/cv:1.0.0" to templatePackage("cv", template = cvTemplate, files = cvFiles),
+                "@atoms/themed-cv:1.0.0" to templatePackage("themed-cv", template = cvTemplate.copy(enforceTheme = true), files = cvFiles),
                 "@atoms/plain:1.0.0" to templatePackage("plain", files = cvFiles),
             ),
         ).asAtoms()
@@ -289,8 +290,14 @@ class ProjectCreatorCommandTest : TempDirectory() {
     }
 
     @Test
-    fun `template omits the theme unless a theme option is given`() {
+    fun `template gets the default theme for its doctype`() {
         assertEquals(0, createFromTemplate().statusCode)
+        assertContains(mainFile(), ".theme {paperwhite} layout:{latex}")
+    }
+
+    @Test
+    fun `theme-enforcing template omits the theme`() {
+        assertEquals(0, createFromTemplate(reference = "@atoms/themed-cv:1.0.0").statusCode)
         assertFalse(".theme" in mainFile())
     }
 
@@ -304,6 +311,15 @@ class ProjectCreatorCommandTest : TempDirectory() {
     fun `template with a color theme option gets the default layout for its doctype`() {
         assertEquals(0, createFromTemplate("--color-theme", "darko").statusCode)
         assertContains(mainFile(), ".theme {darko} layout:{latex}")
+    }
+
+    @Test
+    fun `theme-enforcing template omits the theme even with theme options`() {
+        assertEquals(
+            0,
+            createFromTemplate("--color-theme", "darko", "--layout-theme", "latex", reference = "@atoms/themed-cv:1.0.0").statusCode,
+        )
+        assertFalse(".theme" in mainFile())
     }
 
     @Test
