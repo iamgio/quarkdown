@@ -75,8 +75,7 @@ Born as an extension of CommonMark and GFM, the Quarkdown Flavor brings **functi
 
 <br>
 
-**Possibilities are unlimited** thanks to an ever-expanding [standard library](quarkdown-stdlib/src/commonMain/kotlin/com/quarkdown/stdlib),
-which offers layout builders, I/O, math, conditional statements and loops.
+**Possibilities are unlimited** thanks to an ever-expanding [repository of packages and templates](https://studio.quarkdown.com/atoms), and a solid [standard library](quarkdown-stdlib/src/commonMain/kotlin/com/quarkdown/stdlib).
 
 **Not enough?** You can still define your own functions and variables, all within Markdown.
 You can even create awesome libraries for everyone to use.
@@ -114,6 +113,7 @@ whether it's an academic paper, book, knowledge base or interactive presentation
 - **Elegant:** produces output that matches the quality of industry-leading tools
 - **Agent-friendly:** comes with a built-in skill for idiomatic fluency of your coding agents ([read the eval](https://quarkdown.com/blog/agent-skill/))
 - **Customizable:** full control over document layout, aesthetics, and properties
+- **Community-driven:** import packages and templates with a single line of code, or [publish](https://github.com/quarkdown-labs/atoms) your own
 - **Secure by default:** a restrictive permission system limits access to system resources
 - **Versatile:** a single source compiles to multiple targets
 - **Reactive:** low-latency live previews for rapid iteration. The official wiki (100+ subdocuments) compiles in ~2 seconds

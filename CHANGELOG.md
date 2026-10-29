@@ -2,11 +2,13 @@
 
 ## [Unreleased]
 
+This release marks one of Quarkdown's most significant milestones towards becoming a mature, community-driven project!
+
 ### Added
 
 #### [Packages & package manager](https://quarkdown.com/wiki/packages)
 
-This release comes with Quarkdown's long-awaited package manager!
+This release comes with Quarkdown's long-awaited package manager! You can browse the available packages in the new [catalog](https://studio.quarkdown.com/atoms).
 
 A package, called ***atom***, can be easily included into your document the same way you `.include` any other local Quarkdown file, with the special syntax `@scope/name:version`.
 
@@ -18,9 +20,11 @@ The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/at
 .cowsay {Hello, Quarkdown!}
 ```
 
+We can't wait to see your creations!
+
 #### [Project templates from packages](https://quarkdown.com/wiki/publishing-packages#templates)
 
-`quarkdown create` can now scaffold a project from a package that declares itself a template, via the new `--template` option:
+`quarkdown create` can now scaffold a project from a template package, via the new `--template` option:
 
 ```
 quarkdown create --template @atoms/simple-cv:1.0.0

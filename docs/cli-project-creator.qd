@@ -32,4 +32,6 @@ A [package](packages.qd) can declare itself a **project template**, which you ca
 quarkdown create --template @atoms/simple-cv:1.0.0
 ```
 
+You can find templates on the [Quarkdown Atoms catalog](https://studio.quarkdown.com/atoms?templates=true).
+
 To make your own package a template, see [*Publishing packages*](publishing-packages.qd#templates).

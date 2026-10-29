@@ -99,3 +99,5 @@ Files and directories whose name starts with `__` (double underscore), are inter
 
 Once the package works locally, publish it to the official `@atoms` repository by [following its instructions](https://github.com/quarkdown-labs/atoms).
 Because each published version is immutable, to ship a change you'll need to publish a new one.
+
+Published packages appear in the [atoms catalog](https://studio.quarkdown.com/atoms).

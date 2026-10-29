@@ -26,7 +26,7 @@ For this quickstart, we recommend the following options:
 - Document type: `plain`
 - Document language: `English`
 
-> Tip: You can start from a template [package](packages.qd), by specifying the `--template` option, followed by the package ID:
+> Tip: You can start from a [template](https://studio.quarkdown.com/atoms?templates=true), by specifying the `--template` option, followed by the package ID:
 >
 > ```shell
 > quarkdown create --template @atoms/simple-cv:1.0.0
@@ -632,7 +632,7 @@ You can also visualize the knowledge graph formed by subdocuments:
 
 > Reference: [Packages](packages.qd)
 
-`.include` is not limited to your own files: it can also include a **package**, a reusable bundle of Quarkdown sources published by the community. The official repository is [`quarkdown-labs/atoms`](https://github.com/quarkdown-labs/atoms).
+`.include` is not limited to your own files: it can also include a **package**, a reusable bundle of Quarkdown sources published by the community. You can find the official catalog on [Quarkdown Atoms](https://studio.quarkdown.com/atoms?templates=true).
 
 Let's include the `cowsay` package in our setup file. A package reference has the form `@scope/name:version`:
 

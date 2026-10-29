@@ -3,7 +3,7 @@
 
 A **package**, called an *atom*, is a published, reusable bundle of Quarkdown sources and assets.
 
-The official `@atoms` repository can be found at [`quarkdown-labs/atoms`](https://github.com/quarkdown-labs/atoms).
+You can find the official catalog on [`Quarkdown Atoms`](https://studio.quarkdown.com/atoms).
 
 ## Using a package
 
