@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.7.0] - 2026-10-29
+
 This release marks one of Quarkdown's most significant milestones towards becoming a mature, community-driven project!
 
 ### Added
@@ -10,7 +12,7 @@ This release marks one of Quarkdown's most significant milestones towards becomi
 
 This release comes with Quarkdown's long-awaited package manager! You can browse the available packages in the new [catalog](https://studio.quarkdown.com/atoms).
 
-A package, called ***atom***, can be easily included into your document the same way you `.include` any other local Quarkdown file, with the special syntax `@scope/name:version`.
+A package, called **_atom_**, can be easily included into your document the same way you `.include` any other local Quarkdown file, with the special syntax `@scope/name:version`.
 
 The officially maintained scope, [`@atoms`](https://github.com/quarkdown-labs/atoms), is a GitHub-hosted repository anyone can contribute to.
 
@@ -26,9 +28,7 @@ We can't wait to see your creations!
 
 `quarkdown create` can now scaffold a project from a template package, via the new `--template` option:
 
-```
-quarkdown create --template @atoms/simple-cv:1.0.0
-```
+    quarkdown create --template @atoms/simple-cv:1.0.0
 
 #### Linux-ARM support
 
@@ -109,6 +109,7 @@ This makes numbered iteration straightforward.
     index letter:
     .index .letter
 ```
+
 > Output:
 > 1 A
 > 2 B
@@ -126,6 +127,7 @@ The new `findfirst` function returns the first element of a collection that sati
 
 .numbers::findfirst {n: .n::isgreater than:{5}}
 ```
+
 > Output: `8`
 
 #### [New loop: `join`](https://quarkdown.com/wiki/loops#join)
@@ -140,6 +142,7 @@ The new `join` function merges the elements of a collection into a single inline
 
 .letters::join
 ```
+
 > Output: A, B, C
 
 Like `foreach`, it also accepts a body that transforms each element before joining.
@@ -149,6 +152,7 @@ Like `foreach`, it also accepts a body that transforms each element before joini
     index letter:
     .index **.letter**
 ```
+
 > Output: 1 **A**, 2 **B**, 3 **C**
 
 #### New string operation: `split`
@@ -160,6 +164,7 @@ The new `split` function breaks a string into a collection of its parts, delimit
 
 .date::split separator:{-}::first
 ```
+
 > Output: `2026`
 
 #### [New factory functions: `emptycollection` and `emptydictionary`](https://quarkdown.com/wiki/iterable)
@@ -169,6 +174,7 @@ The new `emptycollection` and `emptydictionary` functions create an empty collec
 ```markdown
 .emptycollection::size
 ```
+
 > Output: `0`
 
 ### Changed
@@ -186,8 +192,9 @@ In the HTML view of `plain` and `paged` documents, dragging the mouse to select 
 #### Missing lines at page breaks
 
 In `paged` documents, a page could lose its last lines when either:
-- the last line of a page ended with a word hyphenated by the browser
-- a footnote needed more room at the bottom of its page than Quarkdown had reserved for it
+
+-   the last line of a page ended with a word hyphenated by the browser
+-   a footnote needed more room at the bottom of its page than Quarkdown had reserved for it
 
 Page breaks no longer split words, footnotes are measured correctly, and long links in footnotes now wrap. 
 
@@ -1788,7 +1795,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.6.4...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.7.0...HEAD
+
+[2.7.0]: https://github.com/iamgio/quarkdown/compare/v2.6.4...v2.7.0
 
 [2.6.4]: https://github.com/iamgio/quarkdown/compare/v2.6.3...v2.6.4
 
