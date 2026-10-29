@@ -472,6 +472,36 @@ class ProjectCreatorCommandTest : TempDirectory() {
     }
 
     @Test
+    fun `template with closed input falls back to defaults`() {
+        val result =
+            command.test(
+                listOf(directory.resolve(".").absolutePath, "--template", "@atoms/cv:1.0.0", "--main-file", "main"),
+                stdin = "",
+            )
+        assertEquals(0, result.statusCode, result.stderr)
+        val main = mainFile()
+        assertContains(main, ".docname {${directory.name}}")
+        assertContains(main, ".doctype {paged}")
+        assertContains(main, ".include {@atoms/cv:1.0.0}")
+        assertFalse(".docauthors" in main)
+        assertFalse(".docdescription" in main)
+        assertFalse(".doclang" in main)
+    }
+
+    @Test
+    fun `closed input without a template falls back to defaults`() {
+        val result =
+            command.test(
+                listOf(directory.resolve(".").absolutePath, "--main-file", "main"),
+                stdin = "",
+            )
+        assertEquals(0, result.statusCode, result.stderr)
+        val main = mainFile()
+        assertContains(main, ".docname {${directory.name}}")
+        assertContains(main, ".doctype {plain}")
+    }
+
+    @Test
     fun `template refusal happens before any prompt`() {
         val result =
             command.test(

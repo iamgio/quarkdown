@@ -7,7 +7,6 @@ import com.github.ajalt.clikt.parameters.options.check
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.prompt
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.mordant.rendering.TextColors.cyan
@@ -23,6 +22,7 @@ import com.quarkdown.cli.creator.content.PackageTemplateInitialContentSupplier
 import com.quarkdown.cli.creator.content.SlidesProjectCreatorInitialContentSupplier
 import com.quarkdown.cli.creator.template.DefaultProjectCreatorTemplateProcessorFactory
 import com.quarkdown.cli.creator.template.DocsProjectCreatorTemplateProcessorFactory
+import com.quarkdown.cli.util.promptOrDefault
 import com.quarkdown.cli.util.promptUnless
 import com.quarkdown.core.document.DocumentAuthor
 import com.quarkdown.core.document.DocumentInfo
@@ -73,11 +73,11 @@ class CreateProjectCommand(
 
     private val mainFileName: String? by option("--main-file", help = "Main file name")
 
-    private val name: String? by option("--name", help = "Project name")
-        .prompt(styledPrompt("Project name"))
+    private val name: String by option("--name", help = "Project name")
+        .promptOrDefault(styledPrompt("Project name"))
 
     private val authorsRaw: String by option("--authors", help = "Project authors")
-        .prompt(styledPrompt("Authors", "(comma-separated)"))
+        .promptOrDefault(styledPrompt("Authors", "(comma-separated)"))
 
     private val authors: List<DocumentAuthor> by lazy {
         authorsRaw
@@ -105,7 +105,7 @@ class CreateProjectCommand(
         ) { template?.doctype }
 
     private val description: String by option("--description", help = "Document description")
-        .prompt(styledPrompt("Description"))
+        .promptOrDefault(styledPrompt("Description"))
 
     private val keywordsRaw: String? by option("--keywords", help = "Document keywords (comma-separated)")
 
@@ -119,15 +119,15 @@ class CreateProjectCommand(
 
     private fun findLocale(language: String): Locale? = LocaleLoader.SYSTEM.find(language)
 
-    private val languageRaw: String? by option("--lang", help = "Document language")
-        .prompt(styledPrompt("Language", "(e.g. English, French, zh, it)"))
+    private val languageRaw: String by option("--lang", help = "Document language")
+        .promptOrDefault(styledPrompt("Language", "(e.g. English, French, zh, it)"))
         .check(
             lazyMessage = { "$it is not a valid locale." },
             validator = { it.isBlank() || findLocale(it) != null },
         )
 
     private val language: Locale? by lazy {
-        languageRaw?.let(::findLocale)
+        languageRaw.takeUnless { it.isBlank() }?.let(::findLocale)
     }
 
     private val colorTheme: String? by option("--color-theme", help = "Color theme")
@@ -153,7 +153,7 @@ class CreateProjectCommand(
 
     private fun createDocumentInfo() =
         DocumentInfo(
-            name = name?.takeUnless { it.isBlank() } ?: directory.name,
+            name = name.takeUnless { it.isBlank() } ?: directory.absoluteFile.normalize().name,
             description = description.takeUnless { it.isBlank() },
             authors = authors.toMutableList(),
             keywords = keywords,
