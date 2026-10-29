@@ -13,7 +13,9 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 /**
  * Tests for [PackageTemplate.resolve].
@@ -24,6 +26,7 @@ class PackageTemplateTest {
             doctype = "paged",
             content = "template.qd",
             additionalFiles = listOf("sections/experience.qd", "references.bib"),
+            enforceTheme = true,
         )
 
     private val cvFiles =
@@ -62,6 +65,7 @@ class PackageTemplateTest {
         val template = resolve("@atoms/cv:1.0.0")
         assertEquals("@atoms/cv:1.0.0", template.reference)
         assertEquals(DocumentType.PAGED, template.doctype)
+        assertTrue(template.enforcesTheme)
         assertEquals("# My CV", template.content)
         assertEquals("# Experience", template.additionalFiles.resolve("sections/experience.qd").readText())
         assertEquals("@book{}", template.additionalFiles.resolve("references.bib").readText())
@@ -96,6 +100,11 @@ class PackageTemplateTest {
     @Test
     fun `template without doctype leaves it null`() {
         assertNull(resolve("@atoms/untyped:1.0.0").doctype)
+    }
+
+    @Test
+    fun `template does not enforce its theme by default`() {
+        assertFalse(resolve("@atoms/untyped:1.0.0").enforcesTheme)
     }
 
     @Test

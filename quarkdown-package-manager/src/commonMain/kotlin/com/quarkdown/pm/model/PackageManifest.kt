@@ -56,10 +56,13 @@ data class AtomManifest(
  *                of the new project's main file
  * @param additionalFiles paths, relative to the package root, of files copied as-is into the new project at the same
  *                        relative path, declared as `additional-files`
+ * @param enforceTheme whether the template's own theme must be kept, declared as `enforce-theme`:
+ *                     when `true`, the project creator never emits a `.theme` call
  */
 @Serializable
 data class TemplateManifest(
     val doctype: String? = null,
     val content: String,
     @SerialName("additional-files") val additionalFiles: List<String> = emptyList(),
+    @SerialName("enforce-theme") val enforceTheme: Boolean = false,
 )

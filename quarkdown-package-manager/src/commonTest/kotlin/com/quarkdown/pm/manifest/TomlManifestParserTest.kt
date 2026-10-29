@@ -135,11 +135,13 @@ class TomlManifestParserTest {
                     doctype = "paged"
                     content = "template.qd"
                     additional-files = ["assets/photo.png", "sections/experience.qd"]
+                    enforce-theme = true
                     """.trimIndent(),
                 ).template
         assertEquals("paged", template?.doctype)
         assertEquals("template.qd", template?.content)
         assertEquals(listOf("assets/photo.png", "sections/experience.qd"), template?.additionalFiles)
+        assertEquals(true, template?.enforceTheme)
     }
 
     @Test
@@ -160,6 +162,7 @@ class TomlManifestParserTest {
         assertEquals("template.qd", template?.content)
         assertNull(template?.doctype)
         assertEquals(emptyList(), template?.additionalFiles)
+        assertEquals(false, template?.enforceTheme)
     }
 
     @Test
