@@ -1,4 +1,5 @@
 @use "highlightjs";
+@use "../components/util/media-queries";
 
 @include highlightjs.theme("default");
 
@@ -15,6 +16,14 @@
     --qd-docs-separator-border-color: rgb(237, 238, 243);
     --qd-docs-search-border-color: rgb(193, 195, 200);
     --qd-docs-search-focused-border: var(--qd-main-color);
+
+    &:has(.quarkdown-paged) {
+        --qd-main-color: black;
+    }
+
+    @include media-queries.print {
+        --qd-main-color: black;
+    }
 }
 
 .quarkdown {
