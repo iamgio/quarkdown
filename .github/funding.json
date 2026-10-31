@@ -1,0 +1,82 @@
+{
+    "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+    "version": "v1.1.0",
+    "entity": {
+        "type": "individual",
+        "role": "owner",
+        "name": "Giorgio Garofalo",
+        "email": "giorgiogarofalo02@gmail.com",
+        "phone": "",
+        "description": "I'm Giorgio (iamgio), an Italian software engineer who has been in love with open source software for over a decade. I created Quarkdown in 2024 and have been its lead maintainer, developing its compiler, standard library, rendering engine, and tooling, as well as handling documentation, releases, and community support with the same passion as day one.",
+        "webpageUrl": {
+            "url": "https://iamgio.eu",
+            "wellKnown": "https://iamgio.eu/.well-known/funding-manifest-urls"
+        }
+    },
+    "projects": [
+        {
+            "guid": "quarkdown",
+            "name": "Quarkdown",
+            "description": "Quarkdown is a modern Markdown-based typesetting system designed for versatility. A single project can compile into a book, an academic paper, a knowledge base, a documentation website, or a slide deck.\n\nIt extends GitHub Flavored Markdown with a Turing-complete scripting system, which lets authors define, reuse, and customize their content. Documents compile to HTML, PDF, MD and TXT, fully offline, with a fast live preview, a community-driven package ecosystem, and a language server.\n\nFunding helps sustain full-time development, maintenance, security fixes, documentation, and community support, keeping Quarkdown a free and open alternative to LaTeX and proprietary typesetting tools.",
+            "webpageUrl": {
+                "url": "https://quarkdown.com",
+                "wellKnown": "https://quarkdown.com/.well-known/funding-manifest-urls"
+            },
+            "repositoryUrl": {
+                "url": "https://github.com/iamgio/quarkdown"
+            },
+            "licenses": ["spdx:GPL-3.0"],
+            "tags": [
+                "markdown",
+                "typesetting",
+                "document-generation",
+                "compiler",
+                "pdf",
+                "html",
+                "presentations",
+                "documentation",
+                "latex-alternative",
+                "kotlin"
+            ]
+        }
+    ],
+    "funding": {
+        "channels": [
+            {
+                "guid": "github-sponsors",
+                "type": "payment-provider",
+                "address": "https://github.com/sponsors/iamgio",
+                "description": "Sponsor the project with one-time or recurring payments through GitHub Sponsors."
+            },
+            {
+                "guid": "bank",
+                "type": "bank",
+                "address": "",
+                "description": "Direct bank transfers are accepted. Please e-mail me for details."
+            }
+        ],
+        "plans": [
+            {
+                "guid": "developer-time",
+                "status": "active",
+                "name": "Developer compensation",
+                "description": "Covers one developer working full-time on Quarkdown, with new features, bug fixes, maintenance, documentation, and community support.",
+                "amount": 4000,
+                "currency": "USD",
+                "frequency": "monthly",
+                "channels": ["bank", "github-sponsors"]
+            },
+            {
+                "guid": "goodwill",
+                "status": "active",
+                "name": "Goodwill",
+                "description": "Contribute any amount you wish to support Quarkdown.",
+                "amount": 0,
+                "currency": "USD",
+                "frequency": "one-time",
+                "channels": ["github-sponsors", "bank"]
+            }
+        ],
+        "history": []
+    }
+}
