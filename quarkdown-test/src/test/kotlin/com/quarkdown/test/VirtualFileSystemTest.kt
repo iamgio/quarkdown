@@ -19,6 +19,7 @@ class VirtualFileSystemTest {
             write("table.csv", "name,age\nAlice,30\nBob,40")
             write("lib/included.qd", ".var {fromlib} {included!}")
             write("sub/child.qd", "# Child")
+            write("sub/includer.qd", ".include {../lib/included.qd}")
         }
 
     @Test
@@ -40,6 +41,16 @@ class VirtualFileSystemTest {
     fun `includes a source file, branching the working directory`() {
         execute(
             ".include {lib/included.qd}\n\n.fromlib",
+            fileSystem = virtualFs(),
+        ) {
+            assertContains(it, "included!")
+        }
+    }
+
+    @Test
+    fun `includes a source file through a parent directory`() {
+        execute(
+            ".include {sub/includer.qd}\n\n.fromlib",
             fileSystem = virtualFs(),
         ) {
             assertContains(it, "included!")

@@ -1,7 +1,10 @@
 package com.quarkdown.core.filesystem
 
+import okio.ForwardingFileSystem
+import okio.Path
 import okio.Path.Companion.toPath
 import okio.fakefilesystem.FakeFileSystem
+import okio.FileSystem as OkioBackend
 
 /**
  * An in-memory [FileSystem], detached from the physical disk.
@@ -9,13 +12,13 @@ import okio.fakefilesystem.FakeFileSystem
  * @param workingDirectoryPath absolute path of the working directory within the virtual tree
  */
 class VirtualFileSystem private constructor(
-    private val backend: FakeFileSystem,
+    private val backend: OkioBackend,
     workingDirectoryPath: String?,
 ) : OkioBackedFileSystem(
         backend,
         workingDirectoryPath?.let { FsEntry(it.toPath(), backend) },
     ) {
-    constructor(workingDirectoryPath: String? = "/") : this(FakeFileSystem(), workingDirectoryPath)
+    constructor(workingDirectoryPath: String? = "/") : this(LexicalPathFileSystem(FakeFileSystem()), workingDirectoryPath)
 
     /**
      * Creates a directory at [path] (relative to the working directory, or absolute),
@@ -72,4 +75,19 @@ class VirtualFileSystem private constructor(
     fun delete(path: String) {
         backend.deleteRecursively(resolve(path).path, mustExist = false)
     }
+}
+
+/**
+ * Resolves `.` and `..` segments lexically before delegating, as the in-memory [FakeFileSystem]
+ * would otherwise look them up as literal names. Lexical resolution is exact here, since the tree has no symbolic links.
+ * @param delegate the in-memory backend
+ */
+private class LexicalPathFileSystem(
+    delegate: OkioBackend,
+) : ForwardingFileSystem(delegate) {
+    override fun onPathParameter(
+        path: Path,
+        functionName: String,
+        parameterName: String,
+    ): Path = path.normalized()
 }
