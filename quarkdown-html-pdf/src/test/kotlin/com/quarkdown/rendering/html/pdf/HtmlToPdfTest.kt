@@ -23,7 +23,7 @@ class HtmlToPdfTest {
             .toFile()
 
     private val options =
-        HtmlPdfExportOptions(
+        ChromiumExportOptions(
             outputDirectory = directory,
             chromePath = ChromiumWrapper.defaultPath,
         )
@@ -38,7 +38,7 @@ class HtmlToPdfTest {
     fun `export with blank chrome path fails the pipeline`() {
         val out = File(directory, "out.pdf")
         assertFailsWith<IOPipelineException> {
-            HtmlPdfExporter(options.copy(chromePath = " ")).export(directory, out)
+            HtmlChromiumExporter(options.copy(chromePath = " "), ChromiumExportFormat.Pdf).export(directory, out)
         }
         assertFalse(out.exists())
     }
@@ -47,7 +47,7 @@ class HtmlToPdfTest {
     fun `export with missing chrome fails the pipeline`() {
         val out = File(directory, "out.pdf")
         assertFailsWith<IOPipelineException> {
-            HtmlPdfExporter(options.copy(chromePath = "not-a-chrome-executable")).export(directory, out)
+            HtmlChromiumExporter(options.copy(chromePath = "not-a-chrome-executable"), ChromiumExportFormat.Pdf).export(directory, out)
         }
         assertFalse(out.exists())
     }
@@ -76,7 +76,7 @@ class HtmlToPdfTest {
         )
 
         val out = File(directory, "out.pdf")
-        HtmlPdfExporter(options.copy(noSandbox = true)).export(directory, out)
+        HtmlChromiumExporter(options.copy(noSandbox = true), ChromiumExportFormat.Pdf).export(directory, out)
 
         assertTrue(out.exists())
 

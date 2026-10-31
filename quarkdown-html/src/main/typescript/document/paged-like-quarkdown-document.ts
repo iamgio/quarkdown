@@ -5,7 +5,32 @@ import {QuarkdownDocument} from "./quarkdown-document";
  */
 export type QuarkdownPage = {
     querySelectorAll(query: string): NodeListOf<HTMLElement>
+    getBoundingClientRect(): DOMRect
 };
+
+/**
+ * Size of a page, in CSS pixels.
+ */
+export type PageSize = { width: number, height: number };
+
+/**
+ * @param document - The document to check
+ * @returns Whether the document is divided into discrete pages
+ */
+export function isPagedLike(document: QuarkdownDocument): document is PagedLikeQuarkdownDocument<QuarkdownPage> {
+    return 'getPages' in document;
+}
+
+/**
+ * Measures the size of a page of the document, assuming all pages share the same size.
+ * @param document - The document to measure
+ * @returns The size of the first page, or `undefined` if the document is not paged or has no pages yet
+ */
+export function getPageSize(document: QuarkdownDocument): PageSize | undefined {
+    if (!isPagedLike(document)) return undefined;
+    const rect = document.getPages()[0]?.getBoundingClientRect();
+    return rect && {width: rect.width, height: rect.height};
+}
 
 /**
  * A Quarkdown document that is divided into discrete pages.

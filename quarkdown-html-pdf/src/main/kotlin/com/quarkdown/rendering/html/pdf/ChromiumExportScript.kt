@@ -7,9 +7,6 @@ import com.quarkdown.interaction.executable.ChromiumWrapper
 import com.quarkdown.server.LocalFileWebServer
 import com.quarkdown.server.withScanner
 import kotlinx.coroutines.delay
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 import java.io.File
 
 /**
@@ -24,23 +21,26 @@ private const val STARTING_SERVER_PORT = 8096
 private const val READINESS_POLL_INTERVAL_MS = 150L
 
 /**
- * Script-like generator of a PDF from HTML through a Chromium-family browser,
+ * Script-like exporter of an HTML document to a [ChromiumExportFormat] through a Chromium-family browser,
  * driven over the Chrome DevTools Protocol via [ChromiumInteraction].
+ * The document is served locally, loaded in the browser, awaited until ready, and finally captured by the format.
  * @param sourcesDirectory directory containing the `index.html` file
- * @param out output PDF file to be written
+ * @param out output file to be written
+ * @param format format to export the document to
  * @param browser browser executable wrapper
- * @param noSandbox whether to disable the Chromium sandbox for PDF export
+ * @param noSandbox whether to disable the Chromium sandbox during the export
  */
-class ChromiumPdfGeneratorScript(
+class ChromiumExportScript(
     private val sourcesDirectory: File,
     private val out: File,
+    private val format: ChromiumExportFormat,
     browser: ChromiumWrapper,
     noSandbox: Boolean = false,
 ) {
     private val interaction = ChromiumInteraction(browser, noSandbox)
 
     /**
-     * Launches the browser to convert the webpage from [sourcesDirectory] into a PDF saved at [out].
+     * Launches the browser to export the webpage from [sourcesDirectory] into [out].
      * Blocking call.
      * @throws IllegalStateException if the browser executable is not found or not valid
      */
@@ -53,15 +53,15 @@ class ChromiumPdfGeneratorScript(
         LocalFileWebServer(sourcesDirectory)
             .withScanner()
             .attemptStartUntilPortAvailable(STARTING_SERVER_PORT) { server, port ->
-                Log.info("PDF server is ready on port $port. Please wait...")
+                Log.info("${format.displayName} export server is ready on port $port. Please wait...")
                 try {
                     generate("http://localhost:$port/?print-pdf")
-                    Log.info("PDF generated successfully.")
+                    Log.info("${format.displayName} generated successfully.")
                 } catch (e: InterruptedException) {
                     throw e
                 } catch (e: Exception) {
                     Log.debug(e)
-                    throw IOPipelineException("Failed to export PDF: ${e.message}")
+                    throw IOPipelineException("Failed to export ${format.displayName}: ${e.message}")
                 } finally {
                     server.stop()
                 }
@@ -72,7 +72,7 @@ class ChromiumPdfGeneratorScript(
         interaction.withPage {
             navigate(url)
             awaitReady()
-            printToPdf(pdfParams(), out)
+            format.export(this, out)
         }
 
     /**
@@ -84,18 +84,4 @@ class ChromiumPdfGeneratorScript(
             delay(READINESS_POLL_INTERVAL_MS)
         }
     }
-
-    /**
-     * @return the `Page.printToPDF` parameters for the current page
-     */
-    private suspend fun ChromiumInteraction.Page.pdfParams(): JsonObject =
-        buildJsonObject {
-            put("printBackground", true)
-            put("preferCSSPageSize", true)
-            // Plain documents render as a single-page PDF.
-            if (evaluateBoolean("document.body.classList.contains('quarkdown-plain')")) {
-                val bodyHeight = evaluateNumber("document.body.clientHeight")
-                put("paperHeight", PdfPaperSize.singlePageHeightInches(bodyHeight))
-            }
-        }
 }
