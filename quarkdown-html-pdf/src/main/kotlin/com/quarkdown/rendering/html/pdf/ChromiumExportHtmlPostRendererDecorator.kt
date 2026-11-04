@@ -13,34 +13,37 @@ import com.quarkdown.rendering.html.post.HtmlPostRenderer
 import java.io.File
 
 /**
- * Decorator for [HtmlPostRenderer] that generates a PDF file from the HTML output via a Chromium-family browser.
+ * Decorator for [HtmlPostRenderer] that exports the HTML output to a [ChromiumExportFormat],
+ * such as PDF or PNG, via a Chromium-family browser.
  * @param postRenderer the original [HtmlPostRenderer] to be decorated
- * @param options options for the PDF export process
+ * @param options options for the export process
+ * @param format format to export the document to
  */
-class PdfHtmlPostRendererDecorator(
+class ChromiumExportHtmlPostRendererDecorator(
     private val postRenderer: HtmlPostRenderer,
-    private val options: HtmlPdfExportOptions,
+    private val options: ChromiumExportOptions,
+    private val format: ChromiumExportFormat,
 ) : PostRenderer by postRenderer {
     override fun generateResources(rendered: CharSequence): Set<OutputResource> {
         val resources = postRenderer.generateResources(rendered)
 
         val tempDirectory =
             kotlin.io.path
-                .createTempDirectory(prefix = "quarkdown-pdf")
+                .createTempDirectory(prefix = "quarkdown-${format.extension}")
                 .toFile()
 
         try {
             val sourcesDirectory: File = OutputResourceGroup("sources", resources).saveTo(tempDirectory)
             val outName = postRenderer.context.subdocument.getOutputFileName(postRenderer.context)
-            val out: File = tempDirectory.resolve("$outName.pdf")
+            val out: File = tempDirectory.resolve("$outName.${format.extension}")
 
-            HtmlPdfExporter(options).export(sourcesDirectory, out)
+            HtmlChromiumExporter(options, format).export(sourcesDirectory, out)
 
             if (!out.exists()) {
-                throw IOPipelineException("PDF export did not produce an output file")
+                throw IOPipelineException("${format.displayName} export did not produce an output file")
             }
 
-            // In order to comply with the pipeline's contract, the output PDF is wrapped in an OutputResource.
+            // In order to comply with the pipeline's contract, the exported file is wrapped in an OutputResource.
             // It is deleted along with its temporary directory, and will be recreated in the output directory
             // by the pipeline's final process.
             return setOf(
@@ -57,7 +60,7 @@ class PdfHtmlPostRendererDecorator(
     ): OutputResource {
         // Single output file.
         resources.singleOrNull()?.let {
-            return it.copy(name = "$name.pdf")
+            return it.copy(name = "$name.${format.extension}")
         }
         // Multiple output files (e.g. subdocuments).
         return OutputResourceGroup(
