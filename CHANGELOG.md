@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### Borderless Mermaid diagrams in `paperwhite`
+
+The `paperwhite` color theme no longer draws a border around Mermaid diagrams. This was a regression introduced in v2.1.2.
+
 ## [2.7.0] - 2026-10-29
 
 This release marks one of Quarkdown's most significant milestones towards becoming a mature, community-driven project!

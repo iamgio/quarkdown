@@ -31,7 +31,7 @@
         border-color: rgba(0, 0, 0, 0.2);
     }
 
-    pre {
+    pre:not(.mermaid) {
         border: 1px solid var(--qd-main-color-muted);
 
         code {

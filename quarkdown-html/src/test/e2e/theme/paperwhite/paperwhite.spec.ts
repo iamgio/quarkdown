@@ -14,6 +14,11 @@ testMatrix("uses pure black text in paged documents", ["paged"], async (page) =>
     await expect(page.locator("h1").first()).toHaveCSS("color", BLACK);
 });
 
+testMatrix("draws a border around code blocks but not Mermaid diagrams", ["plain", "slides"], async (page) => {
+    await expect(page.locator("pre:not(.mermaid)").first()).toHaveCSS("border-top-style", "solid");
+    await expect(page.locator("pre.mermaid")).toHaveCSS("border-top-style", "none");
+});
+
 testMatrix("uses pure black text in print media", ["plain"], async (page) => {
     await page.emulateMedia({media: "print"});
     await expect(page.locator("p").first()).toHaveCSS("color", BLACK);

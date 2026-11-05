@@ -3,3 +3,11 @@
 # Heading
 
 Text
+
+```kotlin
+val x = 1
+```
+
+.mermaid
+    graph TD
+        A --> B
