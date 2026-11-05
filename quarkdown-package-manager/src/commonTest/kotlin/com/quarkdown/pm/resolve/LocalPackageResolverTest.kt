@@ -120,6 +120,18 @@ class LocalPackageResolverTest {
     }
 
     @Test
+    fun `existing directory with the same version is preserved as is`() {
+        fs.write("/project/@atoms/cv/atom.toml", manifest("1.0.0", "main.qd"))
+        fs.write("/project/@atoms/cv/main.qd", "edited")
+        fs.write("/project/@atoms/cv/notes.qd", "extra")
+        val fetcher = fetcher()
+        val hit = assertNotNull(resolver(fetcher).locate(cv1, root))
+        assertEquals("edited", hit.entrypoint.readText())
+        assertEquals("extra", root.resolve("@atoms/cv/notes.qd").readText())
+        assertEquals(emptyList(), fetcher.requested)
+    }
+
+    @Test
     fun `locate misses after the installation is deleted`() {
         val resolver = resolver()
         resolver.install(cv1, root)
