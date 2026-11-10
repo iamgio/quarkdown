@@ -1,0 +1,35 @@
+# Starts a release: bumps version.txt and CHANGELOG.md on main, commits them,
+# and tags the bump commit so the tag snapshot carries the release version.
+# The tag push triggers gradle-deploy.yml, which builds and publishes the release.
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 2.8.0)'
+        required: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      with:
+        ref: main
+        fetch-depth: 0
+
+    - name: Bump version and changelog, then tag
+      uses: iamgio/simple-release@530b6d2e6f11e522dad991315443b78a46a7fced # v1 (v1.4.0)
+      with:
+        tag: ${{ inputs.version }}
+        committer-token: ${{ secrets.COMMITTER_TOKEN }}
+        version-file: version.txt
+        changelog-file: CHANGELOG.md
+        commit: 'true'
+        push-tag: 'true'
+        release: 'false'

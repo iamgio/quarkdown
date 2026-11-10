@@ -17,9 +17,31 @@ jobs:
   test:
     uses: ./.github/workflows/gradle-test.yml
 
+  verify-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      if: github.ref_type == 'tag'
+      with:
+        persist-credentials: false
+        sparse-checkout: version.txt
+        sparse-checkout-cone-mode: false
+
+    - name: Check version.txt matches the tag
+      if: github.ref_type == 'tag'
+      env:
+        TAG: ${{ github.ref_name }}
+      run: |
+        version="$(cat version.txt)"
+        if [ "$version" != "${TAG#v}" ]; then
+          echo "::error file=version.txt::version.txt is '$version' but the tag is '$TAG'. Start releases from the Release workflow."
+          exit 1
+        fi
+
   build:
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: [test, verify-version]
     permissions:
       contents: write
 
@@ -28,18 +50,6 @@ jobs:
       with:
         full-checkout: true
         checkout-token: ${{ secrets.COMMITTER_TOKEN }}
-
-    # Bumps version.txt and updates CHANGELOG.md so the following build embeds
-    # the release version, then commits both files back to main. The rest of the
-    # release publishing happens after the build in the second simple-release step below.
-    - name: Prepare release
-      if: github.ref_type == 'tag'
-      uses: iamgio/simple-release@e6ee64b637906f8687d6cc158cab7c3fb745dfef # v1 (v1.3.1)
-      with:
-        version-file: version.txt
-        changelog-file: CHANGELOG.md
-        commit: 'true'
-        release: 'false'
 
     - name: Build per-platform distributions
       uses: burrunan/gradle-cache-action@404534c34a2faa40430357a3183522a845b04f3b # v3.0.3
@@ -72,7 +82,7 @@ jobs:
     # Moves the rolling `latest` tag, publishes a devbuild prerelease,
     # and on tag publishes the tagged release.
     - name: Publish devbuild and release
-      uses: iamgio/simple-release@e6ee64b637906f8687d6cc158cab7c3fb745dfef # v1 (v1.3.1)
+      uses: iamgio/simple-release@530b6d2e6f11e522dad991315443b78a46a7fced # v1 (v1.4.0)
       with:
         changelog-file: CHANGELOG.md
         update-changelog: 'false'
@@ -125,7 +135,7 @@ jobs:
   image-publish:
     if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: [test, verify-version]
     permissions:
       contents: read
       packages: write
@@ -134,13 +144,6 @@ jobs:
     - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       with:
         persist-credentials: false
-
-    - name: Bump version
-      uses: iamgio/simple-release@e6ee64b637906f8687d6cc158cab7c3fb745dfef # v1 (v1.3.1)
-      with:
-        version-file: version.txt
-        commit: 'false'
-        release: 'false'
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
