@@ -19,6 +19,7 @@ import org.junit.Assume.assumeTrue
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
@@ -364,13 +365,26 @@ class CompileCommandTest : TempDirectory() {
         assumeTrue(runCatching { ChromiumWrapper(ChromiumWrapper.defaultPath).isValid }.getOrDefault(false))
     }
 
+    /**
+     * Asserts that [name] is the only output, as a single file starting with [signature].
+     * @return the output file
+     */
+    private fun checkSingleFile(
+        name: String,
+        signature: ByteArray,
+    ): File {
+        val file = File(outputDirectory, name)
+        assertTrue(file.exists())
+        assertFalse(File(outputDirectory, DEFAULT_OUTPUT_DIRECTORY_NAME).exists())
+        assertContentEquals(signature, file.readBytes().copyOfRange(0, signature.size))
+        return file
+    }
+
     private fun checkPdf(
         name: String = "$DEFAULT_OUTPUT_DIRECTORY_NAME.pdf",
         expectedPages: Int = 3,
     ) {
-        val pdf = File(outputDirectory, name)
-        assertTrue(pdf.exists())
-        assertFalse(File(outputDirectory, DEFAULT_OUTPUT_DIRECTORY_NAME).exists())
+        val pdf = checkSingleFile(name, signature = "%PDF".toByteArray())
 
         Loader.loadPDF(pdf).use {
             assertEquals(expectedPages, it.numberOfPages)
@@ -446,6 +460,37 @@ class CompileCommandTest : TempDirectory() {
         assumePdfEnvironmentInstalled()
         val (_, _) = test("--render", "html-pdf", "--pdf-no-sandbox")
         checkPdf()
+    }
+
+    @Test
+    fun `png via html-png`() {
+        assumePdfEnvironmentInstalled()
+        val (_, _) = test("--render", "html-png", "--pdf-no-sandbox")
+        checkSingleFile(
+            "$DEFAULT_OUTPUT_DIRECTORY_NAME.png",
+            signature = byteArrayOf(0x89.toByte(), 'P'.code.toByte(), 'N'.code.toByte(), 'G'.code.toByte()),
+        )
+    }
+
+    @Test
+    fun `webp via html-webp`() {
+        assumePdfEnvironmentInstalled()
+        val (_, _) = test("--render", "html-webp", "--pdf-no-sandbox")
+        checkSingleFile("$DEFAULT_OUTPUT_DIRECTORY_NAME.webp", signature = "RIFF".toByteArray())
+    }
+
+    @Test
+    fun `png with subdocuments`() {
+        assumePdfEnvironmentInstalled()
+        setupSubdocuments()
+        val (_, _) = test("--render", "html-png", "--pdf-no-sandbox")
+
+        val pngDir = File(outputDirectory, DEFAULT_OUTPUT_DIRECTORY_NAME)
+        assertTrue(pngDir.isDirectory)
+        assertTrue(pngDir.resolve("subdoc1.png").exists())
+        assertTrue(pngDir.resolve("subdoc2.png").exists())
+        assertTrue(pngDir.resolve("subdoc3.png").exists())
+        assertEquals(4, pngDir.listFiles()!!.size)
     }
 
     @Test

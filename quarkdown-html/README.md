@@ -1,14 +1,11 @@
 # html
 
-This module provides an extension to render Quarkdown ASTs to:
-- HTML, CSS and JavaScript;
-- PDF (via a Chromium-family browser, driven over the Chrome DevTools Protocol).
+This module provides an extension to render Quarkdown ASTs to HTML, CSS and JavaScript.
 
 ## Options
 
-- `--render html` for HTML rendering
-- `--render html --pdf` or `--render html-pdf` for PDF rendering.
+- `--render html` for HTML rendering. This is the default renderer of Quarkdown's CLI.
 
 `-r` is short for `--render`.
 
-Note that Quarkdown's CLI uses `--render html` by default, hence PDF rendering can be achieved via just `--pdf`.
+For PDF and image export of the HTML output, see the [html-pdf](../quarkdown-html-pdf) module.

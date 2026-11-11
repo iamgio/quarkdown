@@ -8,19 +8,24 @@ import com.quarkdown.rendering.html.extension.HtmlRendererFactoryVisitor
 import com.quarkdown.rendering.html.post.HtmlPostRenderer
 
 /**
- * The HTML-PDF rendering plug-in produces a PDF document from the HTML output of
- * [com.quarkdown.rendering.html.extension.html].
+ * The HTML-Chromium rendering plug-in produces a file in the given [format] (e.g. PDF, PNG, WebP)
+ * from the HTML output of [com.quarkdown.rendering.html.extension.html].
  * The outcome is 1:1 with what would be displayed in a Chrome browser.
+ * @param format format to export the document to
+ * @param exportOptions options that affect the export process
+ * @param htmlOptions options that affect the underlying HTML rendering
  */
-fun RendererFactory.htmlPdf(
+fun RendererFactory.htmlChromiumExport(
     context: Context,
-    pdfOptions: HtmlPdfExportOptions,
+    format: ChromiumExportFormat,
+    exportOptions: ChromiumExportOptions,
     htmlOptions: HtmlExportOptions,
 ) = RenderingComponents(
     nodeRenderer = accept(HtmlRendererFactoryVisitor(context)),
     postRenderer =
-        PdfHtmlPostRendererDecorator(
+        ChromiumExportHtmlPostRendererDecorator(
             HtmlPostRenderer(context, htmlOptions.resourcesLayout),
-            options = pdfOptions,
+            options = exportOptions,
+            format = format,
         ),
 )
