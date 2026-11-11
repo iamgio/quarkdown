@@ -57,6 +57,34 @@ testMatrix(
 );
 
 testMatrix(
+    "loads the bundled theme fonts",
+    ["plain", "paged", "slides", "docs"],
+    async (page) => {
+        const descriptors = [
+            '16px "Latin Modern Roman"',
+            'bold 16px "Latin Modern Roman"',
+            'italic 16px "Latin Modern Roman"',
+            'italic bold 16px "Latin Modern Roman"',
+            '16px "Latin Modern Mono"',
+            'italic 16px "Latin Modern Mono"',
+        ];
+
+        // Each descriptor must match exactly one face, whose file loads successfully.
+        const statuses = await page.evaluate(
+            (descriptors) => Promise.all(descriptors.map((descriptor) =>
+                document.fonts.load(descriptor).then(
+                    (faces) => faces.map((face) => face.status).join(),
+                    () => "error",
+                ),
+            )),
+            descriptors,
+        );
+
+        expect(statuses).toEqual(descriptors.map(() => "loaded"));
+    }
+);
+
+testMatrix(
     "applies correct default font sizes",
     ["plain", "paged", "slides", "docs"],
     async (page, docType) => {

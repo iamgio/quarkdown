@@ -8,6 +8,10 @@
 
 The `paperwhite` color theme no longer draws a border around Mermaid diagrams. This was a regression introduced in v2.1.2.
 
+#### Latin Modern font in `latex`
+
+The `latex` layout theme now uses Latin Modern Roman instead of Computer Modern, matching the font of modern LaTeX documents, also covering a more characters, at a third of the previous size. The change appears imperceptible to readers.
+
 ## [2.7.0] - 2026-10-29
 
 This release marks one of Quarkdown's most significant milestones towards becoming a mature, community-driven project!
