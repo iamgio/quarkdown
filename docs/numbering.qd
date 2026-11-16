@@ -68,14 +68,14 @@ To avoid merging and turn off numbering rules for unspecified entries, set the `
     .numbering
         - headings: 1.A.a
 
-    ## Title    <!--   1   -->
-    ### Title   <!--  1.A  -->
-    #### Title  <!-- 1.A.a -->
-    #### Title  <!-- 1.A.b -->
-    ##### Title <!-- None  -->
-    ### Title   <!--  1.B  -->
-    ## Title    <!--   2   -->
-    ### Title   <!--  2.A  -->
+    # Title    <!--   1   -->
+    ## Title   <!--  1.A  -->
+    ### Title  <!-- 1.A.a -->
+    ### Title  <!-- 1.A.b -->
+    #### Title <!-- None  -->
+    ## Title   <!--  1.B  -->
+    # Title    <!--   2   -->
+    ## Title   <!--  2.A  -->
     ```
 
     .quarkdownoutput
@@ -100,15 +100,15 @@ To prevent a heading from being numbered, you can either:
         - headings: 1.A.a
         - figures: 1.1
 
-    ## Title
+    # Title
 
     ![Logo](quarkdown-icon.svg "The Quarkdown icon.")
 
-    ### Title
+    ## Title
 
     ![Logo](quarkdown-icon.svg "")
 
-    ## Title
+    # Title
 
     ![Logo](quarkdown-icon.svg "")
     ```
@@ -120,7 +120,7 @@ To prevent a heading from being numbered, you can either:
         - headings: 1.A.a
         - tables: 1.1
 
-    ## Title
+    # Title
 
     |           | Age | Favorite food |
     |-----------|-----|---------------|
@@ -129,7 +129,7 @@ To prevent a heading from being numbered, you can either:
     | **Joe**   | 32  | Sushi         |
     "Study results."
 
-    ### Title
+    ## Title
 
     |           | Age | Favorite food |
     |-----------|-----|---------------|
@@ -137,7 +137,7 @@ To prevent a heading from being numbered, you can either:
     | **Lucas** | 19  | Pizza         |
     | **Joe**   | 32  | Sushi         |
 
-    ## Title
+    # Title
 
     |           | Age | Favorite food |
     |-----------|-----|---------------|
@@ -226,7 +226,7 @@ Full example:
         - headings: 1.1
         - greetings: 1.a
 
-    ## Title 1
+    # Title 1
 
     .numbered {greetings}
         number:
@@ -236,7 +236,7 @@ Full example:
         number:
         **Hey!** This has instead the number **.number**
 
-    ## Title 2
+    # Title 2
 
     .numbered {greetings}
         number:
