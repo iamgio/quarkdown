@@ -6,11 +6,11 @@
 @use "util/latex-toc" as *;
 @use "../components/util/location-selectors" as location-selectors;
 @use "util/font-imports" as *;
-@include import-font-family('computermodern', $variants: 'index');
+@include import-font-family('latinmodern-roman', $variants: 'index');
 @include import-font-family('latinmodern-mono', $variants: 'index');
 
 :root {
-  --qd-main-font: 'Computer Modern Serif', sans-serif;
+  --qd-main-font: 'Latin Modern Roman', serif;
   --qd-main-font-size: 1rem;
   --qd-heading-margin: 1.4em 0 1em 0;
   --qd-code-font: "Latin Modern Mono", monospace;

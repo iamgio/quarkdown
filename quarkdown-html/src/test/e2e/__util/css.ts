@@ -26,9 +26,11 @@ export async function getBeforeContent(locator: Locator): Promise<string> {
 
 /**
  * Checks if the ::before pseudo-element is on the same line as the element's text.
- * Compares the Y position of the ::before (via element box) with the text content's Y.
+ * Since ::before always occupies the element's first line, this checks whether
+ * the vertical center of the text's first line falls within the element's first line box.
+ * Centers are compared rather than tops, as a font's glyph box may be taller than the line height.
  * @param locator - Playwright locator for the element
- * @returns True if the ::before and text share the same vertical position
+ * @returns True if the ::before and text share the same line
  */
 export async function isBeforeInline(locator: Locator): Promise<boolean> {
     return locator.evaluate((el: Element) => {
@@ -37,11 +39,14 @@ export async function isBeforeInline(locator: Locator): Promise<boolean> {
 
         const range = document.createRange();
         range.selectNodeContents(textNode);
-        const textRect = range.getBoundingClientRect();
-        const elementRect = el.getBoundingClientRect();
+        const firstLineRect = range.getClientRects()[0];
+        if (!firstLineRect) return false;
 
-        // ::before is inline if element top matches text top (within 1px tolerance)
-        return Math.abs(elementRect.top - textRect.top) <= 1;
+        const elementTop = el.getBoundingClientRect().top;
+        const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || firstLineRect.height;
+        const textCenter = firstLineRect.top + firstLineRect.height / 2;
+
+        return textCenter >= elementTop && textCenter <= elementTop + lineHeight;
     });
 }
 
