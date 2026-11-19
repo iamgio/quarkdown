@@ -17,7 +17,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
             implementation("com.github.ajalt.colormath:colormath:3.7.0")
-            implementation("com.quarkdown.bibliographer:bibliographer:0.5.0")
+            implementation("com.quarkdown.bibliographer:bibliographer:0.5.1")
             implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.2")
         }
         jvmTest.dependencies {
