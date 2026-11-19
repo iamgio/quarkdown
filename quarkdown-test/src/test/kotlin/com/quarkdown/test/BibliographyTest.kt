@@ -37,8 +37,8 @@ private fun ieeeBibliographyOutput(availableLabel: String = "Available:") =
         "<span class=\"bibliography-entry-label\">[3]</span>" +
         "<span class=\"bibliography-entry-content\">" +
         "D. Knuth, \u201CKnuth: Computers and Typesetting.\u201D [Online]. $availableLabel " +
-        "<a href=\"http://www-cs-faculty.stanford.edu/uno/abcde.html\">" +
-        "http://www-cs-faculty.stanford.edu/uno/abcde.html" +
+        "<a href=\"http://www-cs-faculty.stanford.edu/~uno/abcde.html\">" +
+        "http://www-cs-faculty.stanford.edu/~uno/abcde.html" +
         "</a>" +
         "</span>" +
         "</div>"
@@ -135,7 +135,7 @@ class BibliographyTest {
                     "[2] M. Goossens, F. Mittelbach, and A. Samarin, *The LaTeX Companion*. " +
                     "Reading, Massachusetts: Addison-Wesley, 1993.\n" +
                     "[3] D. Knuth, “Knuth: Computers and Typesetting.” \\[Online]. Available at: " +
-                    "[http://www-cs-faculty.stanford.edu/uno/abcde.html](http://www-cs-faculty.stanford.edu/uno/abcde.html)\n\n",
+                    "[http://www-cs-faculty.stanford.edu/~uno/abcde.html](http://www-cs-faculty.stanford.edu/~uno/abcde.html)\n\n",
                 it,
             )
         }
@@ -161,7 +161,7 @@ class BibliographyTest {
                     "[2] M. Goossens, F. Mittelbach, and A. Samarin, The LaTeX Companion. " +
                     "Reading, Massachusetts: Addison-Wesley, 1993.\n" +
                     "[3] D. Knuth, \u201CKnuth: Computers and Typesetting.\u201D [Online]. Available: " +
-                    "http://www-cs-faculty.stanford.edu/uno/abcde.html\n\n" +
+                    "http://www-cs-faculty.stanford.edu/~uno/abcde.html\n\n" +
                     "abc [1] def [2] ghi [3]\n\n",
                 it,
             )

@@ -12,6 +12,16 @@ The `paperwhite` color theme no longer draws a border around Mermaid diagrams. T
 
 The `latex` layout theme now uses Latin Modern Roman instead of Computer Modern, matching the font of modern LaTeX documents, also covering a more characters, at a third of the previous size. The change appears imperceptible to readers.
 
+### Fixed
+
+#### [Bibliography](https://quarkdown.com/wiki/bibliography): keeping URLs and DOIs verbatim
+
+In BibTeX bibliographies, `url` and `doi` values containing `--` or `---` had their hyphens turned into dashes, which broke the resulting links. These fields are now kept exactly as written.
+
+As a consequence, TeX escapes in these fields are no longer interpreted. For example, write `~` rather than `\~` in a URL.
+
+See [michel-kraemer/citeproc-java#355](https://github.com/michel-kraemer/citeproc-java/issues/355).
+
 ## [2.7.0] - 2026-10-29
 
 This release marks one of Quarkdown's most significant milestones towards becoming a mature, community-driven project!
