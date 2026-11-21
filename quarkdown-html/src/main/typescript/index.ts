@@ -3,7 +3,8 @@
 import {capabilities} from "./capabilities";
 import {postRenderingExecutionQueue, preRenderingExecutionQueue} from "./queue/execution-queues";
 import {PlainDocument} from "./document/type/plain-document";
-import {prepare} from "./document/quarkdown-document";
+import {prepare, QuarkdownDocument} from "./document/quarkdown-document";
+import {getPageSize, PageSize} from "./document/paged-like-quarkdown-document";
 import {notifyLivePreview} from "./live/live-preview";
 import {SlidesDocument} from "./document/type/slides-document";
 import {PagedDocument} from "./document/type/paged-document";
@@ -18,14 +19,35 @@ function isReady(): boolean {
     return preRenderingExecutionQueue.isCompleted() && postRenderingExecutionQueue.isCompleted();
 }
 
+/** The document prepared by the HTML wrapper via [prepareDocument]. */
+let preparedDocument: QuarkdownDocument | undefined;
+
+/**
+ * Prepares the document for rendering and keeps track of it for the global API.
+ * @param document - The document to prepare
+ */
+function prepareDocument(document: QuarkdownDocument): void {
+    preparedDocument = document;
+    prepare(document);
+}
+
+/**
+ * Returns the size of a page of the document, in CSS pixels, for documents divided into pages.
+ * @returns The page size, or `undefined` if the document is not paged-like or not yet rendered
+ */
+function pageSize(): PageSize | undefined {
+    return preparedDocument && getPageSize(preparedDocument);
+}
+
 // Notify the live preview that the document is ready after pre-rendering tasks are done.
 postRenderingExecutionQueue.addOnComplete(() => notifyLivePreview('postRenderingCompleted'));
 
 // Expose the API to the global context.
 const context = window as any;
 context.isReady = isReady;
+context.getPageSize = pageSize;
 context.quarkdownCapabilities = capabilities;
-context.prepare = prepare;
+context.prepare = prepareDocument;
 context.PlainDocument = PlainDocument;
 context.PagedDocument = PagedDocument;
 context.SlidesDocument = SlidesDocument;

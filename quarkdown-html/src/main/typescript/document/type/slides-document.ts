@@ -73,6 +73,7 @@ export class SlidesDocument implements PagedLikeQuarkdownDocument<SlidesPage> {
             return {
                 slide: slide,
                 background: background || document.createElement('div'), // Fallback for missing background
+                getBoundingClientRect: () => slide.getBoundingClientRect(),
                 querySelectorAll(query: string): NodeListOf<HTMLElement> {
                     const slideResults = slide.querySelectorAll<HTMLElement>(query);
                     const bgResults = background?.querySelectorAll<HTMLElement>(query) || [];

@@ -28,6 +28,15 @@ Alternatively, point Quarkdown to any Chromium-family browser you already have.
 
 - `QD_CHROME_PATH`: Path to the browser executable, used when `--chrome-path` is not set.
 
+### Image export
+
+The same browser-driven process can also export your document as an image, by selecting the `html-png` or `html-webp` [renderer](cli-options.qd#output):
+
+```
+quarkdown c main.qd -r html-png
+quarkdown c main.qd -r html-webp
+```
+
 ### Exporting manually (legacy way)
 
 You can export an HTML artifact to PDF via the **in-browser print** feature (`CTRL/CMD + P`).
