@@ -2,6 +2,9 @@
 
 package com.quarkdown.stdlib
 
+import com.jsoizo.kotlincsv.csvReader
+import com.jsoizo.kotlincsv.reader.read
+import com.jsoizo.kotlincsv.reader.withHeader
 import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Table
@@ -33,8 +36,8 @@ import com.quarkdown.stdlib.internal.AlphanumericComparator
 import com.quarkdown.stdlib.internal.JsonValueDeserializer
 import com.quarkdown.stdlib.internal.Ordering
 import com.quarkdown.stdlib.internal.Sorting
-import com.quarkdown.stdlib.internal.parseCsvWithHeader
 import com.quarkdown.stdlib.internal.sortedBy
+import kotlinx.io.Buffer
 import kotlinx.serialization.json.Json
 
 /**
@@ -333,8 +336,6 @@ fun json(
  * @param mode mode to handle the content of each cell and header (plain or Markdown)
  * @param caption optional caption of the table. If set, the table will be numbered according to the current [numbering] format
  * @param referenceId optional ID for cross-referencing via [reference]
- * On platforms without a CSV parser, such as browsers, this function raises an error.
- *
  * @return a table whose content is loaded from the file located in [path]
  * @permission [Permission.ProjectRead] to read CSV files located in the project directory
  * @permission [Permission.GlobalRead] to read CSV files located outside the project directory
@@ -350,9 +351,11 @@ fun csv(
 ): NodeValue {
     val file = file(context, path)
     val columns = mutableListOf<Table.MutableColumn>()
+    val source = Buffer().apply { write(file.readBytes()) }
+    val rows = csvReader().read(source) { it.withHeader().toList() }
 
     // CSV is read row-by-row, while the Table is built by columns.
-    parseCsvWithHeader(file.readBytes()).forEach { row ->
+    rows.forEach { row ->
         row.entries.forEachIndexed { index, (header, content) ->
             val cell = mode.transform(content.trim(), context).let(Table::Cell)
 
