@@ -369,8 +369,8 @@ object ValueFactory {
                 MarkdownContentValue(MarkdownContent(listOf(raw)))
             }
 
-            is DynamicValue if raw.unwrappedValue is String -> {
-                blockMarkdown(raw.unwrappedValue, context)
+            is DynamicValue if raw.content is String -> {
+                blockMarkdown(raw.content, context)
             }
 
             else -> {
@@ -401,8 +401,8 @@ object ValueFactory {
                 InlineMarkdownContentValue(InlineMarkdownContent(listOf(raw)))
             }
 
-            is DynamicValue if raw.unwrappedValue is String -> {
-                inlineMarkdown(raw.unwrappedValue, context)
+            is DynamicValue if raw.content is String -> {
+                inlineMarkdown(raw.content, context)
             }
 
             else -> {
@@ -560,7 +560,7 @@ object ValueFactory {
         context: Context,
     ): Expression? {
         when (raw) {
-            is DynamicValue if raw.unwrappedValue is String -> return expression(raw.unwrappedValue, context)
+            is DynamicValue if raw.content is String -> return expression(raw.content, context)
             is Expression -> return raw
         }
 

@@ -79,17 +79,20 @@ abstract class NodeOutputValueVisitor : OutputValueVisitor<Node> {
     override fun visit(value: VoidValue) = BlankNode
 
     // Dynamic output (e.g. produced by the stdlib function `.function`) is treated:
-    // - If it is a suitable output value: its content is visited again with this visitor.
+    // - If its content is a suitable output value: it is visited again with this visitor.
     // - If it is a collection: its items are wrapped in a GeneralCollectionValue and visited.
+    // - If it is a node: it is visited as a node.
     // - Otherwise: its string content is parsed as Markdown.
     @Suppress("UNCHECKED_CAST")
-    override fun visit(value: DynamicValue): Node =
-        when (value.unwrappedValue) {
-            is OutputValue<*> -> value.unwrappedValue.accept(this)
-            is Iterable<*> -> GeneralCollectionValue(value.unwrappedValue as Iterable<OutputValue<*>>).accept(this)
-            is Node -> this.visit(NodeValue(value.unwrappedValue))
-            else -> this.visit(parseRaw(value.unwrappedValue.toString(), value.evaluationContext))
+    override fun visit(value: DynamicValue): Node {
+        (value.content as? OutputValue<*>)?.let { return it.accept(this) }
+
+        return when (val unwrapped = value.unwrappedValue) {
+            is Iterable<*> -> GeneralCollectionValue(unwrapped as Iterable<OutputValue<*>>).accept(this)
+            is Node -> this.visit(NodeValue(unwrapped))
+            else -> this.visit(parseRaw(unwrapped.toString(), value.evaluationContext))
         }
+    }
 
     /**
      * When a [DynamicValue] cannot be converted to a [NodeValue], its string content is parsed as Markdown.

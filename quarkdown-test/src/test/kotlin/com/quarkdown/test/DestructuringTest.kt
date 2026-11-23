@@ -119,22 +119,22 @@ class DestructuringTest {
                     "<div class=\"container\">" +
                     "<p><strong>Llion Jones</strong><br />Google Research<br />" +
                     "<span style=\"font-size: var(--qd-size-small, 1em);\">" +
-                    "<a href=\"llion@google.com\">llion@google.com</a></span>" +
+                    "llion@google.com</span>" +
                     "<br /><span class=\"whitespace\">&nbsp;</span></p>" +
                     "</div><div class=\"container\">" +
                     "<p><strong>Aidan N. Gomez</strong><br />University of Toronto<br />" +
                     "<span style=\"font-size: var(--qd-size-small, 1em);\">" +
-                    "<a href=\"aidan@cs.toronto.edu\">aidan@cs.toronto.edu</a></span>" +
+                    "aidan@cs.toronto.edu</span>" +
                     "<br /><span class=\"whitespace\">&nbsp;</span></p>" +
                     "</div><div class=\"container\">" +
                     "<p><strong>Łukasz Kaiser</strong><br />Google Brain<br />" +
                     "<span style=\"font-size: var(--qd-size-small, 1em);\">" +
-                    "<a href=\"lukaszkaiser@google.com\">lukaszkaiser@google.com</a></span>" +
+                    "lukaszkaiser@google.com</span>" +
                     "<br /><span class=\"whitespace\">&nbsp;</span></p>" +
                     "</div><div class=\"container\">" +
                     "<p><strong>Illia Polosukhin</strong><br />-<br />" +
                     "<span style=\"font-size: var(--qd-size-small, 1em);\">" +
-                    "<a href=\"illia.polosukhin@gmail.com\">illia.polosukhin@gmail.com</a></span>" +
+                    "illia.polosukhin@gmail.com</span>" +
                     "<br /><span class=\"whitespace\">&nbsp;</span></p>" +
                     "</div></div>",
                 it,

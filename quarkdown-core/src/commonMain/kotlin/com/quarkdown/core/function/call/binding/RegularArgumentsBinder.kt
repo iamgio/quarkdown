@@ -86,9 +86,10 @@ class RegularArgumentsBinder(
             return argument.copy(expression = ValueFactory.lambda(expression.raw, call.context))
         }
 
-        // A dynamic parameter takes the value as-is, wrapped so that its rawness stays explicit.
+        // A dynamic parameter takes the value as-is, wrapped so that its rawness and type stay explicit.
         if (parameter.type == ParameterType.Dynamic) {
-            return argument.copy(expression = DynamicValue(argument.value.unwrappedValue))
+            val value = argument.value
+            return argument.copy(expression = value as? DynamicValue ?: DynamicValue(value))
         }
 
         // Native parameters carry the conversion the processor chose for them at build time.
