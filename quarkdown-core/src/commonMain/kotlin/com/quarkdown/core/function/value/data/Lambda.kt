@@ -59,7 +59,9 @@ open class Lambda(
                         parameters = emptyList(),
                     ) { _, call ->
                         // Value associated to the lambda argument.
-                        DynamicValue(argument.unwrappedValue, evaluationContext = call.context)
+                        (argument as? DynamicValue)
+                            ?.copy(evaluationContext = call.context)
+                            ?: DynamicValue(argument, evaluationContext = call.context)
                     }
                 }.toSet() + additionalFunctions,
     )

@@ -14,6 +14,14 @@ The `latex` layout theme now uses Latin Modern Roman instead of Computer Modern,
 
 ### Fixed
 
+#### Text values are no longer evaluated as Quarkdown code when turned dynamic
+
+Fixed an issue that caused a static string value to be evaluated as Quarkdown source when converted to a dynamic value.
+
+For example, suppose the content of `.env {PATH}` contained `/home/user/.cargo/bin`. When passed through a custom function, or dynamic functions like `.otherwise` and `.takeif`, the string `.cargo` was interpreted as a function call.
+
+These values are now always displayed as plain text.
+
 #### [Bibliography](https://quarkdown.com/wiki/bibliography): keeping URLs and DOIs verbatim
 
 In BibTeX bibliographies, `url` and `doi` values containing `--` or `---` had their hyphens turned into dashes, which broke the resulting links. These fields are now kept exactly as written.

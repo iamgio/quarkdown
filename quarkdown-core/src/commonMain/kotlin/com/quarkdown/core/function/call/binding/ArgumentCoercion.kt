@@ -7,6 +7,7 @@ import com.quarkdown.core.function.error.FunctionCallRuntimeException
 import com.quarkdown.core.function.error.InvalidFunctionCallException
 import com.quarkdown.core.function.error.MismatchingArgumentTypeException
 import com.quarkdown.core.function.value.AdaptableValue
+import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.function.value.NoneValue
 import com.quarkdown.core.function.value.Value
 import com.quarkdown.core.function.value.isNone
@@ -82,9 +83,14 @@ inline fun <reified T> convertArgument(
         "Unbound argument reached conversion for parameter '${parameter.name}'. This is a code generation bug."
     }
 
-    val wrapped: Value<*>? = raw as? Value<*>
+    val value: Value<*>? = raw as? Value<*>
+
+    // Already the expected type. Covers dynamic parameters, which keep their DynamicValue intact.
+    if (value != null && value.satisfies<T>()) return value
+
+    // A dynamic value that wraps a typed value, such as a string to treat literally, converts as that value.
+    val wrapped: Value<*>? = (value as? DynamicValue)?.content as? Value<*> ?: value
     if (wrapped != null) {
-        // Already the expected type. Covers dynamic parameters, which keep their DynamicValue intact.
         if (wrapped.satisfies<T>()) return wrapped
 
         // Quarkdown's `.none` is Kotlin's null, but only where null is accepted.
