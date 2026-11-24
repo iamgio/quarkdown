@@ -184,4 +184,58 @@ class FunctionCallTest {
             assertEquals("<p>hello{3</p>", it)
         }
     }
+
+    @Test
+    fun `quoted inline argument keeps its surrounding whitespace`() {
+        execute(".uppercase {\" abc \"}") {
+            assertEquals("<p> ABC </p>", it)
+        }
+
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join separator:{\" | \"}") {
+            assertEquals("<p>A | B | C</p>", it)
+        }
+    }
+
+    @Test
+    fun `quoted inline argument is still evaluated`() {
+        execute(".text {\" **.sum {1} {2}** \"}") {
+            assertEquals("<p><span> <strong>3</strong> </span></p>", it)
+        }
+    }
+
+    @Test
+    fun `quoted inline argument keeps whitespace before a function call`() {
+        execute(".concatenate {\" .sum {1} {2}\"} with:{x}") {
+            assertEquals("<p> 3x</p>", it)
+        }
+
+        execute(".concatenate {a} with:{\" .sum {1} {2} \"}") {
+            assertEquals("<p>a 3 </p>", it)
+        }
+    }
+
+    @Test
+    fun `empty quoted inline argument`() {
+        execute(".concatenate {a} with:{\"\"}") {
+            assertEquals("<p>a</p>", it)
+        }
+    }
+
+    @Test
+    fun `partially quoted inline argument keeps its quotes`() {
+        execute(".concatenate {\"abc} with:{x}") {
+            assertEquals("<p>&quot;abcx</p>", it)
+        }
+
+        execute(".concatenate {abc\"} with:{x}") {
+            assertEquals("<p>abc&quot;x</p>", it)
+        }
+    }
+
+    @Test
+    fun `escaped quotes in inline argument are kept`() {
+        execute(".text {\\\"abc\\\"}") {
+            assertEquals("<p><span>&ldquo;abc&rdquo;</span></p>", it)
+        }
+    }
 }

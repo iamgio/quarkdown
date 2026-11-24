@@ -24,7 +24,9 @@ object ExpressionFunctionCallRecognizer : InlineRecognizer {
     ): InlineMatch? {
         if (!DelimiterRuns.isLineStart(source, index)) return null
         val scanner = Scanner(source, index = index)
-        repeat(MAX_BLOCK_INDENT) { scanner.take(' ') }
+        if (index > 0) {
+            repeat(MAX_BLOCK_INDENT) { scanner.take(' ') }
+        }
         val flagStart = scanner.index
         if (!functionCallStartAt(source, flagStart)) return null
         val result = walkFunctionCallAt(source, flagStart) ?: return null

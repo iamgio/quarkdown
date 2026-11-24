@@ -80,7 +80,7 @@ The **`.join`** function merges the elements of an iterable into a single inline
       - B
       - C
 
-    .letters::join {+}
+    .letters::join {" + "}
 
 .examplemirror prelude:{The `last` parameter sets a different separator before the last element.}
     .var {letters}
@@ -88,7 +88,7 @@ The **`.join`** function merges the elements of an iterable into a single inline
       - B
       - C
 
-    .letters::join last:{.string {" and "}}
+    .letters::join last:{" and "}
 
 Like `.foreach`, it accepts a [lambda](lambda.qd) block that transforms each element before joining.
 

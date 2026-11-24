@@ -94,7 +94,7 @@
         **.concatenate {
             .name
         } with:{
-            .string {" .number"}
+            " .number"
         } if:{
             .isnotempty {.number}
         }.paperblocksuffix** .content

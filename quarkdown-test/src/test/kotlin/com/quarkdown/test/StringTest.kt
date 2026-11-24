@@ -9,25 +9,6 @@ import kotlin.test.assertEquals
  */
 class StringTest {
     @Test
-    fun `explicit string`() {
-        execute(".string {}") {
-            assertEquals("<p></p>", it)
-        }
-
-        execute(".string {hello}") {
-            assertEquals("<p>hello</p>", it)
-        }
-
-        execute(".string { hello }") {
-            assertEquals("<p>hello</p>", it)
-        }
-
-        execute(".string {\" hello \"}") {
-            assertEquals("<p> hello </p>", it)
-        }
-    }
-
-    @Test
     fun case() {
         execute(".uppercase {hello}") {
             assertEquals("<p>HELLO</p>", it)
@@ -52,7 +33,7 @@ class StringTest {
             assertEquals("<p>helloworld</p>", it)
         }
 
-        execute(".concatenate {hello} {.string {\" world\"}}") {
+        execute(".concatenate {hello} {\" world\"}") {
             assertEquals("<p>hello world</p>", it)
         }
 
