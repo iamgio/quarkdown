@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Added
+
+#### [Last separator in `.join`](https://quarkdown.com/wiki/loops#join)
+
+`.join` now accepts an optional `last` parameter, the separator placed before the last element, which is useful for natural-language lists:
+
+```markdown
+.var {letters}
+  - A
+  - B
+  - C
+
+.letters::join last:{.string {" and "}}
+```
+
+The output is `A, B and C`. If `last` is not set, `separator` is used.
+
 ### Changed
 
 #### Borderless Mermaid diagrams in `paperwhite`

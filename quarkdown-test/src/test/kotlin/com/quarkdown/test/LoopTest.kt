@@ -126,6 +126,43 @@ class LoopTest {
     }
 
     @Test
+    fun `join with last separator`() {
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join last:{.string {\" and \"}}") {
+            assertEquals("<p>A, B and C</p>", it)
+        }
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join separator:{-} last:{**+**}") {
+            assertEquals("<p>A-B<strong>+</strong>C</p>", it)
+        }
+    }
+
+    @Test
+    fun `join with positional inline body`() {
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join {-} {x: **.x**}") {
+            assertEquals("<p><strong>A</strong>-<strong>B</strong>-<strong>C</strong></p>", it)
+        }
+    }
+
+    @Test
+    fun `join with last separator and body`() {
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join last:{**+**}\n    x:\n    _.x_") {
+            assertEquals("<p><em>A</em>, <em>B</em><strong>+</strong><em>C</em></p>", it)
+        }
+        execute(".var {abc}\n  - A\n  - B\n  - C\n\n.abc::join {-} {x: _.x_} last:{**+**}") {
+            assertEquals("<p><em>A</em>-<em>B</em><strong>+</strong><em>C</em></p>", it)
+        }
+    }
+
+    @Test
+    fun `join with last separator and fewer than three elements`() {
+        execute(".var {ab}\n  - A\n  - B\n\n.ab::join last:{.string {\" and \"}}") {
+            assertEquals("<p>A and B</p>", it)
+        }
+        execute(".var {a}\n  - A\n\n.a::join last:{.string {\" and \"}}") {
+            assertEquals("<p>A</p>", it)
+        }
+    }
+
+    @Test
     fun `join inline within a paragraph`() {
         execute(".var {abc}\n  - A\n  - B\n  - C\n\nLetters: .abc::join body:{x: .x}.") {
             assertEquals("<p>Letters: A, B, C.</p>", it)

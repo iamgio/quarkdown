@@ -213,6 +213,8 @@ fun forEach(
  * @param separator inline content placed between the output of adjacent iterations. Defaults to `, `
  * @param body the inline output of each iteration. Accepts 1 parameter (the current element).
  *             If unset, each element is output as is
+ * @param last inline content placed between the output of the last two iterations, in place of [separator].
+ *             If unset, [separator] is used
  * @return the output of all iterations, joined by [separator]
  * @wiki loops
  */
@@ -222,7 +224,8 @@ fun join(
     @Injected context: Context,
     iterable: Iterable<OutputValue<*>>,
     @LikelyNamed separator: InlineMarkdownContent = InlineMarkdownContent(listOf(Text(", "))),
-    @LikelyBody body: Lambda? = null,
+    @Body @LikelyBody body: Lambda? = null,
+    @LikelyNamed last: InlineMarkdownContent? = null,
 ): NodeValue {
     // Each output is converted to an inline node.
     val visitor = InlineNodeOutputValueVisitor(context)
@@ -230,10 +233,10 @@ fun join(
 
     val children =
         outputs.flatMapIndexed { index, output ->
-            if (index == 0) {
-                listOf(output)
-            } else {
-                separator.children + output
+            when (index) {
+                0 -> listOf(output)
+                outputs.lastIndex -> (last ?: separator).children + output
+                else -> separator.children + output
             }
         }
 
