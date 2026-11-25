@@ -74,6 +74,22 @@ The **`.join`** function merges the elements of an iterable into a single inline
 
     .letters::join
 
+.examplemirror
+    .var {letters}
+      - A
+      - B
+      - C
+
+    .letters::join {+}
+
+.examplemirror prelude:{The `last` parameter sets a different separator before the last element.}
+    .var {letters}
+      - A
+      - B
+      - C
+
+    .letters::join last:{.string {" and "}}
+
 Like `.foreach`, it accepts a [lambda](lambda.qd) block that transforms each element before joining.
 
 .examplemirror
