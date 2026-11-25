@@ -21,7 +21,7 @@ The output is `A, B and C`. If `last` is not set, `separator` is used.
 
 #### [Preserving whitespace in quoted arguments](https://quarkdown.com/wiki/syntax-of-a-function-call#whitespace-in-arguments)
 
-Leading and trailing whitespace in a function call argument is ignored. You can now keep it by enclosing the argument in double quotes, which are removed from the value:
+Leading and trailing whitespace in a function call argument is ignored. You can now keep it by enclosing the argument in double quotes, placed right next to the braces. The quotes are removed from the value:
 
 ```markdown
 .letters::join separator:{" | "}

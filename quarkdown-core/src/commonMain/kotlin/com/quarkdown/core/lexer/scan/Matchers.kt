@@ -30,6 +30,24 @@ object Matchers {
         }
 
     /**
+     * Matches a string if its first character is not escaped.
+     * @param string the string to match
+     * @param position the position of the string to match
+     * @param delimiter the string to match
+     * @return the length of [delimiter] if it is matched and not preceded by an escape character, 0 otherwise
+     */
+    fun unescapedMatch(
+        string: CharSequence,
+        position: Int,
+        delimiter: String,
+    ): Int {
+        val isMatch =
+            string.startsWith(delimiter, position) &&
+                unescapedMatch(string, position, delimiter.first()) != 0
+        return if (isMatch) delimiter.length else 0
+    }
+
+    /**
      * Matches a balanced sequence delimited by [begin] and [end], ignoring escaped delimiters.
      *
      * Scans forward starting at [position], which must already be past the opening delimiter, and returns the

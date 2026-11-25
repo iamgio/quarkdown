@@ -12,7 +12,6 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.lexer.token
 import com.quarkdown.core.function.call.FunctionCall
-import com.quarkdown.core.lexer.scan.Matchers.balancedDelimiters
 import com.quarkdown.core.lexer.scan.Matchers.unescapedMatch
 import com.quarkdown.core.parser.BlockTokenParser
 import com.quarkdown.core.parser.walker.funcall.FunctionCallGrammar.Companion.ARGUMENT_BEGIN
@@ -46,10 +45,15 @@ class FunctionCallGrammar(
 
     /**
      * Whether the parser is currently parsing an argument.
-     * While parsing an argument, the parser should not perform syntactic checks as the argument may contain any content, including Markdown.
-     * This is a mutable state variable that is set to true when an argument is being parsed and false when the argument ends.
+     * Set to true when an argument is being parsed and false when the argument ends.
      */
     private var inArg = false
+
+    /**
+     * The delimiters of the inline argument currently being parsed, or `null` if not parsing an inline argument.
+     * Set when an argument begins and reset when it ends.
+     */
+    private var argumentDelimiters: ArgumentDelimiters? = null
 
     companion object {
         /**
@@ -106,14 +110,9 @@ class FunctionCallGrammar(
      */
     private val argContent by token { string, position ->
         if (!inArg) return@token 0
+        val delimiters = argumentDelimiters ?: return@token 0
 
-        val length =
-            balancedDelimiters(
-                string,
-                position,
-                ARGUMENT_BEGIN,
-                ARGUMENT_END,
-            )
+        val length = delimiters.contentLength(string, position)
 
         if (length > 0) {
             inArg = false
@@ -171,29 +170,41 @@ class FunctionCallGrammar(
     private val argumentSeparator = oneOrMore(whitespace or lineContinuation)
 
     /**
-     * Token that matches the beginning of an inline argument.
-     * Sets [inArg] to `true` if found.
+     * Token that matches the beginning of an inline argument, in any of its [ArgumentDelimiters] variants.
+     * Sets [inArg] to `true` and [argumentDelimiters] to the matched variant if found.
      * @see ARGUMENT_BEGIN
      */
     private val argumentBegin by token { string, position ->
-        unescapedMatch(string, position, ARGUMENT_BEGIN) {
-            if (!began) {
-                began = true
-            } else {
-                inArg = true
-            }
+        if (unescapedMatch(string, position, ARGUMENT_BEGIN) == 0) return@token 0
+
+        if (!began) {
+            began = true
+            return@token 1
         }
+
+        inArg = true
+
+        ArgumentDelimiters
+            .at(string, position)
+            .also { argumentDelimiters = it }
+            .begin.length
     }
 
     /**
-     * Token that matches the end of an inline argument.
-     * Sets [inArg] to `false` if found.
+     * Token that matches the end of an inline argument, in the variant of [argumentDelimiters].
+     * Sets [inArg] to `false` and resets [argumentDelimiters] if found.
      * @see ARGUMENT_END
      */
     private val argumentEnd by token { string, position ->
-        unescapedMatch(string, position, ARGUMENT_END) {
+        val end = argumentDelimiters?.end ?: ARGUMENT_END.toString()
+        val length = unescapedMatch(string, position, end)
+
+        if (length > 0) {
             inArg = false
+            argumentDelimiters = null
         }
+
+        length
     }
 
     /**
@@ -275,9 +286,10 @@ class FunctionCallGrammar(
                 optional(argContent) and
                 argumentEnd
         ) map { (name, begin, value, end) ->
+            val delimiters = ArgumentDelimiters.ofBegin(begin.text)
             WalkedFunctionArgument(
                 name = name?.text,
-                value = value?.text?.trimIndent()?.trim() ?: "",
+                value = delimiters.valueOf(value?.text ?: ""),
                 range = begin.offset until end.offset + end.length,
             )
         }

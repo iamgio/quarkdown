@@ -666,6 +666,42 @@ class LexerTest {
         }
     }
 
+    @Test
+    fun quotedFunctionCallArgument() {
+        fun walk(source: CharSequence) = FunctionCallWalkerParser(source, allowsBody = true).parse()
+
+        // Quotes adjacent to the braces are removed, and the whitespace inside is preserved.
+        with(walk(""".function {" and "} {"x"} {""} name:{" .y {z} "}""")) {
+            assertEquals(" and ", value.arguments[0].value)
+            assertEquals("x", value.arguments[1].value)
+            assertEquals("", value.arguments[2].value)
+            with(value.arguments[3]) {
+                assertEquals("name", name)
+                assertEquals(" .y {z} ", value)
+            }
+        }
+
+        // The argument range still covers the quotes and braces.
+        with(walk(""".function {" a "}""")) {
+            assertEquals(10 until 17, value.arguments.single().range)
+        }
+
+        // Quotes that are not adjacent to both braces are regular content.
+        with(walk(""".function { " a " } {"a} {a"} {"} {a "b" c} {"a" b "c"x}""")) {
+            assertEquals("\" a \"", value.arguments[0].value)
+            assertEquals("\"a", value.arguments[1].value)
+            assertEquals("a\"", value.arguments[2].value)
+            assertEquals("\"", value.arguments[3].value)
+            assertEquals("a \"b\" c", value.arguments[4].value)
+            assertEquals("\"a\" b \"c\"x", value.arguments[5].value)
+        }
+
+        // Escaped quotes are regular content.
+        with(walk(""".function {\"a\"}""")) {
+            assertEquals("\\\"a\\\"", value.arguments.single().value)
+        }
+    }
+
     /**
      * Verifies that backslash line continuation works in block function calls.
      */
