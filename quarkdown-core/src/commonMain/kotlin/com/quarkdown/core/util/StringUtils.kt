@@ -50,6 +50,12 @@ fun CharSequence.substringWithinBounds(
 fun String.trimDelimiters(): String = if (length >= 2) substring(1, length - 1) else this
 
 /**
+ * @return [this] string without its enclosing `"` characters if it starts and ends with one, or [this] string otherwise.
+ *         For example, `" Hello "` becomes ` Hello `.
+ */
+fun String.unquoted(): String = if (length >= 2 && startsWith('"') && endsWith('"')) trimDelimiters() else this
+
+/**
  * Indents each line of [this] string by [indent].
  * @param indent indentation string
  * @return [this] string, indented

@@ -43,4 +43,18 @@ class StringUtilsTest {
     fun `blank string becomes empty`() {
         assertEquals("", "\n \n".trimBlankLines())
     }
+
+    @Test
+    fun `quoted string is unquoted`() {
+        assertEquals(" Hello ", "\" Hello \"".unquoted())
+        assertEquals("", "\"\"".unquoted())
+    }
+
+    @Test
+    fun `partially quoted string is returned as-is`() {
+        assertEquals("\"Hello", "\"Hello".unquoted())
+        assertEquals("Hello\"", "Hello\"".unquoted())
+        assertEquals("\"", "\"".unquoted())
+        assertEquals("Hello", "Hello".unquoted())
+    }
 }

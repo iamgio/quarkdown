@@ -14,10 +14,22 @@
   - B
   - C
 
-.letters::join last:{.string {" and "}}
+.letters::join last:{" and "}
 ```
 
 The output is `A, B and C`. If `last` is not set, `separator` is used.
+
+#### [Preserving whitespace in quoted arguments](https://quarkdown.com/wiki/syntax-of-a-function-call#whitespace-in-arguments)
+
+Leading and trailing whitespace in a function call argument is ignored. You can now keep it by enclosing the argument in double quotes, which are removed from the value:
+
+```markdown
+.letters::join separator:{" | "}
+```
+
+The content is still evaluated as usual, including Markdown and function calls.
+
+This is a breaking change for arguments that start and end with a double quote, whose quotes are now removed. To keep them, escape them: `{\"Hello\"}`.
 
 ### Changed
 
@@ -28,6 +40,12 @@ The `paperwhite` color theme no longer draws a border around Mermaid diagrams. T
 #### Latin Modern font in `latex`
 
 The `latex` layout theme now uses Latin Modern Roman instead of Computer Modern, matching the font of modern LaTeX documents, also covering a more characters, at a third of the previous size. The change appears imperceptible to readers.
+
+### Removed
+
+#### `.string` (breaking change)
+
+The `.string` function has been removed. To keep leading and trailing whitespace in an argument, [enclose it in double quotes](https://quarkdown.com/wiki/syntax-of-a-function-call#whitespace-in-arguments) instead: `.uppercase {.string {" hello "}}` becomes `.uppercase {" hello "}`.
 
 ### Fixed
 

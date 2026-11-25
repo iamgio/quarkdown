@@ -7,6 +7,7 @@ import com.quarkdown.core.function.call.UncheckedFunctionCall
 import com.quarkdown.core.function.expression.RawInlineExpression
 import com.quarkdown.core.function.value.DynamicValue
 import com.quarkdown.core.parser.walker.funcall.WalkedFunctionCall
+import com.quarkdown.core.util.unquoted
 
 /**
  * Refines a [WalkedFunctionCall], which is a context-free syntactical element extracted from a function call in a source code,
@@ -46,7 +47,7 @@ class FunctionCallRefiner(
             call.arguments
                 .asSequence()
                 .map { arg ->
-                    val raw = arg.value.trim()
+                    val raw = arg.value.trim().unquoted()
                     val expression = RawInlineExpression(raw, context)
                     FunctionCallArgument(
                         expression,

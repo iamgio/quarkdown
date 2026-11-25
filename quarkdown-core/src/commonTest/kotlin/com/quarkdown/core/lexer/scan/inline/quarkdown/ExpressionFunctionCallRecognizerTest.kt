@@ -15,7 +15,12 @@ class ExpressionFunctionCallRecognizerTest {
         assertEquals("", call(".f {x}")!!.token.data.text)
         assertEquals(6, call(".f {x}")!!.end)
         assertEquals(6, call(".f {x} more")!!.end)
-        assertEquals("  ", call("  .f {x}")!!.token.data.text)
+        assertEquals("  ", call("a\n  .f {x}", index = 2)!!.token.data.text)
+    }
+
+    @Test
+    fun `leaves leading spaces of the first line to plain text`() {
+        assertNull(call("  .f {x}"))
     }
 
     @Test

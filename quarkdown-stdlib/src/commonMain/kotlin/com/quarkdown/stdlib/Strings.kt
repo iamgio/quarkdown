@@ -11,28 +11,9 @@ import com.quarkdown.core.function.value.wrappedAsValue
 import com.quarkdown.core.util.StringCase
 import com.quarkdown.core.util.case
 import com.quarkdown.core.util.node.toPlainText
-import com.quarkdown.core.util.trimDelimiters
 import com.quarkdown.processor.annotation.Name
 import com.quarkdown.processor.annotation.QFunction
 import com.quarkdown.processor.annotation.QModule
-
-/**
- * Creates a string.
- *
- * If [value] is delimited by `"` characters, they are removed
- * and the wrapped string is not trimmed, as opposed to what usually happens
- * through Quarkdown's parser.
- *
- * Example: `"  Hello, World!  "` -> `  Hello, World!  `
- * @param value string to wrap
- * @return a new string value
- */
-@QFunction
-fun string(value: String) =
-    when {
-        value.firstOrNull() == '\"' && value.lastOrNull() == '\"' -> value.trimDelimiters()
-        else -> value
-    }.wrappedAsValue()
 
 /**
  * Concatenates two strings if a condition is met.
