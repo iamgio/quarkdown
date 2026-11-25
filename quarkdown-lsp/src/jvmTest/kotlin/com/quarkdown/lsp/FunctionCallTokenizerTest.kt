@@ -88,6 +88,40 @@ class FunctionCallTokenizerTest {
     }
 
     @Test
+    fun `function call with quoted inline argument`() {
+        val text = ".function {\" .inner {x} \"}"
+        val calls = tokenizer.getFunctionCalls(text)
+
+        val tokens = calls.first().tokens
+        val types = tokens.map { it.type }
+        assertEquals(
+            listOf(
+                FunctionCallToken.Type.BEGIN,
+                FunctionCallToken.Type.FUNCTION_NAME,
+                FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN,
+                FunctionCallToken.Type.INLINE_ARGUMENT_VALUE,
+                FunctionCallToken.Type.INLINE_ARGUMENT_END,
+            ),
+            types,
+        )
+
+        // The quotes are part of the delimiters.
+        with(tokens.single { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_BEGIN }) {
+            assertEquals("{\"", lexeme)
+            assertEquals(10..12, range)
+        }
+        with(tokens.single { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_END }) {
+            assertEquals("\"}", lexeme)
+            assertEquals(24..26, range)
+        }
+        assertEquals(" .inner {x} ", tokens.single { it.type == FunctionCallToken.Type.INLINE_ARGUMENT_VALUE }.lexeme)
+
+        // The call nested within the quotes is still tokenized, at its original offset.
+        val inner = calls.single { call -> call.tokens.any { it.lexeme == "inner" } }
+        assertEquals(13..14, inner.tokens.first { it.type == FunctionCallToken.Type.BEGIN }.range)
+    }
+
+    @Test
     fun `function call with chaining`() {
         val text = ".function1::function2"
         val calls = tokenizer.getFunctionCalls(text)

@@ -117,6 +117,16 @@ class FunctionCallTokensSupplierTest {
     }
 
     @Test
+    fun `function call with quoted argument`() {
+        tokenize("some text .funcall {\" a b \"} some other text.") {
+            assertNext(TYPE_BEGIN, 10..11)
+            assertNext(TYPE_NAME, 11..18)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 19..21)
+            assertNext(TYPE_INLINE_ARGUMENT_DELIMITER, 26..28)
+        }
+    }
+
+    @Test
     fun `function call with one named argument`() {
         tokenize("some text .funcall name:{arg1} some other text.") {
             assertNext(TYPE_BEGIN, 10..11)

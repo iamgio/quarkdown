@@ -63,7 +63,7 @@ Line continuation is supported in both block and inline function calls.
 
 ## Whitespace in arguments
 
-Since leading and trailing whitespace in inline arguments is ignored, `{ hello }` and `{hello}` are the same. To keep it, enclose the argument in double quotes.
+Since leading and trailing whitespace in inline arguments is ignored, `{ hello }` and `{hello}` are the same. To keep it, enclose the argument in double quotes, placed right next to the braces: `{" hello "}`.
 
 .examplemirror
     .var {letters}
