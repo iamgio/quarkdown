@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.8.0] - 2026-11-26
+
 ### Added
 
 #### [Last separator in `.join`](https://quarkdown.com/wiki/loops#join)
@@ -1858,7 +1860,9 @@ Table of contents are no longer empty if no level 1 headings are present, or if 
 
 Table cells now correctly apply the same line spacing as paragraphs and lists.
 
-[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.7.0...HEAD
+[Unreleased]: https://github.com/iamgio/quarkdown/compare/v2.8.0...HEAD
+
+[2.8.0]: https://github.com/iamgio/quarkdown/compare/v2.7.0...v2.8.0
 
 [2.7.0]: https://github.com/iamgio/quarkdown/compare/v2.6.4...v2.7.0
 
